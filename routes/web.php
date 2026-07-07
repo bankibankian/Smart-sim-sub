@@ -7,7 +7,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/palmpay/webhook', [\App\Http\Controllers\PaymentWebhookController::class, 'handleWebhook'])->name('palmpay.webhook');
+
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/kyc', [\App\Http\Controllers\KycController::class, 'submit'])->name('kyc.submit');

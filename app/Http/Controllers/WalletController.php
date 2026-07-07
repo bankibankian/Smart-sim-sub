@@ -33,7 +33,7 @@ class WalletController extends Controller
             'balance'           => $wallet->balance ?? 0,
             'bonus'             => $wallet->bonus ?? 0,
             'status'            => $wallet->status ?? 'inactive',
-            'available_balance' => $wallet->available_balance ?? 0,
+            'available_balance' => $wallet->balance ?? 0,
         ];
 
         // Dynamic rewards & bonus spend progress
