@@ -28,12 +28,13 @@ class VirtualAccountRepository
                 $noncestr = noncestrHelper::generateNonceStr();
                 $accountReference = "F24" . strtoupper(bin2hex(random_bytes(5)));
 
+                $version = config('services.palmpay.VERSION') ?: env('VERSION', 'V2.0');
                 $data = [
                     'requestTime' => $requestTime,
                     'identityType' => 'personal',
                     'licenseNumber' =>  $userDetails->bvn,
                     'virtualAccountName' => $customer_name,
-                    'version' => config('services.palmpay.VERSION'),
+                    'version' => $version,
                     'customerName' => $customer_name,
                     'email' => $userDetails->email,
                     'accountReference' => $accountReference,
@@ -44,8 +45,9 @@ class VirtualAccountRepository
 
                 $signature = signatureHelper::generate_signature($data, config('keys.private'));
 
-                $url = config('services.palmpay.BASE_URL_PALMPAY') . 'api/v2/virtual/account/label/create';
-                $token = config('services.palmpay.BEARER_TOKEN');
+                $baseUrl = config('services.palmpay.BASE_URL_PALMPAY') ?: env('BASE_URL_PALMPAY', 'https://open-gw-prod.palmpay-inc.com/');
+                $url = rtrim($baseUrl, '/') . '/api/v2/virtual/account/label/create';
+                $token = config('services.palmpay.BEARER_TOKEN') ?: env('BEARER_TOKEN', 'L250514133329651622161');
                 $headers = [
                     'Accept: application/json, text/plain, */*',
                     'CountryCode: NG',
