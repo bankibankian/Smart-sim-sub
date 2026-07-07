@@ -27,38 +27,6 @@ class VirtualAccount extends Model
     }
 
     /**
-     * Accessor for accountNo (camelCase compatibility).
-     */
-    public function getAccountNoAttribute(): ?string
-    {
-        return $this->account_number;
-    }
-
-    /**
-     * Accessor for accountName (camelCase compatibility).
-     */
-    public function getAccountNameAttribute(): ?string
-    {
-        return $this->account_name;
-    }
-
-    /**
-     * Accessor for bankName (camelCase compatibility).
-     */
-    public function getBankNameAttribute(): ?string
-    {
-        return $this->bank_name;
-    }
-
-    /**
-     * Accessor for accountReference (camelCase compatibility).
-     */
-    public function getAccountReferenceAttribute(): ?string
-    {
-        return $this->account_reference;
-    }
-
-    /**
      * Determine if the account is active.
      */
     public function isActive(): bool
