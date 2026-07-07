@@ -15,11 +15,11 @@ class PalmPayService
 
     public function __construct()
     {
-        // Get credentials from config with env & default fallback
-        $baseUrl = config('services.palmpay.BASE_URL_PALMPAY') ?: env('BASE_URL_PALMPAY', 'https://open-gw-prod.palmpay-inc.com/');
+        // Get credentials directly from env
+        $baseUrl = env('BASE_URL_PALMPAY') ?: 'https://open-gw-prod.palmpay-inc.com/';
         $this->baseUrl = rtrim($baseUrl, '/') . '/';
-        $this->bearerToken = config('services.palmpay.BEARER_TOKEN') ?: env('BEARER_TOKEN', 'L250514133329651622161');
-        $this->merchantId = config('services.palmpay.MERCHANTID') ?: env('MERCHANTID', '125051308357873');
+        $this->bearerToken = env('BEARER_TOKEN');
+        $this->merchantId = env('MERCHANTID');
     }
 
     /**
@@ -27,7 +27,7 @@ class PalmPayService
      */
     public function queryBankList($businessType = 0)
     {
-        $version = config('services.palmpay.VERSION') ?: env('VERSION', 'V2.0');
+        $version = env('VERSION', 'V2.0');
         $data = [
             'requestTime' => (int) (microtime(true) * 1000),
             'version' => $version,
@@ -43,7 +43,7 @@ class PalmPayService
      */
     public function queryBankAccount($bankCode, $bankAccNo)
     {
-        $version = config('services.palmpay.VERSION') ?: env('VERSION', 'V2.0');
+        $version = env('VERSION', 'V2.0');
         $data = [
             'requestTime' => (int) (microtime(true) * 1000),
             'version' => $version,

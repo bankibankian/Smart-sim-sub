@@ -44,12 +44,4 @@ return [
         'verify_jamb_url' => env('VTPASS_VERIFY_JAMB_URL', 'https://sandbox.vtpass.com/api/verify-jamb'),
         'biller_code'     => env('VTPASS_BILLER_CODE'),
     ],
-
-    'palmpay' => [
-        'BASE_URL_PALMPAY' => env('BASE_URL_PALMPAY'),
-        'BEARER_TOKEN' => env('BEARER_TOKEN'),
-        'MERCHANTID' => env('MERCHANTID'),
-        'VERSION' => env('VERSION'),
-    ],
-
 ];
