@@ -45,4 +45,11 @@ return [
         'biller_code'     => env('VTPASS_BILLER_CODE'),
     ],
 
+    'palmpay' => [
+        'base_url'     => env('BASE_URL_PALMPAY', 'https://open-gw-prod.palmpay-inc.com/'),
+        'bearer_token' => env('BEARER_TOKEN'),
+        'merchant_id'  => env('MERCHANTID'),
+        'version'      => env('VERSION', 'V2.0'),
+    ],
+
 ];

@@ -15,11 +15,11 @@ class PalmPayService
 
     public function __construct()
     {
-        // Get credentials from env with fallback to existing keys
-        $baseUrl = env('BASE_URL_PALMPAY') ?: (env('PALMPAY_BASE_URL') ?: env('BASE_URL3'));
+        // Get credentials from config
+        $baseUrl = config('services.palmpay.base_url', 'https://open-gw-prod.palmpay-inc.com/');
         $this->baseUrl = rtrim($baseUrl, '/') . '/';
-        $this->bearerToken = env('PALMPAY_BEARER_TOKEN', env('BEARER_TOKEN'));
-        $this->merchantId = env('PALMPAY_MERCHANT_ID', env('MERCHANTID'));
+        $this->bearerToken = config('services.palmpay.bearer_token');
+        $this->merchantId = config('services.palmpay.merchant_id');
     }
 
     /**
@@ -29,7 +29,7 @@ class PalmPayService
     {
         $data = [
             'requestTime' => (int) (microtime(true) * 1000),
-            'version' => env('VERSION', 'V2.0'),
+            'version' => config('services.palmpay.version', 'V2.0'),
             'nonceStr' => noncestrHelper::generateNonceStr(),
             'businessType' => $businessType,
         ];
@@ -44,7 +44,7 @@ class PalmPayService
     {
         $data = [
             'requestTime' => (int) (microtime(true) * 1000),
-            'version' => env('VERSION', 'V2.0'),
+            'version' => config('services.palmpay.version', 'V2.0'),
             'nonceStr' => noncestrHelper::generateNonceStr(),
             'bankCode' => $bankCode,
             'bankAccNo' => $bankAccNo,

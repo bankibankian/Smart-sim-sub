@@ -30,12 +30,12 @@ class VirtualAccountRepository
                 $accountReference = "F24" . strtoupper(bin2hex(random_bytes(5)));
 
                 $data = [
-                    'merchantId' => env('MERCHANTID'),
+                    'merchantId' => config('services.palmpay.merchant_id'),
                     'requestTime' => $requestTime,
                     'identityType' => 'personal',
                     'licenseNumber' =>  $userDetails->bvn,
                     'virtualAccountName' => $customer_name,
-                    'version' => env('VERSION'),
+                    'version' => config('services.palmpay.version', 'V2.0'),
                     'customerName' => $customer_name,
                     'email' => $userDetails->email,
                     'accountReference' => $accountReference,
@@ -46,9 +46,9 @@ class VirtualAccountRepository
 
                 $signature = signatureHelper::generate_signature($data, config('keys.private'));
 
-                $baseUrl = env('BASE_URL_PALMPAY') ?: (env('PALMPAY_BASE_URL') ?: env('BASE_URL3'));
+                $baseUrl = config('services.palmpay.base_url', 'https://open-gw-prod.palmpay-inc.com/');
                 $url = rtrim($baseUrl, '/') . '/api/v2/virtual/account/label/create';
-                $token = env('BEARER_TOKEN');
+                $token = config('services.palmpay.bearer_token');
                 $headers = [
                     'Accept: application/json, text/plain, */*',
                     'CountryCode: NG',
