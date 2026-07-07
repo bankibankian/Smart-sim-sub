@@ -6,7 +6,6 @@ use Exception;
 use App\Helpers\noncestrHelper;
 use App\Helpers\signatureHelper;
 use App\Models\User;
-use App\Models\VirtualAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -30,12 +29,11 @@ class VirtualAccountRepository
                 $accountReference = "F24" . strtoupper(bin2hex(random_bytes(5)));
 
                 $data = [
-                    'merchantId' => config('services.palmpay.merchant_id'),
                     'requestTime' => $requestTime,
                     'identityType' => 'personal',
                     'licenseNumber' =>  $userDetails->bvn,
                     'virtualAccountName' => $customer_name,
-                    'version' => config('services.palmpay.version', 'V2.0'),
+                    'version' => config('services.palmpay.VERSION'),
                     'customerName' => $customer_name,
                     'email' => $userDetails->email,
                     'accountReference' => $accountReference,
@@ -46,9 +44,8 @@ class VirtualAccountRepository
 
                 $signature = signatureHelper::generate_signature($data, config('keys.private'));
 
-                $baseUrl = config('services.palmpay.base_url', 'https://open-gw-prod.palmpay-inc.com/');
-                $url = rtrim($baseUrl, '/') . '/api/v2/virtual/account/label/create';
-                $token = config('services.palmpay.bearer_token');
+                $url = config('services.palmpay.BASE_URL_PALMPAY') . 'api/v2/virtual/account/label/create';
+                $token = config('services.palmpay.BEARER_TOKEN');
                 $headers = [
                     'Accept: application/json, text/plain, */*',
                     'CountryCode: NG',
@@ -66,12 +63,6 @@ class VirtualAccountRepository
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-                // Disable SSL verification in local environment
-                if (config('app.env') === 'local') {
-                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-                }
 
                 // Execute request
                 $response = curl_exec($ch);
@@ -96,14 +87,15 @@ class VirtualAccountRepository
                 // Check for success
                 if (isset($response['respCode']) && $response['respCode'] === '00000000') {
 
-                    $res = VirtualAccount::create([
+                    $res =  DB::table('virtual_accounts')->insert([
                         'user_id' => $loginUserId,
-                        'account_reference' => $response['data']['accountReference'],
-                        'account_number' => $response['data']['virtualAccountNo'],
-                        'account_name' => $response['data']['virtualAccountName'],
-                        'bank_name' => 'PalmPay',
-                        'provider' => 'palmpay',
-                        'is_active' => true,
+                        'accountReference' => $response['data']['accountReference'],
+                        'accountNo' => $response['data']['virtualAccountNo'],
+                        'accountName' => $response['data']['virtualAccountName'],
+                        'bankName' => 'PalmPay',
+                        'status' => '1',
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ]);
 
                       return ['success' => true, 'message' => 'Virtual Account Created'];

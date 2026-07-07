@@ -46,10 +46,10 @@ return [
     ],
 
     'palmpay' => [
-        'base_url'     => env('BASE_URL_PALMPAY', 'https://open-gw-prod.palmpay-inc.com/'),
-        'bearer_token' => env('BEARER_TOKEN'),
-        'merchant_id'  => env('MERCHANTID'),
-        'version'      => env('VERSION', 'V2.0'),
+        'BASE_URL_PALMPAY' => env('BASE_URL_PALMPAY'),
+        'BEARER_TOKEN' => env('BEARER_TOKEN'),
+        'MERCHANTID' => env('MERCHANTID'),
+        'VERSION' => env('VERSION'),
     ],
 
 ];
