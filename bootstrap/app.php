@@ -18,10 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'super_admin' => \App\Http\Middleware\EnsureIsSuperAdmin::class,
         ]);
-        $middleware->validateCsrfTokens(except: [
-            'palmpay/webhook',
-        ]);
 
+         $middleware->validateCsrfTokens(except: [
+            '/palmpay/webhook',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
