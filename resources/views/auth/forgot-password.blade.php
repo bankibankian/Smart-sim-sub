@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-slate-900 font-display">Forgot Password</h1>
-        <p class="text-sm text-slate-500 mt-1">Recover your staff credentials securely.</p>
+        <p class="text-sm text-slate-500 mt-1">Recover your account password securely.</p>
     </div>
 
     <div class="mb-6 p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-sm flex gap-3 items-start">

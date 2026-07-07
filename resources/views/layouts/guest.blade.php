@@ -45,7 +45,7 @@
                 <div class="relative z-10 my-auto">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#2EBE59]/10 text-[#2EBE59] border border-[#2EBE59]/20 uppercase tracking-wider mb-6 font-display">
                         <span class="w-1.5 h-1.5 rounded-full bg-[#2EBE59] animate-pulse"></span>
-                        Staff Portal
+                        SmartSIM Portal
                     </span>
                     <h2 class="text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight font-display mb-6">
                         Empowering Businesses Through <span class="bg-gradient-to-r from-[#42517c] to-[#2EBE59] bg-clip-text text-transparent">Smart Connectivity</span>
@@ -57,8 +57,8 @@
                                 <i data-lucide="tag" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h4 class="text-white font-semibold text-sm font-display">Wholesale Distribution</h4>
-                                <p class="text-slate-400 text-xs mt-1">Unlock maximum retail markup with sub-agent price levels.</p>
+                                <h4 class="text-white font-semibold text-sm font-display">Cheaper Data & Airtime</h4>
+                                <p class="text-slate-400 text-xs mt-1">Access the cheapest data and call rates in Nigeria instantly.</p>
                             </div>
                         </div>
 

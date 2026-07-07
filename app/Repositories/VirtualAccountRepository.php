@@ -6,6 +6,7 @@ use Exception;
 use App\Helpers\noncestrHelper;
 use App\Helpers\signatureHelper;
 use App\Models\User;
+use App\Models\VirtualAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -95,15 +96,14 @@ class VirtualAccountRepository
                 // Check for success
                 if (isset($response['respCode']) && $response['respCode'] === '00000000') {
 
-                    $res =  DB::table('virtual_accounts')->insert([
+                    $res = VirtualAccount::create([
                         'user_id' => $loginUserId,
-                        'accountReference' => $response['data']['accountReference'],
-                        'accountNo' => $response['data']['virtualAccountNo'],
-                        'accountName' => $response['data']['virtualAccountName'],
-                        'bankName' => 'PalmPay',
-                        'status' => '1',
-                        'created_at' => now(),
-                        'updated_at' => now(),
+                        'account_reference' => $response['data']['accountReference'],
+                        'account_number' => $response['data']['virtualAccountNo'],
+                        'account_name' => $response['data']['virtualAccountName'],
+                        'bank_name' => 'PalmPay',
+                        'provider' => 'palmpay',
+                        'is_active' => true,
                     ]);
 
                       return ['success' => true, 'message' => 'Virtual Account Created'];

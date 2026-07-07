@@ -3,8 +3,8 @@
     <div class="container">
         <div class="section-header">
             <span class="badge badge-primary">Get In Touch</span>
-            <h2 class="section-subtitle">Dedicated Business Support</h2>
-            <p class="section-description">Have questions about staff onboarding, API configurations, or logistics? Our dedicated lines are open daily.</p>
+            <h2 class="section-subtitle">Dedicated Support</h2>
+            <p class="section-description">Have questions about account activation, data bundles, or bulk wholesale orders? Our support team is here to help daily.</p>
         </div>
 
         <div class="support-grid">
@@ -18,8 +18,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="support-info-title">WhatsApp Staff Support</h3>
-                        <p class="support-info-desc">Instant chats, allocations approval updates, and active troubleshooting.</p>
+                        <h3 class="support-info-title">WhatsApp Support Line</h3>
+                        <p class="support-info-desc">Instant chats, rapid activation support, and general troubleshooting.</p>
                         <a href="https://wa.me/2347048932365" target="_blank" class="support-info-link">Chat on WhatsApp</a>
                     </div>
                 </div>
@@ -32,8 +32,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="support-info-title">Wholesale Inquiry Email</h3>
-                        <p class="support-info-desc">Send us formal distribution proposals, bulk requests, and receipt confirmations.</p>
+                        <h3 class="support-info-title">Wholesale & Support Email</h3>
+                        <p class="support-info-desc">Send us formal distribution proposals, bulk requests, and general questions.</p>
                         <a href="mailto:Support@smartsimsub.com" class="support-info-link">Support@smartsimsub.com</a>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     </div>
                     <div>
                         <h3 class="support-info-title">Headquarters Address</h3>
-                        <p class="support-info-desc">Physical inventory pickups and admin support.</p>
+                        <p class="support-info-desc">Walk-in customer support and business operations.</p>
                         <span style="font-weight:700; color:var(--text-secondary);">Behind Oti Carpet, Opp BMT Garden, Wuse 2, Abuja, FCT Abuja, Nigeria</span>
                     </div>
                 </div>
@@ -72,12 +72,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="role" class="form-label">Your Target Role</label>
+                        <label for="role" class="form-label">Account / Partnership Type</label>
                         <select id="role" class="form-control" required>
                             <option value="" disabled selected>Select option</option>
-                            <option value="staff">Sales Staff Partner</option>
-                            <option value="admin">Regional Distributor / Sub-Admin</option>
-                            <option value="public">Retail Customer</option>
+                            <option value="public">Retail Customer (Standard User)</option>
+                            <option value="wholesale">Wholesale Partner / Agent</option>
+                            <option value="other">Other Inquiry</option>
                         </select>
                     </div>
 

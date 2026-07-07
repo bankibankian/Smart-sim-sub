@@ -40,7 +40,7 @@
                     @else
                         <a href="{{ route('login') }}" class="btn-login">Log In</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary">Become Staff</a>
+                            <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
                         @endif
                     @endauth
                 @endif
@@ -72,13 +72,13 @@
                     <span><strong>Public Offer:</strong> Get a SIM & enjoy up to <strong>100GB Free Data</strong> + <strong>₦15,000 Bonus</strong>!</span>
                 </div>
                 <div class="hero-buttons">
-                    <a href="#calculator" class="btn btn-primary">Calculate Profit</a>
+                    <a href="#pricing" class="btn btn-primary">Get Your SIM Now</a>
                     <a href="#pricing" class="btn btn-outline">Claim Free Data</a>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-item">
                         <span class="stat-number">200+</span>
-                        <span class="stat-label">Active Staff Agents</span>
+                        <span class="stat-label">Active Users</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number green-stat">50K+</span>
@@ -97,35 +97,35 @@
                 <div class="hero-illustration">
                     <!-- Glass Floating Card 1 -->
                     <div class="floating-card floating-card-1">
-                        <div class="badge badge-primary" style="margin-bottom: 8px;">Admin Allocation</div>
-                        <h4 style="margin-bottom: 4px; font-size: 0.95rem;">+500 SIMs Dispatched</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Sent to Agent Ayuba</p>
+                        <div class="badge badge-primary" style="margin-bottom: 8px;">Data Welcome Bonus</div>
+                        <h4 style="margin-bottom: 4px; font-size: 0.95rem;">100GB Active Data</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Claimed successfully</p>
                     </div>
 
                     <!-- Main Simulated Mobile App -->
                     <div class="main-phone-mockup">
                         <div class="mockup-inner">
                             <div class="mockup-header"></div>
-                            <div class="mockup-screen-title">SmartSIM Staff Portal</div>
+                            <div class="mockup-screen-title">SmartSIM Dashboard</div>
                             
                             <div class="mockup-sim-details">
                                 <div class="mockup-sim-row">
-                                    <span>SIM serial:</span>
-                                    <span style="font-weight:600;">8923409...</span>
+                                    <span>Your SIM:</span>
+                                    <span style="font-weight:600;">08034567890</span>
                                 </div>
                                 <div class="mockup-sim-row">
-                                    <span>Cost price:</span>
-                                    <span>₦280</span>
+                                    <span>Welcome Bonus:</span>
+                                    <span>₦15,000</span>
                                 </div>
                                 <div class="mockup-sim-row">
                                     <span>Status:</span>
-                                    <span class="mockup-sim-status">Ready to Sell</span>
+                                    <span class="mockup-sim-status">Active</span>
                                 </div>
                             </div>
 
                             <div class="mockup-chart">
                                 <div style="position: absolute; top: 15px; left: 15px; color:#FFF; font-size: 0.75rem; font-weight:700;">
-                                    Today's Earnings: ₦18,500
+                                    Monthly Savings: ₦12,500
                                 </div>
                             </div>
                         </div>
@@ -133,9 +133,9 @@
 
                     <!-- Glass Floating Card 2 -->
                     <div class="floating-card floating-card-2">
-                        <div class="badge badge-secondary" style="margin-bottom: 8px;">Staff Commission</div>
-                        <h4 style="margin-bottom: 4px; font-size: 0.95rem;">₦1,220 Profit / SIM</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Average agent markup</p>
+                        <div class="badge badge-secondary" style="margin-bottom: 8px;">Instant Cashback</div>
+                        <h4 style="margin-bottom: 4px; font-size: 0.95rem;">Up to 10% Off</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary);">On every data purchase</p>
                     </div>
                 </div>
             </div>

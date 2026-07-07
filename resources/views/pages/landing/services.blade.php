@@ -1,58 +1,61 @@
-<!-- Services / Roles Breakdown Section -->
+<!-- Services / Customer Value Breakdown Section -->
 <section class="section section-light" id="services">
     <div class="container">
         <div class="section-header" id="features">
-            <span class="badge badge-secondary">Engineered For Growth</span>
-            <h2 class="section-subtitle">How the Ecosystem Connects Everyone</h2>
-            <p class="section-description">A simple, three-tiered distribution pipeline designed to maximize speed, minimize inventory overhead, and provide instant activations.</p>
+            <span class="badge badge-secondary">Designed For You</span>
+            <h2 class="section-subtitle">How SmartSIM Makes Your Life Easier</h2>
+            <p class="section-description">Get connected with maximum value. We provide instant online activation, massive free welcome bonuses, and the lowest daily telecom rates.</p>
         </div>
 
         <div class="services-grid">
-            <!-- Admin Card -->
+            <!-- Card 1 -->
             <div class="service-card service-card-blue">
                 <div class="service-icon-box service-icon-blue">
+                    <!-- Lightning Bolt Icon -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                     </svg>
                 </div>
-                <h3 class="service-title">1. Admin Management</h3>
-                <p class="service-text">Import and manage vast SIM inventory, allocate stock to staff on credit or cash basis, control wholesale pricing matrices, and monitor agent performance charts from a single screen.</p>
-                <a href="#support" class="service-link">
-                    <span>Learn Admin Portal</span>
+                <h3 class="service-title">1. Instant Web Activation</h3>
+                <p class="service-text">No paperwork, no waiting in lines. Register and activate your new SIM card directly from your phone or computer in less than 2 minutes.</p>
+                <a href="{{ route('register') }}" class="service-link">
+                    <span>Get Started Now</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                     </svg>
                 </a>
             </div>
 
-            <!-- Staff Card -->
+            <!-- Card 2 -->
             <div class="service-card service-card-green">
                 <div class="service-icon-box service-icon-green">
+                    <!-- Wallet Icon -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.97 5.97 0 00-.75-2.985m-.007-1.044A3.96 3.96 0 0016 11.5H14.5a3 3 0 00-6 0H7c-.98 0-1.87.354-2.57.94m2.1 6.279A6 6 0 016 18.719m0 0a5.97 5.97 0 01.75-2.985m-.007-1.044A3.96 3.96 0 018 11.5h8.5M12 7a4 4 0 110-8 4 4 0 010 8zm0 0v1.5a1.5 1.5 0 003 0V7m0 0a1.5 1.5 0 013 0v1.5m-9-.75a1.5 1.5 0 00-3 0V7m0 0a1.5 1.5 0 01-3 0v1.5" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
                     </svg>
                 </div>
-                <h3 class="service-title">2. Staff Distribution</h3>
-                <p class="service-text">Staff buy SIMs in wholesale quantities from their admin, set their own customized retail profit markup, and distribute them to the public with instant on-the-go registration tools.</p>
-                <a href="#calculator" class="service-link">
-                    <span>Staff Profit Guide</span>
+                <h3 class="service-title">2. Automated Wallet Funding</h3>
+                <p class="service-text">Get your own dedicated virtual bank account. Transfer money from any bank app to instantly top up your wallet and buy data on the go.</p>
+                <a href="{{ route('register') }}" class="service-link">
+                    <span>Learn About Wallet</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                     </svg>
                 </a>
             </div>
 
-            <!-- Public Card -->
+            <!-- Card 3 -->
             <div class="service-card service-card-gold">
                 <div class="service-icon-box service-icon-gold">
+                    <!-- Star Badge Icon -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
                     </svg>
                 </div>
-                <h3 class="service-title">3. Public Mega Bonuses</h3>
-                <p class="service-text">Activate a SmartSIM to enjoy lightning-fast 4G/5G speeds, massive pre-loaded data bundles (up to 100GB), and heavy airtime welcome bonuses to call any network for free.</p>
+                <h3 class="service-title">3. Unbeatable Daily Rates</h3>
+                <p class="service-text">Enjoy massive welcome bonuses up to 100GB data and ₦15,000 airtime, plus get direct access to the cheapest daily telecom rates in Nigeria.</p>
                 <a href="#pricing" class="service-link">
-                    <span>Claim Free Data & Bonuses</span>
+                    <span>Claim Welcome Offer</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                     </svg>

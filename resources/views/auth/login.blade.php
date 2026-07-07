@@ -4,7 +4,7 @@
 
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-slate-900 font-display">Welcome Back</h1>
-        <p class="text-sm text-slate-500 mt-1">Sign in to your staff portal to manage SIMs.</p>
+        <p class="text-sm text-slate-500 mt-1">Sign in to your account.</p>
     </div>
 
     <form method="POST" action="{{ route('login') }}" class="space-y-5">
@@ -68,7 +68,7 @@
             <div class="text-center text-sm text-slate-500 pt-4 border-t border-slate-100 font-display">
                 Don't have an account? 
                 <a href="{{ route('register') }}" class="font-semibold text-[#42517c] hover:text-[#55699e] transition">
-                    Become Staff
+                    Register
                 </a>
             </div>
         @endif

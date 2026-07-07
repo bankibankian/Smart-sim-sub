@@ -104,7 +104,7 @@ function initPricingToggler() {
     toggler.addEventListener('click', () => {
         toggler.classList.toggle('toggle-active');
         const isActive = toggler.classList.contains('toggle-active');
-        const mode = isActive ? 'public' : 'staff';
+        const mode = isActive ? 'staff' : 'public';
         
         updatePricingCards(basePricing[mode]);
     });
@@ -150,7 +150,7 @@ function initPricingToggler() {
 }
 
 /**
- * Profit margin calculator for staff sales
+ * Data savings calculator for consumers
  */
 function initProfitCalculator() {
     const rangeSims = document.getElementById('calc-range-sims');
@@ -165,28 +165,16 @@ function initProfitCalculator() {
 
     if (!rangeSims || !rangeMarkup) return;
 
-    // Wholesale price constants (tiered based on volume)
-    const getWholesaleCostPerSim = (volume) => {
-        if (volume >= 1000) return 200;
-        if (volume >= 250) return 280;
-        return 350;
-    };
-
-    const formatCurrency = (val) => {
-        return '₦' + val.toLocaleString('en-US');
-    };
-
     const recalculate = () => {
-        const simsCount = parseInt(rangeSims.value);
-        const markup = parseInt(rangeMarkup.value);
+        const dataCount = parseInt(rangeSims.value);
+        const monthsCount = parseInt(rangeMarkup.value);
         
-        displaySims.textContent = simsCount.toLocaleString();
-        displayMarkup.textContent = '₦' + markup.toLocaleString();
+        displaySims.textContent = dataCount + ' GB';
+        displayMarkup.textContent = monthsCount + (monthsCount === 1 ? ' Month' : ' Months');
 
-        const costPerSim = getWholesaleCostPerSim(simsCount);
-        const totalCost = costPerSim * simsCount;
-        const totalProfit = markup * simsCount;
-        const totalRevenue = totalCost + totalProfit;
+        const totalCost = 1200 * dataCount * monthsCount;      // Standard Network Cost (₦1,200 per GB)
+        const totalRevenue = 400 * dataCount * monthsCount;    // SmartSIM Cost (₦400 per GB)
+        const totalProfit = totalCost - totalRevenue;          // Total Cash Saved
 
         // Animate the counters or simply insert
         animateCounter(valCost, totalCost);

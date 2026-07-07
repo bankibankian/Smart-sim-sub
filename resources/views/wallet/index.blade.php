@@ -225,14 +225,14 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="space-y-1">
                                         <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account Name</span>
-                                        <span class="block text-xs font-bold text-slate-800">{{ $virtualAccount->accountName }}</span>
+                                        <span class="block text-xs font-bold text-slate-800">{{ $virtualAccount->account_name ?? $virtualAccount->accountName }}</span>
                                     </div>
 
                                     <div class="space-y-1">
                                         <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bank Name</span>
                                         <span class="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
                                             <i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-400"></i>
-                                            {{ $virtualAccount->bankName }}
+                                            {{ $virtualAccount->bank_name ?? $virtualAccount->bankName }}
                                         </span>
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@
                                 <div class="border-t border-slate-200/60 pt-4 space-y-1" x-data="{ copied: false }">
                                     <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account Number</span>
                                     <div class="flex items-center gap-3">
-                                        <span class="text-2xl font-extrabold font-display text-[#42517c] tracking-wide" x-ref="accNum">{{ $virtualAccount->accountNo }}</span>
+                                        <span class="text-2xl font-extrabold font-display text-[#42517c] tracking-wide" x-ref="accNum">{{ $virtualAccount->account_number ?? $virtualAccount->accountNo }}</span>
                                         <button @click="navigator.clipboard.writeText($refs.accNum.innerText); copied = true; setTimeout(() => copied = false, 2000)" 
                                                 type="button" 
                                                 class="px-2.5 py-1.5 bg-white border border-slate-200 text-slate-500 hover:text-[#42517c] rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-slate-50 shadow-sm transition-all">
