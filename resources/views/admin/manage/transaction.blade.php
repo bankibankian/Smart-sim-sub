@@ -146,12 +146,12 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
-                            <th class="py-4 px-6 text-center">S/N</th>
+                            <th class="py-4 px-6 text-center hidden md:table-cell">S/N</th>
                             <th class="py-4 px-6 whitespace-nowrap">Date</th>
-                            <th class="py-4 px-6">Reference</th>
-                            <th class="py-4 px-6">User / Performed By</th>
+                            <th class="py-4 px-6 hidden lg:table-cell">Reference</th>
+                            <th class="py-4 px-6 hidden md:table-cell">User / Performed By</th>
                             <th class="py-4 px-6">Description</th>
-                            <th class="py-4 px-6 text-center">Type</th>
+                            <th class="py-4 px-6 text-center hidden sm:table-cell">Type</th>
                             <th class="py-4 px-6 text-right">Amount</th>
                             <th class="py-4 px-6 text-center">Status</th>
                         </tr>
@@ -187,17 +187,17 @@
                                     meta_json: '{{ json_encode($metadata) }}'
                                 }"
                                 class="hover:bg-slate-50/50 hover:shadow-inner transition-all duration-150">
-                                <td class="py-4 px-6 text-center text-slate-400 font-mono text-xs">
+                                <td class="py-4 px-6 text-center text-slate-400 font-mono text-xs hidden md:table-cell">
                                     {{ ($transactions->currentPage() - 1) * $transactions->perPage() + $loop->iteration }}
                                 </td>
                                 <td class="py-4 px-6 text-slate-900 font-bold whitespace-nowrap">
                                     {{ $transaction->created_at->format('d M Y') }}
                                     <span class="block text-[10px] text-slate-400 font-normal mt-0.5">{{ $transaction->created_at->format('h:i A') }}</span>
                                 </td>
-                                <td class="py-4 px-6 font-mono text-xs text-slate-450">
+                                <td class="py-4 px-6 font-mono text-xs text-slate-450 hidden lg:table-cell">
                                     {{ Str::limit($transaction->transaction_ref, 15) }}
                                 </td>
-                                <td class="py-4 px-6">
+                                <td class="py-4 px-6 hidden md:table-cell">
                                     @if($transaction->user)
                                         <a href="{{ $userUrl }}" class="font-bold text-slate-800 hover:text-[#42517c] hover:underline block">
                                             {{ $userName }}
@@ -211,7 +211,7 @@
                                 <td class="py-4 px-6 text-slate-655 max-w-[200px] truncate" title="{{ $transaction->description }}">
                                     {{ $transaction->description }}
                                 </td>
-                                <td class="py-4 px-6 text-center">
+                                <td class="py-4 px-6 text-center hidden sm:table-cell">
                                     @if(in_array($transaction->type, ['credit', 'refund', 'bonus', 'manual_credit']))
                                         <span class="inline-flex items-center px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100/50 rounded-full uppercase tracking-wider">
                                             {{ $transaction->type == 'manual_credit' ? 'Credit' : ucfirst($transaction->type) }}

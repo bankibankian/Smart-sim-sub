@@ -464,11 +464,11 @@
                                         
                                         <!-- Details -->
                                         <div class="min-w-0 flex-grow">
-                                            <h4 class="font-bold text-slate-800 mb-0 truncate block text-xs w-44 sm:w-64 md:w-72 lg:w-80" title="{{ $tx->description }}">
+                                            <h4 class="font-bold text-slate-800 mb-0 truncate block text-xs" title="{{ $tx->description }}">
                                                 {{ $tx->description }}
                                             </h4>
-                                            <div class="flex items-center gap-1.5 text-slate-400 mt-0.5 min-w-0 text-[9px] font-bold">
-                                                <span class="truncate block w-20 sm:w-32" title="{{ $tx->transaction_ref }}">{{ $tx->transaction_ref }}</span>
+                                            <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-slate-400 mt-0.5 text-[9px] font-bold">
+                                                <span class="truncate block max-w-[80px] sm:max-w-none" title="{{ $tx->transaction_ref }}">{{ $tx->transaction_ref }}</span>
                                                 <span>•</span>
                                                 <span class="text-nowrap">{{ $tx->created_at->format('M d, Y') }}</span>
                                             </div>
@@ -476,7 +476,7 @@
                                     </div>
 
                                     <!-- Amount & Status Badge -->
-                                    <div class="text-end shrink-0 ml-2">
+                                    <div class="text-end shrink-0 ml-3">
                                         <span class="block font-display font-bold text-slate-800 text-nowrap text-xs">
                                             {{ $tx->type === 'credit' ? '+' : '-' }}₦{{ number_format($tx->amount, 2) }}
                                         </span>

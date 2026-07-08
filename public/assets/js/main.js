@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeaderScroll();
     initMobileMenu();
     initPricingToggler();
-    initProfitCalculator();
     initSmoothScroll();
     initFormProcessing();
 });
@@ -147,76 +146,6 @@ function initPricingToggler() {
             }
         });
     }
-}
-
-/**
- * Data savings calculator for consumers
- */
-function initProfitCalculator() {
-    const rangeSims = document.getElementById('calc-range-sims');
-    const rangeMarkup = document.getElementById('calc-range-markup');
-    
-    const displaySims = document.getElementById('display-sims');
-    const displayMarkup = document.getElementById('display-markup');
-    
-    const valCost = document.getElementById('val-cost');
-    const valRevenue = document.getElementById('val-revenue');
-    const valProfit = document.getElementById('val-profit');
-
-    if (!rangeSims || !rangeMarkup) return;
-
-    const recalculate = () => {
-        const dataCount = parseInt(rangeSims.value);
-        const monthsCount = parseInt(rangeMarkup.value);
-        
-        displaySims.textContent = dataCount + ' GB';
-        displayMarkup.textContent = monthsCount + (monthsCount === 1 ? ' Month' : ' Months');
-
-        const totalCost = 1200 * dataCount * monthsCount;      // Standard Network Cost (₦1,200 per GB)
-        const totalRevenue = 400 * dataCount * monthsCount;    // SmartSIM Cost (₦400 per GB)
-        const totalProfit = totalCost - totalRevenue;          // Total Cash Saved
-
-        // Animate the counters or simply insert
-        animateCounter(valCost, totalCost);
-        animateCounter(valRevenue, totalRevenue);
-        animateCounter(valProfit, totalProfit);
-    };
-
-    rangeSims.addEventListener('input', recalculate);
-    rangeMarkup.addEventListener('input', recalculate);
-    
-    recalculate(); // Init calculator values
-}
-
-/**
- * Simple Number Ticker animation for calculator outputs
- */
-function animateCounter(element, targetValue) {
-    if (!element) return;
-    
-    const currentValue = parseInt(element.getAttribute('data-value') || '0');
-    if (currentValue === targetValue) return;
-
-    element.setAttribute('data-value', targetValue);
-    
-    const duration = 400; // ms
-    const startTime = performance.now();
-
-    const updateValue = (currentTime) => {
-        const elapsedTime = currentTime - startTime;
-        const progress = Math.min(elapsedTime / duration, 1);
-        // Easing function: easeOutQuad
-        const easeProgress = progress * (2 - progress);
-        
-        const currentValueCalculated = Math.round(currentValue + (targetValue - currentValue) * easeProgress);
-        element.textContent = '₦' + currentValueCalculated.toLocaleString('en-US');
-
-        if (progress < 1) {
-            requestAnimationFrame(updateValue);
-        }
-    };
-
-    requestAnimationFrame(updateValue);
 }
 
 /**

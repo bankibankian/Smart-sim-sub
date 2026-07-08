@@ -262,25 +262,25 @@
 
                     <div class="space-y-3">
                         @forelse($recentTransactions as $tx)
-                            <div class="p-3 bg-slate-50 border border-slate-200/60 rounded-2xl flex items-center justify-between">
-                                <div class="flex items-center gap-3 min-w-0">
+                            <div class="p-3 bg-slate-50 border border-slate-200/60 rounded-2xl flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-3 min-w-0 flex-grow">
                                     <div class="p-2 rounded-xl {{ $tx->type === 'credit' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }} flex items-center justify-center shrink-0 w-8 h-8">
                                         <i data-lucide="{{ $tx->type === 'credit' ? 'arrow-down-left' : 'arrow-up-right' }}" class="w-4 h-4"></i>
                                     </div>
-                                    <div class="min-w-0">
-                                        <h4 class="font-bold text-slate-800 mb-0 truncate block font-display text-xs w-44 sm:w-64 md:w-72 lg:w-80" title="{{ $tx->description }}">
+                                    <div class="min-w-0 flex-grow">
+                                        <h4 class="font-bold text-slate-800 mb-0 truncate block font-display text-xs" title="{{ $tx->description }}">
                                             {{ $tx->description }}
                                         </h4>
-                                        <div class="flex items-center gap-2 text-slate-400 mt-0.5 text-[9px] font-bold">
-                                            <span class="text-slate-500 font-bold">{{ $tx->user->email ?? 'N/A' }}</span>
-                                            <span>•</span>
-                                            <span>{{ $tx->created_at->format('M d, h:i A') }}</span>
+                                        <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-slate-400 mt-0.5 text-[9px] font-bold">
+                                            <span class="text-slate-500 font-bold truncate max-w-[120px] sm:max-w-none">{{ $tx->user->email ?? 'N/A' }}</span>
+                                            <span class="hidden xs:inline">•</span>
+                                            <span class="text-nowrap">{{ $tx->created_at->format('M d, h:i A') }}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="text-end">
-                                    <span class="block font-display font-bold text-slate-800 text-xs">
+                                <div class="text-end shrink-0 ml-3">
+                                    <span class="block font-display font-bold text-slate-800 text-xs text-nowrap">
                                         ₦{{ number_format($tx->amount, 2) }}
                                     </span>
                                     <span class="bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-full inline-block py-0.5 px-2 text-[8px] font-bold" style="text-transform: uppercase;">
