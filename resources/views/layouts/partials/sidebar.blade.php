@@ -128,6 +128,72 @@
             <span>{{ __('SIM Services') }}</span>
         </a>
 
+        <!-- Verification Dropdown -->
+        <div x-data="{ open: {{ request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index') ? 'true' : 'false' }} }" class="space-y-1">
+            <button @click="open = !open" 
+                    class="w-full group flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display focus:outline-none {{ request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index') ? 'bg-[#42517c]/5 text-slate-200 font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="shield-check" class="w-5 h-5 {{ request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index') ? 'text-[#55699e]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
+                    <span>Verification</span>
+                </div>
+                <i data-lucide="chevron-down" 
+                   class="w-4 h-4 text-slate-500 transition-transform duration-200"
+                   :class="open ? 'rotate-180' : ''"></i>
+            </button>
+
+            <!-- Sub Selection Links -->
+            <div x-show="open" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-2"
+                 class="pl-4 space-y-1"
+                 style="display: none;">
+                
+                <!-- BVN Verification -->
+                <a href="{{ route('bvn.verification.index') }}" 
+                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('bvn.verification.index') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
+                    @if(request()->routeIs('bvn.verification.index'))
+                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
+                    @endif
+                    <i data-lucide="fingerprint" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('bvn.verification.index') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
+                    <span>BVN Verification</span>
+                </a>
+
+                <!-- NIN Verification -->
+                <a href="{{ route('nin.verification.index') }}" 
+                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('nin.verification.index') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
+                    @if(request()->routeIs('nin.verification.index'))
+                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
+                    @endif
+                    <i data-lucide="file-check-2" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('nin.verification.index') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
+                    <span>NIN Verification</span>
+                </a>
+
+                <!-- NIN Demo Verification -->
+                <a href="{{ route('nin.demo.index') }}" 
+                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('nin.demo.index') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
+                    @if(request()->routeIs('nin.demo.index'))
+                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
+                    @endif
+                    <i data-lucide="users" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('nin.demo.index') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
+                    <span>NIN Demo</span>
+                </a>
+
+                <!-- NIN Phone Verification -->
+                <a href="{{ route('nin.phone.index') }}" 
+                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('nin.phone.index') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
+                    @if(request()->routeIs('nin.phone.index'))
+                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
+                    @endif
+                    <i data-lucide="phone" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('nin.phone.index') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
+                    <span>NIN Phone</span>
+                </a>
+            </div>
+        </div>
+
         <!-- Transactions Link -->
         <a href="{{ route('transactions') }}" 
            class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('transactions') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">

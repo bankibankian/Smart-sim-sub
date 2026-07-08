@@ -65,6 +65,38 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sims/request', [\App\Http\Controllers\smartsim\SimsController::class, 'requestSim'])->name('sims.request');
     Route::post('/sims/activate', [\App\Http\Controllers\smartsim\SimsController::class, 'activateSim'])->name('sims.activate');
     Route::post('/partner/sims/assign', [\App\Http\Controllers\smartsim\SimsController::class, 'partnerAssignSim'])->name('partner.sims.assign');
+
+    // Identity Verification Routes
+    Route::prefix('verification')->group(function () {
+        // BVN Verification
+        Route::get('/bvn', [\App\Http\Controllers\Verification\BvnverificationController::class, 'index'])->name('bvn.verification.index');
+        Route::post('/bvn', [\App\Http\Controllers\Verification\BvnverificationController::class, 'store'])->name('bvn.verification.store');
+        Route::get('/bvn/standard/{bvn_no}', [\App\Http\Controllers\Verification\BvnverificationController::class, 'standardBVN'])->name('standardBVN');
+        Route::get('/bvn/premium/{bvn_no}', [\App\Http\Controllers\Verification\BvnverificationController::class, 'premiumBVN'])->name('premiumBVN');
+        Route::get('/bvn/plastic/{bvn_no}', [\App\Http\Controllers\Verification\BvnverificationController::class, 'plasticBVN'])->name('plasticBVN');
+
+        // NIN Verification
+        Route::get('/nin', [\App\Http\Controllers\Verification\NINverificationController::class, 'index'])->name('nin.verification.index');
+        Route::post('/nin', [\App\Http\Controllers\Verification\NINverificationController::class, 'store'])->name('nin.verification.store');
+        Route::get('/nin/regular/{nin_no}', [\App\Http\Controllers\Verification\NINverificationController::class, 'regularSlip'])->name('regularSlip');
+        Route::get('/nin/standard/{nin_no}', [\App\Http\Controllers\Verification\NINverificationController::class, 'standardSlip'])->name('standardSlip');
+        Route::get('/nin/premium/{nin_no}', [\App\Http\Controllers\Verification\NINverificationController::class, 'premiumSlip'])->name('premiumSlip');
+        Route::get('/nin/vnin/{nin_no}', [\App\Http\Controllers\Verification\NINverificationController::class, 'vninSlip'])->name('vninSlip');
+
+        // NIN Demo Verification
+        Route::get('/nin-demo', [\App\Http\Controllers\Verification\NINDemoVerificationController::class, 'index'])->name('nin.demo.index');
+        Route::post('/nin-demo', [\App\Http\Controllers\Verification\NINDemoVerificationController::class, 'store'])->name('nin.demo.store');
+        Route::get('/nin-demo/regular/{nin_no}', [\App\Http\Controllers\Verification\NINDemoVerificationController::class, 'regularSlip'])->name('nin.demo.regularSlip');
+        Route::get('/nin-demo/standard/{nin_no}', [\App\Http\Controllers\Verification\NINDemoVerificationController::class, 'standardSlip'])->name('nin.demo.standardSlip');
+        Route::get('/nin-demo/premium/{nin_no}', [\App\Http\Controllers\Verification\NINDemoVerificationController::class, 'premiumSlip'])->name('nin.demo.premiumSlip');
+
+        // NIN Phone Verification
+        Route::get('/nin-phone', [\App\Http\Controllers\Verification\NINPhoneVerificationController::class, 'index'])->name('nin.phone.index');
+        Route::post('/nin-phone', [\App\Http\Controllers\Verification\NINPhoneVerificationController::class, 'store'])->name('nin.phone.store');
+        Route::get('/nin-phone/regular/{nin_no}', [\App\Http\Controllers\Verification\NINPhoneVerificationController::class, 'regularSlip'])->name('nin.phone.regularSlip');
+        Route::get('/nin-phone/standard/{nin_no}', [\App\Http\Controllers\Verification\NINPhoneVerificationController::class, 'standardSlip'])->name('nin.phone.standardSlip');
+        Route::get('/nin-phone/premium/{nin_no}', [\App\Http\Controllers\Verification\NINPhoneVerificationController::class, 'premiumSlip'])->name('nin.phone.premiumSlip');
+    });
 });
 
 Route::middleware('auth')->group(function () {

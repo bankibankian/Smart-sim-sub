@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             SmeDataSeeder::class,
             AirtimeSeeder::class,
             P2PSeeder::class,
+            VerificationSeeder::class,
         ]);
     }
 }

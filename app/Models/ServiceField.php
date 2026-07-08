@@ -63,6 +63,26 @@ class ServiceField extends Model
     }
 
     /**
+     * Resolve the effective price for a given user type / role.
+     * Priority: role price → base_price.
+     */
+    public function getPriceForUserType(?string $role): float
+    {
+        if ($role) {
+            $rolePrice = $this->prices()
+                ->whereNull('user_id')
+                ->where('user_type', $role)
+                ->first();
+
+            if ($rolePrice) {
+                return (float) $rolePrice->price;
+            }
+        }
+
+        return (float) $this->base_price;
+    }
+
+    /**
      * Scope to only active fields.
      */
     public function scopeActive(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
