@@ -28,6 +28,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Terminate all other existing sessions for this user (Single Device Enforcement)
+        Auth::logoutOtherDevices($request->password);
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

@@ -86,6 +86,9 @@ class TransactionController extends Controller
         if ($ref && $ref !== 'N/A') {
             $tx = Transaction::where('transaction_ref', $ref)->first();
             if ($tx) {
+                if ($tx->user_id !== Auth::id() && Auth::user()->role !== 'super_admin') {
+                    abort(403, 'Unauthorized access to this transaction receipt.');
+                }
                 $data['amount'] = $tx->amount;
                 $data['paid'] = $tx->net_amount;
                 $data['fee'] = $tx->fee ?? 0;

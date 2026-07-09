@@ -23,6 +23,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Enforce strong password rules globally
+        \Illuminate\Validation\Rules\Password::defaults(function () {
+            return \Illuminate\Validation\Rules\Password::min(8)
+                ->letters()
+                ->mixedCase()
+                ->numbers()
+                ->symbols();
+        });
+
         // Force HTTPS in production — protects session cookies and data in transit
         if ($this->app->environment('production')) {
             URL::forceScheme('https');

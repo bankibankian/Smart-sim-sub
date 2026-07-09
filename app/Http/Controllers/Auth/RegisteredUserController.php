@@ -81,6 +81,7 @@ class RegisteredUserController extends Controller
             // Log the user in first, then send OTP for email verification
             event(new Registered($user));
             Auth::login($user);
+            $request->session()->regenerate();
 
             // Generate and send OTP — redirect to verification page
             $user->generateOtp();

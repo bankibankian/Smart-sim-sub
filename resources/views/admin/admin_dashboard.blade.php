@@ -72,7 +72,7 @@
         @if (session('success'))
             <div class="p-4 mb-4 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-800 flex items-center gap-3 shadow-sm animate-in fade-in" role="alert">
                 <i data-lucide="check-circle" class="text-emerald-500 shrink-0 w-5 h-5"></i>
-                <div class="text-sm font-semibold">{!! session('success') !!}</div>
+                <div class="text-sm font-semibold">{{ session('success') }}</div>
             </div>
         @endif
 

@@ -302,6 +302,8 @@ class SimsController extends Controller
         }
 
         if ($sim->user_id && $sim->user) {
+            $isOwnerOrAdmin = ($sim->user_id === Auth::id()) || (Auth::user() && Auth::user()->role === 'super_admin');
+            
             return back()->with('check_result', [
                 'success'      => true,
                 'found'        => true,
@@ -310,9 +312,9 @@ class SimsController extends Controller
                 'category'     => $sim->category,
                 'provider'     => $sim->provider,
                 'status'       => $sim->status,
-                'user_name'    => $sim->user->first_name . ' ' . $sim->user->last_name,
-                'user_email'   => $sim->user->email,
-                'user_phone'   => $sim->user->phone,
+                'user_name'    => $isOwnerOrAdmin ? ($sim->user->first_name . ' ' . $sim->user->last_name) : 'Masked (Unauthorized)',
+                'user_email'   => $isOwnerOrAdmin ? $sim->user->email : 'Masked (Unauthorized)',
+                'user_phone'   => $isOwnerOrAdmin ? $sim->user->phone : 'Masked (Unauthorized)',
             ]);
         }
 

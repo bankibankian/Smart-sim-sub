@@ -177,20 +177,33 @@ class SimPlanController extends Controller
 
         try {
             DB::transaction(function () use ($simRequest) {
-                $sim = $simRequest->sim;
+                // Lock the request for update
+                $lockedRequest = SimRequest::where('id', $simRequest->id)->lockForUpdate()->first();
+                if (!$lockedRequest || $lockedRequest->status !== 'pending') {
+                    throw new \Exception('This request has already been processed or is not found.');
+                }
 
-                if ($simRequest->request_type === 'purchase') {
+                $sim = $lockedRequest->sim;
+                if ($sim) {
+                    $sim = Sim::where('id', $sim->id)->lockForUpdate()->first();
+                }
+
+                if ($lockedRequest->request_type === 'purchase') {
                     if (!$sim || $sim->status !== 'available') {
                         throw new \Exception('The requested SIM number is no longer available.');
                     }
 
-                    $requester = $simRequest->user;
+                    $requester = User::where('id', $lockedRequest->user_id)->lockForUpdate()->first();
+                    if (!$requester) {
+                        throw new \Exception('Requester user not found.');
+                    }
+
                     $sim->update([
                         'user_id'    => $requester->id,
                         'partner_id' => $requester->role === 'partner' ? $requester->id : null,
                         'status'     => 'assigned',
                     ]);
-                } elseif ($simRequest->request_type === 'activation') {
+                } elseif ($lockedRequest->request_type === 'activation') {
                     if ($sim) {
                         $sim->update(['status' => 'active']);
 
@@ -205,7 +218,7 @@ class SimPlanController extends Controller
 
                         if ($field) {
                             $awardCommission = function($userId, $role, $simNumber, $simCategory, $simProvider, $roleName) use ($service, $field) {
-                                $userModel = \App\Models\User::find($userId);
+                                $userModel = \App\Models\User::where('id', $userId)->lockForUpdate()->first();
                                 if (!$userModel || $userModel->role === 'super_admin') {
                                     return;
                                 }
@@ -263,24 +276,18 @@ class SimPlanController extends Controller
 
                             // 1. Award to the assignee/user (excluding super_admin)
                             if ($sim->user_id) {
-                                $u = \App\Models\User::find($sim->user_id);
-                                if ($u) {
-                                    $awardCommission($u->id, $u->role, $sim->number, $sim->category, $sim->provider, 'assignee');
-                                }
+                                $awardCommission($sim->user_id, null, $sim->number, $sim->category, $sim->provider, 'assignee');
                             }
 
                             // 2. Award to the partner (excluding super_admin) if partner is different from assignee
                             if ($sim->partner_id && $sim->partner_id !== $sim->user_id) {
-                                $p = \App\Models\User::find($sim->partner_id);
-                                if ($p) {
-                                    $awardCommission($p->id, $p->role, $sim->number, $sim->category, $sim->provider, 'partner');
-                                }
+                                $awardCommission($sim->partner_id, null, $sim->number, $sim->category, $sim->provider, 'partner');
                             }
                         }
                     }
                 }
 
-                $simRequest->update([
+                $lockedRequest->update([
                     'status' => 'approved',
                     'admin_notes' => 'Approved by Super Admin.',
                 ]);
@@ -307,17 +314,23 @@ class SimPlanController extends Controller
 
         try {
             DB::transaction(function () use ($simRequest, $request) {
-                $simRequest->update([
+                // Lock the request for update
+                $lockedRequest = SimRequest::where('id', $simRequest->id)->lockForUpdate()->first();
+                if (!$lockedRequest || $lockedRequest->status !== 'pending') {
+                    throw new \Exception('This request has already been processed or is not found.');
+                }
+
+                $lockedRequest->update([
                     'status'      => 'rejected',
                     'admin_notes' => $request->admin_notes ?? 'Rejected by Admin.',
                 ]);
 
                 // Refund the amount securely if user was charged
-                if ($simRequest->amount > 0) {
-                    $wallet = Wallet::where('user_id', $simRequest->user_id)->lockForUpdate()->first();
+                if ($lockedRequest->amount > 0) {
+                    $wallet = Wallet::where('user_id', $lockedRequest->user_id)->lockForUpdate()->first();
                     if ($wallet) {
                         $oldBalance = $wallet->balance;
-                        $wallet->increment('balance', $simRequest->amount);
+                        $wallet->increment('balance', $lockedRequest->amount);
                         $newBalance = $wallet->balance;
 
                         $refundRef = 'REF-' . time() . '-' . rand(1000, 9999);
@@ -325,11 +338,11 @@ class SimPlanController extends Controller
                         // Create refund transaction
                         Transaction::create([
                             'transaction_ref' => $refundRef,
-                            'user_id'         => $simRequest->user_id,
-                            'amount'          => $simRequest->amount,
+                            'user_id'         => $lockedRequest->user_id,
+                            'amount'          => $lockedRequest->amount,
                             'fee'             => 0.00,
-                            'net_amount'      => $simRequest->amount,
-                            'description'     => "Refund: Rejected SIM card request ({$simRequest->request_type}) for number {$simRequest->number}",
+                            'net_amount'      => $lockedRequest->amount,
+                            'description'     => "Refund: Rejected SIM card request ({$lockedRequest->request_type}) for number {$lockedRequest->number}",
                             'type'            => 'refund',
                             'status'          => 'completed',
                             'performed_by'    => 'System Admin',
@@ -338,14 +351,14 @@ class SimPlanController extends Controller
 
                         // Create Report record
                         \App\Models\Report::create([
-                            'user_id'      => $simRequest->user_id,
-                            'phone_number' => $simRequest->number,
-                            'network'      => $simRequest->provider,
+                            'user_id'      => $lockedRequest->user_id,
+                            'phone_number' => $lockedRequest->number,
+                            'network'      => $lockedRequest->provider,
                             'ref'          => $refundRef,
-                            'amount'       => $simRequest->amount,
+                            'amount'       => $lockedRequest->amount,
                             'status'       => 'completed',
                             'type'         => 'refund',
-                            'description'  => "Refund: Rejected SIM card request ({$simRequest->request_type}) for number {$simRequest->number}",
+                            'description'  => "Refund: Rejected SIM card request ({$lockedRequest->request_type}) for number {$lockedRequest->number}",
                             'old_balance'  => $oldBalance,
                             'new_balance'  => $newBalance,
                         ]);

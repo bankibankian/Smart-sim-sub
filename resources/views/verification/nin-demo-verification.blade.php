@@ -41,7 +41,7 @@
                             @if (session('error'))
                                 <div class="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-rose-800 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
                                     <i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0 mt-0.5"></i>
-                                    <div class="text-xs font-semibold">{!! session('error') !!}</div>
+                                    <div class="text-xs font-semibold">{{ session('error') }}</div>
                                 </div>
                             @endif
 
@@ -49,12 +49,12 @@
                                 @if (session('status') === 'success')
                                     <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-emerald-800 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
                                         <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
-                                        <div class="text-xs font-semibold">{!! session('message') !!}</div>
+                                        <div class="text-xs font-semibold">{{ session('message') }}</div>
                                     </div>
                                 @else
                                     <div class="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-rose-800 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
                                         <i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0 mt-0.5"></i>
-                                        <div class="text-xs font-semibold">{!! session('message') !!}</div>
+                                        <div class="text-xs font-semibold">{{ session('message') }}</div>
                                     </div>
                                 @endif
                             @endif

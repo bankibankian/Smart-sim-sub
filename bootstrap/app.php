@@ -12,8 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->authenticateSessions();
+
         $middleware->web(append: [
             \App\Http\Middleware\EnsureKycCompleted::class,
+            \App\Http\Middleware\VerifySessionFingerprint::class,
+            \App\Http\Middleware\AddSecurityHeaders::class,
         ]);
         $middleware->alias([
             'super_admin' => \App\Http\Middleware\EnsureIsSuperAdmin::class,

@@ -132,7 +132,7 @@ class SmeDataController extends Controller
         $payableAmount = $plan->calculatePriceForRole($user->role ?? 'personal');
         $description = "{$plan->size} {$plan->plan_type} for {$mobile} ({$plan->network})";
 
-        // Check Wallet Balance
+        // Check Wallet Balance (preliminary check)
         $wallet = Wallet::where('user_id', $user->id)->first();
         if (!$wallet || $wallet->balance < $payableAmount) {
             return redirect()->back()->with('error', 'Insufficient wallet balance! You need ₦' . number_format($payableAmount, 2));
@@ -204,6 +204,61 @@ class SmeDataController extends Controller
 
         $requestId = RequestIdHelper::generateRequestId();
 
+        // 2. Start DB Transaction & Debit user first
+        DB::beginTransaction();
+        try {
+            // Refetch wallet with lock
+            $wallet = Wallet::where('user_id', $user->id)->lockForUpdate()->first();
+            if (!$wallet || $wallet->balance < $payableAmount) {
+                DB::rollBack();
+                $lock->release();
+                return redirect()->back()->with('error', 'Insufficient wallet balance! You need ₦' . number_format($payableAmount, 2));
+            }
+
+            $oldBalance = $wallet->balance;
+            $wallet->decrement('balance', $payableAmount);
+            $newBalance = $wallet->balance;
+
+            $transaction = Transaction::create([
+                'transaction_ref' => $requestId,
+                'user_id'         => $user->id,
+                'amount'          => $payableAmount,
+                'fee'             => 0,
+                'net_amount'      => $payableAmount,
+                'description'     => "SME Data purchase: " . $description,
+                'type'            => 'debit',
+                'status'          => 'processing',
+                'metadata'        => json_encode([
+                    'phone'        => $mobile,
+                    'network'      => $plan->network,
+                    'plan_type'    => $plan->plan_type,
+                    'data_id'      => $planId,
+                ]),
+                'performed_by' => $user->first_name . ' ' . $user->last_name,
+                'approved_by'  => $user->id,
+            ]);
+
+            $report = \App\Models\Report::create([
+                'user_id'      => $user->id,
+                'phone_number' => $mobile,
+                'network'      => $plan->network,
+                'ref'          => $requestId,
+                'amount'       => $payableAmount,
+                'status'       => 'processing',
+                'type'         => 'data',
+                'description'  => "SME Data purchase: " . $description,
+                'old_balance'  => $oldBalance,
+                'new_balance'  => $newBalance,
+                'service_id'   => $serviceField ? $serviceField->service_id : null,
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $lock->release();
+            return redirect()->back()->with('error', 'Database error: ' . $e->getMessage());
+        }
+
         // API Call to Fadeelposdatasub
         try {
             $networkIdMap = [
@@ -251,21 +306,15 @@ class SmeDataController extends Controller
 
             if ($isSuccess) {
                 // Success path
-                $wallet->decrement('balance', $payableAmount);
                 $apiData = $data['data'] ?? [];
                 $transactionRef = $data['transid'] ?? $data['reference'] ?? $data['transaction_id'] ?? $apiData['transaction_ref'] ?? $apiData['reference'] ?? $requestId;
                 
                 // Extract plan info from response if available, otherwise use our description
                 $apiDescription = $data['message'] ?? $apiData['plan'] ?? $description;
 
-                Transaction::create([
+                $transaction->update([
                     'transaction_ref' => $transactionRef,
-                    'user_id'         => $user->id,
-                    'amount'          => $payableAmount,
-                    'fee'             => 0,
-                    'net_amount'      => $payableAmount,
                     'description'     => "SME Data purchase: " . $apiDescription,
-                    'type'            => 'debit',
                     'status'          => 'completed',
                     'metadata'        => json_encode([
                         'phone'        => $mobile,
@@ -275,23 +324,12 @@ class SmeDataController extends Controller
                         'api_response' => $data,
                         'api_data'     => $apiData
                     ]),
-                    'performed_by' => $user->first_name . ' ' . $user->last_name,
-                    'approved_by'  => $user->id,
                 ]);
 
-                // Log Report record
-                \App\Models\Report::create([
-                    'user_id'      => $user->id,
-                    'phone_number' => $mobile,
-                    'network'      => $plan->network,
+                $report->update([
                     'ref'          => $transactionRef,
-                    'amount'       => $payableAmount,
                     'status'       => 'completed',
-                    'type'         => 'data',
                     'description'  => "SME Data purchase: " . $apiDescription,
-                    'old_balance'  => $wallet->balance + $payableAmount,
-                    'new_balance'  => $wallet->balance,
-                    'service_id'   => $serviceField ? $serviceField->service_id : null,
                 ]);
 
                 // Award commission if configured
@@ -352,14 +390,39 @@ class SmeDataController extends Controller
                     });
                 }
 
+                $lock->release();
                 return redirect()->back()->with('success', "Data purchase of {$plan->size} ({$plan->plan_type}) for {$mobile} was successful!");
             } else {
                 $errorMessage = $data['message'] ?? $data['msg'] ?? 'Data purchase failed. Please try again.';
+                DB::transaction(function () use ($wallet, $payableAmount, $transaction, $report, $errorMessage) {
+                    $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                    if ($w) {
+                        $w->increment('balance', $payableAmount);
+                    }
+                    $transaction->update(['status' => 'failed']);
+                    $report->update([
+                        'status'      => 'failed',
+                        'description' => "Failed: " . $errorMessage,
+                    ]);
+                });
+                $lock->release();
                 return redirect()->back()->with('error', $errorMessage);
             }
 
         } catch (\Exception $e) {
             Log::error('SME Data API Connection Error: ' . $e->getMessage());
+            DB::transaction(function () use ($wallet, $payableAmount, $transaction, $report, $e) {
+                $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                if ($w) {
+                    $w->increment('balance', $payableAmount);
+                }
+                $transaction->update(['status' => 'failed']);
+                $report->update([
+                    'status'      => 'failed',
+                    'description' => "Failed: Connection Error - " . $e->getMessage(),
+                ]);
+            });
+            $lock->release();
             return redirect()->back()->with('error', 'Could not connect to data provider. Please try again later.');
         } finally {
             $lock->release();

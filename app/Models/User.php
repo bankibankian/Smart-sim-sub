@@ -214,7 +214,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function verifyOtp(string $code): bool
     {
-        if ($this->otp_code === $code && $this->otp_expires_at && $this->otp_expires_at->isFuture()) {
+        if (!empty($this->otp_code) && hash_equals($this->otp_code, $code) && $this->otp_expires_at && $this->otp_expires_at->isFuture()) {
             $this->forceFill([
                 'otp_code' => null,
                 'otp_expires_at' => null,

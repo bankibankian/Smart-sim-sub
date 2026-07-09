@@ -32,22 +32,23 @@ class ProfileController extends Controller
 
         if ($request->hasFile('profile_photo')) {
             $file = $request->file('profile_photo');
-            $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('uploads/profile_photos');
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
-            $file->move($destinationPath, $filename);
 
             // Delete old photo if it exists
             if ($user->profile_photo) {
-                $oldPath = public_path($user->profile_photo);
-                if (file_exists($oldPath)) {
-                    @unlink($oldPath);
+                if (str_starts_with($user->profile_photo, 'uploads/')) {
+                    $oldPath = public_path($user->profile_photo);
+                    if (file_exists($oldPath)) {
+                        @unlink($oldPath);
+                    }
+                } else {
+                    $oldPath = str_replace('storage/', '', $user->profile_photo);
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
                 }
             }
 
-            $user->profile_photo = 'uploads/profile_photos/' . $filename;
+            // Securely store profile photo on the public disk
+            $path = $file->store('profile_photos', 'public');
+            $user->profile_photo = 'storage/' . $path;
         }
 
         $user->save();

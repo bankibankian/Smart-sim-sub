@@ -50,7 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sme/fetch-price', [\App\Http\Controllers\Action\SmeDataController::class, 'fetchSmeBundlePrice'])->name('sme.fetch.price');
 
     // Profile PIN update requires verified email (financial action)
-    Route::post('/profile/pin', [ProfileController::class, 'updatePin'])->name('profile.pin.update');
+    Route::post('/profile/pin', [ProfileController::class, 'updatePin'])->name('profile.pin.update')->middleware('throttle:5,1');
 
     // Support Tickets Routes
     Route::get('/support', [\App\Http\Controllers\SupportController::class, 'index'])->name('support');
@@ -126,6 +126,12 @@ Route::middleware(['auth', 'verified', 'super_admin'])->prefix('admin/manage')->
     Route::get('/support/{ticket}', [\App\Http\Controllers\Admin\SupportController::class, 'show'])->name('support.show');
     Route::post('/support/{ticket}/reply', [\App\Http\Controllers\Admin\SupportController::class, 'reply'])->name('support.reply');
     Route::post('/support/{ticket}/status', [\App\Http\Controllers\Admin\SupportController::class, 'updateStatus'])->name('support.status');
+
+    // Admin Wallet Routes
+    Route::get('/adminwallet', [\App\Http\Controllers\Admin\AdminWalletController::class, 'index'])->name('adminwallet');
+    Route::post('/adminwallet/verify-user', [\App\Http\Controllers\Admin\AdminWalletController::class, 'verifyUser'])->name('adminwallet.verify-user');
+    Route::post('/adminwallet/single', [\App\Http\Controllers\Admin\AdminWalletController::class, 'adjustSingle'])->name('adminwallet.single');
+    Route::post('/adminwallet/general', [\App\Http\Controllers\Admin\AdminWalletController::class, 'adjustGeneral'])->name('adminwallet.general');
 });
 
 Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
@@ -171,12 +177,6 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
     });
 });
 
-// ⚠️  LOCAL DEVELOPMENT ONLY — remove or keep guarded before deploying to production
-if (app()->environment('local')) {
-    Route::get('/temp-login', function () {
-        \Illuminate\Support\Facades\Auth::login(\App\Models\User::find(1));
-        return redirect()->route('wallet');
-    });
-}
+// Removed temp-login backdoor route for production security.
 
 require __DIR__.'/auth.php';

@@ -311,11 +311,33 @@ class WalletController extends Controller
         ]);
 
         $sender = Auth::user();
+        $lockKey = 'pin_attempts_' . $sender->id;
+        $attempts = Cache::get($lockKey, 0);
+
+        // Lockout after 5 failed attempts for 15 minutes
+        if ($attempts >= 5) {
+            return back()->with('error', 'Too many incorrect PIN attempts. Please try again in 15 minutes.');
+        }
+
+        if (!$sender->transaction_pin) {
+            return back()->with('error', 'Transaction PIN is not set. Please set one in your profile.');
+        }
 
         // 1. PIN verification
         if (!Hash::check($request->pin, $sender->transaction_pin)) {
+            Cache::put($lockKey, $attempts + 1, now()->addMinutes(15));
+
+            Log::warning('Failed PIN verification attempt during transfer', [
+                'user_id'        => $sender->id,
+                'ip'             => $request->ip(),
+                'attempt_number' => $attempts + 1,
+            ]);
+
             return back()->with('error', 'Incorrect transaction PIN.');
         }
+
+        // Reset counter on success
+        Cache::forget($lockKey);
 
         // 2. Resolve recipient
         $recipientWallet = Wallet::where('wallet_number', $request->wallet_id)->first();

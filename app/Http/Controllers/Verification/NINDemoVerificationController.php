@@ -111,23 +111,70 @@ class NINDemoVerificationController extends Controller
         // 3. Determine service price based on user role
         $servicePrice = $serviceField->getPriceForUserType($user->role);
 
-        // 4. Check wallet
-        $wallet = Wallet::where('user_id', $user->id)->firstOrFail();
+        // 4. Start DB Transaction & Debit user first
+        DB::beginTransaction();
+        try {
+            $wallet = Wallet::where('user_id', $user->id)->lockForUpdate()->first();
+            if (!$wallet) {
+                DB::rollBack();
+                return back()->with([
+                    'status' => 'error',
+                    'message' => 'Wallet not found.'
+                ]);
+            }
 
-        if ($wallet->status !== 'active') {
+            if ($wallet->status !== 'active') {
+                DB::rollBack();
+                return back()->with([
+                    'status' => 'error',
+                    'message' => 'Your wallet is not active.'
+                ]);
+            }
+
+            if ($wallet->balance < $servicePrice) {
+                DB::rollBack();
+                return back()->with([
+                    'status' => 'error',
+                    'message' => 'Insufficient wallet balance. You need NGN ' . number_format($servicePrice - $wallet->balance, 2)
+                ]);
+            }
+
+            // Deduct wallet balance
+            $wallet->decrement('balance', $servicePrice);
+
+            $transactionRef = 'D2' . (time() % 1000000000) . '-' . mt_rand(100, 999);
+            $performedBy = $user->first_name . ' ' . $user->last_name;
+
+            $transaction = Transaction::create([
+                'transaction_ref' => $transactionRef,
+                'user_id' => $user->id,
+                'amount' => $servicePrice,
+                'description' => "NIN Demographic Verification - {$serviceField->field_name}",
+                'type' => 'debit',
+                'status' => 'processing',
+                'performed_by'    => $performedBy,
+                'metadata' => [
+                    'service' => 'verification',
+                    'service_field' => $serviceField->field_name,
+                    'field_code' => $serviceField->field_code,
+                    'user_role' => $user->role,
+                    'price_details' => [
+                        'base_price' => $serviceField->base_price,
+                        'user_price' => $servicePrice,
+                    ],
+                ],
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
             return back()->with([
                 'status' => 'error',
-                'message' => 'Your wallet is not active.'
+                'message' => 'Failed to initialize transaction: ' . $e->getMessage()
             ]);
         }
 
-        if ($wallet->balance < $servicePrice) {
-            return back()->with([
-                'status' => 'error',
-                'message' => 'Insufficient wallet balance. You need NGN ' . number_format($servicePrice - $wallet->balance, 2)
-            ]);
-        }
-
+        // 5. Call API outside the transaction
         try {
             $apiKey = env('AREWA_API_TOKEN');
             $baseUrl = env('AREWA_BASE_URL');
@@ -152,16 +199,28 @@ class NINDemoVerificationController extends Controller
             // Check for successful response
             if ($response->successful() && isset($data['status']) && $data['status'] === true) {
                 if (isset($data['api_response']['status']) && $data['api_response']['status'] === true) {
-                     return $this->processSuccessTransaction(
+                     return $this->finalizeSuccessTransaction(
                         $wallet,
                         $servicePrice,
                         $user,
                         $serviceField,
                         $service,
-                        $data
+                        $data,
+                        $transaction,
+                        $transactionRef,
+                        $performedBy
                     );
                 }
             }
+
+            // Refund
+            DB::transaction(function () use ($wallet, $servicePrice, $transaction) {
+                $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                if ($w) {
+                    $w->increment('balance', $servicePrice);
+                }
+                $transaction->update(['status' => 'failed']);
+            });
 
             // Handle different error scenarios
             $errorMessage = $data['message'] ?? 'Verification failed. Please check your details and try again.';
@@ -201,6 +260,19 @@ class NINDemoVerificationController extends Controller
             ]);
 
         } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            // Refund
+            try {
+                DB::transaction(function () use ($wallet, $servicePrice, $transaction) {
+                    $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                    if ($w) {
+                        $w->increment('balance', $servicePrice);
+                    }
+                    $transaction->update(['status' => 'failed']);
+                });
+            } catch (\Exception $refException) {
+                Log::error('Refund failed after verification connection error: ' . $refException->getMessage());
+            }
+
             \Log::error('NIN Demo Verification Connection Error', [
                 'firstName' => $request->firstName ?? 'N/A',
                 'lastName' => $request->lastName ?? 'N/A',
@@ -213,6 +285,19 @@ class NINDemoVerificationController extends Controller
                 'message' => 'Unable to connect to verification service. Please check your internet connection and try again.'
             ]);
         } catch (\Illuminate\Http\Client\RequestException $e) {
+            // Refund
+            try {
+                DB::transaction(function () use ($wallet, $servicePrice, $transaction) {
+                    $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                    if ($w) {
+                        $w->increment('balance', $servicePrice);
+                    }
+                    $transaction->update(['status' => 'failed']);
+                });
+            } catch (\Exception $refException) {
+                Log::error('Refund failed after verification request error: ' . $refException->getMessage());
+            }
+
             \Log::error('NIN Demo Verification Request Error', [
                 'firstName' => $request->firstName ?? 'N/A',
                 'lastName' => $request->lastName ?? 'N/A',
@@ -225,6 +310,19 @@ class NINDemoVerificationController extends Controller
                 'message' => 'Verification request failed. Please try again later.'
             ]);
         } catch (\Exception $e) {
+            // Refund
+            try {
+                DB::transaction(function () use ($wallet, $servicePrice, $transaction) {
+                    $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                    if ($w) {
+                        $w->increment('balance', $servicePrice);
+                    }
+                    $transaction->update(['status' => 'failed']);
+                });
+            } catch (\Exception $refException) {
+                Log::error('Refund failed after verification system error: ' . $refException->getMessage());
+            }
+
             \Log::error('NIN Demo Verification System Error', [
                 'firstName' => $request->firstName ?? 'N/A',
                 'lastName' => $request->lastName ?? 'N/A',
@@ -241,9 +339,9 @@ class NINDemoVerificationController extends Controller
     }
 
     /**
-     * Process successful transaction (Charge + Verification Record)
+     * Process successful transaction (Finalize transaction & Verification Record)
      */
-    private function processSuccessTransaction($wallet, $servicePrice, $user, $serviceField, $service, $apiResponse)
+    private function finalizeSuccessTransaction($wallet, $servicePrice, $user, $serviceField, $service, $apiResponse, $transaction, $transactionRef, $performedBy)
     {
         DB::beginTransaction();
 
@@ -288,21 +386,9 @@ class NINDemoVerificationController extends Controller
                 ]);
             }
             
-            $transactionRef = 'D2' . (time() % 1000000000) . '-' . mt_rand(100, 999);
-            $performedBy = $user->first_name . ' ' . $user->last_name;
-
-            // Determine status based on whether NIN is suspended
-            $transactionStatus = $isSuspended ? 'suspended' : 'pending';
-            $verificationStatus = $isSuspended ? 'suspended' : 'pending';
-
-            $transaction = Transaction::create([
+            $transaction->update([
                 'transaction_ref' => $transactionRef,
-                'user_id' => $user->id,
-                'amount' => $servicePrice,
-                'description' => "NIN Demographic Verification - {$serviceField->field_name}",
-                'type' => 'debit',
                 'status' => "completed",
-                'performed_by'    => $performedBy,
                 'metadata' => [
                     'service' => 'verification',
                     'service_field' => $serviceField->field_name,
@@ -319,9 +405,6 @@ class NINDemoVerificationController extends Controller
                     'api_response' => $apiResponse
                 ],
             ]);
-
-            // Deduct wallet balance
-            $wallet->decrement('balance', $servicePrice);
 
             Verification::create([
                 'user_id' => $user->id,
@@ -380,6 +463,20 @@ class NINDemoVerificationController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             report($e);
+
+            // Refund
+            try {
+                DB::transaction(function () use ($wallet, $servicePrice, $transaction) {
+                    $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                    if ($w) {
+                        $w->increment('balance', $servicePrice);
+                    }
+                    $transaction->update(['status' => 'failed']);
+                });
+            } catch (\Exception $refException) {
+                Log::error('Refund failed after verification finalization failure: ' . $refException->getMessage());
+            }
+
             return back()->with([
                 'status' => 'error',
                 'message' => 'Transaction failed: ' . $e->getMessage()
@@ -397,7 +494,7 @@ class NINDemoVerificationController extends Controller
             ['name' => 'Regular Slip', 'code' => 'V102', 'price' => 100],
             ['name' => 'standard slip', 'code' => '611', 'price' => 100],
             ['name' => 'preminum slip', 'code' => '612', 'price' => 150],
-        ]);
+         ]);
 
         if (!$service) {
             throw new \Exception('Verification service not available.');
@@ -413,21 +510,25 @@ class NINDemoVerificationController extends Controller
         }
 
         $servicePrice = $serviceField->getPriceForUserType($user->role);
-        $wallet = Wallet::where('user_id', $user->id)->firstOrFail();
-
-        if ($wallet->status !== 'active') {
-             throw new \Exception('Your wallet is not active.');
-        }
-
-        if ($wallet->balance < $servicePrice) {
-             throw new \Exception('Insufficient wallet balance.');
-        }
         
         DB::beginTransaction();
         try {
+             $wallet = Wallet::where('user_id', $user->id)->lockForUpdate()->first();
+             if (!$wallet) {
+                 throw new \Exception('Wallet not found.');
+             }
+
+             if ($wallet->status !== 'active') {
+                  throw new \Exception('Your wallet is not active.');
+             }
+
+             if ($wallet->balance < $servicePrice) {
+                  throw new \Exception('Insufficient wallet balance.');
+             }
+
              $transactionRef = 'D-' . (time() % 1000000000) . '-' . mt_rand(100, 999);
              $performedBy = $user->first_name . ' ' . $user->last_name;
- 
+  
              Transaction::create([
                  'transaction_ref' => $transactionRef,
                  'user_id' => $user->id,
@@ -447,7 +548,7 @@ class NINDemoVerificationController extends Controller
                      ],
                  ],
              ]);
- 
+  
              $wallet->decrement('balance', $servicePrice);
              
              DB::commit();
@@ -462,6 +563,15 @@ class NINDemoVerificationController extends Controller
     public function freeSlip($nin_no)
     {
         try {
+            if (!preg_match('/^[0-9]{11}$/', $nin_no)) {
+                return back()->with('error', 'Invalid NIN number format.');
+            }
+
+            $record = Verification::where('number_nin', $nin_no)->latest()->first();
+            if (!$record || $record->user_id !== Auth::id()) {
+                return back()->with('error', 'Unauthorized access to this verification record.');
+            }
+
             $this->chargeForSlip(Auth::user(), 'V101');
             $repObj = new NIN_PDF_Repository();
             return $repObj->regularPDF($nin_no);
@@ -475,6 +585,15 @@ class NINDemoVerificationController extends Controller
     public function regularSlip($nin_no)
     {
         try {
+            if (!preg_match('/^[0-9]{11}$/', $nin_no)) {
+                return back()->with('error', 'Invalid NIN number format.');
+            }
+
+            $record = Verification::where('number_nin', $nin_no)->latest()->first();
+            if (!$record || $record->user_id !== Auth::id()) {
+                return back()->with('error', 'Unauthorized access to this verification record.');
+            }
+
             $this->chargeForSlip(Auth::user(), 'V102');
             $repObj = new NIN_PDF_Repository();
             return $repObj->regularPDF($nin_no);
@@ -488,6 +607,15 @@ class NINDemoVerificationController extends Controller
     public function standardSlip($nin_no)
     {
         try {
+            if (!preg_match('/^[0-9]{11}$/', $nin_no)) {
+                return back()->with('error', 'Invalid NIN number format.');
+            }
+
+            $record = Verification::where('number_nin', $nin_no)->latest()->first();
+            if (!$record || $record->user_id !== Auth::id()) {
+                return back()->with('error', 'Unauthorized access to this verification record.');
+            }
+
             $this->chargeForSlip(Auth::user(), '611');
             $repObj = new NIN_PDF_Repository();
             return $repObj->standardPDF($nin_no);
@@ -501,6 +629,15 @@ class NINDemoVerificationController extends Controller
     public function premiumSlip($nin_no)
     {
         try {
+            if (!preg_match('/^[0-9]{11}$/', $nin_no)) {
+                return back()->with('error', 'Invalid NIN number format.');
+            }
+
+            $record = Verification::where('number_nin', $nin_no)->latest()->first();
+            if (!$record || $record->user_id !== Auth::id()) {
+                return back()->with('error', 'Unauthorized access to this verification record.');
+            }
+
             $this->chargeForSlip(Auth::user(), '612');
             $repObj = new NIN_PDF_Repository();
             return $repObj->premiumPDF($nin_no);

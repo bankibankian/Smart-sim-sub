@@ -326,6 +326,16 @@
                     <span>All Transactions</span>
                 </a>
 
+                <!-- Admin Wallet Link -->
+                <a href="{{ route('admin.manage.adminwallet') }}" 
+                   class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.manage.adminwallet') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }} mt-2">
+                    @if(request()->routeIs('admin.manage.adminwallet'))
+                        <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
+                    @endif
+                    <i data-lucide="wallet" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.manage.adminwallet') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
+                    <span>Admin Wallet</span>
+                </a>
+
                 <!-- Admin Support Link -->
                 <a href="{{ route('admin.manage.support.index') }}" 
                    class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.manage.support*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }} mt-2">

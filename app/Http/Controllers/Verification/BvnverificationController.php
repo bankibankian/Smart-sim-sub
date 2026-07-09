@@ -103,23 +103,71 @@ class BvnverificationController extends Controller
         // 3. Determine service price based on user role
         $servicePrice = $serviceField->getPriceForUserType($user->role);
 
-        // 4. Check wallet
-        $wallet = Wallet::where('user_id', $user->id)->firstOrFail();
+        // 4. Start DB Transaction & Debit user first
+        DB::beginTransaction();
+        try {
+            $wallet = Wallet::where('user_id', $user->id)->lockForUpdate()->first();
+            if (!$wallet) {
+                DB::rollBack();
+                return back()->with([
+                    'status' => 'error',
+                    'message' => 'Wallet not found.'
+                ]);
+            }
 
-        if ($wallet->status !== 'active') {
+            if ($wallet->status !== 'active') {
+                DB::rollBack();
+                return back()->with([
+                    'status' => 'error',
+                    'message' => 'Your wallet is not active.'
+                ]);
+            }
+
+            if ($wallet->balance < $servicePrice) {
+                DB::rollBack();
+                return back()->with([
+                    'status' => 'error',
+                    'message' => 'Insufficient wallet balance. You need NGN ' . number_format($servicePrice - $wallet->balance, 2)
+                ]);
+            }
+
+            // Deduct wallet balance
+            $wallet->decrement('balance', $servicePrice);
+
+            $transactionRef = 'Ver-' . (time() % 1000000000) . '-' . mt_rand(100, 999);
+            $performedBy = $user->first_name . ' ' . $user->last_name;
+
+            $transaction = Transaction::create([
+                'transaction_ref' => $transactionRef,
+                'user_id' => $user->id,
+                'amount' => $servicePrice,
+                'description' => "BVN Verification - {$serviceField->field_name}",
+                'type' => 'debit',
+                'status' => 'processing',
+                'performed_by'    => $performedBy,
+                'metadata' => [
+                    'service' => 'verification',
+                    'service_field' => $serviceField->field_name,
+                    'field_code' => $serviceField->field_code,
+                    'bvn' => $request->bvn,
+                    'user_role' => $user->role,
+                    'price_details' => [
+                        'base_price' => $serviceField->base_price,
+                        'user_price' => $servicePrice,
+                    ],
+                ],
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
             return back()->with([
                 'status' => 'error',
-                'message' => 'Your wallet is not active.'
+                'message' => 'Failed to initialize transaction: ' . $e->getMessage()
             ]);
         }
 
-        if ($wallet->balance < $servicePrice) {
-            return back()->with([
-                'status' => 'error',
-                'message' => 'Insufficient wallet balance. You need NGN ' . number_format($servicePrice - $wallet->balance, 2)
-            ]);
-        }
-
+        // 5. Call API outside the transaction
         try {
             $apiKey = env('AREWA_API_TOKEN');
             $apiBaseUrl = env('AREWA_BASE_URL');
@@ -144,28 +192,45 @@ class BvnverificationController extends Controller
                 (isset($decodedData['status']) && $decodedData['status'] === 'error') || 
                 !isset($decodedData['data'])
             ) {
+                // Refund
+                DB::transaction(function () use ($wallet, $servicePrice, $transaction) {
+                    $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                    if ($w) {
+                        $w->increment('balance', $servicePrice);
+                    }
+                    $transaction->update(['status' => 'failed']);
+                });
+
                 return back()->with([
                     'status' => 'error',
                     'message' => $decodedData['message'] ?? 'Verification failed or no data returned.'
                 ]);
             }
 
-            // Abu subaia verification API usually returns success in 'status' field
             $status = $decodedData['status'] ?? 'UNKNOWN';
 
             if ($status === 'success') {
-                 // Successful -> Charge + Create Transaction + Create Verification
-                 return $this->processSuccessTransaction(
+                 return $this->finalizeSuccessTransaction(
                     $wallet,
                     $servicePrice,
                     $user,
                     $serviceField,
                     $service,
-                    $decodedData
-                );
+                    $decodedData,
+                    $transaction,
+                    $transactionRef,
+                    $performedBy
+                 );
             } else {
-                // If status is not success but response was successful, treat as failed but record it if needed.
-                // Based on common patterns, Arewa API uses 'success'/'error'.
+                // Refund
+                DB::transaction(function () use ($wallet, $servicePrice, $transaction) {
+                    $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                    if ($w) {
+                        $w->increment('balance', $servicePrice);
+                    }
+                    $transaction->update(['status' => 'failed']);
+                });
+
                 return back()->with([
                     'status' => 'error',
                     'message' => $decodedData['message'] ?? 'Verification failed.'
@@ -173,6 +238,19 @@ class BvnverificationController extends Controller
             }
 
         } catch (\Exception $e) {
+             // Refund
+             try {
+                 DB::transaction(function () use ($wallet, $servicePrice, $transaction) {
+                     $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                     if ($w) {
+                         $w->increment('balance', $servicePrice);
+                     }
+                     $transaction->update(['status' => 'failed']);
+                 });
+             } catch (\Exception $refException) {
+                 Log::error('Refund failed after verification exception: ' . $refException->getMessage());
+             }
+
              return back()->with([
                 'status' => 'error',
                 'message' => 'System Error: ' . $e->getMessage()
@@ -181,9 +259,9 @@ class BvnverificationController extends Controller
     }
 
     /**
-     * Process successful transaction (Charge + Verification Record)
+     * Process successful transaction (Finalize transaction & Verification Record)
      */
-    private function processSuccessTransaction($wallet, $servicePrice, $user, $serviceField, $service, $bvnData)
+    private function finalizeSuccessTransaction($wallet, $servicePrice, $user, $serviceField, $service, $bvnData, $transaction, $transactionRef, $performedBy)
     {
         // Normalize bvnData structure if nested under api_response
         if (isset($bvnData['data']['api_response']['data'])) {
@@ -193,18 +271,9 @@ class BvnverificationController extends Controller
         DB::beginTransaction();
 
         try {
-
-            $transactionRef = 'Ver-' . (time() % 1000000000) . '-' . mt_rand(100, 999);
-            $performedBy = $user->first_name . ' ' . $user->last_name;
-
-            $transaction = Transaction::create([
+            $transaction->update([
                 'transaction_ref' => $transactionRef,
-                'user_id' => $user->id,
-                'amount' => $servicePrice,
-                'description' => "BVN Verification - {$serviceField->field_name}",
-                'type' => 'debit',
                 'status' => 'completed',
-                'performed_by'    => $performedBy,
                 'metadata' => [
                     'service' => 'verification',
                     'service_field' => $serviceField->field_name,
@@ -219,9 +288,6 @@ class BvnverificationController extends Controller
                     'api_response' => $bvnData
                 ],
             ]);
-
-            // Deduct wallet balance
-            $wallet->decrement('balance', $servicePrice);
 
             $apiData = $bvnData['data'] ?? [];
 
@@ -255,6 +321,19 @@ class BvnverificationController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             report($e);
+
+            // Since finalizing failed, we should try to refund the user
+            try {
+                DB::transaction(function () use ($wallet, $servicePrice, $transaction) {
+                    $w = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+                    if ($w) {
+                        $w->increment('balance', $servicePrice);
+                    }
+                    $transaction->update(['status' => 'failed']);
+                });
+            } catch (\Exception $refException) {
+                Log::error('Refund failed after verification finalization failure: ' . $refException->getMessage());
+            }
 
             return back()->with([
                 'status' => 'error',
@@ -293,22 +372,25 @@ class BvnverificationController extends Controller
         // 3. Determine service price based on user role
         $servicePrice = $serviceField->getPriceForUserType($user->role);
 
-        // 4. Check wallet
-        $wallet = Wallet::where('user_id', $user->id)->firstOrFail();
-
-        if ($wallet->status !== 'active') {
-             throw new \Exception('Your wallet is not active.');
-        }
-
-        if ($wallet->balance < $servicePrice) {
-             throw new \Exception('Insufficient wallet balance.');
-        }
-        
         DB::beginTransaction();
         try {
+             // 4. Fetch and lock wallet
+             $wallet = Wallet::where('user_id', $user->id)->lockForUpdate()->first();
+             if (!$wallet) {
+                 throw new \Exception('Wallet not found.');
+             }
+
+             if ($wallet->status !== 'active') {
+                  throw new \Exception('Your wallet is not active.');
+             }
+
+             if ($wallet->balance < $servicePrice) {
+                  throw new \Exception('Insufficient wallet balance.');
+             }
+
              $transactionRef = 'Slip-' . (time() % 1000000000) . '-' . mt_rand(100, 999);
              $performedBy = $user->first_name . ' ' . $user->last_name;
- 
+  
              Transaction::create([
                  'transaction_ref' => $transactionRef,
                  'user_id' => $user->id,
@@ -328,7 +410,7 @@ class BvnverificationController extends Controller
                      ],
                  ],
              ]);
- 
+  
              // Deduct wallet balance
              $wallet->decrement('balance', $servicePrice);
              
@@ -348,21 +430,26 @@ class BvnverificationController extends Controller
     public function standardBVN($bvn_no)
     {
         try {
-            $this->chargeForSlip(Auth::user(), '601'); // Charge for Standard Slip
-            
-            if (Verification::where('idno', $bvn_no)->exists()) {
-                $veridiedRecord = Verification::where('idno', $bvn_no)
-                    ->latest()
-                    ->first();
-
-                $view = view('freeBVN', compact('veridiedRecord'))->render();
-                return response()->json(['view' => $view]);
-            } else {
+            if (!preg_match('/^[0-9]{11}$/', $bvn_no)) {
                 return response()->json([
                     "message" => "Error",
-                    "errors" => array("Not Found" => "Verification record not found !")
+                    "errors" => array("Validation" => "Invalid BVN number format.")
                 ], 422);
             }
+
+            $record = Verification::where('idno', $bvn_no)->latest()->first();
+            if (!$record || $record->user_id !== Auth::id()) {
+                return response()->json([
+                    "message" => "Error",
+                    "errors" => array("Unauthorized" => "You are not authorized to access this record.")
+                ], 403);
+            }
+
+            $this->chargeForSlip(Auth::user(), '601'); // Charge for Standard Slip
+            
+            $veridiedRecord = $record;
+            $view = view('freeBVN', compact('veridiedRecord'))->render();
+            return response()->json(['view' => $view]);
         } catch (\Exception $e) {
              return response()->json([
                 "message" => "Error",
@@ -374,21 +461,26 @@ class BvnverificationController extends Controller
     public function premiumBVN($bvn_no)
     {
         try {
-            $this->chargeForSlip(Auth::user(), '602'); // Charge for Premium Slip
-
-            if (Verification::where('idno', $bvn_no)->exists()) {
-                $veridiedRecord = Verification::where('idno', $bvn_no)
-                    ->latest()
-                    ->first();
-
-                $view = view('PremiumBVN', compact('veridiedRecord'))->render();
-                return response()->json(['view' => $view]);
-            } else {
+            if (!preg_match('/^[0-9]{11}$/', $bvn_no)) {
                 return response()->json([
                     "message" => "Error",
-                    "errors" => array("Not Found" => "Verification record not found !")
+                    "errors" => array("Validation" => "Invalid BVN number format.")
                 ], 422);
             }
+
+            $record = Verification::where('idno', $bvn_no)->latest()->first();
+            if (!$record || $record->user_id !== Auth::id()) {
+                return response()->json([
+                    "message" => "Error",
+                    "errors" => array("Unauthorized" => "You are not authorized to access this record.")
+                ], 403);
+            }
+
+            $this->chargeForSlip(Auth::user(), '602'); // Charge for Premium Slip
+
+            $veridiedRecord = $record;
+            $view = view('PremiumBVN', compact('veridiedRecord'))->render();
+            return response()->json(['view' => $view]);
         } catch (\Exception $e) {
             return response()->json([
                "message" => "Error",
@@ -400,6 +492,15 @@ class BvnverificationController extends Controller
     public function plasticBVN($bvn_no)
     {
          try {
+            if (!preg_match('/^[0-9]{11}$/', $bvn_no)) {
+                return back()->with('error', 'Invalid BVN number format.');
+            }
+
+            $record = Verification::where('idno', $bvn_no)->latest()->first();
+            if (!$record || $record->user_id !== Auth::id()) {
+                return back()->with('error', 'You are not authorized to access this record.');
+            }
+
             $this->chargeForSlip(Auth::user(), '603'); // Charge for Plastic Slip
             
             $repObj = new BVN_PDF_Repository();
