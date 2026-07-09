@@ -346,7 +346,7 @@ class BvnverificationController extends Controller
     /**
      * Charge for Slip Download
      */
-    private function chargeForSlip($user, $fieldCode)
+    private function chargeForSlip($user, $fieldCode, $bvn)
     {
          // 1. Get Verification Service using ServiceManager
          $service = ServiceManager::getServiceWithFields('Verification', [
@@ -404,6 +404,7 @@ class BvnverificationController extends Controller
                      'service_field' => $serviceField->field_name,
                      'field_code' => $serviceField->field_code,
                      'user_role' => $user->role,
+                     'bvn' => $bvn,
                      'price_details' => [
                          'base_price' => $serviceField->base_price,
                          'user_price' => $servicePrice,
@@ -438,14 +439,14 @@ class BvnverificationController extends Controller
             }
 
             $record = Verification::where('idno', $bvn_no)->latest()->first();
-            if (!$record || $record->user_id !== Auth::id()) {
+            if (!$record) {
                 return response()->json([
                     "message" => "Error",
-                    "errors" => array("Unauthorized" => "You are not authorized to access this record.")
-                ], 403);
+                    "errors" => array("NotFound" => "Verification record not found.")
+                ], 404);
             }
 
-            $this->chargeForSlip(Auth::user(), '601'); // Charge for Standard Slip
+            $this->chargeForSlip(Auth::user(), '601', $bvn_no); // Charge for Standard Slip
             
             $veridiedRecord = $record;
             $view = view('freeBVN', compact('veridiedRecord'))->render();
@@ -469,14 +470,14 @@ class BvnverificationController extends Controller
             }
 
             $record = Verification::where('idno', $bvn_no)->latest()->first();
-            if (!$record || $record->user_id !== Auth::id()) {
+            if (!$record) {
                 return response()->json([
                     "message" => "Error",
-                    "errors" => array("Unauthorized" => "You are not authorized to access this record.")
-                ], 403);
+                    "errors" => array("NotFound" => "Verification record not found.")
+                ], 404);
             }
 
-            $this->chargeForSlip(Auth::user(), '602'); // Charge for Premium Slip
+            $this->chargeForSlip(Auth::user(), '602', $bvn_no); // Charge for Premium Slip
 
             $veridiedRecord = $record;
             $view = view('PremiumBVN', compact('veridiedRecord'))->render();
@@ -497,11 +498,11 @@ class BvnverificationController extends Controller
             }
 
             $record = Verification::where('idno', $bvn_no)->latest()->first();
-            if (!$record || $record->user_id !== Auth::id()) {
-                return back()->with('error', 'You are not authorized to access this record.');
+            if (!$record) {
+                return back()->with('error', 'Verification record not found.');
             }
 
-            $this->chargeForSlip(Auth::user(), '603'); // Charge for Plastic Slip
+            $this->chargeForSlip(Auth::user(), '603', $bvn_no); // Charge for Plastic Slip
             
             $repObj = new BVN_PDF_Repository();
             return $repObj->plasticPDF($bvn_no);

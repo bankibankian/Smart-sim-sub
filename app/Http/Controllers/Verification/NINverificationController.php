@@ -385,7 +385,7 @@ class NINverificationController extends Controller
     /**
      * Charge for Slip Download
      */
-    private function chargeForSlip($user, $fieldCode)
+    private function chargeForSlip($user, $fieldCode, $nin)
     {
          // 1. Get Verification Service using ServiceManager
          $service = ServiceManager::getServiceWithFields('Verification', [
@@ -444,6 +444,7 @@ class NINverificationController extends Controller
                      'service_field' => $serviceField->field_name,
                      'field_code' => $serviceField->field_code,
                      'user_role' => $user->role,
+                     'nin' => $nin,
                      'price_details' => [
                          'base_price' => $serviceField->base_price,
                          'user_price' => $servicePrice,
@@ -474,11 +475,11 @@ class NINverificationController extends Controller
             }
 
             $record = Verification::where('number_nin', $nin_no)->latest()->first();
-            if (!$record || $record->user_id !== Auth::id()) {
-                return back()->with('error', 'Unauthorized access to this verification record.');
+            if (!$record) {
+                return back()->with('error', 'Verification record not found.');
             }
 
-            $this->chargeForSlip(Auth::user(), 'V102'); // Charge for Regular Slip
+            $this->chargeForSlip(Auth::user(), 'V102', $nin_no); // Charge for Regular Slip
             
             $repObj = new NIN_PDF_Repository();
             return $repObj->regularPDF($nin_no);
@@ -497,11 +498,11 @@ class NINverificationController extends Controller
             }
 
             $record = Verification::where('number_nin', $nin_no)->latest()->first();
-            if (!$record || $record->user_id !== Auth::id()) {
-                return back()->with('error', 'Unauthorized access to this verification record.');
+            if (!$record) {
+                return back()->with('error', 'Verification record not found.');
             }
 
-            $this->chargeForSlip(Auth::user(), '611'); // Charge for Standard Slip
+            $this->chargeForSlip(Auth::user(), '611', $nin_no); // Charge for Standard Slip
             
             $repObj = new NIN_PDF_Repository();
             return $repObj->standardPDF($nin_no);
@@ -520,11 +521,11 @@ class NINverificationController extends Controller
             }
 
             $record = Verification::where('number_nin', $nin_no)->latest()->first();
-            if (!$record || $record->user_id !== Auth::id()) {
-                return back()->with('error', 'Unauthorized access to this verification record.');
+            if (!$record) {
+                return back()->with('error', 'Verification record not found.');
             }
 
-            $this->chargeForSlip(Auth::user(), '612'); // Charge for Premium Slip
+            $this->chargeForSlip(Auth::user(), '612', $nin_no); // Charge for Premium Slip
             
             $repObj = new NIN_PDF_Repository();
             return $repObj->premiumPDF($nin_no);
@@ -543,11 +544,11 @@ class NINverificationController extends Controller
             }
 
             $record = Verification::where('number_nin', $nin_no)->latest()->first();
-            if (!$record || $record->user_id !== Auth::id()) {
-                return back()->with('error', 'Unauthorized access to this verification record.');
+            if (!$record) {
+                return back()->with('error', 'Verification record not found.');
             }
 
-            $this->chargeForSlip(Auth::user(), '616'); // Charge for VNIN Slip
+            $this->chargeForSlip(Auth::user(), '616', $nin_no); // Charge for VNIN Slip
             
             $repObj = new NIN_PDF_Repository();
             return $repObj->vninPDF($nin_no);
