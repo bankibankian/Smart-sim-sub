@@ -179,4 +179,9 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
 
 // Removed temp-login backdoor route for production security.
 
+Route::get('/clear-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    return 'Cache cleared successfully!';
+});
+
 require __DIR__.'/auth.php';
