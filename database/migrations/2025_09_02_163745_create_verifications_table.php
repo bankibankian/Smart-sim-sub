@@ -11,9 +11,9 @@ class CreateVerificationsTable extends Migration
         Schema::create('verifications', function (Blueprint $table) {
             $table->id();
             $table->string('reference')->unique();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('service_field_id')->constrained('service_fields');
-            $table->foreignId('service_id')->constrained('services');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('service_field_id');
+            $table->unsignedBigInteger('service_id');
             $table->string('field_code')->nullable();
             $table->string('field_name')->nullable();
             $table->string('service_name')->nullable();
