@@ -3,8 +3,8 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-slate-900 font-display">Welcome Back</h1>
-        <p class="text-sm text-slate-500 mt-1">Sign in to your account.</p>
+        <h1 class="text-2xl font-bold text-slate-900 font-display">Welcome Back User</h1>
+        <p class="text-sm text-slate-500 mt-1">Sign in to your accounts.</p>
     </div>
 
     <form method="POST" action="{{ route('login') }}" class="space-y-5">
