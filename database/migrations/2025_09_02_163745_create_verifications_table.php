@@ -71,7 +71,8 @@ class CreateVerificationsTable extends Migration
             $table->string('self_origin_state')->nullable();
             $table->string('self_origin_lga')->nullable();
             $table->string('self_origin_place')->nullable();
-            $table->foreignId('transaction_id')->constrained();
+            // The transactions table is created by a later migration.
+            $table->foreignId('transaction_id');
             $table->enum('status', ['pending', 'processing', 'successful', 'failed', 'resolved', 'rejected', 'query', 'remark'])->default('pending');
             $table->timestamp('submission_date')->useCurrent();
             $table->timestamps();
