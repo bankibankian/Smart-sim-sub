@@ -17,7 +17,7 @@
             transition: all 0.2s ease-in-out;
         }
         .category-option.active {
-            border-color: #42517c !important;
+            border-color: #0056D2 !important;
             background-color: rgb(243 244 246) !important;
             box-shadow: 0 0 0 2px rgba(66, 81, 124, 0.15) !important;
         }
@@ -25,9 +25,9 @@
             transition: all 0.2s ease-in-out;
         }
         .priority-btn.active {
-            background-color: #42517c !important;
+            background-color: #0056D2 !important;
             color: #ffffff !important;
-            border-color: #42517c !important;
+            border-color: #0056D2 !important;
         }
     </style>
     @endpush
@@ -37,7 +37,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/50 shadow-sm animate-pulse">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm animate-pulse">
                         <i data-lucide="help-circle" class="w-5 h-5"></i>
                     </div>
                     Support Center
@@ -97,7 +97,7 @@
             <!-- Call Card -->
             <a href="tel:+2347048932365"
                class="channel-card rounded-3xl border border-slate-100/80 p-6 flex items-center gap-4 hover:border-indigo-200 group">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-[#42517c] flex items-center justify-center border border-indigo-100/50 group-hover:scale-110 transition-transform">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-[#0056D2] flex items-center justify-center border border-indigo-100/50 group-hover:scale-110 transition-transform">
                     <i data-lucide="phone-call" class="w-6 h-6"></i>
                 </div>
                 <div>
@@ -127,7 +127,7 @@
                 <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-col justify-between h-full">
                     <div class="space-y-6">
                         <div class="flex items-center gap-3 pb-4 border-b border-slate-50">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c]">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
                                 <i data-lucide="message-square" class="w-5 h-5"></i>
                             </div>
                             <div>
@@ -145,7 +145,7 @@
                             <div class="space-y-1.5">
                                 <label for="subject" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Subject</label>
                                 <input type="text" id="subject" name="subject" value="{{ old('subject') }}" 
-                                       class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] transition-all text-slate-800 font-semibold" 
+                                       class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-semibold" 
                                        placeholder="e.g. Wallet Funding issue" required>
                             </div>
 
@@ -158,7 +158,7 @@
                                         <i data-lucide="info" class="w-4 h-4 text-indigo-500 mb-1.5"></i>
                                         <div>
                                             <span class="block text-xs font-bold text-slate-700">General</span>
-                                            <span class="text-[9px] text-slate-400 font-medium">Inquiry / feedback</span>
+                                            <span class="text-xs text-slate-400 font-medium">Inquiry / feedback</span>
                                         </div>
                                     </div>
                                     <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
@@ -166,7 +166,7 @@
                                         <i data-lucide="cpu" class="w-4 h-4 text-emerald-500 mb-1.5"></i>
                                         <div>
                                             <span class="block text-xs font-bold text-slate-700">Technical</span>
-                                            <span class="text-[9px] text-slate-400 font-medium">App bugs / downtime</span>
+                                            <span class="text-xs text-slate-400 font-medium">App bugs / downtime</span>
                                         </div>
                                     </div>
                                     <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
@@ -174,7 +174,7 @@
                                         <i data-lucide="credit-card" class="w-4 h-4 text-rose-500 mb-1.5"></i>
                                         <div>
                                             <span class="block text-xs font-bold text-slate-700">Billing</span>
-                                            <span class="text-[9px] text-slate-400 font-medium">Funding / charges</span>
+                                            <span class="text-xs text-slate-400 font-medium">Funding / charges</span>
                                         </div>
                                     </div>
                                     <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
@@ -182,7 +182,7 @@
                                         <i data-lucide="arrow-up-circle" class="w-4 h-4 text-amber-500 mb-1.5"></i>
                                         <div>
                                             <span class="block text-xs font-bold text-slate-700">Upgrade</span>
-                                            <span class="text-[9px] text-slate-400 font-medium">Role verification</span>
+                                            <span class="text-xs text-slate-400 font-medium">Role verification</span>
                                         </div>
                                     </div>
                                 </div>
@@ -208,14 +208,14 @@
                             <div class="space-y-1.5">
                                 <label for="message" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Message Description</label>
                                 <textarea id="message" name="message" rows="4"
-                                          class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] transition-all text-slate-800 font-medium" 
+                                          class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-medium" 
                                           placeholder="Describe your issue or inquiry in detail..." required>{{ old('message') }}</textarea>
                             </div>
 
                             {{-- Submit Button --}}
                             <div class="pt-2">
                                 <button type="submit" 
-                                        class="w-full py-3.5 px-6 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                                        class="w-full py-3.5 px-6 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
                                     <i data-lucide="send" class="w-4 h-4"></i>
                                     <span>Submit Ticket</span>
                                 </button>
@@ -231,7 +231,7 @@
                     <div class="space-y-6">
                         <div class="flex items-center justify-between pb-4 border-b border-slate-50">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c]">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
                                     <i data-lucide="history" class="w-5 h-5"></i>
                                 </div>
                                 <div>
@@ -259,7 +259,7 @@
                                                 <div class="font-bold text-sm text-slate-800 truncate max-w-[150px]">
                                                     {{ $ticket->subject }}
                                                 </div>
-                                                <div class="text-[10px] font-semibold text-slate-400 mt-0.5">
+                                                <div class="text-xs font-semibold text-slate-400 mt-0.5">
                                                     ID: #{{ $ticket->id }} • {{ $ticket->created_at->format('M d, Y') }}
                                                 </div>
                                             </td>
@@ -267,19 +267,19 @@
                                                 {{ ucfirst($ticket->category) }}
                                             </td>
                                             <td class="py-3.5 px-4">
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $ticket->priority_badge }}">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold border {{ $ticket->priority_badge }}">
                                                     {{ ucfirst($ticket->priority) }}
                                                 </span>
                                             </td>
                                             <td class="py-3.5 px-4">
-                                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $ticket->status_badge }}">
+                                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-bold border {{ $ticket->status_badge }}">
                                                     <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
                                                     {{ ucfirst($ticket->status) }}
                                                 </span>
                                             </td>
                                             <td class="py-3.5 px-4 text-right">
                                                 <a href="{{ route('support.show', $ticket) }}" 
-                                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#42517c]/5 hover:bg-[#42517c]/10 text-[#42517c] font-bold text-xs rounded-xl transition-all">
+                                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0056D2]/5 hover:bg-[#0056D2]/10 text-[#0056D2] font-bold text-xs rounded-xl transition-all">
                                                     <i data-lucide="eye" class="w-3.5 h-3.5"></i>
                                                     View
                                                 </a>

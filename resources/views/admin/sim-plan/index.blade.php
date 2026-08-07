@@ -6,7 +6,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/50 shadow-sm">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="settings" class="w-5 h-5"></i>
                     </div>
                     SIM Cards & Plans Management
@@ -19,7 +19,7 @@
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Card 1: Total Uploaded -->
             <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c] shrink-0">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2] shrink-0">
                     <i data-lucide="database" class="w-6 h-6"></i>
                 </div>
                 <div>
@@ -88,7 +88,7 @@
             <div class="lg:col-span-4 space-y-6" x-data="{ uploadTab: 'manual' }">
                 <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
                     <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c]">
+                        <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i>
                         </div>
                         <div class="flex-1">
@@ -99,8 +99,8 @@
 
                     <!-- Upload Toggle Tabs -->
                     <div class="flex bg-slate-50 p-1 rounded-xl mb-4 text-xs font-semibold">
-                        <button type="button" @click="uploadTab = 'manual'" :class="uploadTab === 'manual' ? 'bg-[#42517c] text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'" class="flex-1 py-1.5 rounded-lg transition-all text-center">Manual Text</button>
-                        <button type="button" @click="uploadTab = 'excel'" :class="uploadTab === 'excel' ? 'bg-[#42517c] text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'" class="flex-1 py-1.5 rounded-lg transition-all flex items-center justify-center gap-1">
+                        <button type="button" @click="uploadTab = 'manual'" :class="uploadTab === 'manual' ? 'bg-[#0056D2] text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'" class="flex-1 py-1.5 rounded-lg transition-all text-center">Manual Text</button>
+                        <button type="button" @click="uploadTab = 'excel'" :class="uploadTab === 'excel' ? 'bg-[#0056D2] text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'" class="flex-1 py-1.5 rounded-lg transition-all flex items-center justify-center gap-1">
                             <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i> Excel Sheet
                         </button>
                     </div>
@@ -110,7 +110,7 @@
                         @csrf
                         <div class="space-y-1.5">
                             <label for="add_category" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">SIM Category</label>
-                            <select id="add_category" name="category" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] text-slate-700 font-medium">
+                            <select id="add_category" name="category" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
                                 <option value="">Select Category</option>
                                 @foreach ($categories as $cat)
                                     <option value="{{ $cat }}">{{ $cat }}</option>
@@ -120,7 +120,7 @@
 
                         <div class="space-y-1.5">
                             <label for="add_provider" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Network Operator</label>
-                            <select id="add_provider" name="provider" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] text-slate-700 font-medium">
+                            <select id="add_provider" name="provider" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
                                 <option value="">Select Network</option>
                                 @foreach ($providers as $prov)
                                     <option value="{{ $prov }}">{{ strtoupper($prov) }}</option>
@@ -131,8 +131,8 @@
                         <div class="space-y-1.5">
                             <label for="add_numbers" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">SIM Numbers</label>
                             <textarea id="add_numbers" name="numbers" rows="6" required placeholder="08030000000&#10;08031111111&#10;08032222222"
-                                      class="w-full py-2 px-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] text-slate-800 font-semibold placeholder:font-normal placeholder:text-slate-400"></textarea>
-                            <p class="text-[10px] text-slate-400">Separate numbers by comma or new lines.</p>
+                                      class="w-full py-2 px-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-800 font-semibold placeholder:font-normal placeholder:text-slate-400"></textarea>
+                            <p class="text-xs text-slate-400">Separate numbers by comma or new lines.</p>
                         </div>
 
                         <button type="submit" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition-all duration-200 flex items-center justify-center gap-2">
@@ -145,7 +145,7 @@
                     <form x-show="uploadTab === 'excel'" style="display: none;" action="{{ route('admin.sim-plan.import') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                         @csrf
                         <div class="bg-indigo-50/50 rounded-2xl p-4 border border-indigo-100/50 space-y-2">
-                            <h4 class="text-xs font-bold text-[#42517c] flex items-center gap-1.5">
+                            <h4 class="text-xs font-bold text-[#0056D2] flex items-center gap-1.5">
                                 <i data-lucide="info" class="w-4 h-4 text-indigo-500"></i> Excel Upload Instructions
                             </h4>
                             <p class="text-[11px] text-slate-600 leading-relaxed">
@@ -158,12 +158,12 @@
 
                         <div class="space-y-2">
                             <label for="excel_file" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Choose Excel/CSV file</label>
-                            <div class="border-2 border-dashed border-slate-200 hover:border-[#42517c]/50 transition-colors rounded-2xl p-4 text-center cursor-pointer relative">
+                            <div class="border-2 border-dashed border-slate-200 hover:border-[#0056D2]/50 transition-colors rounded-2xl p-4 text-center cursor-pointer relative">
                                 <input type="file" id="excel_file" name="excel_file" required accept=".xlsx,.xls,.csv" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('excel-file-name').innerText = this.files[0].name;">
                                 <div class="space-y-1.5">
                                     <i data-lucide="file-up" class="w-8 h-8 text-slate-400 mx-auto"></i>
                                     <p class="text-xs font-semibold text-slate-600" id="excel-file-name">Click or drag Excel file here</p>
-                                    <p class="text-[10px] text-slate-400">Supports .xlsx, .xls, .csv up to 5MB</p>
+                                    <p class="text-xs text-slate-400">Supports .xlsx, .xls, .csv up to 5MB</p>
                                 </div>
                             </div>
                         </div>
@@ -180,13 +180,13 @@
             <div class="lg:col-span-8 space-y-6" x-data="{ currentTab: 'requests' }">
                 <!-- Navigation Tabs -->
                 <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-2 flex gap-1">
-                    <button type="button" @click="currentTab = 'requests'" :class="currentTab === 'requests' ? 'bg-[#42517c] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
+                    <button type="button" @click="currentTab = 'requests'" :class="currentTab === 'requests' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
                         <i data-lucide="inbox" class="w-4 h-4"></i> Pending Requests ({{ count($pendingRequests) }})
                     </button>
-                    <button type="button" @click="currentTab = 'resolved'" :class="currentTab === 'resolved' ? 'bg-[#42517c] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
+                    <button type="button" @click="currentTab = 'resolved'" :class="currentTab === 'resolved' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
                         <i data-lucide="check-square" class="w-4 h-4"></i> Resolved Requests
                     </button>
-                    <button type="button" @click="currentTab = 'inventory'" :class="currentTab === 'inventory' ? 'bg-[#42517c] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
+                    <button type="button" @click="currentTab = 'inventory'" :class="currentTab === 'inventory' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
                         <i data-lucide="database" class="w-4 h-4"></i> SIM Inventory
                     </button>
                 </div>
@@ -211,17 +211,17 @@
                                     <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
                                         <td class="py-3">
                                             <span class="font-bold text-slate-700">{{ $req->user->first_name }} {{ $req->user->last_name }}</span>
-                                            <span class="block text-[10px] text-slate-400">{{ $req->user->role }}</span>
+                                            <span class="block text-xs text-slate-400">{{ $req->user->role }}</span>
                                         </td>
                                         <td class="py-3 font-semibold text-slate-800">{{ $req->number }}</td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $req->request_type === 'activation' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-[#42517c]' }}">
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold {{ $req->request_type === 'activation' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-[#0056D2]' }}">
                                                 {{ $req->request_type }}
                                             </span>
                                         </td>
                                         <td class="py-3">
                                             <span class="font-medium text-slate-600 block">{{ $req->category }}</span>
-                                            <span class="text-[10px] text-slate-400 block uppercase">{{ $req->provider }}</span>
+                                            <span class="text-xs text-slate-400 block uppercase">{{ $req->provider }}</span>
                                         </td>
                                         <td class="py-3">
                                             <span class="font-bold text-slate-700">₦{{ number_format($req->amount, 2) }}</span>
@@ -284,17 +284,17 @@
                                     <tr class="border-b border-slate-50">
                                         <td class="py-3">
                                             <span class="font-bold text-slate-700">{{ $req->user->first_name }} {{ $req->user->last_name }}</span>
-                                            <span class="block text-[10px] text-slate-400">{{ $req->user->role }}</span>
+                                            <span class="block text-xs text-slate-400">{{ $req->user->role }}</span>
                                         </td>
                                         <td class="py-3 font-semibold text-slate-800">{{ $req->number }}</td>
                                         <td class="py-3 font-semibold capitalize">{{ $req->request_type }}</td>
                                         <td class="py-3 font-bold text-slate-700">₦{{ number_format($req->amount, 2) }}</td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $req->status === 'approved' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold {{ $req->status === 'approved' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
                                                 {{ $req->status }}
                                             </span>
                                             @if ($req->admin_notes)
-                                                <span class="block text-[9px] text-slate-400 italic mt-0.5">{{ $req->admin_notes }}</span>
+                                                <span class="block text-xs text-slate-400 italic mt-0.5">{{ $req->admin_notes }}</span>
                                             @endif
                                         </td>
                                         <td class="py-3 text-slate-400 font-medium">{{ $req->created_at->format('M d, Y H:i') }}</td>
@@ -374,7 +374,7 @@
                             </select>
                         </div>
                         <div class="flex gap-2">
-                            <button type="submit" class="flex-1 bg-[#42517c] hover:bg-[#354062] text-white font-bold text-xs py-2 px-3 rounded-xl">Filter</button>
+                            <button type="submit" class="flex-1 bg-[#0056D2] hover:bg-[#354062] text-white font-bold text-xs py-2 px-3 rounded-xl">Filter</button>
                             <a href="{{ route('admin.sim-plan.index') }}" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs py-2 px-3 rounded-xl flex items-center justify-center">Reset</a>
                         </div>
                     </form>
@@ -400,7 +400,7 @@
                                 </div>
                             `,
                             showCancelButton: true,
-                            confirmButtonColor: '#42517c',
+                            confirmButtonColor: '#0056D2',
                             confirmButtonText: 'Assign Selected',
                             preConfirm: () => {
                                 const val = document.getElementById('bulk_user_id').value;
@@ -433,7 +433,7 @@
                             <thead>
                                 <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase">
                                     <th class="py-2.5 pl-3 w-8">
-                                        <input type="checkbox" @change="toggleAll($event.target.checked)" class="rounded text-[#42517c] focus:ring-[#42517c]">
+                                        <input type="checkbox" @change="toggleAll($event.target.checked)" class="rounded text-[#0056D2] focus:ring-[#0056D2]">
                                     </th>
                                     <th class="py-2.5">Number</th>
                                     <th class="py-2.5">Category/Network</th>
@@ -450,18 +450,18 @@
                                                 <input type="checkbox" id="sim_cb_{{ $sim->id }}" value="{{ $sim->id }}" 
                                                        :checked="selectedSims.includes({{ $sim->id }})"
                                                        @change="toggleSim({{ $sim->id }}, $event.target.checked)"
-                                                       class="sim-checkbox rounded text-[#42517c] focus:ring-[#42517c]">
+                                                       class="sim-checkbox rounded text-[#0056D2] focus:ring-[#0056D2]">
                                             @else
-                                                <input type="checkbox" disabled class="rounded bg-slate-50 border-slate-200 text-slate-350 cursor-not-allowed">
+                                                <input type="checkbox" disabled class="rounded bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed">
                                             @endif
                                         </td>
                                         <td class="py-3 font-bold text-slate-800">{{ $sim->number }}</td>
                                         <td class="py-3">
                                             <span class="font-semibold text-slate-700 block">{{ $sim->category }}</span>
-                                            <span class="text-[10px] text-slate-400 block uppercase">{{ $sim->provider }}</span>
+                                            <span class="text-xs text-slate-400 block uppercase">{{ $sim->provider }}</span>
                                         </td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase 
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase 
                                                 {{ $sim->status === 'active' ? 'bg-emerald-50 text-emerald-600' : ($sim->status === 'assigned' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-600') }}">
                                                 @if($sim->status === 'active')
                                                     ACTIVATED
@@ -475,7 +475,7 @@
                                         <td class="py-3">
                                             @if ($sim->user)
                                                 <span class="font-semibold text-slate-700">{{ $sim->user->first_name }} {{ $sim->user->last_name }}</span>
-                                                <span class="block text-[10px] text-slate-400 capitalize">{{ $sim->user->role }}</span>
+                                                <span class="block text-xs text-slate-400 capitalize">{{ $sim->user->role }}</span>
                                             @else
                                                 <span class="text-slate-400 font-semibold italic">None</span>
                                             @endif
@@ -496,7 +496,7 @@
                                                         </div>
                                                     `,
                                                     showCancelButton: true,
-                                                    confirmButtonColor: '#42517c',
+                                                    confirmButtonColor: '#0056D2',
                                                     confirmButtonText: 'Assign Now',
                                                     preConfirm: () => {
                                                         const val = document.getElementById('swal_user_id').value;
@@ -514,7 +514,7 @@
                                                         document.body.appendChild(f);
                                                         f.submit();
                                                     }
-                                                })" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold bg-[#42517c] hover:bg-[#354062] text-white rounded-xl transition-all duration-150 shadow-sm">
+                                                })" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold bg-[#0056D2] hover:bg-[#354062] text-white rounded-xl transition-all duration-150 shadow-sm">
                                                     <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
                                                     Assign
                                                 </button>

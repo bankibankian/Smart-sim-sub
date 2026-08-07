@@ -6,7 +6,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/50 shadow-sm">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="send" class="w-5 h-5"></i>
                     </div>
                     P2P Transfer
@@ -60,7 +60,7 @@
                     
                     <div>
                         <!-- Card Header -->
-                        <div class="bg-gradient-to-r from-[#42517c] to-[#55699e] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+                        <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
                                     <i data-lucide="send" class="w-5 h-5"></i>
@@ -70,7 +70,7 @@
                                     <p class="text-xs text-slate-200 mt-0.5 font-medium">Instantly credit another wallet.</p>
                                 </div>
                             </div>
-                            <span class="inline-block text-[9px] font-extrabold text-[#42517c] bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">P2P</span>
+                            <span class="inline-block text-xs font-extrabold text-[#0056D2] bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">P2P</span>
                         </div>
 
                         <!-- Card Body -->
@@ -78,7 +78,7 @@
                             
                             <!-- Welcome Subtitle -->
                             <div class="text-center max-w-sm mx-auto space-y-1.5">
-                                <div class="w-12 h-12 rounded-full bg-indigo-50 text-[#42517c] flex items-center justify-center mx-auto shadow-inner">
+                                <div class="w-12 h-12 rounded-full bg-indigo-50 text-[#0056D2] flex items-center justify-center mx-auto shadow-inner">
                                     <i data-lucide="users" class="w-6 h-6"></i>
                                 </div>
                                 <h4 class="font-bold text-slate-800 text-sm">Instant Peer-to-Peer Transfer</h4>
@@ -91,18 +91,18 @@
 
                                 {{-- Recipient Identifier --}}
                                 <div class="space-y-2">
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Recipient Identifier</label>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Recipient Identifier</label>
                                     <div class="flex gap-2">
                                         <div class="relative flex-grow">
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                                                 <i data-lucide="user-check" class="w-4 h-4"></i>
                                             </div>
                                             <input type="text" id="wallet_id" name="wallet_id"
-                                                   class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] text-xs font-semibold text-slate-700 focus:outline-none transition-all shadow-sm"
+                                                   class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 focus:outline-none transition-all shadow-sm"
                                                    placeholder="Wallet ID, Email, or Phone"
                                                    required>
                                         </div>
-                                        <button class="px-5 py-3 bg-[#42517c] hover:bg-[#354268] text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-[0.98] shrink-0" 
+                                        <button class="px-5 py-3 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-[0.98] shrink-0" 
                                                 type="button" id="verifyBtn" onclick="verifyUser()">
                                             Verify
                                         </button>
@@ -119,19 +119,19 @@
                                             </div>
                                             <div class="space-y-0.5">
                                                 <h6 id="recipientName" class="font-bold text-xs text-slate-800"></h6>
-                                                <span class="block text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Verified SmartSIM User</span>
+                                                <span class="block text-xs text-slate-400 font-semibold uppercase tracking-wider">Verified SmartSIM User</span>
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <div class="mt-1">
-                                        <small id="userErrorDisplay" class="text-rose-600 font-bold text-[10px] flex items-center gap-1"></small>
+                                        <small id="userErrorDisplay" class="text-rose-600 font-bold text-xs flex items-center gap-1"></small>
                                     </div>
                                 </div>
 
                                 {{-- Amount --}}
                                 <div class="space-y-2">
-                                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                    <div class="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-wider">
                                         <label for="amount">Amount</label>
                                         <span class="text-slate-400 lowercase">Balance: 
                                             <strong class="text-emerald-600 font-extrabold uppercase">
@@ -145,7 +145,7 @@
                                             ₦
                                         </div>
                                         <input type="number" id="amount" name="amount"
-                                               class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] text-xs font-semibold text-slate-700 focus:outline-none transition-all shadow-sm"
+                                               class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 focus:outline-none transition-all shadow-sm"
                                                placeholder="0.00"
                                                min="0.01" step="0.01"
                                                required>
@@ -154,19 +154,19 @@
 
                                 {{-- Description --}}
                                 <div class="space-y-2">
-                                    <label for="description" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description (Optional)</label>
+                                    <label for="description" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Description (Optional)</label>
                                     <div class="relative">
                                         <div class="absolute top-3 left-3 pointer-events-none text-slate-400">
                                             <i data-lucide="text" class="w-4 h-4"></i>
                                         </div>
                                         <textarea id="description" name="description" 
-                                                  class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] text-xs font-semibold text-slate-700 focus:outline-none transition-all shadow-sm" 
+                                                  class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 focus:outline-none transition-all shadow-sm" 
                                                   rows="2" placeholder="What is this transfer for?"></textarea>
                                     </div>
                                 </div>
 
                                 {{-- Submit --}}
-                                <button type="button" class="w-full mt-4 py-3.5 px-6 bg-[#42517c] hover:bg-[#354268] text-white font-bold text-xs rounded-xl shadow-md disabled:bg-slate-100 disabled:border-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200 flex items-center justify-center gap-2"
+                                <button type="button" class="w-full mt-4 py-3.5 px-6 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md disabled:bg-slate-100 disabled:border-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200 flex items-center justify-center gap-2"
                                         id="proceedBtn" disabled>
                                     Proceed to Transfer 
                                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -176,8 +176,8 @@
                     </div>
 
                     <!-- Footer Info -->
-                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold">
-                        <i data-lucide="shield-check" class="w-4 h-4 text-[#42517c]/80"></i>
+                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center gap-1.5 text-xs text-slate-400 font-semibold">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-[#0056D2]/80"></i>
                         <span>Protected by Multi-Factor Authentication</span>
                     </div>
 
@@ -191,7 +191,7 @@
                     <div>
                         <!-- Header -->
                         <div class="px-6 py-5 border-b border-slate-100 flex items-center gap-3 bg-slate-50/50">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/50 shadow-inner">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-inner">
                                 <i data-lucide="clock-3" class="w-5 h-5"></i>
                             </div>
                             <div>
@@ -205,7 +205,7 @@
                             @if(isset($recentRecipients) && count($recentRecipients) > 0)
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     @foreach($recentRecipients as $recipient)
-                                        <div class="flex items-center gap-3 p-3 bg-white border border-slate-150 hover:border-[#42517c]/30 hover:bg-[#42517c]/5 rounded-2xl shadow-sm transition-all duration-200 cursor-pointer"
+                                        <div class="flex items-center gap-3 p-3 bg-white border border-slate-200 hover:border-[#0056D2]/30 hover:bg-[#0056D2]/5 rounded-2xl shadow-sm transition-all duration-200 cursor-pointer"
                                              onclick="selectRecentBank('{{ $recipient['bank_code'] }}', '{{ $recipient['account_no'] }}', '{{ $recipient['account_name'] }}')">
 
                                             <div class="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
@@ -213,15 +213,15 @@
                                                     <img src="{{ $recipient['bank_url'] }}" alt="{{ $recipient['bank_name'] }}"
                                                          class="w-6 h-6 object-contain"
                                                          onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                                                    <i data-lucide="user" class="w-4 h-4 text-[#42517c]" style="display:none;"></i>
+                                                    <i data-lucide="user" class="w-4 h-4 text-[#0056D2]" style="display:none;"></i>
                                                 @else
-                                                    <i data-lucide="user" class="w-4 h-4 text-[#42517c]"></i>
+                                                    <i data-lucide="user" class="w-4 h-4 text-[#0056D2]"></i>
                                                 @endif
                                             </div>
 
                                             <div class="flex-grow min-w-0">
-                                                <span class="block text-xs font-bold text-slate-850 truncate leading-snug">{{ $recipient['account_name'] }}</span>
-                                                <span class="block text-[10px] text-slate-400 font-medium truncate mt-0.5">
+                                                <span class="block text-xs font-bold text-slate-900 truncate leading-snug">{{ $recipient['account_name'] }}</span>
+                                                <span class="block text-xs text-slate-400 font-medium truncate mt-0.5">
                                                     {{ $recipient['bank_name'] }} &bull; {{ $recipient['account_no'] }}
                                                 </span>
                                             </div>
@@ -245,7 +245,7 @@
                     </div>
 
                     <!-- Footer -->
-                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center text-[10px] text-slate-400 font-semibold gap-1">
+                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center text-xs text-slate-400 font-semibold gap-1">
                         <span>PCI-DSS Secured System Gateway</span>
                     </div>
 
@@ -339,7 +339,7 @@
                     icon: 'warning',
                     title: 'Invalid Amount',
                     text: 'Please enter a valid amount.',
-                    confirmButtonColor: '#42517c',
+                    confirmButtonColor: '#0056D2',
                 });
                 return;
             }
@@ -349,7 +349,7 @@
                     icon: 'warning',
                     title: 'Recipient Not Verified',
                     text: 'Please verify the recipient first.',
-                    confirmButtonColor: '#42517c',
+                    confirmButtonColor: '#0056D2',
                 });
                 return;
             }

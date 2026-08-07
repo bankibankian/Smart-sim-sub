@@ -2,6 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+    display: none !important;
+}
+
+/*
+ * Theme tokens for the welcome2 landing page (resources/views/welcome2.blade.php).
+ * Scoped to .landing-theme so they don't affect the rest of the app; toggled between
+ * light and dark by adding/removing the Tailwind `dark` class on <html>.
+ */
+.landing-theme {
+    --lp-page: #F4F7FC;
+    --lp-page-grad-a: rgba(0, 86, 210, 0.08);
+    --lp-page-grad-b: rgba(0, 168, 89, 0.06);
+    --lp-surface: #FFFFFF;
+    --lp-surface-alt: #F1F5F9;
+    --lp-surface-strong: #E8EFFC;
+    --lp-nav: rgba(255, 255, 255, 0.9);
+    --lp-text: #0B1526;
+    --lp-text-soft: #4A607A;
+    --lp-text-faint: #6B7C93;
+    --lp-border: #DDE3EA;
+    --lp-border-strong: #C4CEDB;
+}
+
+.landing-theme.dark {
+    --lp-page: #04101f;
+    --lp-page-grad-a: rgba(0, 86, 210, 0.24);
+    --lp-page-grad-b: rgba(0, 168, 89, 0.16);
+    --lp-surface: rgba(255, 255, 255, 0.045);
+    --lp-surface-alt: rgba(255, 255, 255, 0.07);
+    --lp-surface-strong: rgba(0, 86, 210, 0.14);
+    --lp-nav: rgba(4, 16, 31, 0.88);
+    --lp-text: #F7FAFC;
+    --lp-text-soft: #B9C6D6;
+    --lp-text-faint: #8697AC;
+    --lp-border: rgba(255, 255, 255, 0.1);
+    --lp-border-strong: rgba(255, 255, 255, 0.18);
+}
+
 @layer base {
     /* Premium custom scrollbar styling */
     ::-webkit-scrollbar {
@@ -48,7 +87,7 @@
     /* Subtle background card pattern */
     .bg-grid-pattern {
         background-size: 20px 20px;
-        background-image: 
+        background-image:
             linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
             linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
     }

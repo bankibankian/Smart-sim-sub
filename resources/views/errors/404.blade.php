@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Tailwind / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -72,7 +72,7 @@
             border: 1px solid rgba(30, 41, 59, 0.8);
             align-items: center;
             justify-content: center;
-            color: #55699e;
+            color: #0049b8;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             position: relative;
             margin-bottom: 2rem;
@@ -137,7 +137,7 @@
             justify-content: center;
             gap: 0.5rem;
             padding: 0.75rem 1.5rem;
-            background-color: #42517c;
+            background-color: #0056D2;
             color: #ffffff;
             font-size: 0.875rem;
             font-weight: 600;

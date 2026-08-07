@@ -26,7 +26,7 @@
                         <input type="text" 
                                name="first_name" 
                                value="{{ old('first_name', $user->first_name) }}" 
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                required>
                     </div>
                     <div>
@@ -34,14 +34,14 @@
                         <input type="text" 
                                name="middle_name" 
                                value="{{ old('middle_name', $user->middle_name) }}" 
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Name</label>
                         <input type="text" 
                                name="last_name" 
                                value="{{ old('last_name', $user->last_name) }}" 
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                required>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         <input type="email" 
                                name="email" 
                                value="{{ old('email', $user->email) }}" 
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                required>
                     </div>
                     <div>
@@ -61,7 +61,7 @@
                         <input type="text" 
                                name="phone" 
                                value="{{ old('phone', $user->phone) }}" 
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                required>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Status</label>
                         <select name="status" 
-                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             <option value="active" {{ old('status', $user->status) == 'active' ? 'selected' : '' }}>Active</option>
                             <option value="suspended" {{ old('status', $user->status) == 'suspended' ? 'selected' : '' }}>Suspended</option>
                             <option value="inactive" {{ old('status', $user->status) == 'inactive' ? 'selected' : '' }}>Inactive / Deactivated</option>
@@ -81,7 +81,7 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">System Role</label>
                         <select name="role" 
-                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             <option value="personal" {{ old('role', $user->role) == 'personal' ? 'selected' : '' }}>Personal</option>
                             <option value="agent" {{ old('role', $user->role) == 'agent' ? 'selected' : '' }}>Agent</option>
                             <option value="partner" {{ old('role', $user->role) == 'partner' ? 'selected' : '' }}>Partner</option>
@@ -96,7 +96,7 @@
                 <!-- Submit Button -->
                 <div class="flex justify-end pt-4 border-t border-slate-50">
                     <button type="submit" 
-                            class="px-6 py-3.5 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354268] hover:to-[#42517c] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                            class="px-6 py-3.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
                         Save Changes
                     </button>
                 </div>

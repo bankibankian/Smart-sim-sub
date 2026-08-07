@@ -1,361 +1,185 @@
 <!-- Sidebar Overlay (Mobile) -->
-<div x-show="sidebarOpen" 
+<div x-show="sidebarOpen"
      x-transition:enter="transition ease-out duration-300"
      x-transition:enter-start="opacity-0"
      x-transition:enter-end="opacity-100"
      x-transition:leave="transition ease-in duration-200"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
-     @click="sidebarOpen = false" 
-     class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden" 
+     @click="sidebarOpen = false"
+     class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden"
      style="display: none;">
 </div>
 
 <!-- Sidebar Container -->
-<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
-       class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 border-r border-slate-800/80 flex flex-col transform lg:translate-x-0 lg:static lg:h-screen transition-transform duration-300 ease-in-out">
-    
+<aside :class="[sidebarOpen ? 'translate-x-0' : '-translate-x-full', sidebarCollapsed ? 'lg:w-[76px]' : 'lg:w-64']"
+       class="fixed inset-y-0 left-0 z-50 w-64 bg-white text-slate-600 border-r border-slate-200 flex flex-col transform lg:translate-x-0 lg:static lg:h-screen transition-all duration-200 ease-in-out">
+
     <!-- Brand Header -->
-    <div class="px-5 py-4 border-b border-slate-800/80">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center p-1 shadow-md shadow-indigo-950/20">
-                <img src="{{ asset('assets/images/logo/favicon.png') }}" alt="SmartSIM Logo" class="w-5.5 h-5.5 object-contain">
-            </div>
-            <div>
-                <span class="text-base font-bold text-white font-display tracking-tight">SmartSIM</span>
-                <span class="block text-[8px] font-semibold text-[#55699e] uppercase tracking-wider -mt-0.5">
-                    {{ strtoupper(str_replace('_', ' ', auth()->user()->role ?? 'user')) }} PANEL
-                </span>
-            </div>
-        </div>
+    <div class="flex items-center justify-between gap-2 px-4 py-4 border-b border-slate-200">
+        <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 min-w-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md">
+            <img src="{{ asset('assets/images/logo/favicon.png') }}" alt="" class="w-8 h-8 rounded-md shrink-0" aria-hidden="true">
+            <span x-show="!sidebarCollapsed" x-cloak class="min-w-0 truncate text-sm font-bold text-slate-900 font-display">SmartSIM</span>
+        </a>
+        <button type="button" @click="sidebarCollapsed = !sidebarCollapsed"
+                class="hidden lg:inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+            <i data-lucide="chevron-left" class="w-4 h-4 transition-transform duration-200" :class="sidebarCollapsed ? 'rotate-180' : ''" aria-hidden="true"></i>
+        </button>
     </div>
 
     <!-- Navigation Menu -->
-    <nav class="flex-grow px-4 py-6 space-y-1.5 overflow-y-auto">
-        <!-- Dashboard Link -->
-        <a href="{{ route('dashboard') }}" 
-           class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('dashboard') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-            @if(request()->routeIs('dashboard'))
-                <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-            @endif
-            <i data-lucide="layout-dashboard" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('dashboard') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-            <span>{{ __('Dashboard') }}</span>
-        </a>
+    <nav class="flex-grow px-3 py-4 space-y-1 overflow-y-auto overflow-x-hidden" aria-label="Main navigation">
 
-        <!-- Wallet Dropdown Sub-Selection -->
-        <div x-data="{ open: {{ request()->routeIs('wallet', 'transfer', 'withdraw') ? 'true' : 'false' }} }" class="space-y-1">
-            <button @click="open = !open" 
-                    class="w-full group flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display focus:outline-none {{ request()->routeIs('wallet', 'transfer', 'withdraw') ? 'bg-[#42517c]/5 text-slate-200 font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                <div class="flex items-center gap-3">
-                    <i data-lucide="wallet" class="w-5 h-5 {{ request()->routeIs('wallet', 'transfer', 'withdraw') ? 'text-[#55699e]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>Wallet</span>
-                </div>
-                <i data-lucide="chevron-down" 
-                   class="w-4 h-4 text-slate-500 transition-transform duration-200"
-                   :class="open ? 'rotate-180' : ''"></i>
+        @include('layouts.partials.sidebar-link', [
+            'href' => route('dashboard'),
+            'icon' => 'layout-dashboard',
+            'label' => __('Dashboard'),
+            'active' => request()->routeIs('dashboard'),
+        ])
+
+        @php
+            $walletActive = request()->routeIs('wallet', 'transfer', 'withdraw');
+        @endphp
+        <div x-data="{ open: {{ $walletActive ? 'true' : 'false' }} }">
+            <button type="button"
+                    @click="if (sidebarCollapsed) { sidebarCollapsed = false; open = true } else { open = !open }"
+                    :aria-expanded="open" aria-controls="sidebar-wallet-menu"
+                    :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : 'justify-between'"
+                    class="w-full flex items-center gap-3 py-2.5 px-3 rounded-md text-sm font-medium font-display transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary {{ $walletActive ? 'text-slate-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                <span class="flex items-center gap-3">
+                    <i data-lucide="wallet" class="w-5 h-5 shrink-0 {{ $walletActive ? 'text-slate-900' : 'text-slate-400' }}"></i>
+                    <span x-show="!sidebarCollapsed" x-cloak>Wallet</span>
+                </span>
+                <i x-show="!sidebarCollapsed" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" aria-hidden="true"></i>
             </button>
 
-            <!-- Sub Selection Links -->
-            <div x-show="open" 
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 -translate-y-2"
+            <div id="sidebar-wallet-menu" x-show="open && !sidebarCollapsed"
+                 x-transition:enter="transition ease-out duration-150"
+                 x-transition:enter-start="opacity-0 -translate-y-1"
                  x-transition:enter-end="opacity-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave="transition ease-in duration-100"
                  x-transition:leave-start="opacity-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 -translate-y-2"
-                 class="pl-4 space-y-1"
-                 style="display: none;">
-                
-                <!-- Wallet Link -->
-                <a href="{{ route('wallet') }}" 
-                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('wallet') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                    @if(request()->routeIs('wallet'))
-                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="wallet" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('wallet') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>{{ __('My Wallet') }}</span>
-                </a>
+                 x-transition:leave-end="opacity-0 -translate-y-1"
+                 class="mt-1 ml-[22px] space-y-0.5 border-l border-slate-200 pl-2.5" style="display: none;">
 
-                <!-- P2P Transfer Link -->
-                <a href="{{ route('transfer') }}" 
-                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('transfer') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                    @if(request()->routeIs('transfer'))
-                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="send" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('transfer') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>{{ __('P2P Transfer') }}</span>
-                </a>
-
-                <!-- Secure Payout Link -->
-                <a href="{{ route('withdraw') }}" 
-                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('withdraw') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                    @if(request()->routeIs('withdraw'))
-                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="banknote" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('withdraw') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>{{ __('Secure Withdrawal') }}</span>
-                </a>
+                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('wallet'), 'icon' => 'wallet', 'label' => __('My Wallet'), 'active' => request()->routeIs('wallet')])
+                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('transfer'), 'icon' => 'send', 'label' => __('P2P Transfer'), 'active' => request()->routeIs('transfer')])
+                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('withdraw'), 'icon' => 'banknote', 'label' => __('Secure Withdrawal'), 'active' => request()->routeIs('withdraw')])
             </div>
         </div>
 
-        <!-- Buy Airtime Link -->
-        <a href="{{ route('airtime') }}" 
-           class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('airtime') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-            @if(request()->routeIs('airtime'))
-                <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-            @endif
-            <i data-lucide="phone" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('airtime') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-            <span>{{ __('Buy Airtime') }}</span>
-        </a>
+        @include('layouts.partials.sidebar-link', ['href' => route('airtime'), 'icon' => 'phone', 'label' => __('Buy Airtime'), 'active' => request()->routeIs('airtime')])
+        @include('layouts.partials.sidebar-link', ['href' => route('buy-sme-data'), 'icon' => 'wifi', 'label' => __('Buy Data'), 'active' => request()->routeIs('buy-sme-data*')])
+        @include('layouts.partials.sidebar-link', ['href' => route('sims.index'), 'icon' => 'cpu', 'label' => __('SIM Services'), 'active' => request()->routeIs('sims.*')])
 
-        <!-- Buy Data Link -->
-        <a href="{{ route('buy-sme-data') }}" 
-           class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('buy-sme-data*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-            @if(request()->routeIs('buy-sme-data*'))
-                <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-            @endif
-            <i data-lucide="wifi" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('buy-sme-data*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-            <span>{{ __('Buy Data') }}</span>
-        </a>
-
-        <!-- SIM Services Link -->
-        <a href="{{ route('sims.index') }}" 
-           class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('sims.*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-            @if(request()->routeIs('sims.*'))
-                <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-            @endif
-            <i data-lucide="cpu" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('sims.*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-            <span>{{ __('SIM Services') }}</span>
-        </a>
-
-        <!-- Verification Dropdown -->
-        <div x-data="{ open: {{ request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index') ? 'true' : 'false' }} }" class="space-y-1">
-            <button @click="open = !open" 
-                    class="w-full group flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display focus:outline-none {{ request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index') ? 'bg-[#42517c]/5 text-slate-200 font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                <div class="flex items-center gap-3">
-                    <i data-lucide="shield-check" class="w-5 h-5 {{ request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index') ? 'text-[#55699e]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>Verification</span>
-                </div>
-                <i data-lucide="chevron-down" 
-                   class="w-4 h-4 text-slate-500 transition-transform duration-200"
-                   :class="open ? 'rotate-180' : ''"></i>
+        @php
+            $verificationActive = request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index');
+        @endphp
+        <div x-data="{ open: {{ $verificationActive ? 'true' : 'false' }} }">
+            <button type="button"
+                    @click="if (sidebarCollapsed) { sidebarCollapsed = false; open = true } else { open = !open }"
+                    :aria-expanded="open" aria-controls="sidebar-verification-menu"
+                    :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : 'justify-between'"
+                    class="w-full flex items-center gap-3 py-2.5 px-3 rounded-md text-sm font-medium font-display transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary {{ $verificationActive ? 'text-slate-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                <span class="flex items-center gap-3">
+                    <i data-lucide="shield-check" class="w-5 h-5 shrink-0 {{ $verificationActive ? 'text-slate-900' : 'text-slate-400' }}"></i>
+                    <span x-show="!sidebarCollapsed" x-cloak>Verification</span>
+                </span>
+                <i x-show="!sidebarCollapsed" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" aria-hidden="true"></i>
             </button>
 
-            <!-- Sub Selection Links -->
-            <div x-show="open" 
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 -translate-y-2"
+            <div id="sidebar-verification-menu" x-show="open && !sidebarCollapsed"
+                 x-transition:enter="transition ease-out duration-150"
+                 x-transition:enter-start="opacity-0 -translate-y-1"
                  x-transition:enter-end="opacity-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave="transition ease-in duration-100"
                  x-transition:leave-start="opacity-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 -translate-y-2"
-                 class="pl-4 space-y-1"
-                 style="display: none;">
-                
-                <!-- BVN Verification -->
-                <a href="{{ route('bvn.verification.index') }}" 
-                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('bvn.verification.index') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                    @if(request()->routeIs('bvn.verification.index'))
-                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="fingerprint" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('bvn.verification.index') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>BVN Verification</span>
-                </a>
+                 x-transition:leave-end="opacity-0 -translate-y-1"
+                 class="mt-1 ml-[22px] space-y-0.5 border-l border-slate-200 pl-2.5" style="display: none;">
 
-                <!-- NIN Verification -->
-                <a href="{{ route('nin.verification.index') }}" 
-                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('nin.verification.index') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                    @if(request()->routeIs('nin.verification.index'))
-                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="file-check-2" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('nin.verification.index') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>NIN Verification</span>
-                </a>
-
-                <!-- NIN Demo Verification -->
-                <a href="{{ route('nin.demo.index') }}" 
-                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('nin.demo.index') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                    @if(request()->routeIs('nin.demo.index'))
-                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="users" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('nin.demo.index') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>NIN Demo</span>
-                </a>
-
-                <!-- NIN Phone Verification -->
-                <a href="{{ route('nin.phone.index') }}" 
-                   class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('nin.phone.index') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                    @if(request()->routeIs('nin.phone.index'))
-                        <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="phone" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('nin.phone.index') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>NIN Phone</span>
-                </a>
+                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('bvn.verification.index'), 'icon' => 'fingerprint', 'label' => 'BVN Verification', 'active' => request()->routeIs('bvn.verification.index')])
+                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('nin.verification.index'), 'icon' => 'file-check-2', 'label' => 'NIN Verification', 'active' => request()->routeIs('nin.verification.index')])
+                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('nin.demo.index'), 'icon' => 'users', 'label' => 'NIN Demo', 'active' => request()->routeIs('nin.demo.index')])
+                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('nin.phone.index'), 'icon' => 'phone', 'label' => 'NIN Phone', 'active' => request()->routeIs('nin.phone.index')])
             </div>
         </div>
 
-        <!-- Transactions Link -->
-        <a href="{{ route('transactions') }}" 
-           class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('transactions') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-            @if(request()->routeIs('transactions'))
-                <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-            @endif
-            <i data-lucide="history" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('transactions') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-            <span>{{ __('Transaction') }}</span>
-        </a>
-
-
-         <!-- support Link -->
-        <a href="{{ route('support') }}" 
-           class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('support') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-            @if(request()->routeIs('support'))
-                <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-            @endif
-            <i data-lucide="help-circle" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('support') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-            <span>{{ __('Support') }}</span>
-        </a>
-
-        <!-- Profile Link -->
-        <a href="{{ route('profile.edit') }}" 
-           class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('profile.edit') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-            @if(request()->routeIs('profile.edit'))
-                <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-            @endif
-            <i data-lucide="user-cog" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('profile.edit') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-            <span>{{ __('Profile Settings') }}</span>
-        </a>
+        @include('layouts.partials.sidebar-link', ['href' => route('transactions'), 'icon' => 'history', 'label' => __('Transaction'), 'active' => request()->routeIs('transactions')])
+        @include('layouts.partials.sidebar-link', ['href' => route('support'), 'icon' => 'help-circle', 'label' => __('Support'), 'active' => request()->routeIs('support')])
+        @include('layouts.partials.sidebar-link', ['href' => route('profile.edit'), 'icon' => 'user-cog', 'label' => __('Profile Settings'), 'active' => request()->routeIs('profile.edit')])
 
         @if (auth()->user() && auth()->user()->role === 'super_admin')
             <!-- Admin Management Section -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80">
-                <span class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Administration</span>
-                
-                <!-- Users Dropdown Sub-Selection -->
-                <div x-data="{ open: {{ request()->routeIs('admin.manage.users*', 'admin.manage.upgrades*', 'admin.manage.access*') ? 'true' : 'false' }} }" class="space-y-1">
-                    <button @click="open = !open" 
-                            class="w-full group flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display focus:outline-none {{ request()->routeIs('admin.manage.users*', 'admin.manage.upgrades*', 'admin.manage.access*') ? 'bg-[#42517c]/5 text-slate-200 font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="users" class="w-5 h-5 {{ request()->routeIs('admin.manage.users*', 'admin.manage.upgrades*', 'admin.manage.access*') ? 'text-[#55699e]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                            <span>Users</span>
-                        </div>
-                        <i data-lucide="chevron-down" 
-                           class="w-4 h-4 text-slate-500 transition-transform duration-200"
-                           :class="open ? 'rotate-180' : ''"></i>
+            <div class="pt-4 mt-4 border-t border-slate-200">
+                <span x-show="!sidebarCollapsed" x-cloak class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wide block mb-2">Administration</span>
+
+                @php
+                    $adminUsersActive = request()->routeIs('admin.manage.users*', 'admin.manage.upgrades*', 'admin.manage.access*');
+                @endphp
+                <div x-data="{ open: {{ $adminUsersActive ? 'true' : 'false' }} }">
+                    <button type="button"
+                            @click="if (sidebarCollapsed) { sidebarCollapsed = false; open = true } else { open = !open }"
+                            :aria-expanded="open" aria-controls="sidebar-admin-users-menu"
+                            :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : 'justify-between'"
+                            class="w-full flex items-center gap-3 py-2.5 px-3 rounded-md text-sm font-medium font-display transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary {{ $adminUsersActive ? 'text-slate-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="users" class="w-5 h-5 shrink-0 {{ $adminUsersActive ? 'text-slate-900' : 'text-slate-400' }}"></i>
+                            <span x-show="!sidebarCollapsed" x-cloak>Users</span>
+                        </span>
+                        <i x-show="!sidebarCollapsed" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" aria-hidden="true"></i>
                     </button>
 
-                    <!-- Sub Selection Links -->
-                    <div x-show="open" 
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 -translate-y-2"
+                    <div id="sidebar-admin-users-menu" x-show="open && !sidebarCollapsed"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 -translate-y-1"
                          x-transition:enter-end="opacity-100 translate-y-0"
-                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave="transition ease-in duration-100"
                          x-transition:leave-start="opacity-100 translate-y-0"
-                         x-transition:leave-end="opacity-0 -translate-y-2"
-                         class="pl-4 space-y-1"
-                         style="display: none;">
-                        
-                        <!-- Manage Users Link -->
-                        <a href="{{ route('admin.manage.users') }}" 
-                           class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.manage.users*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                            @if(request()->routeIs('admin.manage.users*'))
-                                <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                            @endif
-                            <i data-lucide="users" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.manage.users*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                            <span>Manage Users</span>
-                        </a>
+                         x-transition:leave-end="opacity-0 -translate-y-1"
+                         class="mt-1 ml-[22px] space-y-0.5 border-l border-slate-200 pl-2.5" style="display: none;">
 
-                        <!-- Manage Upgrades Link -->
-                        <a href="{{ route('admin.manage.upgrades') }}" 
-                           class="group flex items-xl gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.manage.upgrades*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                            @if(request()->routeIs('admin.manage.upgrades*'))
-                                <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                            @endif
-                            <i data-lucide="arrow-up-circle" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.manage.upgrades*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                            <span>Manage Upgrades</span>
-                        </a>
-
-                        <!-- Manage Access Link -->
-                        <a href="{{ route('admin.manage.access') }}" 
-                           class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.manage.access*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }}">
-                            @if(request()->routeIs('admin.manage.access*'))
-                                <div class="absolute left-0 top-2.5 bottom-2.5 w-1 bg-[#42517c] rounded-r-full"></div>
-                            @endif
-                            <i data-lucide="shield-check" class="w-4 h-4 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.manage.access*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                            <span>Manage Access</span>
-                        </a>
+                        @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('admin.manage.users'), 'icon' => 'users', 'label' => 'Manage Users', 'active' => request()->routeIs('admin.manage.users*')])
+                        @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('admin.manage.upgrades'), 'icon' => 'arrow-up-circle', 'label' => 'Manage Upgrades', 'active' => request()->routeIs('admin.manage.upgrades*')])
+                        @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('admin.manage.access'), 'icon' => 'shield-check', 'label' => 'Manage Access', 'active' => request()->routeIs('admin.manage.access*')])
                     </div>
                 </div>
 
-                <!-- Services Management Link -->
-                <a href="{{ route('admin.services.index') }}" 
-                   class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.services*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }} mt-2">
-                    @if(request()->routeIs('admin.services*'))
-                        <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="server" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.services*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>Services Pricing</span>
-                </a>
-
-                <!-- SME Data Plans Link -->
-                <a href="{{ route('admin.sme-plans.index') }}" 
-                   class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.sme-plans*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }} mt-2">
-                    @if(request()->routeIs('admin.sme-plans*'))
-                        <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="wifi" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.sme-plans*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>SME Data Plans</span>
-                </a>
-
-                <!-- SIM Plans Management Link -->
-                <a href="{{ route('admin.sim-plan.index') }}" 
-                   class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.sim-plan*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }} mt-2">
-                    @if(request()->routeIs('admin.sim-plan*'))
-                        <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="settings" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.sim-plan*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>SIM Plans</span>
-                </a>
-
-                <!-- System Transactions Link -->
-                <a href="{{ route('admin.transactions') }}" 
-                   class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.transactions*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }} mt-2">
-                    @if(request()->routeIs('admin.transactions*'))
-                        <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="receipt" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.transactions*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>All Transactions</span>
-                </a>
-
-                <!-- Admin Wallet Link -->
-                <a href="{{ route('admin.manage.adminwallet') }}" 
-                   class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.manage.adminwallet') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }} mt-2">
-                    @if(request()->routeIs('admin.manage.adminwallet'))
-                        <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="wallet" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.manage.adminwallet') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>Admin Wallet</span>
-                </a>
-
-                <!-- Admin Support Link -->
-                <a href="{{ route('admin.manage.support.index') }}" 
-                   class="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 font-display relative {{ request()->routeIs('admin.manage.support*') ? 'bg-[#42517c]/10 text-white font-bold' : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200' }} mt-2">
-                    @if(request()->routeIs('admin.manage.support*'))
-                        <div class="absolute left-0 top-3 bottom-3 w-1 bg-[#42517c] rounded-r-full"></div>
-                    @endif
-                    <i data-lucide="message-square" class="w-5 h-5 transition-transform duration-200 group-hover:scale-105 {{ request()->routeIs('admin.manage.support*') ? 'text-[#42517c]' : 'text-slate-400 group-hover:text-slate-300' }}"></i>
-                    <span>Admin Support</span>
-                </a>
+                @include('layouts.partials.sidebar-link', ['href' => route('admin.services.index'), 'icon' => 'server', 'label' => 'Services Pricing', 'active' => request()->routeIs('admin.services*')])
+                @include('layouts.partials.sidebar-link', ['href' => route('admin.sme-plans.index'), 'icon' => 'wifi', 'label' => 'SME Data Plans', 'active' => request()->routeIs('admin.sme-plans*')])
+                @include('layouts.partials.sidebar-link', ['href' => route('admin.sim-plan.index'), 'icon' => 'settings', 'label' => 'SIM Plans', 'active' => request()->routeIs('admin.sim-plan*')])
+                @include('layouts.partials.sidebar-link', ['href' => route('admin.transactions'), 'icon' => 'receipt', 'label' => 'All Transactions', 'active' => request()->routeIs('admin.transactions*')])
+                @include('layouts.partials.sidebar-link', ['href' => route('admin.manage.adminwallet'), 'icon' => 'wallet', 'label' => 'Admin Wallet', 'active' => request()->routeIs('admin.manage.adminwallet')])
+                @include('layouts.partials.sidebar-link', ['href' => route('admin.manage.support.index'), 'icon' => 'message-square', 'label' => 'Admin Support', 'active' => request()->routeIs('admin.manage.support*')])
             </div>
         @endif
+    </nav>
 
-        <!-- Logout Link -->
-        <form method="POST" action="{{ route('logout') }}" class="m-0 mt-4 pt-4 border-t border-slate-800/80">
+    <!-- Support promo card (disabled for now, kept for possible future use) -->
+    <div x-show="!sidebarCollapsed" x-cloak class="hidden px-3 pb-3">
+        <a href="{{ route('support') }}" class="block rounded-lg border border-slate-200 bg-slate-50 p-3.5 transition hover:border-slate-300 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <div class="flex h-8 w-8 items-center justify-center rounded-md bg-white border border-slate-200 text-slate-500">
+                <i data-lucide="life-buoy" class="w-4 h-4"></i>
+            </div>
+            <p class="mt-2.5 text-sm font-semibold text-slate-800 font-display">Need help?</p>
+            <p class="mt-0.5 text-xs text-slate-500 leading-relaxed">Our support team can assist with activations, wallets, and more.</p>
+            <span class="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                Contact support
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </span>
+        </a>
+    </div>
+
+    <!-- Logout -->
+    <div class="border-t border-slate-200 p-3">
+        <form method="POST" action="{{ route('logout') }}" class="m-0">
             @csrf
             <button type="submit"
-               class="w-full group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-all duration-200 font-display border-0 cursor-pointer bg-transparent text-left focus:outline-none">
-                <i data-lucide="log-out" class="w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5"></i>
-                <span>{{ __('Log Out') }}</span>
+                    :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : ''"
+                    class="w-full flex items-center gap-3 py-2.5 px-3 rounded-md text-sm font-medium font-display text-rose-600 hover:bg-rose-50 transition-colors border-0 cursor-pointer bg-transparent text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
+                <span x-show="!sidebarCollapsed" x-cloak>{{ __('Log Out') }}</span>
             </button>
         </form>
-    </nav>
+    </div>
 </aside>

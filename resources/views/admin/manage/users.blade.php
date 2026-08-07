@@ -102,7 +102,7 @@
                                name="search" 
                                value="{{ request('search') }}" 
                                placeholder="Search by name, email or phone..." 
-                               class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm">
+                               class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm">
                         <div class="absolute left-4 top-3.5 text-slate-400">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </div>
@@ -110,7 +110,7 @@
 
                     <!-- Status Filter -->
                     <div class="w-full md:w-44">
-                        <select name="status" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                        <select name="status" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
                             <option value="">All Statuses</option>
                             <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
                             <option value="suspended" {{ request('status') === 'suspended' ? 'selected' : '' }}>Suspended</option>
@@ -121,7 +121,7 @@
 
                     <!-- Role Filter -->
                     <div class="w-full md:w-44">
-                        <select name="role" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                        <select name="role" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
                             <option value="">All Roles</option>
                             <option value="personal" {{ request('role') === 'personal' ? 'selected' : '' }}>Personal</option>
                             <option value="agent" {{ request('role') === 'agent' ? 'selected' : '' }}>Agent</option>
@@ -135,12 +135,12 @@
 
                     <!-- Action Buttons -->
                     <div class="flex items-center gap-2">
-                        <button type="submit" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#42517c] hover:bg-[#42517c]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                        <button type="submit" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
                             <i data-lucide="filter" class="w-3.5 h-3.5"></i>
                             Filter
                         </button>
                         @if(request('search') || request('status') || request('role'))
-                            <a href="{{ route('admin.manage.users') }}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-650 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <a href="{{ route('admin.manage.users') }}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                                 Reset
                             </a>
@@ -153,7 +153,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                             <th class="py-4 px-6">Name</th>
                             <th class="py-4 px-6">Email / Phone</th>
                             <th class="py-4 px-6">Role</th>
@@ -167,7 +167,7 @@
                             <tr class="hover:bg-slate-50/30 transition-all duration-150">
                                 <td class="py-4 px-6">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 bg-[#42517c]/5 text-[#42517c] rounded-xl flex items-center justify-center font-bold text-xs uppercase">
+                                        <div class="w-9 h-9 bg-[#0056D2]/5 text-[#0056D2] rounded-xl flex items-center justify-center font-bold text-xs uppercase">
                                             {{ substr($u->first_name, 0, 1) }}{{ substr($u->last_name, 0, 1) }}
                                         </div>
                                         <div>
@@ -177,31 +177,31 @@
                                 </td>
                                 <td class="py-4 px-6">
                                     <span class="block text-xs font-semibold text-slate-500">{{ $u->email }}</span>
-                                    <span class="block text-[10px] text-slate-400 mt-0.5">{{ $u->phone ?? 'No Phone' }}</span>
+                                    <span class="block text-xs text-slate-400 mt-0.5">{{ $u->phone ?? 'No Phone' }}</span>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
+                                    <span class="px-2.5 py-1 text-xs font-extrabold rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
                                         {{ $u->role }}
                                     </span>
                                 </td>
                                 <td class="py-4 px-6">
                                     @if ($u->status === 'active')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                                             Active
                                         </span>
                                     @elseif ($u->status === 'suspended')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-amber-50 text-amber-600 border border-amber-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-amber-50 text-amber-600 border border-amber-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
                                             Suspended
                                         </span>
                                     @elseif ($u->status === 'inactive')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-slate-100 text-slate-500 border border-slate-200 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-slate-100 text-slate-500 border border-slate-200 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-slate-400 rounded-full"></span>
                                             Inactive
                                         </span>
                                     @elseif ($u->status === 'banned')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
                                             Banned
                                         </span>
@@ -214,7 +214,7 @@
                                     <div class="flex items-center justify-end gap-2">
                                         <!-- View -->
                                         <a href="{{ route('admin.manage.users.show', $u) }}" 
-                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-[#42517c]/5 hover:bg-[#42517c]/10 text-[#42517c] rounded-xl transition-all duration-150">
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-[#0056D2]/5 hover:bg-[#0056D2]/10 text-[#0056D2] rounded-xl transition-all duration-150">
                                             <i data-lucide="eye" class="w-3.5 h-3.5"></i>
                                             View
                                         </a>

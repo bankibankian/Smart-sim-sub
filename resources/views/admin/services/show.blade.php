@@ -39,7 +39,7 @@
         @if($errors->any())
             <div class="p-4 bg-rose-50 border border-rose-100 text-rose-700 rounded-2xl flex flex-col gap-1.5 shadow-sm">
                 <div class="flex items-center gap-3">
-                    <i data-lucide="alert-circle" class="w-5 h-5 text-rose-550 flex-shrink-0 animate-pulse"></i>
+                    <i data-lucide="alert-circle" class="w-5 h-5 text-rose-600 flex-shrink-0 animate-pulse"></i>
                     <span class="text-sm font-extrabold uppercase tracking-wider">Validation Errors Found:</span>
                 </div>
                 <ul class="list-disc list-inside text-xs text-rose-600 mt-1 pl-8 font-semibold space-y-1">
@@ -54,11 +54,11 @@
         <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
             <div class="flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
                 @if($service->image)
-                    <div class="w-16 h-16 rounded-2xl border border-slate-150 overflow-hidden bg-slate-50 flex items-center justify-center p-2">
+                    <div class="w-16 h-16 rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex items-center justify-center p-2">
                         <img src="{{ $service->image }}" class="w-full h-full object-contain" alt="{{ $service->name }}">
                     </div>
                 @else
-                    <div class="w-16 h-16 rounded-2xl bg-[#42517c]/5 text-[#42517c] border border-slate-100 flex items-center justify-center font-bold text-lg uppercase">
+                    <div class="w-16 h-16 rounded-2xl bg-[#0056D2]/5 text-[#0056D2] border border-slate-100 flex items-center justify-center font-bold text-lg uppercase">
                         {{ strtoupper(substr($service->name, 0, 2)) }}
                     </div>
                 @endif
@@ -67,12 +67,12 @@
                     <p class="text-xs text-slate-400 mt-1 max-w-xl font-medium">{{ $service->description ?? 'No description provided' }}</p>
                     <div class="mt-3 flex items-center gap-2 justify-center md:justify-start">
                         @if($service->is_active)
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
                                 <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                                 Active
                             </span>
                         @else
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
                                 <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
                                 Inactive
                             </span>
@@ -90,7 +90,7 @@
                     <h3 class="text-md font-bold text-slate-800 font-display">Service Variants (Fields)</h3>
                     <p class="text-xs text-slate-400 mt-1">Configure pricing plans and field codes for this service.</p>
                 </div>
-                <button @click="addFieldModalOpen = true" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-[#42517c] hover:bg-[#42517c]/90 text-white rounded-xl shadow-sm transition-all duration-150">
+                <button @click="addFieldModalOpen = true" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm transition-all duration-150">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     Add Variant
                 </button>
@@ -100,7 +100,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                             <th class="py-4 px-6">S/N</th>
                             <th class="py-4 px-6">Variant Name</th>
                             <th class="py-4 px-6">Field Code</th>
@@ -119,19 +119,19 @@
                                     {{ $field->field_name }}
                                 </td>
                                 <td class="py-4 px-6">
-                                    <code class="px-2 py-1 bg-slate-50 border border-slate-100 rounded text-xs font-bold text-[#42517c]">{{ $field->field_code }}</code>
+                                    <code class="px-2 py-1 bg-slate-50 border border-slate-100 rounded text-xs font-bold text-[#0056D2]">{{ $field->field_code }}</code>
                                 </td>
-                                <td class="py-4 px-6 text-[#42517c] font-bold font-display">
+                                <td class="py-4 px-6 text-[#0056D2] font-bold font-display">
                                     ₦{{ number_format($field->base_price, 2) }}
                                 </td>
                                 <td class="py-4 px-6">
                                     @if($field->is_active)
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                                             Active
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
                                             Inactive
                                         </span>
@@ -191,7 +191,7 @@
                     <h3 class="text-md font-bold text-slate-800 font-display">Target / Group Custom Pricing</h3>
                     <p class="text-xs text-slate-400 mt-1">Set customized pricing rates for specific user roles or individual user accounts.</p>
                 </div>
-                <button @click="addPriceModalOpen = true" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-[#42517c] hover:bg-[#42517c]/90 text-white rounded-xl shadow-sm transition-all duration-150">
+                <button @click="addPriceModalOpen = true" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm transition-all duration-150">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     Add Custom Price
                 </button>
@@ -201,7 +201,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                             <th class="py-4 px-6">S/N</th>
                             <th class="py-4 px-6">Target</th>
                             <th class="py-4 px-6">Linked Variant</th>
@@ -220,10 +220,10 @@
                                     @if($price->user_id)
                                         <div class="flex flex-col">
                                             <span class="font-bold text-slate-800">{{ $price->user->name ?? 'User Account' }}</span>
-                                            <span class="text-[10px] text-slate-400 font-semibold mt-0.5">{{ $price->user->email ?? 'No email' }}</span>
+                                            <span class="text-xs text-slate-400 font-semibold mt-0.5">{{ $price->user->email ?? 'No email' }}</span>
                                         </div>
                                     @else
-                                        <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 uppercase tracking-wider">
+                                        <span class="px-2.5 py-1 text-xs font-extrabold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 uppercase tracking-wider">
                                             Role: {{ $price->user_type }}
                                         </span>
                                     @endif
@@ -232,13 +232,13 @@
                                     @if($price->serviceField)
                                         <div class="flex flex-col">
                                             <span class="font-bold text-slate-800">{{ $price->serviceField->field_name }}</span>
-                                            <span class="text-[10px] text-slate-400 font-semibold mt-0.5">Code: {{ $price->serviceField->field_code }}</span>
+                                            <span class="text-xs text-slate-400 font-semibold mt-0.5">Code: {{ $price->serviceField->field_code }}</span>
                                         </div>
                                     @else
                                         <span class="text-slate-400 text-xs italic">All Variants</span>
                                     @endif
                                 </td>
-                                <td class="py-4 px-6 text-[#42517c] font-bold font-display">
+                                <td class="py-4 px-6 text-[#0056D2] font-bold font-display">
                                     {{ $service->name === 'airtime' ? number_format($price->price, 2) . '%' : '₦' . number_format($price->price, 2) }}
                                 </td>
                                 <td class="py-4 px-6 text-emerald-600 font-bold font-display">
@@ -311,19 +311,19 @@
                             <!-- Name -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Variant Name</label>
-                                <input type="text" name="field_name" required placeholder="e.g., MTN VTU 1GB" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="text" name="field_name" required placeholder="e.g., MTN VTU 1GB" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Code -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Field Code</label>
-                                <input type="text" name="field_code" required placeholder="e.g., mtn_vtu_1gb" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="text" name="field_code" required placeholder="e.g., mtn_vtu_1gb" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Base Price -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Base Price (₦)</label>
-                                <input type="number" step="0.01" name="base_price" required placeholder="e.500.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="number" step="0.01" name="base_price" required placeholder="e.500.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Status -->
@@ -334,16 +334,16 @@
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" name="is_active" value="1" checked class="sr-only peer">
-                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#42517c]"></div>
+                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0056D2]"></div>
                                 </label>
                             </div>
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="addFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-550 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <button type="button" @click="addFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 Cancel
                             </button>
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#42517c] hover:bg-[#42517c]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
                                 Create Variant
                             </button>
                         </div>
@@ -371,19 +371,19 @@
                             <!-- Name -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Variant Name</label>
-                                <input type="text" name="field_name" :value="editField.field_name" required class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="text" name="field_name" :value="editField.field_name" required class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Code -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Field Code</label>
-                                <input type="text" name="field_code" :value="editField.field_code" required class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="text" name="field_code" :value="editField.field_code" required class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Base Price -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Base Price (₦)</label>
-                                <input type="number" step="0.01" name="base_price" :value="editField.base_price" required class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="number" step="0.01" name="base_price" :value="editField.base_price" required class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Status -->
@@ -394,16 +394,16 @@
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" name="is_active" value="1" :checked="editField.isActive" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#42517c]"></div>
+                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0056D2]"></div>
                                 </label>
                             </div>
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="editFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-550 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <button type="button" @click="editFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 Cancel
                             </button>
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#42517c] hover:bg-[#42517c]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
                                 Update Variant
                             </button>
                         </div>
@@ -431,7 +431,7 @@
                             <!-- Variant select -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Variant</label>
-                                <select name="service_fields_id" class="w-full px-3 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm font-semibold text-slate-800 transition-all duration-200">
+                                <select name="service_fields_id" class="w-full px-3 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm font-semibold text-slate-800 transition-all duration-200">
                                     <option value="">All Variants (Service Base Price)</option>
                                     @foreach($service->fields as $f)
                                         <option value="{{ $f->id }}">{{ $f->field_name }} (Base: ₦{{ number_format($f->base_price, 2) }})</option>
@@ -443,10 +443,10 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Selection</label>
                                 <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
-                                    <button type="button" @click="addTarget = 'role'" :class="addTarget === 'role' ? 'bg-[#42517c] text-white' : 'text-slate-650 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
+                                    <button type="button" @click="addTarget = 'role'" :class="addTarget === 'role' ? 'bg-[#0056D2] text-white' : 'text-slate-700 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
                                         Role Group
                                     </button>
-                                    <button type="button" @click="addTarget = 'user'" :class="addTarget === 'user' ? 'bg-[#42517c] text-white' : 'text-slate-650 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
+                                    <button type="button" @click="addTarget = 'user'" :class="addTarget === 'user' ? 'bg-[#0056D2] text-white' : 'text-slate-700 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
                                         Specific User
                                     </button>
                                 </div>
@@ -456,7 +456,7 @@
                             <!-- Target Role Selection (x-show) -->
                             <div x-show="addTarget === 'role'">
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Role Group</label>
-                                <select name="user_type" class="w-full px-3 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm font-semibold text-slate-800 transition-all duration-200">
+                                <select name="user_type" class="w-full px-3 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm font-semibold text-slate-800 transition-all duration-200">
                                     <option value="personal">Personal</option>
                                     <option value="agent">Agent</option>
                                     <option value="partner">Partner</option>
@@ -470,7 +470,7 @@
                             <!-- Target Specific User Selection (x-show) -->
                             <div x-show="addTarget === 'user'" style="display: none;">
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Email Address</label>
-                                <input type="email" name="user_email" placeholder="e.g., user@example.com" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="email" name="user_email" placeholder="e.g., user@example.com" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Custom Price -->
@@ -478,7 +478,7 @@
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                                     Custom Price <span x-text="'{{ $service->name }}' === 'airtime' ? '(%)' : '(₦)'"></span>
                                 </label>
-                                <input type="number" step="0.01" name="price" required placeholder="e.g., 480.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="number" step="0.01" name="price" required placeholder="e.g., 480.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Commission -->
@@ -486,16 +486,16 @@
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                                     Commission <span x-text="'{{ $service->name }}' === 'airtime' ? '(%)' : '(₦)'"></span>
                                 </label>
-                                <input type="number" step="0.01" name="commission" required value="0.00" placeholder="e.g., 50.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="number" step="0.01" name="commission" required value="0.00" placeholder="e.g., 50.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="addPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-550 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <button type="button" @click="addPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 Cancel
                             </button>
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#42517c] hover:bg-[#42517c]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
                                 Save Price
                             </button>
                         </div>
@@ -533,10 +533,10 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Selection</label>
                                 <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
-                                    <button type="button" @click="editPrice.price_target = 'role'" :class="editPrice.price_target === 'role' ? 'bg-[#42517c] text-white' : 'text-slate-650 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
+                                    <button type="button" @click="editPrice.price_target = 'role'" :class="editPrice.price_target === 'role' ? 'bg-[#0056D2] text-white' : 'text-slate-700 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
                                         Role Group
                                     </button>
-                                    <button type="button" @click="editPrice.price_target = 'user'" :class="editPrice.price_target === 'user' ? 'bg-[#42517c] text-white' : 'text-slate-650 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
+                                    <button type="button" @click="editPrice.price_target = 'user'" :class="editPrice.price_target === 'user' ? 'bg-[#0056D2] text-white' : 'text-slate-700 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
                                         Specific User
                                     </button>
                                 </div>
@@ -546,7 +546,7 @@
                             <!-- Target Role Selection (x-show) -->
                             <div x-show="editPrice.price_target === 'role'">
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Role Group</label>
-                                <select name="user_type" :value="editPrice.user_type" @change="editPrice.user_type = $event.target.value" class="w-full px-3 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm font-semibold text-slate-800 transition-all duration-200">
+                                <select name="user_type" :value="editPrice.user_type" @change="editPrice.user_type = $event.target.value" class="w-full px-3 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm font-semibold text-slate-800 transition-all duration-200">
                                     <option value="personal">Personal</option>
                                     <option value="agent">Agent</option>
                                     <option value="partner">Partner</option>
@@ -560,7 +560,7 @@
                             <!-- Target Specific User Selection (x-show) -->
                             <div x-show="editPrice.price_target === 'user'" style="display: none;">
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Email Address</label>
-                                <input type="email" name="user_email" :value="editPrice.user_email" @input="editPrice.user_email = $event.target.value" placeholder="e.g., user@example.com" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="email" name="user_email" :value="editPrice.user_email" @input="editPrice.user_email = $event.target.value" placeholder="e.g., user@example.com" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Custom Price -->
@@ -568,7 +568,7 @@
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                                     Custom Price <span x-text="'{{ $service->name }}' === 'airtime' ? '(%)' : '(₦)'"></span>
                                 </label>
-                                <input type="number" step="0.01" name="price" :value="editPrice.price" required placeholder="e.g., 480.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="number" step="0.01" name="price" :value="editPrice.price" required placeholder="e.g., 480.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Commission -->
@@ -576,16 +576,16 @@
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                                     Commission <span x-text="'{{ $service->name }}' === 'airtime' ? '(%)' : '(₦)'"></span>
                                 </label>
-                                <input type="number" step="0.01" name="commission" :value="editPrice.commission" required placeholder="e.g., 50.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="number" step="0.01" name="commission" :value="editPrice.commission" required placeholder="e.g., 50.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="editPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-550 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <button type="button" @click="editPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 Cancel
                             </button>
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#42517c] hover:bg-[#42517c]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
                                 Update Price
                             </button>
                         </div>
@@ -606,7 +606,7 @@
                 text: "Are you sure you want to perform this action?",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#42517c',
+                confirmButtonColor: '#0056D2',
                 cancelButtonColor: '#ef4444',
                 confirmButtonText: 'Yes, continue!',
                 cancelButtonText: 'Cancel'

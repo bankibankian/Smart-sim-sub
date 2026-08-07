@@ -15,7 +15,7 @@
             position: relative;
         }
         .network-option.active {
-            border-color: #42517c !important;
+            border-color: #0056D2 !important;
             background-color: rgb(243 244 246) !important;
             box-shadow: 0 0 0 2px rgba(66, 81, 124, 0.2) !important;
         }
@@ -47,8 +47,8 @@
             transition: all 0.15s ease-in-out;
         }
         .amount-btn:hover {
-            border-color: #42517c !important;
-            color: #42517c !important;
+            border-color: #0056D2 !important;
+            color: #0056D2 !important;
             background-color: rgb(243 244 246) !important;
         }
         .amount-btn:active {
@@ -58,7 +58,7 @@
             max-height: 480px;
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #42517c #f8f9fa;
+            scrollbar-color: #0056D2 #f8f9fa;
         }
         #recentRecipientsBody::-webkit-scrollbar {
             width: 5px;
@@ -68,7 +68,7 @@
             border-radius: 10px;
         }
         #recentRecipientsBody::-webkit-scrollbar-thumb {
-            background-color: #42517c;
+            background-color: #0056D2;
             border-radius: 10px;
         }
     </style>
@@ -79,7 +79,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/50 shadow-sm">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="phone" class="w-5 h-5"></i>
                     </div>
                     Buy Airtime
@@ -133,12 +133,12 @@
                     <div class="space-y-6">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c]">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
                                     <i data-lucide="smartphone" class="w-5 h-5"></i>
                                 </div>
                                 <div>
                                     <h3 class="font-bold text-slate-800 font-display">Instant Recharge</h3>
-                                    <span class="inline-block text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mt-0.5">Zero Fee</span>
+                                    <span class="inline-block text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mt-0.5">Zero Fee</span>
                                 </div>
                             </div>
                         </div>
@@ -156,10 +156,10 @@
                                         <i data-lucide="phone" class="w-4 h-4"></i>
                                     </div>
                                     <input type="tel" id="mobileno" name="mobileno" value="{{ old('mobileno') }}" 
-                                           class="w-full text-center pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] transition-all text-slate-800 font-semibold" 
+                                           class="w-full text-center pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-semibold" 
                                            maxlength="11" pattern="\d{11}" placeholder="080 0000 0000" required>
                                 </div>
-                                <div id="networkResult" class="text-xs font-bold text-[#42517c] text-center min-h-[1.2rem] mt-1"></div>
+                                <div id="networkResult" class="text-xs font-bold text-[#0056D2] text-center min-h-[1.2rem] mt-1"></div>
                             </div>
 
                             {{-- Network Selection --}}
@@ -180,7 +180,7 @@
                                              data-network="{{ $key }}">
                                             
                                             <!-- Check Mark -->
-                                            <div class="check-mark bg-white border border-slate-200 rounded-full p-0.5 text-[#42517c] shadow-sm">
+                                            <div class="check-mark bg-white border border-slate-200 rounded-full p-0.5 text-[#0056D2] shadow-sm">
                                                 <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
                                             </div>
 
@@ -188,7 +188,7 @@
                                                  class="rounded-full w-9 h-9 object-contain shadow-sm border border-slate-100 mb-1" 
                                                  onerror="this.src='{{ asset('assets/images/apps/default.png') }}'">
                                             
-                                            <span class="text-[10px] font-bold text-slate-700">{{ $network['name'] }}</span>
+                                            <span class="text-xs font-bold text-slate-700">{{ $network['name'] }}</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -202,7 +202,7 @@
                                         <span>Balance:</span>
                                         <span id="walletBalance" class="font-bold text-emerald-600 hidden">₦{{ number_format($wallet->balance ?? 0, 2) }}</span>
                                         <span id="hiddenBalance" class="font-bold text-emerald-600">₦ * * * *</span>
-                                        <button type="button" id="toggleBalance" class="text-[#42517c] hover:underline focus:outline-none">
+                                        <button type="button" id="toggleBalance" class="text-[#0056D2] hover:underline focus:outline-none">
                                             <i data-lucide="eye" class="w-3.5 h-3.5 inline"></i>
                                         </button>
                                     </div>
@@ -213,14 +213,14 @@
                                         ₦
                                     </div>
                                     <input type="text" id="amount_display" 
-                                           class="w-full text-center pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] transition-all text-slate-800 font-extrabold text-lg" 
+                                           class="w-full text-center pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-extrabold text-lg" 
                                            placeholder="0.00" required autocomplete="off">
                                     <input type="hidden" id="amount" name="amount" value="{{ old('amount') }}" required>
                                 </div>
 
-                                <div id="amount_in_words" class="text-xs font-bold text-[#42517c] text-center hidden italic mt-1.5"></div>
+                                <div id="amount_in_words" class="text-xs font-bold text-[#0056D2] text-center hidden italic mt-1.5"></div>
 
-                                <div class="flex justify-between text-[10px] text-slate-400 font-semibold px-1">
+                                <div class="flex justify-between text-xs text-slate-400 font-semibold px-1">
                                     <span>Min: ₦50.00</span>
                                     <span>Max: ₦5,000.00</span>
                                 </div>
@@ -240,7 +240,7 @@
                             {{-- Purchase Button --}}
                             <div class="pt-4">
                                 <button type="button" id="buy-airtime" 
-                                        class="w-full py-3.5 px-6 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                                        class="w-full py-3.5 px-6 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
                                     <i data-lucide="zap" class="w-4 h-4"></i>
                                     Purchase Now
                                 </button>
@@ -249,7 +249,7 @@
                     </div>
 
                     <div class="mt-8 border-t border-slate-100 pt-4 text-center">
-                        <span class="text-[10px] text-slate-400 font-semibold inline-flex items-center gap-1.5">
+                        <span class="text-xs text-slate-400 font-semibold inline-flex items-center gap-1.5">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
                             Secure 256-bit Encrypted Transaction
                         </span>
@@ -263,7 +263,7 @@
                     <div class="space-y-6">
                         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c]">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
                                     <i data-lucide="history" class="w-5 h-5"></i>
                                 </div>
                                 <div>
@@ -286,9 +286,9 @@
                                                         <img src="{{ $recipient['bank_url'] }}" alt="{{ $recipient['bank_name'] }}"
                                                              class="w-6 h-6 object-contain"
                                                              onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                                                        <i data-lucide="phone" class="w-4 h-4 text-[#42517c]" style="display:none;"></i>
+                                                        <i data-lucide="phone" class="w-4 h-4 text-[#0056D2]" style="display:none;"></i>
                                                     @else
-                                                        <i data-lucide="phone" class="w-4 h-4 text-[#42517c]"></i>
+                                                        <i data-lucide="phone" class="w-4 h-4 text-[#0056D2]"></i>
                                                     @endif
                                                 </div>
 
@@ -297,7 +297,7 @@
                                                     <div class="flex items-center gap-2 mt-0.5">
                                                         <span class="text-xs text-slate-500 font-semibold">{{ $recipient['bank_name'] }}</span>
                                                         <span class="text-slate-300 text-xs">•</span>
-                                                        <span class="text-[10px] text-slate-400 font-semibold">{{ $recipient['date'] }}</span>
+                                                        <span class="text-xs text-slate-400 font-semibold">{{ $recipient['date'] }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -306,15 +306,15 @@
                                                 <span class="font-bold text-sm text-slate-800 block">₦{{ number_format($recipient['amount'], 2) }}</span>
                                                 <div class="mt-0.5">
                                                     @if($recipient['status'] === 'successful' || $recipient['status'] === 'completed')
-                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700">
                                                             Success
                                                         </span>
                                                     @elseif($recipient['status'] === 'failed')
-                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700">
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-700">
                                                             Failed
                                                         </span>
                                                     @else
-                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700">
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700">
                                                             Processing
                                                         </span>
                                                     @endif
@@ -339,7 +339,7 @@
                     </div>
 
                     <div class="mt-8 border-t border-slate-100 pt-4 text-center">
-                        <span class="text-[10px] text-slate-400 font-semibold inline-flex items-center gap-1.5">
+                        <span class="text-xs text-slate-400 font-semibold inline-flex items-center gap-1.5">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
                             Protected by SmartSIM Multi-Factor Authentication
                         </span>
@@ -643,7 +643,7 @@
                             icon: 'warning',
                             title: 'Invalid Phone Number',
                             text: 'Please enter a valid 11-digit phone number.',
-                            confirmButtonColor: '#42517c',
+                            confirmButtonColor: '#0056D2',
                         });
                         phoneInput.focus();
                         return;
@@ -653,7 +653,7 @@
                             icon: 'warning',
                             title: 'Select Operator',
                             text: 'Please select a network operator.',
-                            confirmButtonColor: '#42517c',
+                            confirmButtonColor: '#0056D2',
                         });
                         return;
                     }
@@ -662,7 +662,7 @@
                             icon: 'warning',
                             title: 'Invalid Amount',
                             text: 'Recharge amount must be between ₦50 and ₦5,000.',
-                            confirmButtonColor: '#42517c',
+                            confirmButtonColor: '#0056D2',
                         });
                         if (amountDisplay) amountDisplay.focus();
                         else amountInput.focus();

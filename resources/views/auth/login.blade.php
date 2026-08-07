@@ -12,75 +12,60 @@
         <div>
             <label for="email" class="mb-2 block text-[14px] font-medium text-[#24344a]">Email</label>
             <div class="relative">
-                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[#93a0b2]">
-                    <i data-lucide="mail" class="h-5 w-5" stroke-width="1.6"></i>
-                </span>
-                <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    value="{{ old('email') }}"
-                    required
-                    autofocus
-                    autocomplete="username"
-                    placeholder="Enter your email"
-                    class="block h-[42px] w-full rounded-lg border border-[#c8d2df] bg-[#eaf2ff] py-2 pl-10 pr-4 text-[14px] text-[#14243a] outline-none transition placeholder:text-[#8d99a9] focus:border-[#667c96] focus:bg-white focus:ring-2 focus:ring-[#1e3048]/10"
-                >
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                </div>
+                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
+                    class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm"
+                    placeholder="name@example.com" />
             </div>
             <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
 
         <div>
-            <label for="password" class="mb-2 block text-[14px] font-medium text-[#24344a]">Password</label>
+            <div class="flex justify-between items-center mb-2">
+                <label for="password" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider">Password</label>
+                @if (Route::has('password.request'))
+                    <a class="text-xs font-medium text-primary hover:text-[#0049b8] transition-colors font-display" href="{{ route('password.request') }}">
+                        {{ __('Forgot password?') }}
+                    </a>
+                @endif
+            </div>
             <div class="relative">
-                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[#93a0b2]">
-                    <i data-lucide="lock" class="h-5 w-5" stroke-width="1.6"></i>
-                </span>
-                <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    required
-                    autocomplete="current-password"
-                    placeholder="Enter your password"
-                    class="block h-[42px] w-full rounded-lg border border-[#c8d2df] bg-[#eaf2ff] py-2 pl-10 pr-11 text-[14px] text-[#14243a] outline-none transition placeholder:text-[#8d99a9] focus:border-[#667c96] focus:bg-white focus:ring-2 focus:ring-[#1e3048]/10"
-                >
-                <button
-                    type="button"
-                    id="password-toggle"
-                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-[#93a0b2] transition hover:text-[#526071]"
-                    aria-label="Show password"
-                >
-                    <i data-lucide="eye" id="password-toggle-icon" class="h-5 w-5" stroke-width="1.6"></i>
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                </div>
+                <input id="password" type="password" name="password" required autocomplete="current-password"
+                    class="block w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm"
+                    placeholder="••••••••" />
+                <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition">
+                    <i data-lucide="eye" id="password-toggle-icon" class="w-4 h-4"></i>
                 </button>
             </div>
             <x-input-error :messages="$errors->get('password')" class="mt-1.5" />
 
-            <div class="mt-3 flex items-center justify-between">
-                <label class="flex cursor-pointer items-center gap-2 text-[13px] text-[#526071]">
-                    <input type="checkbox" name="remember" class="h-4 w-4 rounded border-slate-300 text-[#1e3048] focus:ring-[#1e3048]">
-                    <span>Remember me</span>
-                </label>
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-[14px] font-medium text-[#1d2e45] hover:underline">
-                        Forgot Password?
-                    </a>
-                @endif
-            </div>
+        <!-- Remember Me -->
+        <div class="flex items-center">
+            <input id="remember_me" type="checkbox" name="remember"
+                class="rounded border-slate-300 text-primary focus:ring-primary/20 focus:ring-offset-0 focus:outline-none w-4 h-4 cursor-pointer transition-all">
+            <label for="remember_me" class="ms-2 text-sm text-slate-500 select-none cursor-pointer">{{ __('Remember me') }}</label>
         </div>
 
-        <button
-            type="submit"
-            class="mt-3 flex h-[42px] w-full items-center justify-center rounded-lg bg-[#1d2e45] px-5 text-[14px] font-semibold text-white shadow-sm transition hover:bg-[#142238] focus:outline-none focus:ring-2 focus:ring-[#1d2e45]/30 focus:ring-offset-2 active:scale-[0.99]"
-        >
-            <span data-submit-text>Sign In</span>
-        </button>
+        <!-- Submit Button -->
+        <div class="pt-2">
+            <button type="submit" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-primary hover:bg-[#0049b8] text-white font-semibold text-sm rounded-lg transition-colors duration-200 font-display">
+                <span>{{ __('Log in') }}</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </div>
 
         @if (Route::has('register'))
-            <p class="pt-2 text-center text-[14px] text-[#526071]">
-                Don't have an account?
-                <a href="{{ route('register') }}" class="font-medium text-[#1d2e45] hover:underline">Sign up</a>
-            </p>
+            <div class="text-center text-sm text-slate-500 pt-4 border-t border-slate-100 font-display">
+                Don't have an account? 
+                <a href="{{ route('register') }}" class="font-semibold text-primary hover:text-[#0049b8] transition">
+                    Register
+                </a>
+            </div>
         @endif
     </form>
 

@@ -6,7 +6,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/50 shadow-sm">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="cpu" class="w-5 h-5"></i>
                     </div>
                     SIM Services
@@ -17,19 +17,19 @@
 
         {{-- Flash Messages --}}
         @if (session('success'))
-            <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-emerald-800 flex items-start gap-3 shadow-sm">
+            <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4 text-emerald-800 flex items-start gap-3 shadow-sm">
                 <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
                 <div class="text-sm font-semibold">{{ session('success') }}</div>
             </div>
         @endif
         @if (session('warning'))
-            <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-amber-800 flex items-start gap-3 shadow-sm">
+            <div class="bg-amber-50 border border-amber-100 rounded-lg p-4 text-amber-800 flex items-start gap-3 shadow-sm">
                 <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5"></i>
                 <div class="text-sm font-semibold">{{ session('warning') }}</div>
             </div>
         @endif
         @if (session('error'))
-            <div class="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-rose-800 flex items-start gap-3 shadow-sm">
+            <div class="bg-rose-50 border border-rose-100 rounded-lg p-4 text-rose-800 flex items-start gap-3 shadow-sm">
                 <i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0 mt-0.5"></i>
                 <div class="text-sm font-semibold">{{ session('error') }}</div>
             </div>
@@ -49,18 +49,18 @@
                  style="display: none;">
                 <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openResultModal = false"></div>
                 <div class="flex min-h-screen items-center justify-center p-4">
-                    <div class="relative w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all space-y-4">
+                    <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all space-y-4">
                          <button type="button" @click="openResultModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
                              <i data-lucide="x" class="w-5 h-5"></i>
                          </button>
                          
                          <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
-                             <div class="w-9 h-9 rounded-xl {{ $res['success'] && isset($res['assigned']) && $res['assigned'] ? 'bg-indigo-50 text-[#42517c]' : 'bg-emerald-50 text-emerald-600' }} flex items-center justify-center">
+                             <div class="w-9 h-9 rounded-xl {{ $res['success'] && isset($res['assigned']) && $res['assigned'] ? 'bg-primary/10 text-primary' : 'bg-emerald-50 text-emerald-600' }} flex items-center justify-center">
                                  <i data-lucide="search" class="w-4 h-4"></i>
                              </div>
                              <div>
                                  <h3 class="font-bold text-slate-800 font-display">Check Number Result</h3>
-                                 <p class="text-xs text-slate-400">Query for Number: <span class="font-bold text-slate-650">{{ request('number') }}</span></p>
+                                 <p class="text-xs text-slate-400">Query for Number: <span class="font-bold text-slate-700">{{ request('number') }}</span></p>
                              </div>
                          </div>
 
@@ -69,8 +69,8 @@
                          @else
                              <div class="space-y-3">
                                  <div class="flex justify-between items-center text-sm">
-                                     <span class="text-slate-450 font-semibold">SIM Status:</span>
-                                     <span class="font-bold uppercase px-2.5 py-0.5 rounded-full text-[10px] tracking-wider {{ $res['status'] === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-[#42517c]' }}">
+                                     <span class="text-slate-500 font-semibold">SIM Status:</span>
+                                     <span class="font-bold uppercase px-2.5 py-0.5 rounded-full text-xs tracking-wider {{ $res['status'] === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-primary/10 text-primary' }}">
                                          @if($res['status'] === 'active')
                                              ACTIVATED
                                          @elseif($res['status'] === 'available')
@@ -81,28 +81,28 @@
                                      </span>
                                  </div>
                                  <div class="flex justify-between items-center text-sm">
-                                     <span class="text-slate-450 font-semibold">Category:</span>
+                                     <span class="text-slate-500 font-semibold">Category:</span>
                                      <span class="font-bold text-slate-700">{{ $res['category'] }}</span>
                                  </div>
                                  <div class="flex justify-between items-center text-sm">
-                                     <span class="text-slate-450 font-semibold">Provider:</span>
+                                     <span class="text-slate-500 font-semibold">Provider:</span>
                                      <span class="font-bold text-slate-700 uppercase">{{ $res['provider'] }}</span>
                                  </div>
 
                                  @if (isset($res['assigned']) && $res['assigned'])
-                                     <div class="bg-indigo-50/50 rounded-2xl p-4 border border-indigo-100/50 space-y-2 mt-2">
-                                         <h5 class="text-xs font-bold text-[#42517c] uppercase tracking-wider">Assigned User Details</h5>
+                                     <div class="bg-primary/5 rounded-lg p-4 border border-primary/10 space-y-2 mt-2">
+                                         <h5 class="text-xs font-bold text-[#0056D2] uppercase tracking-wider">Assigned User Details</h5>
                                          <div class="flex justify-between text-sm">
                                              <span class="text-slate-500 font-semibold text-xs">Name:</span>
                                              <span class="font-bold text-slate-800">{{ $res['user_name'] }}</span>
                                          </div>
                                          <div class="flex justify-between text-sm">
                                              <span class="text-slate-500 font-semibold text-xs">Email:</span>
-                                             <a href="mailto:{{ $res['user_email'] }}" class="font-bold text-[#42517c] hover:underline text-xs break-all">{{ $res['user_email'] }}</a>
+                                             <a href="mailto:{{ $res['user_email'] }}" class="font-bold text-[#0056D2] hover:underline text-xs break-all">{{ $res['user_email'] }}</a>
                                          </div>
                                          <div class="flex justify-between text-sm">
                                              <span class="text-slate-500 font-semibold text-xs">Phone:</span>
-                                             <a href="tel:{{ $res['user_phone'] }}" class="font-bold text-[#42517c] hover:underline text-xs">{{ $res['user_phone'] }}</a>
+                                             <a href="tel:{{ $res['user_phone'] }}" class="font-bold text-[#0056D2] hover:underline text-xs">{{ $res['user_phone'] }}</a>
                                          </div>
                                      </div>
                                  @else
@@ -120,9 +120,9 @@
             <!-- Left Panel: Actions & Forms (Forms Column) -->
             <div class="lg:col-span-5 flex flex-col gap-6">
                 <!-- Activation Request Form Card -->
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+                <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
                     <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c]">
+                        <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                             <i data-lucide="zap" class="w-4 h-4"></i>
                         </div>
                         <div>
@@ -141,7 +141,7 @@
                         @csrf
                         <div class="space-y-1.5">
                             <label for="activate_sim_id" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Select SIM Number</label>
-                            <select id="activate_sim_id" name="sim_id" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] text-slate-700 font-medium">
+                            <select id="activate_sim_id" name="sim_id" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
                                 <option value="">Select SIM</option>
                                 @forelse ($sims as $sim)
                                     @if ($sim->status !== 'active')
@@ -154,12 +154,12 @@
                         </div>
 
                         <!-- Dynamic Price indicator for Activation Request -->
-                        <div id="activation-price-box" class="hidden bg-indigo-50/70 border border-indigo-100 rounded-2xl p-4 space-y-1 shadow-inner">
+                        <div id="activation-price-box" class="hidden bg-primary/5 border border-primary/10 rounded-lg p-4 space-y-1 shadow-inner">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Activation Fee</span>
-                                <span id="activation-price-value" class="text-base font-extrabold text-indigo-700 font-display">₦0.00</span>
+                                <span id="activation-price-value" class="text-base font-extrabold text-primary font-display">₦0.00</span>
                             </div>
-                            <p class="text-[10px] text-slate-400">This amount will be debited from your wallet balance.</p>
+                            <p class="text-xs text-slate-400">This amount will be debited from your wallet balance.</p>
                         </div>
 
                         <button type="submit" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition-all duration-200 flex items-center justify-center gap-2">
@@ -173,8 +173,8 @@
             <!-- Right Panel: Data Lists & Tabbed Tables -->
             <div class="lg:col-span-7 flex flex-col gap-6" x-data="{ currentTab: 'sims' }">
                 <!-- Action Row -->
-                <div class="flex flex-wrap items-center gap-3 bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
-                    <button type="button" @click="openRequestSimModal = true" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-xs rounded-xl shadow-sm transition-all duration-150">
+                <div class="flex flex-wrap items-center gap-3 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                    <button type="button" @click="openRequestSimModal = true" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-xs rounded-xl shadow-sm transition-all duration-150">
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                         Request SIM Card
                     </button>
@@ -198,12 +198,12 @@
                      style="display: none;">
                     <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openRequestSimModal = false"></div>
                     <div class="flex min-h-screen items-center justify-center p-4">
-                        <div class="relative w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all">
+                        <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all">
                              <button type="button" @click="openRequestSimModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
                                  <i data-lucide="x" class="w-5 h-5"></i>
                              </button>
                              <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
-                                 <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c]">
+                                 <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                      <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                                  </div>
                                  <div>
@@ -215,7 +215,7 @@
                                  @csrf
                                  <div class="space-y-1.5">
                                      <label for="req_category" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">SIM Category</label>
-                                     <select id="req_category" name="category" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] text-slate-700 font-medium">
+                                     <select id="req_category" name="category" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
                                          <option value="">Select Category</option>
                                          @foreach ($categories as $cat)
                                              <option value="{{ $cat['name'] }}">{{ $cat['name'] }}</option>
@@ -224,7 +224,7 @@
                                  </div>
                                  <div class="space-y-1.5">
                                      <label for="req_provider" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Network Operator</label>
-                                     <select id="req_provider" name="provider" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] text-slate-700 font-medium">
+                                     <select id="req_provider" name="provider" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
                                          <option value="">Select Network</option>
                                          @foreach ($providers as $prov)
                                              <option value="{{ $prov }}">{{ strtoupper($prov) }}</option>
@@ -233,11 +233,11 @@
                                  </div>
                                  <div class="space-y-1.5">
                                      <label for="req_number" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Available Numbers</label>
-                                     <select id="req_number" name="sim_id" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] text-slate-700 font-medium" disabled>
+                                     <select id="req_number" name="sim_id" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium" disabled>
                                          <option value="">Select Number (Select Category & Network First)</option>
                                      </select>
                                  </div>
-                                 <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                                 <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
                                      <i data-lucide="send" class="w-4 h-4"></i>
                                      Submit Request
                                  </button>
@@ -258,12 +258,12 @@
                      style="display: none;">
                     <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openLookupModal = false"></div>
                     <div class="flex min-h-screen items-center justify-center p-4">
-                        <div class="relative w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all">
+                        <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all">
                              <button type="button" @click="openLookupModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
                                  <i data-lucide="x" class="w-5 h-5"></i>
                              </button>
                              <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
-                                 <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c]">
+                                 <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                      <i data-lucide="search" class="w-4 h-4"></i>
                                  </div>
                                  <div>
@@ -275,7 +275,7 @@
                                  <div class="space-y-1.5">
                                      <label for="check_number" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">SIM Phone Number</label>
                                      <input type="tel" id="check_number" name="number" required placeholder="e.g. 08031234567"
-                                            class="w-full text-center py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] transition-all text-slate-800 font-semibold">
+                                            class="w-full text-center py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-semibold">
                                  </div>
                                  <button type="submit" class="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow transition-all duration-200 flex items-center justify-center gap-2">
                                      <i data-lucide="search" class="w-3.5 h-3.5"></i>
@@ -287,17 +287,17 @@
                 </div>
 
                 <!-- Navigation Tabs -->
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-2 flex gap-1">
-                    <button type="button" @click="currentTab = 'sims'" :class="currentTab === 'sims' ? 'bg-[#42517c] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
+                <div class="bg-white rounded-lg border border-slate-100 shadow-sm p-2 flex gap-1">
+                    <button type="button" @click="currentTab = 'sims'" :class="currentTab === 'sims' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
                         <i data-lucide="cpu" class="w-4 h-4"></i> My SIM Cards
                     </button>
-                    <button type="button" @click="currentTab = 'my_requests'" :class="currentTab === 'my_requests' ? 'bg-[#42517c] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
+                    <button type="button" @click="currentTab = 'my_requests'" :class="currentTab === 'my_requests' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
                         <i data-lucide="clock" class="w-4 h-4"></i> My Requests
                     </button>
                 </div>
 
                 <!-- Tab: SIM Inventory / My SIM Cards -->
-                <div x-show="currentTab === 'sims'" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                <div x-show="currentTab === 'sims'" class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">
                         My Registered SIMs
                     </h3>
@@ -321,10 +321,10 @@
                                         <td class="py-3 font-bold text-slate-800">{{ $sim->number }}</td>
                                         <td class="py-3">
                                             <span class="font-semibold text-slate-700 block">{{ $sim->category }}</span>
-                                            <span class="text-[10px] text-slate-400 block uppercase">{{ $sim->provider }}</span>
+                                            <span class="text-xs text-slate-400 block uppercase">{{ $sim->provider }}</span>
                                         </td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase 
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase 
                                                 {{ $sim->status === 'active' ? 'bg-emerald-50 text-emerald-600' : ($sim->status === 'assigned' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-600') }}">
                                                 @if($sim->status === 'active')
                                                     ACTIVATED
@@ -339,7 +339,7 @@
                                             <td class="py-3">
                                                 @if ($sim->user_id !== $sim->partner_id && $sim->user)
                                                     <span class="font-semibold text-slate-700">{{ $sim->user->first_name }} {{ $sim->user->last_name }}</span>
-                                                    <span class="block text-[10px] text-slate-400 capitalize">{{ $sim->user->role }}</span>
+                                                    <span class="block text-xs text-slate-400 capitalize">{{ $sim->user->role }}</span>
                                                 @else
                                                     <span class="text-slate-400 font-semibold italic">Owned by You</span>
                                                 @endif
@@ -360,7 +360,7 @@
                                                             </div>
                                                         `,
                                                         showCancelButton: true,
-                                                        confirmButtonColor: '#42517c',
+                                                        confirmButtonColor: '#0056D2',
                                                         confirmButtonText: 'Assign Now',
                                                         preConfirm: () => {
                                                             const val = document.getElementById('partner_user_id').value;
@@ -378,11 +378,11 @@
                                                             document.body.appendChild(f);
                                                             f.submit();
                                                         }
-                                                    })" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-2 py-1 rounded-lg font-display text-[10px] tracking-wide">
+                                                    })" class="bg-primary hover:bg-[#0049b8] text-white font-bold px-2 py-1 rounded-lg font-display text-xs tracking-wide">
                                                         Delegate
                                                     </button>
                                                 @else
-                                                    <span class="text-[10px] text-slate-400 font-semibold">Delegated</span>
+                                                    <span class="text-xs text-slate-400 font-semibold">Delegated</span>
                                                 @endif
                                             </td>
                                         @endif
@@ -399,7 +399,7 @@
                 </div>
 
                 <!-- Tab: My Requests -->
-                <div x-show="currentTab === 'my_requests'" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                <div x-show="currentTab === 'my_requests'" class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">My SIM Requests</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
@@ -420,16 +420,16 @@
                                         <td class="py-3 capitalize font-semibold text-slate-700">{{ $req->request_type }}</td>
                                         <td class="py-3">
                                             <span class="font-semibold text-slate-600 block">{{ $req->category }}</span>
-                                            <span class="text-[10px] text-slate-400 block uppercase">{{ $req->provider }}</span>
+                                            <span class="text-xs text-slate-400 block uppercase">{{ $req->provider }}</span>
                                         </td>
                                         <td class="py-3 font-bold text-slate-700">₦{{ number_format($req->amount, 2) }}</td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase
                                                 {{ $req->status === 'approved' ? 'bg-emerald-50 text-emerald-600' : ($req->status === 'pending' ? 'bg-amber-50 text-amber-600' : 'bg-rose-50 text-rose-600') }}">
                                                 {{ $req->status }}
                                             </span>
                                             @if ($req->admin_notes)
-                                                <span class="block text-[9px] text-slate-400 italic mt-0.5">{{ $req->admin_notes }}</span>
+                                                <span class="block text-xs text-slate-400 italic mt-0.5">{{ $req->admin_notes }}</span>
                                             @endif
                                         </td>
                                         <td class="py-3 text-slate-400 font-medium">{{ $req->created_at->format('M d, Y H:i') }}</td>
