@@ -6,14 +6,13 @@
             Connect your world. Supercharge your business.
         </h1>
 
-        <p class="mt-6 max-w-xl text-lg leading-8 text-[var(--lp-text-soft)]">
-            Specialized SIM cards for POS terminals, cameras, routers, and trackers — plus
-            wholesale distribution and wallet tools for the agents who sell them.
+        <p class="mt-6 max-w-xl text-md leading-8 text-[var(--lp-text-soft)]">
+            Smart SIM solutions for POS terminals, cameras, routers, and trackers with airtime, data, KYC verification, and rewards all in one platform.
         </p>
 
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
             <a href="#pricing" class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0049b8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-                See SIM pricing
+                See our pricing
             </a>
             <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-lg border px-6 py-3 text-sm font-semibold text-[var(--lp-text)] transition hover:bg-[var(--lp-surface-alt)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" style="border-color: var(--lp-border-strong);">
                 Create an account
