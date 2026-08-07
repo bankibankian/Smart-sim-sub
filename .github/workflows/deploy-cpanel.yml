@@ -1,0 +1,110 @@
+name: Deploy to cPanel (manual)
+
+# Manual-only trigger: run this from the Actions tab whenever you want to
+# push the current state of a branch to your cPanel-hosted site.
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy"
+        required: true
+        default: "main"
+      php_version:
+        description: "PHP version to build against (should match the version selected in cPanel's MultiPHP Manager)"
+        required: true
+        default: "8.2"
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Setup PHP ${{ github.event.inputs.php_version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ github.event.inputs.php_version }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --no-dev --optimize-autoloader --prefer-dist --no-interaction
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build frontend assets
+        run: npm run build
+
+      # Everything below runs entirely from this runner, which has PHP,
+      # Composer and Node available. cPanel shared hosting usually does NOT
+      # have Node in the SSH PATH, so we build here and ship the finished
+      # vendor/ and public/build/ directories over instead of building on
+      # the server itself.
+      - name: Deploy files via rsync over SSH
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          # Never touch the server's real .env, storage contents, or git
+          # metadata. .env holds the live DB/API credentials and must be
+          # managed by hand on the server, not overwritten by CI.
+          exclude: >-
+            .git/
+            .github/
+            node_modules/
+            tests/
+            .env
+            .env.*
+            storage/app/
+            storage/framework/cache/
+            storage/framework/sessions/
+            storage/framework/views/
+            storage/logs/
+          path: ./
+          remote_path: ${{ secrets.CPANEL_DEPLOY_PATH }}
+          remote_host: ${{ secrets.CPANEL_SSH_HOST }}
+          remote_port: ${{ secrets.CPANEL_SSH_PORT }}
+          remote_user: ${{ secrets.CPANEL_SSH_USERNAME }}
+          remote_key: ${{ secrets.CPANEL_SSH_PRIVATE_KEY }}
+
+      - name: Run post-deploy commands on cPanel
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.CPANEL_SSH_HOST }}
+          username: ${{ secrets.CPANEL_SSH_USERNAME }}
+          key: ${{ secrets.CPANEL_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.CPANEL_SSH_PORT }}
+          script: |
+            set -e
+            cd "${{ secrets.CPANEL_DEPLOY_PATH }}"
+
+            # cPanel's default `php` on PATH can be an old/unrelated version.
+            # Point this at the binary MultiPHP Manager uses for this domain,
+            # e.g. /opt/cpanel/ea-php82/root/usr/bin/php. Falls back to
+            # whatever `php` resolves to if the secret isn't set.
+            PHP_BIN="${{ secrets.CPANEL_PHP_BIN }}"
+            if [ -z "$PHP_BIN" ]; then PHP_BIN="php"; fi
+
+            # Re-create any storage subfolders rsync's exclude list stripped
+            # and make sure the web server can still write to them.
+            mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs
+            chmod -R 775 storage bootstrap/cache
+
+            "$PHP_BIN" artisan migrate --force
+            "$PHP_BIN" artisan config:cache
+            "$PHP_BIN" artisan route:cache
+            "$PHP_BIN" artisan view:cache
+            "$PHP_BIN" artisan storage:link || true
