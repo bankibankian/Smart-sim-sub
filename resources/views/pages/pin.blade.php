@@ -25,7 +25,7 @@
          class="relative w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-2xl overflow-hidden flex flex-col">
         
         {{-- Modal Header --}}
-        <div class="bg-gradient-to-r from-[#42517c] to-[#55699e] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+        <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
                     <i data-lucide="shield-check" class="w-5 h-5 text-white"></i>
@@ -60,7 +60,7 @@
                     </div>
                     <div class="flex justify-between items-center pt-1.5">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Amount</span>
-                        <span class="text-xl font-extrabold text-[#42517c] font-display" id="confirmAmount">₦0.00</span>
+                        <span class="text-xl font-extrabold text-[#0056D2] font-display" id="confirmAmount">₦0.00</span>
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@
                     </div>
                 </div>
 
-                <button type="button" id="btnGoToPin" class="w-full py-3.5 px-6 bg-[#42517c] hover:bg-[#354268] text-white font-bold text-xs rounded-xl shadow-md shadow-[#42517c]/10 hover:shadow-[#42517c]/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+                <button type="button" id="btnGoToPin" class="w-full py-3.5 px-6 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
                     Confirm & Pay
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
@@ -80,7 +80,7 @@
             {{-- Step 2: PIN Authorization Screen --}}
             <div id="pinStep" class="hidden space-y-5">
                 <div class="text-center space-y-2">
-                    <div class="w-12 h-12 rounded-full bg-indigo-50 text-[#42517c] flex items-center justify-center mx-auto shadow-inner">
+                    <div class="w-12 h-12 rounded-full bg-indigo-50 text-[#0056D2] flex items-center justify-center mx-auto shadow-inner">
                         <i data-lucide="key-round" class="w-5 h-5"></i>
                     </div>
                     <h6 class="font-bold text-slate-800 text-sm">Enter Security PIN</h6>
@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="flex justify-center">
-                    <input type="password" id="pinInput" class="w-full max-w-[220px] h-14 text-center py-2 px-3 font-extrabold text-slate-700 bg-white border-2 border-slate-200 focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] rounded-xl focus:outline-none transition-all" 
+                    <input type="password" id="pinInput" class="w-full max-w-[220px] h-14 text-center py-2 px-3 font-extrabold text-slate-700 bg-white border-2 border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] rounded-xl focus:outline-none transition-all" 
                            maxlength="5" placeholder="•••••"
                            style="font-size: 2rem; letter-spacing: 0.8rem;">
                 </div>
@@ -102,7 +102,7 @@
                 </div>
 
                 <div class="space-y-2">
-                    <button type="button" id="confirmPinBtn" class="w-full py-3.5 px-6 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+                    <button type="button" id="confirmPinBtn" class="w-full py-3.5 px-6 bg-[#008245] hover:bg-[#006b38] text-white font-bold text-xs rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
                         <span id="pinLoader" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin hidden"></span>
                         <span id="confirmPinText">Authorize Now</span>
                     </button>

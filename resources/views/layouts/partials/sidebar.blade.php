@@ -22,7 +22,7 @@
             <span x-show="!sidebarCollapsed" x-cloak class="min-w-0 truncate text-sm font-bold text-slate-900 font-display">SmartSIM</span>
         </a>
         <button type="button" @click="sidebarCollapsed = !sidebarCollapsed"
-                class="hidden lg:inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                class="hidden lg:inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'">
             <i data-lucide="chevron-left" class="w-4 h-4 transition-transform duration-200" :class="sidebarCollapsed ? 'rotate-180' : ''" aria-hidden="true"></i>
         </button>
@@ -155,8 +155,8 @@
         @endif
     </nav>
 
-    <!-- Support promo card -->
-    <div x-show="!sidebarCollapsed" x-cloak class="px-3 pb-3">
+    <!-- Support promo card (disabled for now, kept for possible future use) -->
+    <div x-show="!sidebarCollapsed" x-cloak class="hidden px-3 pb-3">
         <a href="{{ route('support') }}" class="block rounded-lg border border-slate-200 bg-slate-50 p-3.5 transition hover:border-slate-300 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
             <div class="flex h-8 w-8 items-center justify-center rounded-md bg-white border border-slate-200 text-slate-500">
                 <i data-lucide="life-buoy" class="w-4 h-4"></i>

@@ -102,7 +102,7 @@
                                name="search" 
                                value="{{ request('search') }}" 
                                placeholder="Search by name, email or phone..." 
-                               class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm">
+                               class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm">
                         <div class="absolute left-4 top-3.5 text-slate-400">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </div>
@@ -110,7 +110,7 @@
 
                     <!-- Status Filter -->
                     <div class="w-full md:w-44">
-                        <select name="status" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                        <select name="status" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
                             <option value="">All Statuses</option>
                             <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
                             <option value="suspended" {{ request('status') === 'suspended' ? 'selected' : '' }}>Suspended</option>
@@ -121,7 +121,7 @@
 
                     <!-- Role Filter -->
                     <div class="w-full md:w-44">
-                        <select name="role" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                        <select name="role" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
                             <option value="">All Roles</option>
                             <option value="personal" {{ request('role') === 'personal' ? 'selected' : '' }}>Personal</option>
                             <option value="agent" {{ request('role') === 'agent' ? 'selected' : '' }}>Agent</option>
@@ -135,7 +135,7 @@
 
                     <!-- Action Buttons -->
                     <div class="flex items-center gap-2">
-                        <button type="submit" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#42517c] hover:bg-[#42517c]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                        <button type="submit" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
                             <i data-lucide="filter" class="w-3.5 h-3.5"></i>
                             Filter
                         </button>
@@ -167,7 +167,7 @@
                             <tr class="hover:bg-slate-50/30 transition-all duration-150">
                                 <td class="py-4 px-6">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 bg-[#42517c]/5 text-[#42517c] rounded-xl flex items-center justify-center font-bold text-xs uppercase">
+                                        <div class="w-9 h-9 bg-[#0056D2]/5 text-[#0056D2] rounded-xl flex items-center justify-center font-bold text-xs uppercase">
                                             {{ substr($u->first_name, 0, 1) }}{{ substr($u->last_name, 0, 1) }}
                                         </div>
                                         <div>
@@ -214,7 +214,7 @@
                                     <div class="flex items-center justify-end gap-2">
                                         <!-- View -->
                                         <a href="{{ route('admin.manage.users.show', $u) }}" 
-                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-[#42517c]/5 hover:bg-[#42517c]/10 text-[#42517c] rounded-xl transition-all duration-150">
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-[#0056D2]/5 hover:bg-[#0056D2]/10 text-[#0056D2] rounded-xl transition-all duration-150">
                                             <i data-lucide="eye" class="w-3.5 h-3.5"></i>
                                             View
                                         </a>

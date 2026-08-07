@@ -24,7 +24,7 @@
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Total Tickets -->
             <div class="bg-gradient-to-br from-indigo-50/50 to-slate-50/50 p-5 rounded-3xl border border-indigo-100/60 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-[#42517c] border border-indigo-100/50 flex items-center justify-center shadow-sm">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-[#0056D2] border border-indigo-100/50 flex items-center justify-center shadow-sm">
                     <i data-lucide="message-square" class="w-5 h-5"></i>
                 </div>
                 <div>
@@ -73,14 +73,14 @@
                 <div>
                     <label for="search" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Search Query</label>
                     <input type="text" id="search" name="search" value="{{ request('search') }}"
-                           class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c]"
+                           class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2]"
                            placeholder="Subject, email, or name...">
                 </div>
 
                 <div>
                     <label for="status" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Status</label>
                     <select id="status" name="status"
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c]">
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2]">
                         <option value="">All Statuses</option>
                         <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
                         <option value="responded" {{ request('status') == 'responded' ? 'selected' : '' }}>Responded</option>
@@ -91,7 +91,7 @@
                 <div>
                     <label for="priority" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Priority</label>
                     <select id="priority" name="priority"
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c]">
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2]">
                         <option value="">All Priorities</option>
                         <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Low</option>
                         <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
@@ -101,7 +101,7 @@
 
                 <div class="flex gap-2">
                     <button type="submit"
-                            class="flex-1 py-2.5 px-4 bg-[#42517c] hover:bg-[#354062] text-white font-semibold text-xs rounded-xl shadow-sm transition-all duration-200">
+                            class="flex-1 py-2.5 px-4 bg-[#0056D2] hover:bg-[#354062] text-white font-semibold text-xs rounded-xl shadow-sm transition-all duration-200">
                         Apply Filters
                     </button>
                     @if(request()->filled('search') || request()->filled('status') || request()->filled('priority'))
@@ -163,7 +163,7 @@
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     <a href="{{ route('admin.manage.support.show', $ticket) }}"
-                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#42517c]/5 hover:bg-[#42517c]/10 text-[#42517c] font-bold text-xs rounded-xl transition-all">
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0056D2]/5 hover:bg-[#0056D2]/10 text-[#0056D2] font-bold text-xs rounded-xl transition-all">
                                         <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
                                         Respond
                                     </a>

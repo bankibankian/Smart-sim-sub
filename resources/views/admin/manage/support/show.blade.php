@@ -70,7 +70,7 @@
                     <div class="px-6 py-4 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="relative">
-                                <div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-[#42517c] flex items-center justify-center font-extrabold text-sm uppercase">
+                                <div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-[#0056D2] flex items-center justify-center font-extrabold text-sm uppercase">
                                     {{ substr($ticket->user->first_name, 0, 1) }}{{ substr($ticket->user->last_name, 0, 1) }}
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-1 bg-indigo-50 border border-indigo-100/50 rounded-lg text-[10px] font-bold text-[#42517c] uppercase tracking-wider flex items-center gap-1.5">
+                            <span class="px-2.5 py-1 bg-indigo-50 border border-indigo-100/50 rounded-lg text-[10px] font-bold text-[#0056D2] uppercase tracking-wider flex items-center gap-1.5">
                                 <i data-lucide="tag" class="w-3 h-3"></i>
                                 {{ $ticket->category }}
                             </span>
@@ -106,14 +106,14 @@
                             @if($msg->is_admin)
                                 <!-- Admin Reply (Right) -->
                                 <div class="flex items-end gap-3 max-w-[85%] ml-auto flex-row-reverse animate-in slide-in-from-right duration-250">
-                                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#42517c] to-[#55699e] text-white flex items-center justify-center font-bold text-xs shadow-sm flex-shrink-0 mb-1">
+                                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#0056D2] to-[#0049b8] text-white flex items-center justify-center font-bold text-xs shadow-sm flex-shrink-0 mb-1">
                                         AD
                                     </div>
                                     <div class="space-y-1 text-right">
                                         <div class="flex items-center gap-2 justify-end">
                                             <span class="text-xs font-bold text-slate-800">Support Agent (Me)</span>
                                         </div>
-                                        <div class="bg-gradient-to-br from-[#42517c] to-[#5a6eab] text-white rounded-3xl rounded-tr-none px-4 py-3 shadow-md text-sm text-left whitespace-pre-wrap leading-relaxed">
+                                        <div class="bg-gradient-to-br from-[#0056D2] to-[#5a6eab] text-white rounded-3xl rounded-tr-none px-4 py-3 shadow-md text-sm text-left whitespace-pre-wrap leading-relaxed">
                                             {{ $msg->message }}
                                         </div>
                                         <span class="block text-[9px] text-slate-400 font-semibold pr-1">
@@ -124,7 +124,7 @@
                             @else
                                 <!-- User Message (Left) -->
                                 <div class="flex items-end gap-3 max-w-[85%] animate-in slide-in-from-left duration-250">
-                                    <div class="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 text-[#42517c] flex items-center justify-center font-bold text-xs shadow-sm flex-shrink-0 mb-1">
+                                    <div class="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 text-[#0056D2] flex items-center justify-center font-bold text-xs shadow-sm flex-shrink-0 mb-1">
                                         {{ substr($ticket->user->first_name, 0, 1) }}{{ substr($ticket->user->last_name, 0, 1) }}
                                     </div>
                                     <div class="space-y-1">
@@ -156,7 +156,7 @@
                             @csrf
                             <div class="relative">
                                 <textarea name="message" rows="3" required
-                                          class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#42517c]/20 focus:border-[#42517c] transition-all text-slate-800 font-medium placeholder-slate-400 text-sm shadow-inner" 
+                                          class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-medium placeholder-slate-400 text-sm shadow-inner" 
                                           placeholder="Type your official administrative response here..."></textarea>
                             </div>
                             <div class="flex justify-between items-center">
@@ -183,7 +183,7 @@
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-50">Customer Profile</h3>
 
                     <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-[#42517c] flex items-center justify-center font-extrabold text-sm uppercase">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-[#0056D2] flex items-center justify-center font-extrabold text-sm uppercase">
                             {{ substr($ticket->user->first_name, 0, 1) }}{{ substr($ticket->user->last_name, 0, 1) }}
                         </div>
                         <div>

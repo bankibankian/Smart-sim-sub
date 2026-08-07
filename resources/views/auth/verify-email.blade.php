@@ -4,8 +4,8 @@
         <p class="text-sm text-slate-500 mt-1">Please confirm your identity to get started.</p>
     </div>
 
-    <div class="mb-6 p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-sm flex gap-3 items-start">
-        <i data-lucide="mail-open" class="w-5 h-5 text-[#42517c] shrink-0 mt-0.5"></i>
+    <div class="mb-6 p-4 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-sm flex gap-3 items-start">
+        <i data-lucide="mail-open" class="w-5 h-5 text-primary shrink-0 mt-0.5"></i>
         <span>
             {{ __('Thanks for signing up! Please verify your email address by entering the 6-digit code we sent to') }}
             <strong class="text-slate-800">{{ auth()->user()->email }}</strong>.
@@ -13,7 +13,7 @@
     </div>
 
     @if (session('status') == 'verification-otp-sent' || session('info'))
-        <div class="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm flex gap-3 items-start">
+        <div class="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm flex gap-3 items-start">
             <i data-lucide="check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5"></i>
             <span>
                 {{ session('info') ?? __('A new OTP verification code has been sent to your email address.') }}
@@ -33,7 +33,7 @@
                    inputmode="numeric" 
                    pattern="[0-9]*"
                    autocomplete="one-time-code"
-                   class="w-full text-center text-3xl font-bold tracking-[0.55em] py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 outline-none transition-all duration-200 font-mono text-slate-800">
+                   class="w-full text-center text-3xl font-bold tracking-[0.55em] py-3.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 font-mono text-slate-800">
             
             @error('code')
                 <p class="text-sm text-red-600 mt-2 flex gap-1.5 items-center font-medium">
@@ -43,7 +43,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354268] hover:to-[#42517c] text-white font-semibold text-sm rounded-xl shadow-lg shadow-indigo-950/10 hover:shadow-indigo-950/20 active:scale-[0.98] transition-all duration-200 font-display">
+        <button type="submit" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-primary hover:bg-[#0049b8] text-white font-semibold text-sm rounded-lg transition-colors duration-200 font-display">
             <span>{{ __('Verify Code') }}</span>
             <i data-lucide="shield-check" class="w-4 h-4"></i>
         </button>
@@ -53,7 +53,7 @@
         <form method="POST" action="{{ route('verification.send') }}" class="w-full sm:w-auto">
             @csrf
 
-            <button type="submit" class="w-full flex items-center justify-center gap-1.5 text-sm font-semibold text-[#42517c] hover:text-[#2d3857] transition py-2 px-4 rounded-xl hover:bg-slate-50 transition-colors font-display">
+            <button type="submit" class="w-full flex items-center justify-center gap-1.5 text-sm font-semibold text-primary hover:text-[#0049b8] transition py-2 px-4 rounded-lg hover:bg-slate-50 transition-colors font-display">
                 <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                 <span>{{ __('Resend Code') }}</span>
             </button>
@@ -62,7 +62,7 @@
         <form method="POST" action="{{ route('logout') }}" class="w-full sm:w-auto">
             @csrf
 
-            <button type="submit" class="w-full text-center text-sm font-semibold text-slate-500 hover:text-slate-800 transition py-2 px-4 rounded-xl hover:bg-slate-50 transition-colors font-display">
+            <button type="submit" class="w-full text-center text-sm font-semibold text-slate-500 hover:text-slate-800 transition py-2 px-4 rounded-lg hover:bg-slate-50 transition-colors font-display">
                 {{ __('Log Out') }}
             </button>
         </form>

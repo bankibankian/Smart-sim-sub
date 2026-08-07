@@ -18,7 +18,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -29,11 +29,10 @@
     <body class="font-sans text-gray-900 antialiased h-full bg-[#f8fafc]">
         <div class="min-h-screen grid grid-cols-1 lg:grid-cols-12 overflow-x-hidden">
             <!-- Left Banner (Col-5, Desktop Only) -->
-            <div class="hidden lg:flex lg:col-span-5 relative bg-gradient-to-br from-slate-950 via-[#1e293b] to-[#42517c] p-12 flex-col justify-between overflow-hidden">
-                <!-- Background Glowing Blobs -->
-                <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-[#2EBE59]/10 rounded-full blur-[80px] -mr-40 -mt-40"></div>
-                <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#42517c]/10 rounded-full blur-[80px] -ml-40 -mb-40"></div>
-                
+            <div class="hidden lg:flex lg:col-span-5 relative bg-slate-950 p-12 flex-col justify-between overflow-hidden">
+                <!-- Background Glow -->
+                <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] -mr-40 -mt-40"></div>
+
                 <!-- Logo / Header -->
                 <div class="relative z-10">
                     <a href="/" class="flex items-center gap-3">
@@ -43,27 +42,27 @@
 
                 <!-- Center Content: Slogan and Platform features -->
                 <div class="relative z-10 my-auto">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#2EBE59]/10 text-[#2EBE59] border border-[#2EBE59]/20 uppercase tracking-wider mb-6 font-display">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#2EBE59] animate-pulse"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-primary/10 text-blue-300 border border-primary/20 mb-6 font-display">
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
                         SmartSIM Portal
                     </span>
-                    <h2 class="text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight font-display mb-6">
-                        Empowering Businesses Through <span class="bg-gradient-to-r from-[#42517c] to-[#2EBE59] bg-clip-text text-transparent">Smart Connectivity</span>
+                    <h2 class="text-3xl lg:text-4xl font-bold text-white tracking-tight leading-tight font-display mb-6">
+                        Empowering businesses through smart connectivity
                     </h2>
-                    
+
                     <div class="space-y-6">
                         <div class="flex items-start gap-4">
-                            <div class="p-2 bg-white/5 rounded-lg border border-white/10 text-[#42517c]">
+                            <div class="p-2 bg-white/5 rounded-lg border border-white/10 text-primary">
                                 <i data-lucide="tag" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h4 class="text-white font-semibold text-sm font-display">Cheaper Data & Airtime</h4>
+                                <h4 class="text-white font-semibold text-sm font-display">Cheaper Data &amp; Airtime</h4>
                                 <p class="text-slate-400 text-xs mt-1">Access the cheapest data and call rates in Nigeria instantly.</p>
                             </div>
                         </div>
 
                         <div class="flex items-start gap-4">
-                            <div class="p-2 bg-white/5 rounded-lg border border-white/10 text-[#2EBE59]">
+                            <div class="p-2 bg-white/5 rounded-lg border border-white/10 text-primary">
                                 <i data-lucide="zap" class="w-5 h-5"></i>
                             </div>
                             <div>
@@ -73,7 +72,7 @@
                         </div>
 
                         <div class="flex items-start gap-4">
-                            <div class="p-2 bg-white/5 rounded-lg border border-white/10 text-amber-500">
+                            <div class="p-2 bg-white/5 rounded-lg border border-white/10 text-primary">
                                 <i data-lucide="gift" class="w-5 h-5"></i>
                             </div>
                             <div>

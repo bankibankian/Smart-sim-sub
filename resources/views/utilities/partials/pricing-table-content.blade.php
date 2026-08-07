@@ -23,7 +23,7 @@
                     <td class="py-3.5 px-2 text-right">
                         <button type="button" 
                                 onclick="autoSelectPlan('{{ $plan->network }}', '{{ $plan->plan_type }}', '{{ $plan->data_id }}')" 
-                                class="inline-flex items-center gap-1 py-1.5 px-3 bg-indigo-50 hover:bg-[#42517c] hover:text-white text-[#42517c] font-bold rounded-lg text-[10px] transition-all duration-150">
+                                class="inline-flex items-center gap-1 py-1.5 px-3 bg-indigo-50 hover:bg-[#0056D2] hover:text-white text-[#0056D2] font-bold rounded-lg text-[10px] transition-all duration-150">
                             Select
                         </button>
                     </td>

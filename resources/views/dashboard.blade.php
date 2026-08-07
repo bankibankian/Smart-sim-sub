@@ -17,13 +17,23 @@
             transition: border-color 0.2s ease, background-color 0.2s ease;
             text-decoration: none;
             background: #ffffff;
+            height: 96px;
         }
         .service-btn:hover {
             background: #f8fafc;
             border-color: rgba(0, 86, 210, 0.3);
         }
-        .font-display {
-            font-family: 'Outfit', sans-serif;
+        .service-btn h4 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
+        }
+        @media (min-width: 768px) {
+            .service-btn {
+                height: 136px;
+            }
         }
     </style>
 @endpush
@@ -67,140 +77,78 @@
         @endif
 
         <!-- TOP FINANCIAL GRID (Balances & Virtual Accounts using Bootstrap grid) -->
-        <div class="row g-4 mb-4">
+        <div class="row g-3 mb-4">
 
             <!-- Card 1: Main Wallet Balance -->
             <div class="col-12 col-md-4">
-                <div class="dash-card p-4 h-100 flex flex-col justify-between" style="min-height: 210px;">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
-                                    <i data-lucide="wallet" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-semibold text-slate-800 font-display mb-0">Wallet Balance</h3>
-                                    <span class="text-slate-400 text-xs">Available for use</span>
-                                </div>
-                            </div>
-                            <i data-lucide="circle-ellipsis" class="text-slate-300 w-5 h-5"></i>
-                        </div>
-
-                        <div class="py-2">
-                            <span class="text-slate-400 text-sm block mb-1">Total available funds</span>
-                            <div class="text-3xl font-bold font-display text-slate-800 tracking-tight mb-0">
-                                ₦{{ number_format($walletData['balance'] ?? 0.00, 2) }}
-                            </div>
-                        </div>
+                <div class="dash-card p-3.5 h-100 flex items-center gap-3">
+                    <div class="rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10 shrink-0">
+                        <i data-lucide="wallet" class="w-5 h-5"></i>
                     </div>
-
-                    <div class="border-t border-slate-100 pt-3 flex items-center justify-between text-sm mt-3">
-                        <span class="text-slate-400">Main account</span>
-                        <a href="{{ route('transfer') }}" class="text-primary font-semibold no-underline flex items-center gap-1 hover:underline">
-                            Send cash <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                        </a>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs text-slate-400 mb-0.5">Wallet Balance</p>
+                        <p class="text-lg font-bold font-display text-slate-800 tracking-tight mb-0 truncate">
+                            ₦{{ number_format($walletData['balance'] ?? 0.00, 2) }}
+                        </p>
                     </div>
+                    <a href="{{ route('transfer') }}" class="shrink-0 text-xs font-semibold text-primary no-underline hover:underline">
+                        Send
+                    </a>
                 </div>
             </div>
 
             <!-- Card 2: Rewards & Bonus -->
             <div class="col-12 col-md-4">
-                <div class="dash-card p-4 h-100 flex flex-col justify-between" style="min-height: 210px;">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
-                                    <i data-lucide="gift" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-semibold text-slate-800 font-display mb-0">Referral & Bonuses</h3>
-                                    <span class="text-slate-400 text-xs">Claimable earnings</span>
-                                </div>
-                            </div>
-                            <i data-lucide="award" class="text-vibrant w-5 h-5"></i>
-                        </div>
-
-                        <div class="py-2">
-                            <span class="text-slate-400 text-sm block mb-1">Accumulated rewards</span>
-                            <div class="text-3xl font-bold font-display text-slate-800 tracking-tight mb-0">
-                                ₦{{ number_format($walletData['bonus'] ?? 0.00, 2) }}
-                            </div>
-                        </div>
+                <div class="dash-card p-3.5 h-100 flex items-center gap-3">
+                    <div class="rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10 shrink-0">
+                        <i data-lucide="gift" class="w-5 h-5"></i>
                     </div>
-
-                    <div class="pt-3 mt-3">
-                        @if(isset($walletData) && $walletData['bonus'] > 0)
-                            <form method="POST" action="{{ route('wallet.claimBonus') }}" class="w-full m-0">
-                                @csrf
-                                <button type="submit" class="w-full py-2.5 font-semibold text-white flex items-center justify-center gap-1.5 font-display border-0 rounded-lg bg-vibrant hover:bg-[#008f4c] transition text-sm">
-                                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                                    Claim to main wallet
-                                </button>
-                            </form>
-                        @else
-                            <div class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 text-center text-slate-400 text-xs flex items-center justify-center gap-1.5 font-semibold">
-                                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                                Spend to unlock more bonuses
-                            </div>
-                        @endif
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs text-slate-400 mb-0.5">Referral &amp; Bonuses</p>
+                        <p class="text-lg font-bold font-display text-slate-800 tracking-tight mb-0 truncate">
+                            ₦{{ number_format($walletData['bonus'] ?? 0.00, 2) }}
+                        </p>
                     </div>
+                    @if(isset($walletData) && $walletData['bonus'] > 0)
+                        <form method="POST" action="{{ route('wallet.claimBonus') }}" class="m-0 shrink-0">
+                            @csrf
+                            <button type="submit" class="text-xs font-semibold text-vibrant hover:underline">
+                                Claim
+                            </button>
+                        </form>
+                    @else
+                        <span class="shrink-0 text-xs font-medium text-slate-300">Locked</span>
+                    @endif
                 </div>
             </div>
 
             <!-- Card 3: Virtual Account Details -->
             <div class="col-12 col-md-4">
-                <div class="dash-card p-4 h-100 flex flex-col justify-between" style="min-height: 210px;">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center w-10 h-10">
-                                    <i data-lucide="building-2" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-semibold text-slate-800 font-display mb-0">Instant Funding</h3>
-                                    <span class="text-slate-400 text-xs">PalmPay settlement</span>
-                                </div>
-                            </div>
-                            <i data-lucide="shield-check" class="text-vibrant w-5 h-5"></i>
+                <div class="dash-card p-3.5 h-100 flex items-center gap-3" x-data="{ copied: false }">
+                    <div class="rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center w-10 h-10 shrink-0">
+                        <i data-lucide="building-2" class="w-5 h-5"></i>
+                    </div>
+                    @if($virtualAccount)
+                        <div class="min-w-0 flex-1">
+                            <p class="text-xs text-slate-400 mb-0.5 truncate">{{ $virtualAccount->bank_name ?? ($virtualAccount->bankName ?? 'PalmPay') }} &middot; Instant Funding</p>
+                            <p class="text-lg font-bold font-display text-primary tracking-wide mb-0 truncate" x-ref="accNum">
+                                {{ $virtualAccount->account_number ?? ($virtualAccount->accountNo ?? 'N/A') }}
+                            </p>
                         </div>
-
-                        @if($virtualAccount)
-                            <div class="p-3 bg-slate-50 rounded-lg border border-slate-100 space-y-1.5">
-                                <div class="flex justify-between items-center text-slate-400 text-xs font-medium">
-                                    <span>Bank</span>
-                                    <span class="font-semibold text-slate-800">{{ $virtualAccount->bank_name ?? ($virtualAccount->bankName ?? 'PalmPay') }}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-slate-400 text-xs font-medium">
-                                    <span>Name</span>
-                                    <span class="font-semibold text-slate-800 text-truncate" style="max-width: 140px;">{{ $virtualAccount->account_name ?? ($virtualAccount->accountName ?? 'N/A') }}</span>
-                                </div>
-
-                                <div class="border-t border-slate-100 pt-2 mt-2 flex items-center justify-between" x-data="{ copied: false }">
-                                    <span class="text-lg font-bold text-primary font-display mb-0 tracking-wide" x-ref="accNum">
-                                        {{ $virtualAccount->account_number ?? ($virtualAccount->accountNo ?? 'N/A') }}
-                                    </span>
-                                    <button @click="navigator.clipboard.writeText($refs.accNum.innerText.trim()); copied = true; setTimeout(() => copied = false, 2000)"
-                                            type="button"
-                                            class="bg-white border border-slate-200 py-1 px-2 text-slate-500 rounded-md flex items-center gap-1 hover:text-primary hover:border-primary/30 text-xs font-semibold">
-                                        <i x-show="!copied" data-lucide="copy" class="w-3 h-3"></i>
-                                        <i x-show="copied" data-lucide="check" class="text-vibrant w-3 h-3" style="display:none;"></i>
-                                        <span x-text="copied ? 'Copied' : 'Copy'">Copy</span>
-                                    </button>
-                                </div>
-                            </div>
-                        @else
-                            <div class="text-center py-2">
-                                <a href="{{ route('wallet') }}" class="w-full py-2.5 font-semibold rounded-lg inline-flex items-center justify-center gap-1.5 font-display text-white text-decoration-none bg-primary hover:bg-[#0049b8] transition text-sm">
-                                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                                    <span class="text-nowrap">Setup funding account</span>
-                                </a>
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="text-slate-400 mt-2 text-xs">
-                        * Transfer to this account to fund your main wallet balance instantly.
-                    </div>
+                        <button @click="navigator.clipboard.writeText($refs.accNum.innerText.trim()); copied = true; setTimeout(() => copied = false, 2000)"
+                                type="button"
+                                class="shrink-0 text-xs font-semibold text-primary hover:underline">
+                            <span x-text="copied ? 'Copied' : 'Copy'">Copy</span>
+                        </button>
+                    @else
+                        <div class="min-w-0 flex-1">
+                            <p class="text-xs text-slate-400 mb-0.5">Instant Funding</p>
+                            <p class="text-sm font-semibold text-slate-800 mb-0">No account yet</p>
+                        </div>
+                        <a href="{{ route('wallet') }}" class="shrink-0 text-xs font-semibold text-primary no-underline hover:underline">
+                            Set up
+                        </a>
+                    @endif
                 </div>
             </div>
 
@@ -217,7 +165,7 @@
 
                 <!-- Service 1: Buy Airtime -->
                 <div class="col">
-                    <a href="{{ route('airtime') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                    <a href="{{ route('airtime') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
                         <div class="p-2 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center w-10 h-10">
                             <i data-lucide="phone" class="w-5 h-5"></i>
                         </div>
@@ -230,7 +178,7 @@
 
                 <!-- Service 2: Buy Data -->
                 <div class="col">
-                    <a href="{{ route('buy-sme-data') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                    <a href="{{ route('buy-sme-data') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
                         <div class="p-2 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center w-10 h-10">
                             <i data-lucide="wifi" class="w-5 h-5"></i>
                         </div>
@@ -243,7 +191,7 @@
 
                 <!-- Service 3: SIM Services -->
                 <div class="col">
-                    <a href="{{ route('sims.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                    <a href="{{ route('sims.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
                         <div class="p-2 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center w-10 h-10">
                             <i data-lucide="cpu" class="w-5 h-5"></i>
                         </div>
@@ -256,7 +204,7 @@
 
                 <!-- Service 4: Withdrawal -->
                 <div class="col">
-                    <a href="{{ route('withdraw') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                    <a href="{{ route('withdraw') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
                         <div class="p-2 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center w-10 h-10">
                             <i data-lucide="banknote" class="w-5 h-5"></i>
                         </div>
@@ -269,7 +217,7 @@
 
                 <!-- Service 5: P2P Transfer -->
                 <div class="col">
-                    <a href="{{ route('transfer') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                    <a href="{{ route('transfer') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
                         <div class="p-2 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center w-10 h-10">
                             <i data-lucide="send" class="w-5 h-5"></i>
                         </div>
@@ -282,7 +230,7 @@
 
                 <!-- Service 6: NIN -->
                 <div class="col">
-                    <a href="{{ route('nin.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                    <a href="{{ route('nin.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
                         <div class="p-2 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center w-10 h-10">
                             <i data-lucide="id-card" class="w-5 h-5"></i>
                         </div>
@@ -295,7 +243,7 @@
 
                 <!-- Service 7: BVN -->
                 <div class="col">
-                    <a href="{{ route('bvn.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                    <a href="{{ route('bvn.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
                         <div class="p-2 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center w-10 h-10">
                             <i data-lucide="id-card" class="w-5 h-5"></i>
                         </div>
@@ -308,7 +256,7 @@
 
                 <!-- Service 8: NIN by Phone -->
                 <div class="col">
-                    <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                    <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
                         <div class="p-2 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center w-10 h-10">
                             <i data-lucide="id-card" class="w-5 h-5"></i>
                         </div>
@@ -321,7 +269,7 @@
 
                 <!-- Service 9: NIN by Demo -->
                 <div class="col">
-                    <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                    <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
                         <div class="p-2 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center w-10 h-10">
                             <i data-lucide="id-card" class="w-5 h-5"></i>
                         </div>

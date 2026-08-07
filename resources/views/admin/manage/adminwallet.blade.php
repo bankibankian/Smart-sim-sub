@@ -109,13 +109,13 @@
             <!-- Single User Action Card -->
             <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between items-start gap-4">
                 <div class="space-y-2">
-                    <div class="w-12 h-12 rounded-2xl bg-[#42517c]/10 text-[#42517c] flex items-center justify-center">
+                    <div class="w-12 h-12 rounded-2xl bg-[#0056D2]/10 text-[#0056D2] flex items-center justify-center">
                         <i data-lucide="user-cog" class="w-6 h-6"></i>
                     </div>
                     <h3 class="text-base font-bold text-slate-800 font-display">Single User Adjustment</h3>
                     <p class="text-xs text-slate-400 leading-relaxed font-semibold">Credit or debit a specific user's wallet manually. Search and verify the user before performing the transaction.</p>
                 </div>
-                <button @click="singleModalOpen = true" class="w-full py-2.5 px-4 bg-[#42517c] hover:bg-[#354268] text-white font-bold text-xs rounded-xl shadow-sm hover:shadow active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-1.5">
+                <button @click="singleModalOpen = true" class="w-full py-2.5 px-4 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-sm hover:shadow active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-1.5">
                     <i data-lucide="wallet" class="w-4 h-4"></i>
                     Open Single Adjustment Form
                 </button>
@@ -129,7 +129,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <h3 class="text-base font-bold text-slate-800 font-display">General Adjustment</h3>
-                        <span class="px-2 py-0.5 text-[9px] font-extrabold bg-[#42517c]/10 text-[#42517c] rounded-full uppercase tracking-wider">{{ $totalUsers }} users target</span>
+                        <span class="px-2 py-0.5 text-[9px] font-extrabold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">{{ $totalUsers }} users target</span>
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed font-semibold">Execute manual funding or debiting adjustments globally across all registered users in the database.</p>
                 </div>
@@ -191,7 +191,7 @@
                                                name="identifier" 
                                                value="{{ old('identifier') }}" 
                                                placeholder="Enter user email, phone, or wallet number..." 
-                                               class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
+                                               class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
                                                required>
                                         <div class="absolute left-3.5 top-3 text-slate-400">
                                             <i data-lucide="user" class="w-4 h-4"></i>
@@ -209,7 +209,7 @@
                             <!-- User Live Preview Container -->
                             <div id="verify-preview" class="hidden p-4 rounded-2xl border border-slate-100 bg-slate-50/50 space-y-2 transition-all duration-200">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-[#42517c]/10 text-[#42517c] flex items-center justify-center font-bold text-xs uppercase" id="preview-avatar">
+                                    <div class="w-8 h-8 rounded-full bg-[#0056D2]/10 text-[#0056D2] flex items-center justify-center font-bold text-xs uppercase" id="preview-avatar">
                                         US
                                     </div>
                                     <div>
@@ -232,7 +232,7 @@
                             <!-- Adjustment Type -->
                             <div class="space-y-1.5">
                                 <label for="single-type" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Adjustment Type</label>
-                                <select id="single-type" name="type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200" required>
+                                <select id="single-type" name="type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200" required>
                                     <option value="credit" {{ old('type') === 'credit' ? 'selected' : '' }}>Credit (Add Funds)</option>
                                     <option value="debit" {{ old('type') === 'debit' ? 'selected' : '' }}>Debit (Deduct Funds)</option>
                                 </select>
@@ -249,7 +249,7 @@
                                            min="0.01" 
                                            value="{{ old('amount') }}" 
                                            placeholder="0.00" 
-                                           class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
+                                           class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
                                            required>
                                     <div class="absolute left-3.5 top-3 text-slate-400 text-xs font-bold">₦</div>
                                 </div>
@@ -262,7 +262,7 @@
                                           name="description" 
                                           rows="2" 
                                           placeholder="Provide detail for this transaction (visible to the user)..." 
-                                          class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
+                                          class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
                                           required>{{ old('description') }}</textarea>
                             </div>
 
@@ -285,7 +285,7 @@
                                 <button type="button" @click="singleModalOpen = false" class="w-1/2 py-3 px-4 border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs rounded-xl active:scale-[0.98] transition-all duration-150">
                                     Cancel
                                 </button>
-                                <button type="submit" class="w-1/2 py-3 px-4 bg-[#42517c] hover:bg-[#354268] text-white font-bold text-xs rounded-xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-1.5">
+                                <button type="submit" class="w-1/2 py-3 px-4 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-1.5">
                                     <i data-lucide="check-square" class="w-4 h-4"></i>
                                     Execute
                                 </button>
@@ -332,7 +332,7 @@
                         <div>
                             <div class="flex items-center justify-between">
                                 <h2 class="text-lg font-bold text-slate-800 font-display">General / System-wide Adjustment</h2>
-                                <span class="px-2.5 py-1 text-[10px] font-extrabold bg-[#42517c]/10 text-[#42517c] rounded-full uppercase tracking-wider">
+                                <span class="px-2.5 py-1 text-[10px] font-extrabold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">
                                     {{ $totalUsers }} users target
                                 </span>
                             </div>
@@ -345,7 +345,7 @@
                             <!-- Adjustment Type -->
                             <div class="space-y-1.5">
                                 <label for="general-type" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Adjustment Type</label>
-                                <select id="general-type" name="type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200" required>
+                                <select id="general-type" name="type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200" required>
                                     <option value="credit" {{ old('type') === 'credit' ? 'selected' : '' }}>Credit All Users (Add Funds)</option>
                                     <option value="debit" {{ old('type') === 'debit' ? 'selected' : '' }}>Debit All Users (Deduct Funds)</option>
                                 </select>
@@ -362,7 +362,7 @@
                                            min="0.01" 
                                            value="{{ old('amount') }}" 
                                            placeholder="0.00" 
-                                           class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
+                                           class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
                                            required>
                                     <div class="absolute left-3.5 top-3 text-slate-400 text-xs font-bold">₦</div>
                                 </div>
@@ -375,7 +375,7 @@
                                           name="description" 
                                           rows="2" 
                                           placeholder="Provide general adjustment reason..." 
-                                          class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
+                                          class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
                                           required>{{ old('description') }}</textarea>
                             </div>
 
@@ -446,7 +446,7 @@
                             <tr class="hover:bg-slate-50/30 transition-all duration-150">
                                 <td class="py-4 px-6">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 bg-[#42517c]/5 text-[#42517c] rounded-xl flex items-center justify-center font-bold text-xs uppercase">
+                                        <div class="w-8 h-8 bg-[#0056D2]/5 text-[#0056D2] rounded-xl flex items-center justify-center font-bold text-xs uppercase">
                                             {{ substr($tx->user->first_name ?? 'U', 0, 1) }}{{ substr($tx->user->last_name ?? 'S', 0, 1) }}
                                         </div>
                                         <div>
@@ -526,7 +526,7 @@
                         icon: 'warning',
                         title: 'Empty Identifier',
                         text: 'Please enter a user Email, Phone, or Wallet Number.',
-                        confirmButtonColor: '#42517c'
+                        confirmButtonColor: '#0056D2'
                     });
                     return;
                 }
@@ -571,7 +571,7 @@
                             icon: 'error',
                             title: 'Not Found',
                             text: data.message,
-                            confirmButtonColor: '#42517c'
+                            confirmButtonColor: '#0056D2'
                         });
                     }
                 })
@@ -584,7 +584,7 @@
                         icon: 'error',
                         title: 'Error',
                         text: 'An error occurred while verifying the user. Please try again.',
-                        confirmButtonColor: '#42517c'
+                        confirmButtonColor: '#0056D2'
                     });
                 });
             });

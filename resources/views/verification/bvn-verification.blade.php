@@ -6,7 +6,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/50 shadow-sm">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
                     </div>
                     BVN Verification
@@ -21,7 +21,7 @@
             <div class="col-12 col-lg-6">
                 <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
                     <div>
-                        <div class="bg-gradient-to-r from-[#42517c] to-[#55699e] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+                        <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
                                     <i data-lucide="fingerprint" class="w-5 h-5"></i>
@@ -81,7 +81,7 @@
                                 @csrf
                                 <div class="space-y-1.5 text-start">
                                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">BVN Number <span class="text-rose-500">*</span></label>
-                                    <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] text-sm font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all text-center tracking-widest font-display" 
+                                    <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-sm font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all text-center tracking-widest font-display" 
                                         name="bvn" type="text"
                                         placeholder="Enter 11 Digit BVN" maxlength="11" minlength="11" pattern="[0-9]{11}"
                                         required value="{{ old('bvn') }}">
@@ -90,12 +90,12 @@
                                 <div class="space-y-3">
                                     <div class="bg-indigo-50/40 border border-indigo-100/60 rounded-2xl p-4 flex justify-between items-center">
                                         <div class="flex items-center gap-2.5">
-                                            <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-[#42517c]">
+                                            <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-[#0056D2]">
                                                 <i data-lucide="tag" class="w-4 h-4"></i>
                                             </div>
                                             <span class="text-xs font-bold text-slate-750">Service Fee</span>
                                         </div>
-                                        <span class="text-base font-extrabold font-display text-[#42517c]">₦{{ number_format($verificationPrice ?? 0, 2) }}</span>
+                                        <span class="text-base font-extrabold font-display text-[#0056D2]">₦{{ number_format($verificationPrice ?? 0, 2) }}</span>
                                     </div>
                                     <div class="flex justify-between items-center text-[11px] px-1">
                                         <span class="text-slate-400 font-medium">Your current balance:</span>
@@ -105,7 +105,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="w-full py-3.5 px-6 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354268] hover:to-[#42517c] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#42517c]/10 hover:shadow-[#42517c]/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 font-display">
+                                <button type="submit" class="w-full py-3.5 px-6 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 font-display">
                                     <i data-lucide="search" class="w-4 h-4"></i>
                                     <span>Verify Now</span>
                                 </button>
@@ -162,7 +162,7 @@
                                     <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 divide-y divide-slate-200/50">
                                         <div class="flex justify-between items-center py-2 text-xs">
                                             <span class="text-slate-450 font-medium">BVN Number</span>
-                                            <span class="font-bold text-[#42517c] font-display tracking-wider">{{ session('verification')['data']['bvn'] }}</span>
+                                            <span class="font-bold text-[#0056D2] font-display tracking-wider">{{ session('verification')['data']['bvn'] }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
                                             <span class="text-slate-450 font-medium">First Name</span>
@@ -208,10 +208,10 @@
                                             </div>
                                             <div class="col-4">
                                                 <button onclick="confirmDownload('{{ route('premiumBVN', session('verification')['data']['bvn']) }}', 'Premium Slip', {{ $premiumSlipPrice ?? 0 }})"
-                                                        class="w-100 flex flex-col items-center justify-center p-3 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100/50 text-[#42517c] rounded-xl transition duration-200 font-display space-y-1">
-                                                    <i data-lucide="file-check" class="w-4.5 h-4.5 text-[#42517c]"></i>
+                                                        class="w-100 flex flex-col items-center justify-center p-3 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100/50 text-[#0056D2] rounded-xl transition duration-200 font-display space-y-1">
+                                                    <i data-lucide="file-check" class="w-4.5 h-4.5 text-[#0056D2]"></i>
                                                     <span class="text-xs font-bold mt-1">Premium</span>
-                                                    <span class="text-[10px] font-bold text-[#42517c]/70">₦{{ number_format($premiumSlipPrice ?? 0, 2) }}</span>
+                                                    <span class="text-[10px] font-bold text-[#0056D2]/70">₦{{ number_format($premiumSlipPrice ?? 0, 2) }}</span>
                                                 </button>
                                             </div>
                                             <div class="col-4">
@@ -254,7 +254,7 @@
                 text: `You will be charged ₦${price.toLocaleString()} for the ${type}. Do you want to proceed?`,
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#42517c',
+                confirmButtonColor: '#0056D2',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, Proceed!',
                 cancelButtonText: 'Cancel',
@@ -262,7 +262,7 @@
                     popup: 'rounded-3xl border border-slate-100 shadow-xl p-6',
                     title: 'text-lg font-bold font-display text-slate-900',
                     htmlContainer: 'text-xs text-slate-500 mt-2',
-                    confirmButton: 'px-5 py-2.5 bg-[#42517c] hover:bg-[#354268] text-white font-bold text-xs rounded-xl shadow-md transition-all duration-200 mx-2 focus:outline-none',
+                    confirmButton: 'px-5 py-2.5 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md transition-all duration-200 mx-2 focus:outline-none',
                     cancelButton: 'px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-md transition-all duration-200 mx-2 focus:outline-none'
                 },
                 buttonsStyling: false
@@ -305,7 +305,7 @@
                                     title: 'Error',
                                     text: 'Failed to generate slip response.',
                                     icon: 'error',
-                                    confirmButtonColor: '#42517c'
+                                    confirmButtonColor: '#0056D2'
                                 });
                             }
                         },
@@ -321,7 +321,7 @@
                                 title: 'Failed!',
                                 text: msg,
                                 icon: 'error',
-                                confirmButtonColor: '#42517c'
+                                confirmButtonColor: '#0056D2'
                             });
                         }
                     });

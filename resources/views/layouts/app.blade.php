@@ -16,7 +16,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -44,8 +44,10 @@
                 @include('layouts.partials.header')
 
                 <!-- Main Content Slot -->
-                <main class="flex-grow p-4 sm:p-6 lg:p-8 bg-slate-50/50">
-                    {{ $slot }}
+                <main class="flex-grow py-8 px-8 sm:py-4 sm:px-4 md:py-8 md:px-10 lg:py-10 lg:px-16 xl:px-24 bg-slate-50/50">
+                    <div class="mx-auto max-w-[1800px]">
+                        {{ $slot }}
+                    </div>
                 </main>
             </div>
         </div>

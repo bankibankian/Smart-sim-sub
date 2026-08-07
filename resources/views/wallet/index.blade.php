@@ -6,7 +6,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/50 shadow-sm">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="wallet" class="w-5 h-5"></i>
                     </div>
                     My Wallet
@@ -112,7 +112,7 @@
                 </div>
 
                 <!-- Motivation & Progress Card -->
-                <div class="bg-gradient-to-br from-[#42517c] to-[#55699e] rounded-3xl p-6 text-white shadow-sm overflow-hidden relative flex flex-col justify-between min-h-[260px] animate-gradient-shift">
+                <div class="bg-gradient-to-br from-[#0056D2] to-[#0049b8] rounded-3xl p-6 text-white shadow-sm overflow-hidden relative flex flex-col justify-between min-h-[260px] animate-gradient-shift">
                     <!-- Background decor -->
                     <div class="absolute -top-12 -left-12 w-28 h-28 bg-white/5 rounded-full blur-xl"></div>
 
@@ -180,7 +180,7 @@
                 <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
                     
                     <!-- Card Header -->
-                    <div class="bg-gradient-to-r from-[#42517c] to-[#55699e] px-6 py-5 border-b border-slate-100 text-white">
+                    <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
                                 <i data-lucide="bank" class="w-5 h-5"></i>
@@ -197,7 +197,7 @@
                         
                         <!-- Brief Description -->
                         <div class="text-center max-w-md mx-auto space-y-2">
-                            <div class="w-12 h-12 rounded-full bg-indigo-50 text-[#42517c] flex items-center justify-center mx-auto shadow-inner">
+                            <div class="w-12 h-12 rounded-full bg-indigo-50 text-[#0056D2] flex items-center justify-center mx-auto shadow-inner">
                                 <i data-lucide="zap" class="w-6 h-6"></i>
                             </div>
                             <h4 class="font-bold text-slate-800 text-sm">Transfer & Receive Credits Instantly</h4>
@@ -240,10 +240,10 @@
                                 <div class="border-t border-slate-200/60 pt-4 space-y-1" x-data="{ copied: false }">
                                     <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account Number</span>
                                     <div class="flex items-center gap-3">
-                                        <span class="text-2xl font-extrabold font-display text-[#42517c] tracking-wide" x-ref="accNum">{{ $virtualAccount->account_number ?? $virtualAccount->accountNo }}</span>
+                                        <span class="text-2xl font-extrabold font-display text-[#0056D2] tracking-wide" x-ref="accNum">{{ $virtualAccount->account_number ?? $virtualAccount->accountNo }}</span>
                                         <button @click="navigator.clipboard.writeText($refs.accNum.innerText); copied = true; setTimeout(() => copied = false, 2000)" 
                                                 type="button" 
-                                                class="px-2.5 py-1.5 bg-white border border-slate-200 text-slate-500 hover:text-[#42517c] rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-slate-50 shadow-sm transition-all">
+                                                class="px-2.5 py-1.5 bg-white border border-slate-200 text-slate-500 hover:text-[#0056D2] rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-slate-50 shadow-sm transition-all">
                                             <i x-show="!copied" data-lucide="copy" class="w-3.5 h-3.5"></i>
                                             <i x-show="copied" data-lucide="check" class="w-3.5 h-3.5 text-emerald-500" style="display: none;"></i>
                                             <span x-text="copied ? 'Copied' : 'Copy'">Copy</span>
@@ -272,7 +272,7 @@
                                         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Full Name</label>
                                         <input type="text" name="name" 
                                                value="{{ auth()->user()->first_name }} {{ auth()->user()->last_name }} {{ auth()->user()->middle_name }}" 
-                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
+                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
                                                required>
                                     </div>
                                     
@@ -280,7 +280,7 @@
                                         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Phone Number</label>
                                         <input type="tel" name="phone" 
                                                value="{{ auth()->user()->phone }}" 
-                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
+                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
                                                required>
                                     </div>
 
@@ -292,18 +292,18 @@
                                                maxlength="11"
                                                pattern="\d{11}"
                                                title="BVN must be exactly 11 digits"
-                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
+                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
                                                required>
                                     </div>
 
                                     <div class="flex items-start gap-2.5 pt-2">
-                                        <input type="checkbox" id="confirmCheck" class="mt-0.5 rounded border-slate-300 text-[#42517c] focus:ring-[#42517c] shrink-0" required>
+                                        <input type="checkbox" id="confirmCheck" class="mt-0.5 rounded border-slate-300 text-[#0056D2] focus:ring-[#0056D2] shrink-0" required>
                                         <label for="confirmCheck" class="text-[11px] text-slate-500 leading-relaxed">
                                             I confirm that the above details are accurate and consent to create a virtual account.
                                         </label>
                                     </div>
 
-                                    <button type="submit" class="w-full mt-4 py-3 px-4 bg-[#42517c] hover:bg-[#354268] text-white font-bold text-xs rounded-xl shadow-md shadow-[#42517c]/10 hover:shadow-[#42517c]/20 transition-all duration-200 flex items-center justify-center gap-2">
+                                    <button type="submit" class="w-full mt-4 py-3 px-4 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 transition-all duration-200 flex items-center justify-center gap-2">
                                         <i data-lucide="plus-circle" class="w-4 h-4"></i>
                                         Generate Virtual Account
                                     </button>

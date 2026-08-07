@@ -22,7 +22,7 @@
         <!-- Modal Header -->
         <div class="mb-6 border-b border-slate-100 pb-5">
             <div class="flex items-center gap-3 mb-2.5">
-                <div class="p-2.5 bg-[#42517c]/10 text-[#42517c] rounded-xl">
+                <div class="p-2.5 bg-[#0056D2]/10 text-[#0056D2] rounded-xl">
                     <i data-lucide="shield-check" class="w-6 h-6"></i>
                 </div>
                 <h1 class="text-xl sm:text-2xl font-bold text-slate-900 font-display">Complete Profile Setup</h1>
@@ -46,7 +46,7 @@
                     <label for="first_name" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">First Name <span class="text-red-500">*</span></label>
                     <input id="first_name" type="text" name="first_name" value="{{ old('first_name', auth()->user()->first_name) }}" required autofocus
                            placeholder="John"
-                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 outline-none transition-all duration-200 text-slate-800 text-sm">
+                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 outline-none transition-all duration-200 text-slate-800 text-sm">
                     @error('first_name')
                         <p class="text-xs text-red-600 mt-1.5 flex gap-1 items-center font-medium">
                             <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
@@ -59,7 +59,7 @@
                     <label for="middle_name" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Middle Name <span class="text-slate-400 font-normal">(Optional)</span></label>
                     <input id="middle_name" type="text" name="middle_name" value="{{ old('middle_name', auth()->user()->middle_name) }}"
                            placeholder="Alexander"
-                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 outline-none transition-all duration-200 text-slate-800 text-sm">
+                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 outline-none transition-all duration-200 text-slate-800 text-sm">
                     @error('middle_name')
                         <p class="text-xs text-red-600 mt-1.5 flex gap-1 items-center font-medium">
                             <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
@@ -72,7 +72,7 @@
                     <label for="last_name" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Last Name <span class="text-red-500">*</span></label>
                     <input id="last_name" type="text" name="last_name" value="{{ old('last_name', auth()->user()->last_name) }}" required
                            placeholder="Doe"
-                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 outline-none transition-all duration-200 text-slate-800 text-sm">
+                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 outline-none transition-all duration-200 text-slate-800 text-sm">
                     @error('last_name')
                         <p class="text-xs text-red-600 mt-1.5 flex gap-1 items-center font-medium">
                             <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
@@ -86,7 +86,7 @@
                 <label for="phone" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Phone Number <span class="text-red-500">*</span></label>
                 <input id="phone" type="tel" name="phone" value="{{ old('phone', auth()->user()->phone) }}" required
                        placeholder="e.g. 08012345678"
-                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 outline-none transition-all duration-200 text-slate-800 text-sm">
+                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 outline-none transition-all duration-200 text-slate-800 text-sm">
                 @error('phone')
                     <p class="text-xs text-red-600 mt-1.5 flex gap-1 items-center font-medium">
                         <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
@@ -103,8 +103,8 @@
                     <input type="hidden" name="state" :value="state" required>
                     
                     <button type="button" @click="toggleStateDropdown()" 
-                            class="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 outline-none transition-all duration-200 text-slate-800 text-sm text-left"
-                            :class="stateOpen ? 'bg-white border-[#42517c] ring-4 ring-[#42517c]/10' : ''">
+                            class="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 outline-none transition-all duration-200 text-slate-800 text-sm text-left"
+                            :class="stateOpen ? 'bg-white border-[#0056D2] ring-4 ring-[#0056D2]/10' : ''">
                         <span x-text="state || 'Select State'" :class="state ? 'text-slate-800' : 'text-slate-400'">Select State</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="stateOpen ? 'rotate-180' : ''"></i>
                     </button>
@@ -120,13 +120,13 @@
                         <div class="relative mb-2">
                             <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-slate-400"></i>
                             <input type="text" x-model="stateSearch" placeholder="Search state..."
-                                   class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none focus:bg-white focus:border-[#42517c] transition-all">
+                                   class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none focus:bg-white focus:border-[#0056D2] transition-all">
                         </div>
                         <div class="max-h-40 overflow-y-auto space-y-0.5 custom-scrollbar">
                             <template x-for="item in filteredStates" :key="item">
                                 <button type="button" @click="selectState(item)"
                                         class="w-full text-left px-3 py-1.5 rounded-lg text-sm transition-all duration-150"
-                                        :class="state === item ? 'bg-[#42517c] text-white font-semibold' : 'text-slate-700 hover:bg-slate-50'">
+                                        :class="state === item ? 'bg-[#0056D2] text-white font-semibold' : 'text-slate-700 hover:bg-slate-50'">
                                     <span x-text="item"></span>
                                 </button>
                             </template>
@@ -149,8 +149,8 @@
                     <input type="hidden" name="lga" :value="lga" required>
                     
                     <button type="button" @click="toggleLgaDropdown()" :disabled="!state"
-                            class="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 outline-none transition-all duration-200 text-slate-800 text-sm text-left disabled:opacity-60 disabled:cursor-not-allowed"
-                            :class="lgaOpen ? 'bg-white border-[#42517c] ring-4 ring-[#42517c]/10' : ''">
+                            class="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 outline-none transition-all duration-200 text-slate-800 text-sm text-left disabled:opacity-60 disabled:cursor-not-allowed"
+                            :class="lgaOpen ? 'bg-white border-[#0056D2] ring-4 ring-[#0056D2]/10' : ''">
                         <span x-text="lga || (state ? 'Select LGA' : 'Select State first')" :class="lga ? 'text-slate-800' : 'text-slate-400'">Select LGA</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="lgaOpen ? 'rotate-180' : ''"></i>
                     </button>
@@ -166,13 +166,13 @@
                         <div class="relative mb-2">
                             <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-slate-400"></i>
                             <input type="text" x-model="lgaSearch" placeholder="Search LGA..."
-                                   class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none focus:bg-white focus:border-[#42517c] transition-all">
+                                   class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none focus:bg-white focus:border-[#0056D2] transition-all">
                         </div>
                         <div class="max-h-40 overflow-y-auto space-y-0.5 custom-scrollbar">
                             <template x-for="item in filteredLgas" :key="item">
                                 <button type="button" @click="selectLga(item)"
                                         class="w-full text-left px-3 py-1.5 rounded-lg text-sm transition-all duration-150"
-                                        :class="lga === item ? 'bg-[#42517c] text-white font-semibold' : 'text-slate-700 hover:bg-slate-50'">
+                                        :class="lga === item ? 'bg-[#0056D2] text-white font-semibold' : 'text-slate-700 hover:bg-slate-50'">
                                     <span x-text="item"></span>
                                 </button>
                             </template>
@@ -194,7 +194,7 @@
                 <label for="address" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Residential Address <span class="text-red-500">*</span></label>
                 <textarea id="address" name="address" rows="2" required
                           placeholder="Enter your street address, building number, etc."
-                          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 outline-none transition-all duration-200 text-slate-800 text-sm resize-none">{{ old('address', auth()->user()->address) }}</textarea>
+                          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 outline-none transition-all duration-200 text-slate-800 text-sm resize-none">{{ old('address', auth()->user()->address) }}</textarea>
                 @error('address')
                     <p class="text-xs text-red-600 mt-1.5 flex gap-1 items-center font-medium">
                         <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
@@ -207,11 +207,11 @@
             <div class="pt-1">
                 <label class="relative flex items-start gap-3 cursor-pointer group">
                     <input type="checkbox" name="agree" value="1" required class="peer sr-only">
-                    <div class="h-5 w-5 shrink-0 rounded-md border border-slate-200 bg-slate-50 peer-checked:bg-[#42517c] peer-checked:border-[#42517c] transition-all duration-200 flex items-center justify-center text-white">
+                    <div class="h-5 w-5 shrink-0 rounded-md border border-slate-200 bg-slate-50 peer-checked:bg-[#0056D2] peer-checked:border-[#0056D2] transition-all duration-200 flex items-center justify-center text-white">
                         <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3px] scale-50 opacity-0 peer-checked:scale-100 peer-checked:opacity-100 transition-all duration-200"></i>
                     </div>
                     <span class="text-xs text-slate-500 leading-normal select-none group-hover:text-slate-700 transition">
-                        I agree to the <a href="#" class="text-[#42517c] font-semibold hover:underline">Service Agreement</a> and confirm that all information provided is correct.
+                        I agree to the <a href="#" class="text-[#0056D2] font-semibold hover:underline">Service Agreement</a> and confirm that all information provided is correct.
                     </span>
                 </label>
                 @error('agree')
@@ -222,7 +222,7 @@
                 @enderror
             </div>
 
-            <button type="submit" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354268] hover:to-[#42517c] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#42517c]/10 hover:shadow-[#42517c]/20 active:scale-[0.98] transition-all duration-200 font-display">
+            <button type="submit" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 active:scale-[0.98] transition-all duration-200 font-display">
                 <span>Complete Registration Setup</span>
                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </button>

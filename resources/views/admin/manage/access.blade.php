@@ -26,7 +26,7 @@
                                name="search" 
                                value="{{ request('search') }}" 
                                placeholder="Search user by name or email..." 
-                               class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                               class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                         <div class="absolute left-4 top-3.5 text-slate-400">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </div>
@@ -53,7 +53,7 @@
                                     <span class="block text-xs font-semibold text-slate-400">{{ $u->email }}</span>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-[#42517c]/10 text-[#42517c] border border-[#42517c]/20 uppercase tracking-wider">
+                                    <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-[#0056D2]/10 text-[#0056D2] border border-[#0056D2]/20 uppercase tracking-wider">
                                         {{ $u->role }}
                                     </span>
                                 </td>
@@ -74,7 +74,7 @@
                                         @method('PUT')
                                         
                                         <select name="role" 
-                                                class="px-3 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:outline-none rounded-xl text-xs text-slate-850 font-semibold transition-all duration-150">
+                                                class="px-3 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:outline-none rounded-xl text-xs text-slate-850 font-semibold transition-all duration-150">
                                             <option value="personal" {{ $u->role === 'personal' ? 'selected' : '' }}>Personal</option>
                                             <option value="agent" {{ $u->role === 'agent' ? 'selected' : '' }}>Agent</option>
                                             <option value="partner" {{ $u->role === 'partner' ? 'selected' : '' }}>Partner</option>
@@ -85,7 +85,7 @@
                                         </select>
 
                                         <button type="submit" 
-                                                class="px-4 py-1.5 bg-[#42517c] hover:bg-[#354268] text-white font-semibold text-xs rounded-xl shadow-sm transition-all duration-150 active:scale-[0.98]">
+                                                class="px-4 py-1.5 bg-[#0056D2] hover:bg-[#003a8c] text-white font-semibold text-xs rounded-xl shadow-sm transition-all duration-150 active:scale-[0.98]">
                                             Save
                                         </button>
                                     </form>

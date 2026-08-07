@@ -16,9 +16,6 @@
             box-shadow: 0 15px 30px rgba(66, 81, 124, 0.08);
             border-color: rgba(99, 102, 241, 0.3);
         }
-        .font-display {
-            font-family: 'Outfit', sans-serif;
-        }
         .custom-badge {
             font-size: 10px;
             font-weight: 700;
@@ -33,9 +30,9 @@
             background: #f8fafc;
         }
         .admin-btn:hover {
-            background: #42517c;
+            background: #0056D2;
             color: #ffffff !important;
-            border-color: #42517c;
+            border-color: #0056D2;
             transform: translateY(-2px);
             box-shadow: 0 8px 16px rgba(66, 81, 124, 0.12);
         }

@@ -13,7 +13,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Atkinson Hyperlegible Next', ...defaultTheme.fontFamily.sans],
+                display: ['Atkinson Hyperlegible Next', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 primary: '#0056D2',

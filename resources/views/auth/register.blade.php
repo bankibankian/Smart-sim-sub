@@ -15,7 +15,7 @@
                     <i data-lucide="mail" class="w-4 h-4"></i>
                 </div>
                 <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
-                    class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/20 transition-all duration-200 text-sm shadow-sm"
+                    class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm"
                     placeholder="name@example.com" />
             </div>
             <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
@@ -29,7 +29,7 @@
                     <i data-lucide="lock" class="w-4 h-4"></i>
                 </div>
                 <input id="password" type="password" name="password" required autocomplete="new-password"
-                    class="block w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/20 transition-all duration-200 text-sm shadow-sm"
+                    class="block w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm"
                     placeholder="••••••••" />
                 <button type="button" onclick="togglePasswordVisibility('password', 'password-toggle-icon')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition">
                     <i data-lucide="eye" id="password-toggle-icon" class="w-4 h-4"></i>
@@ -57,7 +57,7 @@
                     <i data-lucide="shield-check" class="w-4 h-4"></i>
                 </div>
                 <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
-                    class="block w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/20 transition-all duration-200 text-sm shadow-sm"
+                    class="block w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm"
                     placeholder="••••••••" />
                 <button type="button" onclick="togglePasswordVisibility('password_confirmation', 'confirm-password-toggle-icon')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition">
                     <i data-lucide="eye" id="confirm-password-toggle-icon" class="w-4 h-4"></i>
@@ -69,20 +69,20 @@
         <!-- Terms & Conditions -->
         <div class="flex items-start">
             <input type="checkbox" name="terms" id="terms" value="1"
-                class="rounded border-slate-300 text-[#42517c] focus:ring-[#42517c]/20 focus:ring-offset-0 focus:outline-none w-4 h-4 cursor-pointer transition-all mt-1 flex-shrink-0"
+                class="rounded border-slate-300 text-primary focus:ring-primary/20 focus:ring-offset-0 focus:outline-none w-4 h-4 cursor-pointer transition-all mt-1 flex-shrink-0"
                 {{ old('terms') ? 'checked' : '' }}>
             <label for="terms" class="ms-2 text-sm text-slate-500 select-none cursor-pointer">
                 I agree to the
-                <a href="#" class="font-semibold text-[#42517c] hover:text-[#55699e] transition text-decoration-none font-display">Terms &amp; Conditions</a>
+                <a href="#" class="font-semibold text-primary hover:text-[#0049b8] transition text-decoration-none font-display">Terms &amp; Conditions</a>
                 and
-                <a href="#" class="font-semibold text-[#42517c] hover:text-[#55699e] transition text-decoration-none font-display">Privacy Policy</a>
+                <a href="#" class="font-semibold text-primary hover:text-[#0049b8] transition text-decoration-none font-display">Privacy Policy</a>
             </label>
         </div>
         <x-input-error :messages="$errors->get('terms')" class="mt-1.5" />
 
         <!-- Submit Button -->
         <div class="pt-2">
-            <button type="submit" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354268] hover:to-[#42517c] text-white font-semibold text-sm rounded-xl shadow-lg shadow-indigo-950/10 hover:shadow-indigo-950/20 active:scale-[0.98] transition-all duration-200 font-display">
+            <button type="submit" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-primary hover:bg-[#0049b8] text-white font-semibold text-sm rounded-lg transition-colors duration-200 font-display">
                 <span>{{ __('Register') }}</span>
                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </button>
@@ -91,7 +91,7 @@
         <!-- Login Link -->
         <div class="text-center text-sm text-slate-500 pt-4 border-t border-slate-100 font-display">
             Already registered? 
-            <a href="{{ route('login') }}" class="font-semibold text-[#42517c] hover:text-[#55699e] transition">
+            <a href="{{ route('login') }}" class="font-semibold text-primary hover:text-[#0049b8] transition">
                 Log In
             </a>
         </div>

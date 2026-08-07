@@ -6,7 +6,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/50 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="receipt" class="w-6 h-6"></i>
                     </div>
                     Transactions
@@ -60,7 +60,7 @@
                 <div class="absolute -top-10 -right-10 w-28 h-28 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#42517c] shadow-inner">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2] shadow-inner">
                             <i data-lucide="activity" class="w-5 h-5"></i>
                         </div>
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Transactions</span>
@@ -84,7 +84,7 @@
                            name="search" 
                            value="{{ request('search') }}" 
                            placeholder="Search by reference, description, amount, name, or email..." 
-                           class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm">
+                           class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm">
                     <div class="absolute left-4 top-3.5 text-slate-400">
                         <i data-lucide="search" class="w-4 h-4"></i>
                     </div>
@@ -92,7 +92,7 @@
 
                 <!-- Type Filter -->
                 <div class="w-full md:w-44">
-                    <select name="type" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                    <select name="type" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
                         <option value="">All Types</option>
                         <option value="credit" {{ request('type') == 'credit' ? 'selected' : '' }}>Credit</option>
                         <option value="debit" {{ request('type') == 'debit' ? 'selected' : '' }}>Debit</option>
@@ -105,7 +105,7 @@
 
                 <!-- Status Filter -->
                 <div class="w-full md:w-44">
-                    <select name="status" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-2 focus:ring-[#42517c]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                    <select name="status" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
                         <option value="">All Statuses</option>
                         <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
                         <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
@@ -115,7 +115,7 @@
 
                 <!-- Action Buttons -->
                 <div class="flex items-center gap-2">
-                    <button type="submit" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#42517c] hover:bg-[#42517c]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                    <button type="submit" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
                         <i data-lucide="filter" class="w-3.5 h-3.5"></i>
                         Filter
                     </button>
@@ -133,10 +133,10 @@
         <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-50 flex items-center justify-between">
                 <h3 class="font-bold text-slate-800 font-display flex items-center gap-2">
-                    <i data-lucide="receipt" class="w-4.5 h-4.5 text-[#42517c]"></i>
+                    <i data-lucide="receipt" class="w-4.5 h-4.5 text-[#0056D2]"></i>
                     All Transactions
                 </h3>
-                <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-indigo-50 text-[#42517c] border border-indigo-100/50 uppercase tracking-wider">
+                <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-indigo-50 text-[#0056D2] border border-indigo-100/50 uppercase tracking-wider">
                     Super Admin Console
                 </span>
             </div>
@@ -199,7 +199,7 @@
                                 </td>
                                 <td class="py-4 px-6 hidden md:table-cell">
                                     @if($transaction->user)
-                                        <a href="{{ $userUrl }}" class="font-bold text-slate-800 hover:text-[#42517c] hover:underline block">
+                                        <a href="{{ $userUrl }}" class="font-bold text-slate-800 hover:text-[#0056D2] hover:underline block">
                                             {{ $userName }}
                                         </a>
                                         <span class="block text-[10px] text-slate-400 font-normal font-mono mt-0.5">{{ $userEmail }}</span>
@@ -290,7 +290,7 @@
                 <!-- Modal Header -->
                 <div class="py-4 px-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#42517c] border border-indigo-100/35 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/35 shadow-sm">
                             <i data-lucide="receipt" class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -350,7 +350,7 @@
                             <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">User / Account Info</span>
                             <div class="space-y-1.5">
                                 <div class="text-sm font-semibold text-slate-800">
-                                    Name: <a :href="selectedTx?.user_url" class="font-bold text-[#42517c] hover:underline" x-text="selectedTx?.user_name"></a>
+                                    Name: <a :href="selectedTx?.user_url" class="font-bold text-[#0056D2] hover:underline" x-text="selectedTx?.user_name"></a>
                                 </div>
                                 <div class="text-xs text-slate-600 font-mono">
                                     Email: <span x-text="selectedTx?.user_email"></span>

@@ -9,11 +9,11 @@
         <div class="relative overflow-hidden p-6 sm:p-8 bg-white border border-slate-100/80 rounded-3xl shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-grid-pattern">
             <div class="absolute -right-16 -top-16 w-36 h-36 rounded-full bg-slate-50 blur-2xl opacity-50"></div>
             <div class="relative z-10">
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#42517c] bg-clip-text text-transparent">Services Management</h1>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#0056D2] bg-clip-text text-transparent">Services Management</h1>
                 <p class="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Configure and manage system services, dynamic variant fields, and custom pricing rules.</p>
             </div>
             <div class="relative z-10 flex-shrink-0">
-                <button @click="addModalOpen = true" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#37446b] hover:to-[#42517c] text-white rounded-2xl shadow-md hover:shadow-lg shadow-[#42517c]/10 hover:shadow-[#42517c]/20 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200">
+                <button @click="addModalOpen = true" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     Add Service
                 </button>
@@ -110,7 +110,7 @@
                                name="search" 
                                value="{{ request('search') }}" 
                                placeholder="Search by service name or description..." 
-                               class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm placeholder:text-slate-400">
+                               class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm placeholder:text-slate-400">
                         <div class="absolute left-4 top-4 text-slate-400">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </div>
@@ -125,7 +125,7 @@
                     <!-- Status Filter -->
                     <div class="w-full lg:w-48">
                         <div class="relative">
-                            <select name="status" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
+                            <select name="status" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
                                 <option value="">All Statuses</option>
                                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active Only</option>
                                 <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive Only</option>
@@ -139,7 +139,7 @@
                     <!-- Sort Filter -->
                     <div class="w-full lg:w-48">
                         <div class="relative">
-                            <select name="sort" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
+                            <select name="sort" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
                                 <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Newest First</option>
                                 <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest First</option>
                             </select>
@@ -177,7 +177,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-750">
                         @forelse($services as $service)
-                            <tr class="group border-l-4 border-l-transparent hover:border-l-[#42517c] hover:bg-slate-50/40 transition-all duration-200">
+                            <tr class="group border-l-4 border-l-transparent hover:border-l-[#0056D2] hover:bg-slate-50/40 transition-all duration-200">
                                 <td class="py-4 px-6 text-center text-slate-400 text-xs font-semibold">
                                     {{ $services->firstItem() + $loop->index }}
                                 </td>
@@ -188,12 +188,12 @@
                                                 <img src="{{ $service->image }}" class="w-full h-full object-contain rounded-xl" alt="{{ $service->name }}">
                                             </div>
                                         @else
-                                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#42517c]/10 to-[#55699e]/5 text-[#42517c] border border-slate-150 flex items-center justify-center font-bold text-xs tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105 uppercase">
+                                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#0056D2]/10 to-[#0049b8]/5 text-[#0056D2] border border-slate-150 flex items-center justify-center font-bold text-xs tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105 uppercase">
                                                 {{ strtoupper(substr($service->name, 0, 2)) }}
                                             </div>
                                         @endif
                                         <div>
-                                            <a href="{{ route('admin.services.show', $service) }}" class="block text-slate-800 font-extrabold font-display hover:text-[#42517c] transition-colors text-sm sm:text-base leading-tight">{{ $service->name }}</a>
+                                            <a href="{{ route('admin.services.show', $service) }}" class="block text-slate-800 font-extrabold font-display hover:text-[#0056D2] transition-colors text-sm sm:text-base leading-tight">{{ $service->name }}</a>
                                             <span class="block text-[11px] text-slate-400 mt-1 truncate max-w-xs font-normal leading-normal">{{ $service->description ?? 'No description provided' }}</span>
                                         </div>
                                     </div>
@@ -233,7 +233,7 @@
                                     <div class="flex items-center justify-end gap-2.5">
                                         <!-- Configure -->
                                         <a href="{{ route('admin.services.show', $service) }}" 
-                                           class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-[#42517c]/5 hover:bg-[#42517c] text-[#42517c] hover:text-white rounded-xl shadow-sm hover:shadow hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-150">
+                                           class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-[#0056D2]/5 hover:bg-[#0056D2] text-[#0056D2] hover:text-white rounded-xl shadow-sm hover:shadow hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-150">
                                             <i data-lucide="settings" class="w-3.5 h-3.5"></i>
                                             Configure
                                         </a>
@@ -323,10 +323,10 @@
                             <!-- Image Input -->
                             <div class="bg-slate-50/50 p-4 border border-dashed border-slate-200 rounded-2xl text-center hover:bg-slate-50/80 transition-colors">
                                 <div class="mx-auto w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 mb-3 shadow-sm overflow-hidden">
-                                    <i data-lucide="image" class="w-7 h-7 text-[#42517c]/65"></i>
+                                    <i data-lucide="image" class="w-7 h-7 text-[#0056D2]/65"></i>
                                 </div>
                                 <div class="text-xs text-slate-400 mb-2 font-medium">Select a service logo (PNG, JPG, max 2MB)</div>
-                                <label for="addImage" class="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-extrabold bg-white border border-slate-200 text-[#42517c] hover:bg-[#42517c] hover:text-white rounded-xl shadow-sm hover:shadow active:scale-[0.97] transition-all duration-200">
+                                <label for="addImage" class="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-extrabold bg-white border border-slate-200 text-[#0056D2] hover:bg-[#0056D2] hover:text-white rounded-xl shadow-sm hover:shadow active:scale-[0.97] transition-all duration-200">
                                     <i data-lucide="upload" class="w-3.5 h-3.5"></i>
                                     Choose Icon File
                                 </label>
@@ -340,13 +340,13 @@
                             <!-- Name -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Service Name</label>
-                                <input type="text" name="name" required placeholder="e.g., MTN VTU" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
+                                <input type="text" name="name" required placeholder="e.g., MTN VTU" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                             </div>
 
                             <!-- Description -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Description</label>
-                                <textarea name="description" rows="3" placeholder="Provide brief details about this service..." class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400"></textarea>
+                                <textarea name="description" rows="3" placeholder="Provide brief details about this service..." class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400"></textarea>
                             </div>
 
                             <!-- Status Toggle -->
@@ -366,7 +366,7 @@
                             <button type="button" @click="addModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-105 hover:bg-slate-200 text-slate-650 border border-slate-200 rounded-2xl transition-all duration-150">
                                 Cancel
                             </button>
-                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#37446b] hover:to-[#42517c] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
+                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
                                 Create Service
                             </button>
                         </div>
@@ -434,7 +434,7 @@
                                     </div>
                                 </div>
                                 <div class="text-xs text-slate-400 mb-2 font-medium">Select a new logo icon if you want to replace it</div>
-                                <label for="editImage" class="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-extrabold bg-white border border-slate-200 text-[#42517c] hover:bg-[#42517c] hover:text-white rounded-xl shadow-sm hover:shadow active:scale-[0.97] transition-all duration-200">
+                                <label for="editImage" class="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-extrabold bg-white border border-slate-200 text-[#0056D2] hover:bg-[#0056D2] hover:text-white rounded-xl shadow-sm hover:shadow active:scale-[0.97] transition-all duration-200">
                                     <i data-lucide="camera" class="w-3.5 h-3.5"></i>
                                     Browse Icon
                                 </label>
@@ -444,13 +444,13 @@
                             <!-- Name -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Service Name</label>
-                                <input type="text" name="name" :value="editService.name" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="text" name="name" :value="editService.name" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Description -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Description</label>
-                                <textarea name="description" rows="3" :value="editService.description" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200"></textarea>
+                                <textarea name="description" rows="3" :value="editService.description" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200"></textarea>
                             </div>
 
                             <!-- Status Toggle -->
@@ -470,7 +470,7 @@
                             <button type="button" @click="editModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-105 hover:bg-slate-200 text-slate-650 border border-slate-200 rounded-2xl transition-all duration-150">
                                 Cancel
                             </button>
-                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#37446b] hover:to-[#42517c] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
+                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
                                 Update Service
                             </button>
                         </div>
@@ -509,7 +509,7 @@
                 text: "Are you sure you want to perform this action?",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#42517c',
+                confirmButtonColor: '#0056D2',
                 cancelButtonColor: '#ef4444',
                 confirmButtonText: 'Yes, continue!',
                 cancelButtonText: 'Cancel'

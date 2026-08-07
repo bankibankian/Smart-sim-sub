@@ -30,7 +30,7 @@
         <!-- Back Link & Title -->
         <div class="space-y-4">
             <a href="{{ route('admin.manage.users') }}" 
-               class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#42517c] transition-colors duration-150">
+               class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#0056D2] transition-colors duration-150">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 Back to Users List
             </a>
@@ -38,7 +38,7 @@
             <!-- Hero User Info Profile -->
             <div class="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <!-- Background decoration -->
-                <div class="absolute right-0 top-0 w-64 h-64 bg-[#42517c]/2.5 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute right-0 top-0 w-64 h-64 bg-[#0056D2]/2.5 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 z-10">
                     <!-- Profile avatar status ring -->
@@ -50,7 +50,7 @@
                             @if ($user->profile_photo)
                                 <img src="{{ asset($user->profile_photo) }}" alt="Profile Photo" class="w-full h-full object-cover">
                             @else
-                                <div class="w-full h-full bg-gradient-to-br from-[#42517c] to-[#55699e] text-white flex items-center justify-center">
+                                <div class="w-full h-full bg-gradient-to-br from-[#0056D2] to-[#0049b8] text-white flex items-center justify-center">
                                     {{ substr($user->first_name, 0, 1) }}{{ substr($user->last_name, 0, 1) }}
                                 </div>
                             @endif
@@ -97,7 +97,7 @@
 
                     <div class="flex items-center gap-2">
                         <a href="{{ route('admin.manage.users.edit', $user) }}" 
-                           class="px-4 py-2.5 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#374368] hover:to-[#465785] text-white text-xs font-semibold rounded-xl shadow-md shadow-[#42517c]/10 transition-all duration-200 flex items-center gap-2">
+                           class="px-4 py-2.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#374368] hover:to-[#465785] text-white text-xs font-semibold rounded-xl shadow-md shadow-[#0056D2]/10 transition-all duration-200 flex items-center gap-2">
                             <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                             Edit Account
                         </a>
@@ -109,19 +109,19 @@
         <!-- Navigation Tabs -->
         <div class="bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 flex gap-1 max-w-md">
             <button @click="activeTab = 'overview'" 
-                    :class="activeTab === 'overview' ? 'bg-white text-[#42517c] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'" 
+                    :class="activeTab === 'overview' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'" 
                     class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
                 <i data-lucide="user" class="w-4 h-4"></i>
                 Overview & KYC
             </button>
             <button @click="activeTab = 'financials'" 
-                    :class="activeTab === 'financials' ? 'bg-white text-[#42517c] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'" 
+                    :class="activeTab === 'financials' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'" 
                     class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
                 <i data-lucide="wallet" class="w-4 h-4"></i>
                 Wallet & Bank
             </button>
             <button @click="activeTab = 'transactions'" 
-                    :class="activeTab === 'transactions' ? 'bg-white text-[#42517c] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'" 
+                    :class="activeTab === 'transactions' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'" 
                     class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
                 <i data-lucide="list" class="w-4 h-4"></i>
                 Ledger Logs
@@ -213,7 +213,7 @@
                                     <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Email Address</span>
                                     <span class="text-xs font-bold text-slate-700 truncate block">{{ $user->email }}</span>
                                 </div>
-                                <button @click="copy('{{ $user->email }}', 'Email Address')" class="text-slate-400 hover:text-[#42517c] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
+                                <button @click="copy('{{ $user->email }}', 'Email Address')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
                                     <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                 </button>
                             </div>
@@ -224,7 +224,7 @@
                                     <span class="text-xs font-bold text-slate-700">{{ $user->phone ?? 'N/A' }}</span>
                                 </div>
                                 @if ($user->phone)
-                                    <button @click="copy('{{ $user->phone }}', 'Phone Number')" class="text-slate-400 hover:text-[#42517c] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
+                                    <button @click="copy('{{ $user->phone }}', 'Phone Number')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
                                         <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                     </button>
                                 @endif
@@ -245,7 +245,7 @@
                                     <span class="text-xs font-bold text-slate-700 font-mono">{{ $user->referral_code ?? 'N/A' }}</span>
                                 </div>
                                 @if ($user->referral_code)
-                                    <button @click="copy('{{ $user->referral_code }}', 'Referral Code')" class="text-slate-400 hover:text-[#42517c] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
+                                    <button @click="copy('{{ $user->referral_code }}', 'Referral Code')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
                                         <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                     </button>
                                 @endif
@@ -270,7 +270,7 @@
                                     <span class="text-xs font-mono font-bold text-slate-700">{{ $user->bvn ?? 'Not Provided' }}</span>
                                 </div>
                                 @if ($user->bvn)
-                                    <button @click="copy('{{ $user->bvn }}', 'BVN')" class="text-slate-400 hover:text-[#42517c] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
+                                    <button @click="copy('{{ $user->bvn }}', 'BVN')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
                                         <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                     </button>
                                 @endif
@@ -282,7 +282,7 @@
                                     <span class="text-xs font-mono font-bold text-slate-700">{{ $user->nin ?? 'Not Provided' }}</span>
                                 </div>
                                 @if ($user->nin)
-                                    <button @click="copy('{{ $user->nin }}', 'NIN')" class="text-slate-400 hover:text-[#42517c] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
+                                    <button @click="copy('{{ $user->nin }}', 'NIN')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
                                         <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                     </button>
                                 @endif
@@ -348,7 +348,7 @@
                                     <span class="text-xs font-mono font-bold text-slate-700">{{ $user->cac_number ?? 'N/A' }}</span>
                                 </div>
                                 @if ($user->cac_number)
-                                    <button @click="copy('{{ $user->cac_number }}', 'CAC Number')" class="text-slate-400 hover:text-[#42517c] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
+                                    <button @click="copy('{{ $user->cac_number }}', 'CAC Number')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
                                         <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                     </button>
                                 @endif
@@ -356,7 +356,7 @@
                             <!-- Requested Role -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
                                 <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Requested Tier Role</span>
-                                <span class="text-xs font-bold text-[#42517c] uppercase tracking-wider">{{ $user->pending_role ?? 'N/A' }}</span>
+                                <span class="text-xs font-bold text-[#0056D2] uppercase tracking-wider">{{ $user->pending_role ?? 'N/A' }}</span>
                             </div>
                         </div>
                     </div>
@@ -381,7 +381,7 @@
                                     <span class="px-2.5 py-1 text-[10px] font-mono font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wider">
                                         {{ $user->wallet->wallet_number }}
                                     </span>
-                                    <button @click="copy('{{ $user->wallet->wallet_number }}', 'Wallet Account Number')" class="text-slate-400 hover:text-[#42517c] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
+                                    <button @click="copy('{{ $user->wallet->wallet_number }}', 'Wallet Account Number')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
                                         <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                     </button>
                                 </div>
@@ -393,7 +393,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                                 <!-- Virtual Debit Card representation -->
                                 <div class="sm:col-span-3 lg:col-span-1 relative overflow-hidden p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 text-white min-h-[170px] flex flex-col justify-between shadow-lg">
-                                    <div class="absolute right-0 top-0 w-32 h-32 bg-[#55699e]/10 rounded-full blur-2xl pointer-events-none"></div>
+                                    <div class="absolute right-0 top-0 w-32 h-32 bg-[#0049b8]/10 rounded-full blur-2xl pointer-events-none"></div>
                                     <div class="flex items-center justify-between">
                                         <span class="text-[9px] font-extrabold tracking-widest uppercase opacity-70">SmartSIM wallet</span>
                                         <i data-lucide="contactless" class="w-4 h-4 opacity-50"></i>
@@ -434,7 +434,7 @@
                                     </div>
                                     <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
                                         <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Currency Type</span>
-                                        <span class="text-sm font-extrabold text-[#42517c] uppercase tracking-wider">{{ $user->wallet->currency }}</span>
+                                        <span class="text-sm font-extrabold text-[#0056D2] uppercase tracking-wider">{{ $user->wallet->currency }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -547,7 +547,7 @@
                         @forelse ($user->virtualAccounts as $acc)
                             <div class="p-5 bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-150 rounded-2xl space-y-4 relative hover:shadow-md transition-all duration-200">
                                 <div class="flex items-center justify-between">
-                                    <span class="px-2.5 py-1 text-[9px] font-extrabold rounded-full bg-[#42517c]/10 text-[#42517c] uppercase tracking-wider">
+                                    <span class="px-2.5 py-1 text-[9px] font-extrabold rounded-full bg-[#0056D2]/10 text-[#0056D2] uppercase tracking-wider">
                                         {{ $acc->provider }}
                                     </span>
                                     @if ($acc->is_active)
@@ -571,7 +571,7 @@
                                             <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Account Number</span>
                                             <span class="text-sm font-mono font-bold text-slate-800 tracking-wider">{{ $acc->account_number }}</span>
                                         </div>
-                                        <button @click="copy('{{ $acc->account_number }}', 'Account Number')" class="text-slate-400 hover:text-[#42517c] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
+                                        <button @click="copy('{{ $acc->account_number }}', 'Account Number')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
                                             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                         </button>
                                     </div>

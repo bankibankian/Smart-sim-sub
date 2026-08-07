@@ -3,7 +3,7 @@
     <div class="mb-8">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden">
             <!-- Decorative Accent Gradients -->
-            <div class="absolute -top-24 -left-24 w-48 h-48 bg-[#42517c]/5 rounded-full blur-3xl"></div>
+            <div class="absolute -top-24 -left-24 w-48 h-48 bg-[#0056D2]/5 rounded-full blur-3xl"></div>
             <div class="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl"></div>
 
             <div class="flex items-center gap-5 relative z-10">
@@ -13,7 +13,7 @@
                              class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-4 border-slate-50 shadow-md" 
                              alt="Avatar">
                     @else
-                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[#42517c]/10 text-[#42517c] flex items-center justify-center font-bold text-3xl font-display border-4 border-slate-50 shadow-md">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[#0056D2]/10 text-[#0056D2] flex items-center justify-center font-bold text-3xl font-display border-4 border-slate-50 shadow-md">
                             {{ strtoupper(substr($user->first_name ?? $user->email, 0, 1)) }}
                         </div>
                     @endif
@@ -26,7 +26,7 @@
                         {{ $user->first_name }} {{ $user->last_name }}
                     </h1>
                     <div class="flex flex-wrap items-center gap-3 mt-1.5">
-                        <span class="px-3 py-0.5 text-[10px] font-bold bg-[#42517c]/10 text-[#42517c] rounded-full uppercase tracking-wider">
+                        <span class="px-3 py-0.5 text-[10px] font-bold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">
                             {{ $user->role }}
                         </span>
                         <span class="text-slate-300 text-xs">•</span>
@@ -41,7 +41,7 @@
             <div class="flex items-center gap-4 relative z-10">
                 <div class="bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl text-center md:text-right min-w-[150px]">
                     <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Wallet Balance</span>
-                    <span class="block text-xl font-extrabold text-[#42517c] font-display">
+                    <span class="block text-xl font-extrabold text-[#0056D2] font-display">
                         ₦{{ number_format($user->wallet->balance ?? 0.00, 2) }}
                     </span>
                 </div>
@@ -59,21 +59,21 @@
             <h3 class="px-3 mb-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Settings Menu</h3>
             
             <button @click="activeTab = 'profile'" 
-                    :class="activeTab === 'profile' ? 'bg-[#42517c] text-white shadow-lg shadow-[#42517c]/10' : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'" 
+                    :class="activeTab === 'profile' ? 'bg-[#0056D2] text-white shadow-lg shadow-[#0056D2]/10' : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'" 
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-200">
                 <i data-lucide="user" class="w-5 h-5"></i>
                 <span>Personal Profile</span>
             </button>
             
             <button @click="activeTab = 'security'" 
-                    :class="activeTab === 'security' ? 'bg-[#42517c] text-white shadow-lg shadow-[#42517c]/10' : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'" 
+                    :class="activeTab === 'security' ? 'bg-[#0056D2] text-white shadow-lg shadow-[#0056D2]/10' : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'" 
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-200">
                 <i data-lucide="shield" class="w-5 h-5"></i>
                 <span>Security & PIN</span>
             </button>
             
             <button @click="activeTab = 'upgrade'" 
-                    :class="activeTab === 'upgrade' ? 'bg-[#42517c] text-white shadow-lg shadow-[#42517c]/10' : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'" 
+                    :class="activeTab === 'upgrade' ? 'bg-[#0056D2] text-white shadow-lg shadow-[#0056D2]/10' : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'" 
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-200">
                 <i data-lucide="award" class="w-5 h-5"></i>
                 <span>Account Upgrade</span>
@@ -136,7 +136,7 @@
                                      class="w-24 h-24 rounded-3xl object-cover border-4 border-slate-50 shadow-md group-hover:opacity-80 transition-all duration-200" 
                                      alt="Avatar">
                             @else
-                                <div x-show="!photoPreview" class="w-24 h-24 rounded-3xl bg-[#42517c]/10 text-[#42517c] flex items-center justify-center font-bold text-3xl font-display border-4 border-slate-50 shadow-md group-hover:opacity-80 transition-all duration-200">
+                                <div x-show="!photoPreview" class="w-24 h-24 rounded-3xl bg-[#0056D2]/10 text-[#0056D2] flex items-center justify-center font-bold text-3xl font-display border-4 border-slate-50 shadow-md group-hover:opacity-80 transition-all duration-200">
                                     {{ strtoupper(substr($user->first_name ?? $user->email, 0, 1)) }}
                                 </div>
                             @endif
@@ -222,7 +222,7 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Gender Identification</label>
                         <select name="gender" 
-                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             <option value="" disabled selected>Select Gender</option>
                             <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
                             <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
@@ -232,7 +232,7 @@
 
                     <div class="flex justify-end pt-4">
                         <button type="submit" 
-                                class="px-6 py-3.5 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354268] hover:to-[#42517c] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                                class="px-6 py-3.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
                             Save Profile Changes
                         </button>
                     </div>
@@ -272,7 +272,7 @@
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Current Password</label>
                             <input type="password" 
                                    name="current_password" 
-                                   class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePassword->has('current_password') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                                   class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePassword->has('current_password') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                    required>
                         </div>
 
@@ -281,21 +281,21 @@
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">New Password</label>
                                 <input type="password" 
                                        name="password" 
-                                       class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePassword->has('password') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                                       class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePassword->has('password') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                        required>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Confirm New Password</label>
                                 <input type="password" 
                                        name="password_confirmation" 
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                        required>
                             </div>
                         </div>
 
                         <div class="flex justify-end pt-2">
                             <button type="submit" 
-                                    class="px-6 py-3.5 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354268] hover:to-[#42517c] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                                    class="px-6 py-3.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
                                 Update Login Password
                             </button>
                         </div>
@@ -345,7 +345,7 @@
                             <input type="password" 
                                    name="password" 
                                    placeholder="Enter password to authorise PIN update"
-                                   class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePin->has('password') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                                   class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePin->has('password') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                    required>
                         </div>
 
@@ -359,7 +359,7 @@
                                        pattern="[0-9]{5}" 
                                        inputmode="numeric"
                                        placeholder="5 digits"
-                                       class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePin->has('transaction_pin') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 tracking-[0.6em] text-center" 
+                                       class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePin->has('transaction_pin') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 tracking-[0.6em] text-center" 
                                        required>
                             </div>
                             <div>
@@ -371,7 +371,7 @@
                                        pattern="[0-9]{5}" 
                                        inputmode="numeric"
                                        placeholder="Repeat 5 digits"
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 tracking-[0.6em] text-center" 
+                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 tracking-[0.6em] text-center" 
                                        required>
                             </div>
                         </div>
@@ -382,7 +382,7 @@
 
                         <div class="flex justify-end pt-2">
                             <button type="submit" 
-                                    class="px-6 py-3.5 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354268] hover:to-[#42517c] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                                    class="px-6 py-3.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
                                 Save Transaction PIN
                             </button>
                         </div>
@@ -488,7 +488,7 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Account Tier</label>
                                 <select name="role" 
-                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                     <option value="" disabled selected>Select Tier </option>
                                     <option value="agent" {{ old('role', $user->pending_role ?? $user->role) == 'agent' ? 'selected' : '' }}>Agent (Sub-distributor/Reseller benefits)</option>
                                     <option value="partner" {{ old('role', $user->pending_role ?? $user->role) == 'partner' ? 'selected' : '' }}>Partner (Integrator APIs & custom values)</option>
@@ -499,7 +499,7 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Confirm Gender</label>
                                 <select name="gender" 
-                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                     <option value="" disabled selected>Select Gender</option>
                                     <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
                                     <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
@@ -517,7 +517,7 @@
                                        name="business_name" 
                                        value="{{ old('business_name', $user->business_name) }}" 
                                        placeholder="e.g. Smart Telecoms Ltd"
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                        required>
                             </div>
 
@@ -525,7 +525,7 @@
                                 <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Business Category Type</label>
                                     <select name="business_type" 
-                                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                         <option value="" disabled selected>Select Category</option>
                                         <option value="sole_proprietor" {{ old('business_type', $user->business_type) == 'sole_proprietor' ? 'selected' : '' }}>Sole Proprietorship</option>
                                         <option value="llc" {{ old('business_type', $user->business_type) == 'llc' ? 'selected' : '' }}>Limited Liability Company (LLC)</option>
@@ -539,7 +539,7 @@
                                            name="cac_number" 
                                            value="{{ old('cac_number', $user->cac_number) }}" 
                                            placeholder="e.g. RC-1234567"
-                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
+                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
                                            required>
                                 </div>
                             </div>
@@ -547,7 +547,7 @@
 
                         <div class="flex justify-end pt-4">
                             <button type="submit" 
-                                    class="px-6 py-3.5 bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#354268] hover:to-[#42517c] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                                    class="px-6 py-3.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
                                 Submit Upgrade Request
                             </button>
                         </div>

@@ -31,7 +31,7 @@
                 <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-[#42517c]/5 text-[#42517c] rounded-2xl flex items-center justify-center font-extrabold text-sm uppercase">
+                            <div class="w-12 h-12 bg-[#0056D2]/5 text-[#0056D2] rounded-2xl flex items-center justify-center font-extrabold text-sm uppercase">
                                 {{ substr($req->first_name, 0, 1) }}{{ substr($req->last_name, 0, 1) }}
                             </div>
                             <div>
@@ -42,7 +42,7 @@
 
                         <div class="flex items-center gap-2">
                             <span class="text-xs font-bold text-slate-400">Request:</span>
-                            <span class="px-3 py-1 text-[10px] font-extrabold bg-[#42517c]/10 text-[#42517c] rounded-full uppercase tracking-wider">
+                            <span class="px-3 py-1 text-[10px] font-extrabold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">
                                 {{ $req->role }}
                             </span>
                             <i data-lucide="arrow-right" class="w-4 h-4 text-slate-300"></i>

@@ -9,11 +9,11 @@
         <div class="relative overflow-hidden p-6 sm:p-8 bg-white border border-slate-100/80 rounded-3xl shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-grid-pattern">
             <div class="absolute -right-16 -top-16 w-36 h-36 rounded-full bg-slate-50 blur-2xl opacity-50"></div>
             <div class="relative z-10">
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#42517c] bg-clip-text text-transparent">SME Data Plans Management</h1>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#0056D2] bg-clip-text text-transparent">SME Data Plans Management</h1>
                 <p class="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Add, update, activate or disable SME and Gifting data subscription plans for all networks.</p>
             </div>
             <div class="relative z-10 flex-shrink-0">
-                <button @click="addModalOpen = true" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#37446b] hover:to-[#42517c] text-white rounded-2xl shadow-md hover:shadow-lg shadow-[#42517c]/10 hover:shadow-[#42517c]/20 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200">
+                <button @click="addModalOpen = true" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     Add New Plan
                 </button>
@@ -126,7 +126,7 @@
                                 name="search" 
                                 value="{{ request('search') }}" 
                                 placeholder="Search by Data ID or bundle size..." 
-                                class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm placeholder:text-slate-400">
+                                class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm placeholder:text-slate-400">
                         <div class="absolute left-4 top-4 text-slate-400">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </div>
@@ -135,7 +135,7 @@
                     <!-- Network Filter -->
                     <div class="w-full lg:w-48">
                         <div class="relative">
-                            <select name="network" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
+                            <select name="network" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
                                 <option value="">All Networks</option>
                                 <option value="MTN" {{ request('network') === 'MTN' ? 'selected' : '' }}>MTN</option>
                                 <option value="GLO" {{ request('network') === 'GLO' ? 'selected' : '' }}>GLO</option>
@@ -151,7 +151,7 @@
                     <!-- Status Filter -->
                     <div class="w-full lg:w-48">
                         <div class="relative">
-                            <select name="status" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
+                            <select name="status" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
                                 <option value="">All Statuses</option>
                                 <option value="enabled" {{ request('status') === 'enabled' ? 'selected' : '' }}>Enabled Only</option>
                                 <option value="disabled" {{ request('status') === 'disabled' ? 'selected' : '' }}>Disabled Only</option>
@@ -193,7 +193,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-750">
                         @forelse($plans as $plan)
-                            <tr class="group border-l-4 border-l-transparent hover:border-l-[#42517c] hover:bg-slate-50/40 transition-all duration-200">
+                            <tr class="group border-l-4 border-l-transparent hover:border-l-[#0056D2] hover:bg-slate-50/40 transition-all duration-200">
                                 <td class="py-4 px-6 text-center text-slate-400 text-xs font-semibold">
                                     {{ $plans->firstItem() + $loop->index }}
                                 </td>
@@ -348,14 +348,14 @@
                             <!-- Data ID -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Data ID (API Plan Code)</label>
-                                <input type="text" name="data_id" required placeholder="e.g., MTN_SME_1GB" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
+                                <input type="text" name="data_id" required placeholder="e.g., MTN_SME_1GB" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                             </div>
 
                             <!-- Network & Type -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Network</label>
-                                    <select name="network" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <select name="network" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                         <option value="MTN">MTN</option>
                                         <option value="GLO">GLO</option>
                                         <option value="AIRTEL">Airtel</option>
@@ -364,7 +364,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Plan Type</label>
-                                    <input type="text" name="plan_type" required placeholder="SME, GIFTING, etc" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
+                                    <input type="text" name="plan_type" required placeholder="SME, GIFTING, etc" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                                 </div>
                             </div>
 
@@ -372,11 +372,11 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Size</label>
-                                    <input type="text" name="size" required placeholder="e.g., 5GB SME" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
+                                    <input type="text" name="size" required placeholder="e.g., 5GB SME" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Validity (Days)</label>
-                                    <input type="text" name="validity" required placeholder="30" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
+                                    <input type="text" name="validity" required placeholder="30" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                                 </div>
                             </div>
 
@@ -384,19 +384,19 @@
                             <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Business Price (₦)</label>
-                                    <input type="number" step="0.01" name="business_price" required placeholder="7150.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="number" step="0.01" name="business_price" required placeholder="7150.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Personal Price (₦)</label>
-                                    <input type="number" step="0.01" name="personal_price" required placeholder="7500.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="number" step="0.01" name="personal_price" required placeholder="7500.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Agent Price (₦)</label>
-                                    <input type="number" step="0.01" name="agent_price" required placeholder="7200.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="number" step="0.01" name="agent_price" required placeholder="7200.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Partner Price (₦)</label>
-                                    <input type="number" step="0.01" name="partner_price" required placeholder="7300.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="number" step="0.01" name="partner_price" required placeholder="7300.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                             </div>
 
@@ -417,7 +417,7 @@
                             <button type="button" @click="addModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-105 hover:bg-slate-200 text-slate-650 border border-slate-200 rounded-2xl transition-all duration-150">
                                 Cancel
                             </button>
-                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#37446b] hover:to-[#42517c] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
+                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
                                 Create Plan
                             </button>
                         </div>
@@ -461,14 +461,14 @@
                             <!-- Data ID -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Data ID (API Plan Code)</label>
-                                <input type="text" name="data_id" :value="editPlan.data_id" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <input type="text" name="data_id" :value="editPlan.data_id" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Network & Type -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Network</label>
-                                    <select name="network" :value="editPlan.network" x-model="editPlan.network" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <select name="network" :value="editPlan.network" x-model="editPlan.network" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                         <option value="MTN">MTN</option>
                                         <option value="GLO">GLO</option>
                                         <option value="AIRTEL">Airtel</option>
@@ -477,7 +477,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Plan Type</label>
-                                    <input type="text" name="plan_type" :value="editPlan.plan_type" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="text" name="plan_type" :value="editPlan.plan_type" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                             </div>
 
@@ -485,11 +485,11 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Size</label>
-                                    <input type="text" name="size" :value="editPlan.size" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="text" name="size" :value="editPlan.size" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Validity (Days)</label>
-                                    <input type="text" name="validity" :value="editPlan.validity" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="text" name="validity" :value="editPlan.validity" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                             </div>
 
@@ -497,19 +497,19 @@
                             <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Business Price (₦)</label>
-                                    <input type="number" step="0.01" name="business_price" :value="editPlan.business_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="number" step="0.01" name="business_price" :value="editPlan.business_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Personal Price (₦)</label>
-                                    <input type="number" step="0.01" name="personal_price" :value="editPlan.personal_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="number" step="0.01" name="personal_price" :value="editPlan.personal_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Agent Price (₦)</label>
-                                    <input type="number" step="0.01" name="agent_price" :value="editPlan.agent_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="number" step="0.01" name="agent_price" :value="editPlan.agent_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Partner Price (₦)</label>
-                                    <input type="number" step="0.01" name="partner_price" :value="editPlan.partner_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#42517c] focus:ring-4 focus:ring-[#42517c]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <input type="number" step="0.01" name="partner_price" :value="editPlan.partner_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                             </div>
 
@@ -530,7 +530,7 @@
                             <button type="button" @click="editModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-105 hover:bg-slate-200 text-slate-650 border border-slate-200 rounded-2xl transition-all duration-150">
                                 Cancel
                             </button>
-                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#42517c] to-[#55699e] hover:from-[#37446b] hover:to-[#42517c] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
+                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
                                 Update Plan
                             </button>
                         </div>
@@ -552,7 +552,7 @@
                 text: "Do you want to save this SME Data Plan config?",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#42517c',
+                confirmButtonColor: '#0056D2',
                 cancelButtonColor: '#ef4444',
                 confirmButtonText: 'Yes, save it!',
                 cancelButtonText: 'Cancel'
