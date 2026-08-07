@@ -166,7 +166,7 @@
                 <!-- Service 1: Buy Airtime -->
                 <div class="col">
                     <a href="{{ route('airtime') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center w-10 h-10">
+                        <div class="p-2 rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
                             <i data-lucide="phone" class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -179,7 +179,7 @@
                 <!-- Service 2: Buy Data -->
                 <div class="col">
                     <a href="{{ route('buy-sme-data') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center w-10 h-10">
+                        <div class="p-2 rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
                             <i data-lucide="wifi" class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -192,7 +192,7 @@
                 <!-- Service 3: SIM Services -->
                 <div class="col">
                     <a href="{{ route('sims.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center w-10 h-10">
+                        <div class="p-2 rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
                             <i data-lucide="cpu" class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -205,7 +205,7 @@
                 <!-- Service 4: Withdrawal -->
                 <div class="col">
                     <a href="{{ route('withdraw') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center w-10 h-10">
+                        <div class="p-2 rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
                             <i data-lucide="banknote" class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -218,7 +218,7 @@
                 <!-- Service 5: P2P Transfer -->
                 <div class="col">
                     <a href="{{ route('transfer') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center w-10 h-10">
+                        <div class="p-2 rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
                             <i data-lucide="send" class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -231,7 +231,7 @@
                 <!-- Service 6: NIN -->
                 <div class="col">
                     <a href="{{ route('nin.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center w-10 h-10">
+                        <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
                             <i data-lucide="id-card" class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -244,7 +244,7 @@
                 <!-- Service 7: BVN -->
                 <div class="col">
                     <a href="{{ route('bvn.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center w-10 h-10">
+                        <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
                             <i data-lucide="id-card" class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -257,7 +257,7 @@
                 <!-- Service 8: NIN by Phone -->
                 <div class="col">
                     <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center w-10 h-10">
+                        <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
                             <i data-lucide="id-card" class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -270,7 +270,7 @@
                 <!-- Service 9: NIN by Demo -->
                 <div class="col">
                     <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center w-10 h-10">
+                        <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
                             <i data-lucide="id-card" class="w-5 h-5"></i>
                         </div>
                         <div>
