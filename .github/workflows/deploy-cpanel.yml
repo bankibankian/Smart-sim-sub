@@ -54,25 +54,37 @@ jobs:
       # have Node in the SSH PATH, so we build here and ship the finished
       # vendor/ and public/build/ directories over instead of building on
       # the server itself.
+      #
+      # IMPORTANT: this action (burnett01/rsync-deployments) has NO separate
+      # `exclude` input -- passing one is silently ignored (you just get an
+      # "Unexpected input" warning in the log). Exclusions MUST be rsync
+      # flags baked directly into `switches`, or they don't apply at all.
+      #
+      # We also deliberately do NOT pass --delete here. --delete makes rsync
+      # remove anything on the server that isn't present in this runner's
+      # checkout, which is only safe if every excluded path is 100% correct
+      # -- one missed pattern silently wipes files (this is exactly what
+      # deleted production .env and .git on the first version of this
+      # workflow). Without --delete, stale files are left behind instead of
+      # deleted, which is a far safer default failure mode. Only add
+      # --delete back if you specifically need it, and double-check the
+      # exclude list first.
       - name: Deploy files via rsync over SSH
         uses: burnett01/rsync-deployments@7.0.1
         with:
-          switches: -avzr --delete
-          # Never touch the server's real .env, storage contents, or git
-          # metadata. .env holds the live DB/API credentials and must be
-          # managed by hand on the server, not overwritten by CI.
-          exclude: >-
-            .git/
-            .github/
-            node_modules/
-            tests/
-            .env
-            .env.*
-            storage/app/
-            storage/framework/cache/
-            storage/framework/sessions/
-            storage/framework/views/
-            storage/logs/
+          switches: >-
+            -avzr
+            --exclude=.env
+            --exclude=.env.*
+            --exclude=.git/
+            --exclude=.github/
+            --exclude=node_modules/
+            --exclude=tests/
+            --exclude=storage/app/
+            --exclude=storage/framework/cache/
+            --exclude=storage/framework/sessions/
+            --exclude=storage/framework/views/
+            --exclude=storage/logs/
           path: ./
           remote_path: ${{ secrets.CPANEL_DEPLOY_PATH }}
           remote_host: ${{ secrets.CPANEL_SSH_HOST }}
