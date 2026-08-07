@@ -2,8 +2,7 @@
     <div class="max-w-2xl">
         <h2 class="text-3xl font-bold tracking-tight text-[var(--lp-text)] sm:text-4xl">Dedicated support</h2>
         <p class="mt-4 text-lg leading-8 text-[var(--lp-text-soft)]">
-            Have questions about account activation, data bundles, or bulk wholesale orders?
-            Our team is here to help daily.
+            Questions about activation, wallets, or wholesale orders? Our team is here daily.
         </p>
     </div>
 

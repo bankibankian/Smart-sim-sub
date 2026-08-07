@@ -103,4 +103,29 @@
         background-size: 200% 200%;
         animation: gradient-shift 6s ease infinite;
     }
+
+    /* Gentle continuous float for hero illustration elements */
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .animate-float {
+        animation: float 5s ease-in-out infinite;
+    }
+
+    .animate-float-slow {
+        animation: float 6.5s ease-in-out infinite;
+    }
+
+    /* Live-updating bar for the hero activity sparkline */
+    @keyframes bar-pulse {
+        0%, 100% { transform: scaleY(0.55); }
+        50% { transform: scaleY(1); }
+    }
+
+    .animate-bar-pulse {
+        animation: bar-pulse 2.2s ease-in-out infinite;
+        transform-origin: bottom;
+    }
 }

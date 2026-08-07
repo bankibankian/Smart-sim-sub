@@ -2,11 +2,11 @@
     $faqs = [
         [
             'q' => 'How fast is SIM activation?',
-            'a' => 'Activation is fully online. Register, verify your details, and your SIM plus welcome bonus are typically active in under 2 minutes — no paperwork or store visit required.',
+            'a' => 'Activation is fully online. Register, verify your details, and your SIM is typically active in under 2 minutes — no paperwork or store visit required.',
         ],
         [
-            'q' => 'What is included in the welcome bonus?',
-            'a' => 'Every new SIM ships with free activation data and an airtime credit. Exact amounts depend on the tier you choose — up to 100GB data and ₦15,000 airtime on the Ultimate SIM.',
+            'q' => 'What SIM types are available?',
+            'a' => 'POS, Camera, CCTV, Router, and GPS SIMs — each priced for the device it\'s built for. See the pricing section above for current rates.',
         ],
         [
             'q' => 'Can I become a wholesale distribution agent?',
