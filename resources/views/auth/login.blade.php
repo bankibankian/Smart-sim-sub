@@ -1,18 +1,16 @@
 <x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status class="mb-5" :status="session('status')" />
 
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold text-slate-900 font-display">Welcome Back</h1>
-        <p class="text-sm text-slate-500 mt-1">Sign in to your account.</p>
-    </div>
+    <header class="mb-8 text-center">
+        <h1 class="text-[26px] font-bold leading-tight tracking-[-0.025em] text-[#15253a]">Welcome Back</h1>
+        <p class="mt-2 text-[15px] text-[#526071]">Sign in to your account</p>
+    </header>
 
-    <form method="POST" action="{{ route('login') }}" class="space-y-5">
+    <form method="POST" action="{{ route('login') }}" class="space-y-[18px]">
         @csrf
 
-        <!-- Email Address -->
         <div>
-            <label for="email" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Email Address</label>
+            <label for="email" class="mb-2 block text-[14px] font-medium text-[#24344a]">Email</label>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                     <i data-lucide="mail" class="w-4 h-4"></i>
@@ -24,7 +22,6 @@
             <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
 
-        <!-- Password -->
         <div>
             <div class="flex justify-between items-center mb-2">
                 <label for="password" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider">Password</label>
@@ -46,7 +43,6 @@
                 </button>
             </div>
             <x-input-error :messages="$errors->get('password')" class="mt-1.5" />
-        </div>
 
         <!-- Remember Me -->
         <div class="flex items-center">
@@ -63,7 +59,6 @@
             </button>
         </div>
 
-        <!-- Registration Link -->
         @if (Route::has('register'))
             <div class="text-center text-sm text-slate-500 pt-4 border-t border-slate-100 font-display">
                 Don't have an account? 
@@ -75,17 +70,15 @@
     </form>
 
     <script>
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('password-toggle-icon');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.setAttribute('data-lucide', 'eye-off');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.setAttribute('data-lucide', 'eye');
-            }
+        document.getElementById('password-toggle')?.addEventListener('click', function () {
+            const input = document.getElementById('password');
+            const icon = document.getElementById('password-toggle-icon');
+            const isHidden = input.type === 'password';
+
+            input.type = isHidden ? 'text' : 'password';
+            icon.setAttribute('data-lucide', isHidden ? 'eye-off' : 'eye');
+            this.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
             lucide.createIcons();
-        }
+        });
     </script>
 </x-guest-layout>
