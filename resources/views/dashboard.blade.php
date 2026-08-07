@@ -380,7 +380,7 @@
                                         </rect>
 
                                         <!-- Day Labels -->
-                                        <text x="{{ $startX + 11 }}" y="132" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">
+                                        <text x="{{ $startX + 11 }}" y="132" fill="#64748b" font-size="11" font-weight="600" text-anchor="middle">
                                             {{ $day['day'] }}
                                         </text>
                                     @endforeach

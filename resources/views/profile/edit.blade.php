@@ -26,11 +26,11 @@
                         {{ $user->first_name }} {{ $user->last_name }}
                     </h1>
                     <div class="flex flex-wrap items-center gap-3 mt-1.5">
-                        <span class="px-3 py-0.5 text-[10px] font-bold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">
+                        <span class="px-3 py-0.5 text-xs font-bold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">
                             {{ $user->role }}
                         </span>
                         <span class="text-slate-300 text-xs">•</span>
-                        <span class="px-3 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider flex items-center gap-1">
+                        <span class="px-3 py-0.5 text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider flex items-center gap-1">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
                             Tier {{ $user->account_tier }} Verified
                         </span>
@@ -40,7 +40,7 @@
             
             <div class="flex items-center gap-4 relative z-10">
                 <div class="bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl text-center md:text-right min-w-[150px]">
-                    <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Wallet Balance</span>
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Wallet Balance</span>
                     <span class="block text-xl font-extrabold text-[#0056D2] font-display">
                         ₦{{ number_format($user->wallet->balance ?? 0.00, 2) }}
                     </span>
@@ -56,7 +56,7 @@
         
         <!-- Sidebar Navigation Options -->
         <div class="lg:col-span-1 space-y-2 bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
-            <h3 class="px-3 mb-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Settings Menu</h3>
+            <h3 class="px-3 mb-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Settings Menu</h3>
             
             <button @click="activeTab = 'profile'" 
                     :class="activeTab === 'profile' ? 'bg-[#0056D2] text-white shadow-lg shadow-[#0056D2]/10' : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'" 
@@ -311,15 +311,15 @@
                         </div>
                         <div class="shrink-0">
                             @if ($user->transaction_pin)
-                                <span class="px-3 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider flex items-center gap-1">
+                                <span class="px-3 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider flex items-center gap-1">
                                     <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                                     Active
                                 </span>
                                 @if ($user->pin_set_at)
-                                    <p class="text-[10px] text-slate-400 text-right mt-1">Last set {{ $user->pin_set_at->diffForHumans() }}</p>
+                                    <p class="text-xs text-slate-400 text-right mt-1">Last set {{ $user->pin_set_at->diffForHumans() }}</p>
                                 @endif
                             @else
-                                <span class="px-3 py-1 text-[10px] font-extrabold bg-amber-50 text-amber-600 border border-amber-100 rounded-full uppercase tracking-wider flex items-center gap-1">
+                                <span class="px-3 py-1 text-xs font-extrabold bg-amber-50 text-amber-600 border border-amber-100 rounded-full uppercase tracking-wider flex items-center gap-1">
                                     <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
                                     Not Set
                                 </span>

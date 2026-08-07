@@ -85,7 +85,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-bold text-slate-800 font-display">Instant Recharge</h3>
-                                    <span class="inline-block text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mt-0.5">Automated Delivery</span>
+                                    <span class="inline-block text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mt-0.5">Automated Delivery</span>
                                 </div>
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                                                  class="rounded-full w-9 h-9 object-contain shadow-sm border border-slate-100 mb-1" 
                                                  onerror="this.src='{{ asset('assets/images/apps/default.png') }}'">
                                             
-                                            <span class="text-[10px] font-bold text-slate-700">{{ $network['name'] }}</span>
+                                            <span class="text-xs font-bold text-slate-700">{{ $network['name'] }}</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -197,7 +197,7 @@
                     </div>
 
                     <div class="mt-8 border-t border-slate-100 pt-4 text-center">
-                        <span class="text-[10px] text-slate-400 font-semibold inline-flex items-center gap-1.5">
+                        <span class="text-xs text-slate-400 font-semibold inline-flex items-center gap-1.5">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
                             Secure 256-bit Encrypted Transaction
                         </span>
@@ -247,7 +247,7 @@
                     </div>
 
                     <div class="mt-8 border-t border-slate-100 pt-4 text-center">
-                        <span class="text-[10px] text-slate-400 font-semibold inline-flex items-center gap-1.5">
+                        <span class="text-xs text-slate-400 font-semibold inline-flex items-center gap-1.5">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
                             Protected by SmartSIM Multi-Factor Authentication
                         </span>

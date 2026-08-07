@@ -129,7 +129,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <h3 class="text-base font-bold text-slate-800 font-display">General Adjustment</h3>
-                        <span class="px-2 py-0.5 text-[9px] font-extrabold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">{{ $totalUsers }} users target</span>
+                        <span class="px-2 py-0.5 text-xs font-extrabold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">{{ $totalUsers }} users target</span>
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed font-semibold">Execute manual funding or debiting adjustments globally across all registered users in the database.</p>
                 </div>
@@ -214,16 +214,16 @@
                                     </div>
                                     <div>
                                         <span class="block text-xs font-bold text-slate-800" id="preview-name">User Name</span>
-                                        <span class="block text-[10px] text-slate-400" id="preview-email">user@example.com</span>
+                                        <span class="block text-xs text-slate-400" id="preview-email">user@example.com</span>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100">
                                     <div>
-                                        <span class="block text-[9px] font-bold text-slate-400 uppercase">Wallet ID</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase">Wallet ID</span>
                                         <span class="block text-xs font-semibold text-slate-700" id="preview-wallet">N/A</span>
                                     </div>
                                     <div>
-                                        <span class="block text-[9px] font-bold text-slate-400 uppercase">Current Balance</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase">Current Balance</span>
                                         <span class="block text-xs font-bold text-emerald-600" id="preview-balance">₦0.00</span>
                                     </div>
                                 </div>
@@ -332,7 +332,7 @@
                         <div>
                             <div class="flex items-center justify-between">
                                 <h2 class="text-lg font-bold text-slate-800 font-display">General / System-wide Adjustment</h2>
-                                <span class="px-2.5 py-1 text-[10px] font-extrabold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">
+                                <span class="px-2.5 py-1 text-xs font-extrabold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">
                                     {{ $totalUsers }} users target
                                 </span>
                             </div>
@@ -431,7 +431,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                             <th class="py-4 px-6">User</th>
                             <th class="py-4 px-6">Ref / ID</th>
                             <th class="py-4 px-6">Type</th>
@@ -453,7 +453,7 @@
                                             <span class="block text-slate-800 font-bold font-display text-xs">
                                                 {{ $tx->user ? $tx->user->first_name . ' ' . $tx->user->last_name : 'Deleted User' }}
                                             </span>
-                                            <span class="block text-[10px] text-slate-400">{{ $tx->user->email ?? 'N/A' }}</span>
+                                            <span class="block text-xs text-slate-400">{{ $tx->user->email ?? 'N/A' }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -462,11 +462,11 @@
                                 </td>
                                 <td class="py-4 px-6">
                                     @if ($tx->type === 'manual_credit')
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-[9px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
                                             Credit
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-[9px] font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
                                             Debit
                                         </span>
                                     @endif

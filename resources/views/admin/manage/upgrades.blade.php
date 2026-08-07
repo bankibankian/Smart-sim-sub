@@ -42,11 +42,11 @@
 
                         <div class="flex items-center gap-2">
                             <span class="text-xs font-bold text-slate-400">Request:</span>
-                            <span class="px-3 py-1 text-[10px] font-extrabold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">
+                            <span class="px-3 py-1 text-xs font-extrabold bg-[#0056D2]/10 text-[#0056D2] rounded-full uppercase tracking-wider">
                                 {{ $req->role }}
                             </span>
                             <i data-lucide="arrow-right" class="w-4 h-4 text-slate-300"></i>
-                            <span class="px-3 py-1 text-[10px] font-extrabold bg-indigo-500 text-white rounded-full uppercase tracking-wider">
+                            <span class="px-3 py-1 text-xs font-extrabold bg-indigo-500 text-white rounded-full uppercase tracking-wider">
                                 {{ $req->pending_role }}
                             </span>
                         </div>
@@ -55,21 +55,21 @@
                     <!-- Business Info Grid -->
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 p-5 bg-slate-50 rounded-2xl border border-slate-100/50">
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Business Name</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Business Name</span>
                             <span class="text-sm font-bold text-slate-700">{{ $req->business_name }}</span>
                         </div>
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Business Type</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Business Type</span>
                             <span class="text-sm font-bold text-slate-700 capitalize">{{ str_replace('_', ' ', $req->business_type) }}</span>
                         </div>
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">CAC Registration No.</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">CAC Registration No.</span>
                             <span class="text-sm font-bold text-slate-700">{{ $req->cac_number }}</span>
                         </div>
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Gender / Requested At</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Gender / Requested At</span>
                             <span class="text-sm font-bold text-slate-700 block capitalize">{{ $req->gender }}</span>
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">{{ $req->upgrade_requested_at ? $req->upgrade_requested_at->format('M d, Y h:i A') : 'No Date' }}</span>
+                            <span class="text-xs text-slate-400 mt-0.5 block">{{ $req->upgrade_requested_at ? $req->upgrade_requested_at->format('M d, Y h:i A') : 'No Date' }}</span>
                         </div>
                     </div>
 
@@ -106,7 +106,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                            <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                                 <th class="py-4 px-6">User</th>
                                 <th class="py-4 px-6">Business Name</th>
                                 <th class="py-4 px-6">Requested Tier</th>
@@ -119,14 +119,14 @@
                                 <tr class="hover:bg-slate-50/30 transition-all duration-150">
                                     <td class="py-4 px-6">
                                         <span class="block text-slate-800 font-bold font-display">{{ $hist->first_name }} {{ $hist->last_name }}</span>
-                                        <span class="block text-[10px] text-slate-400">{{ $hist->email }}</span>
+                                        <span class="block text-xs text-slate-400">{{ $hist->email }}</span>
                                     </td>
                                     <td class="py-4 px-6">
                                         <span class="block text-slate-700 font-semibold">{{ $hist->business_name ?? 'N/A' }}</span>
-                                        <span class="block text-[10px] text-slate-400">{{ $hist->cac_number ?? 'N/A' }}</span>
+                                        <span class="block text-xs text-slate-400">{{ $hist->cac_number ?? 'N/A' }}</span>
                                     </td>
                                     <td class="py-4 px-6">
-                                        <span class="px-2.5 py-0.5 text-[9px] font-extrabold rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
+                                        <span class="px-2.5 py-0.5 text-xs font-extrabold rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
                                             {{ $hist->pending_role ?? $hist->role }}
                                         </span>
                                     </td>
@@ -135,11 +135,11 @@
                                     </td>
                                     <td class="py-4 px-6 text-right">
                                         @if ($hist->upgrade_status === 'approved')
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
                                                 Approved
                                             </span>
                                         @elseif ($hist->upgrade_status === 'rejected')
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
                                                 Rejected
                                             </span>
                                         @endif

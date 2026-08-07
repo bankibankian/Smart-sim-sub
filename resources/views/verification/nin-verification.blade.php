@@ -31,7 +31,7 @@
                                     <p class="text-xs text-slate-200 mt-0.5">Perform instant national identity query.</p>
                                 </div>
                             </div>
-                            <span class="text-[10px] font-bold text-primary bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            <span class="text-xs font-bold text-primary bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">
                                 Instant
                             </span>
                         </div>
@@ -80,7 +80,7 @@
                             <form method="POST" action="{{ route('nin.verification.store') }}" class="space-y-6 m-0">
                                 @csrf
                                 <div class="space-y-1.5 text-start">
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">NIN Number <span class="text-rose-500">*</span></label>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">NIN Number <span class="text-rose-500">*</span></label>
                                     <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-sm font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all text-center tracking-widest font-display" 
                                         name="number_nin" type="text"
                                         placeholder="Enter 11 Digit NIN" maxlength="11" minlength="11" pattern="[0-9]{11}"
@@ -93,13 +93,13 @@
                                             <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                                                 <i data-lucide="tag" class="w-4 h-4"></i>
                                             </div>
-                                            <span class="text-xs font-bold text-slate-750">Service Fee</span>
+                                            <span class="text-xs font-bold text-slate-800">Service Fee</span>
                                         </div>
                                         <span class="text-base font-extrabold font-display text-[#0056D2]">₦{{ number_format($verificationPrice ?? 0, 2) }}</span>
                                     </div>
                                     <div class="flex justify-between items-center text-[11px] px-1">
-                                        <span class="text-slate-450 font-medium">Your current balance:</span>
-                                        <span class="font-bold text-slate-650">
+                                        <span class="text-slate-500 font-medium">Your current balance:</span>
+                                        <span class="font-bold text-slate-700">
                                             Wallet: <strong class="text-emerald-600 font-display">₦{{ number_format($wallet->balance ?? 0, 2) }}</strong>
                                         </span>
                                     </div>
@@ -151,36 +151,36 @@
                                                     <img src="data:image/jpeg;base64,{{ $verificationData['photo'] }}"
                                                         alt="ID Photo" class="w-full h-full object-cover rounded-lg">
                                                 @else
-                                                    <div class="w-full h-full bg-slate-50 flex flex-col items-center justify-center text-slate-350 rounded-lg">
+                                                    <div class="w-full h-full bg-slate-50 flex flex-col items-center justify-center text-slate-400 rounded-lg">
                                                         <i data-lucide="user" class="w-10 h-10 mb-1"></i>
-                                                        <span class="text-[9px] font-bold uppercase">No Image</span>
+                                                        <span class="text-xs font-bold uppercase">No Image</span>
                                                     </div>
                                                 @endif
                                             </div>
                                         </div>
-                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-2.5">Passport Photograph</span>
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2.5">Passport Photograph</span>
                                     </div>
 
                                     {{-- Details List --}}
                                     <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 divide-y divide-slate-200/50">
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">NIN Number</span>
+                                            <span class="text-slate-500 font-medium">NIN Number</span>
                                             <span class="font-bold text-[#0056D2] font-display tracking-wider">{{ $verificationData['nin'] ?? 'N/A' }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">First Name</span>
+                                            <span class="text-slate-500 font-medium">First Name</span>
                                             <span class="font-semibold text-slate-800">{{ $verificationData['firstName'] ?? 'N/A' }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Last Name</span>
+                                            <span class="text-slate-500 font-medium">Last Name</span>
                                             <span class="font-semibold text-slate-800">{{ $verificationData['surname'] ?? 'N/A' }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Middle Name</span>
+                                            <span class="text-slate-500 font-medium">Middle Name</span>
                                             <span class="font-semibold text-slate-800">{{ $verificationData['middleName'] ?? 'N/A' }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Date of Birth</span>
+                                            <span class="text-slate-500 font-medium">Date of Birth</span>
                                             <span class="font-semibold text-slate-800">
                                                 {{ !empty($verificationData['birthDate'])
                                                     ? \Carbon\Carbon::parse($verificationData['birthDate'])->format('d M, Y')
@@ -188,11 +188,11 @@
                                             </span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Gender</span>
+                                            <span class="text-slate-500 font-medium">Gender</span>
                                             <span class="font-semibold text-slate-800">{{ ucfirst($verificationData['gender'] ?? 'N/A') }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Phone</span>
+                                            <span class="text-slate-500 font-medium">Phone</span>
                                             <span class="font-semibold text-slate-800">{{ $verificationData['telephoneNo'] ?? 'N/A' }}</span>
                                         </div>
                                     </div>
@@ -207,7 +207,7 @@
                                                             class="w-100 flex flex-col items-center justify-center p-2.5 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/60 text-slate-700 rounded-xl transition duration-200 font-display space-y-1">
                                                         <i data-lucide="file-text" class="w-4 h-4 text-slate-500"></i>
                                                         <span class="text-[11px] font-bold mt-1">Regular</span>
-                                                        <span class="text-[9px] font-bold text-slate-400">₦{{ number_format($regularSlipPrice ?? 0, 2) }}</span>
+                                                        <span class="text-xs font-bold text-slate-400">₦{{ number_format($regularSlipPrice ?? 0, 2) }}</span>
                                                     </button>
                                                 </div>
                                                 <div class="col-6 col-sm-3">
@@ -215,7 +215,7 @@
                                                             class="w-100 flex flex-col items-center justify-center p-2.5 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/60 text-slate-700 rounded-xl transition duration-200 font-display space-y-1">
                                                         <i data-lucide="file-check" class="w-4 h-4 text-slate-500"></i>
                                                         <span class="text-[11px] font-bold mt-1">Standard</span>
-                                                        <span class="text-[9px] font-bold text-slate-400">₦{{ number_format($standardSlipPrice ?? 0, 2) }}</span>
+                                                        <span class="text-xs font-bold text-slate-400">₦{{ number_format($standardSlipPrice ?? 0, 2) }}</span>
                                                     </button>
                                                 </div>
                                                 <div class="col-6 col-sm-3">
@@ -223,7 +223,7 @@
                                                             class="w-100 flex flex-col items-center justify-center p-2.5 bg-primary/10 hover:bg-primary/15 border border-primary/20 text-primary rounded-xl transition duration-200 font-display space-y-1">
                                                         <i data-lucide="award" class="w-4 h-4 text-[#0056D2]"></i>
                                                         <span class="text-[11px] font-bold mt-1">Premium</span>
-                                                        <span class="text-[9px] font-bold text-primary/70">₦{{ number_format($premiumSlipPrice ?? 0, 2) }}</span>
+                                                        <span class="text-xs font-bold text-primary/70">₦{{ number_format($premiumSlipPrice ?? 0, 2) }}</span>
                                                     </button>
                                                 </div>
                                                 <div class="col-6 col-sm-3">
@@ -231,7 +231,7 @@
                                                             class="w-100 flex flex-col items-center justify-center p-2.5 bg-amber-50 hover:bg-amber-100/80 border border-amber-200/50 text-amber-700 rounded-xl transition duration-200 font-display space-y-1">
                                                         <i data-lucide="qr-code" class="w-4 h-4 text-amber-600"></i>
                                                         <span class="text-[11px] font-bold mt-1">VNIN</span>
-                                                        <span class="text-[9px] font-bold text-amber-650">₦{{ number_format($vninSlipPrice ?? 0, 2) }}</span>
+                                                        <span class="text-xs font-bold text-amber-700">₦{{ number_format($vninSlipPrice ?? 0, 2) }}</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -247,7 +247,7 @@
                                     </div>
                                     <div class="space-y-1 max-w-xs mx-auto">
                                         <h4 class="font-bold text-slate-800 text-sm">Awaiting Verification</h4>
-                                        <p class="text-xs text-slate-450 leading-relaxed">
+                                        <p class="text-xs text-slate-500 leading-relaxed">
                                             Enter details on the left and submit to view the verified national profile.
                                         </p>
                                     </div>

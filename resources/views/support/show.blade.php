@@ -79,12 +79,12 @@
                             </div>
                             <div>
                                 <h4 class="text-sm font-bold text-slate-800">Dedicated Support Agent</h4>
-                                <span class="text-[10px] text-slate-400 font-semibold block">Usually replies within minutes</span>
+                                <span class="text-xs text-slate-400 font-semibold block">Usually replies within minutes</span>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-1 bg-indigo-50 border border-indigo-100/50 rounded-lg text-[10px] font-bold text-[#0056D2] uppercase tracking-wider flex items-center gap-1.5">
+                            <span class="px-2.5 py-1 bg-indigo-50 border border-indigo-100/50 rounded-lg text-xs font-bold text-[#0056D2] uppercase tracking-wider flex items-center gap-1.5">
                                 <i data-lucide="tag" class="w-3 h-3"></i>
                                 {{ $ticket->category }}
                             </span>
@@ -99,7 +99,7 @@
                             @php $msgDate = $msg->created_at->format('F d, Y'); @endphp
                             @if($msgDate !== $lastDate)
                                 <div class="flex justify-center my-4">
-                                    <span class="px-3.5 py-1 bg-slate-100/80 text-slate-500 text-[10px] font-extrabold rounded-full uppercase tracking-wider border border-slate-200/30 shadow-sm">
+                                    <span class="px-3.5 py-1 bg-slate-100/80 text-slate-500 text-xs font-extrabold rounded-full uppercase tracking-wider border border-slate-200/30 shadow-sm">
                                         {{ $msg->created_at->isToday() ? 'Today' : ($msg->created_at->isYesterday() ? 'Yesterday' : $msgDate) }}
                                     </span>
                                 </div>
@@ -117,9 +117,9 @@
                                             {{ $msg->message }}
                                         </div>
                                         <div class="flex items-center gap-1.5 pl-1">
-                                            <span class="text-[9px] font-bold text-slate-400">Agent</span>
-                                            <span class="text-[9px] text-slate-300 font-semibold">•</span>
-                                            <span class="text-[9px] text-slate-400 font-semibold">
+                                            <span class="text-xs font-bold text-slate-400">Agent</span>
+                                            <span class="text-xs text-slate-300 font-semibold">•</span>
+                                            <span class="text-xs text-slate-400 font-semibold">
                                                 {{ $msg->created_at->format('h:i A') }}
                                             </span>
                                         </div>
@@ -135,7 +135,7 @@
                                         <div class="bg-gradient-to-br from-[#0056D2] to-[#5a6eab] text-white rounded-3xl rounded-br-none px-4 py-3 shadow-md text-sm text-left whitespace-pre-wrap leading-relaxed">
                                             {{ $msg->message }}
                                         </div>
-                                        <span class="block text-[9px] text-slate-400 font-semibold pr-1">
+                                        <span class="block text-xs text-slate-400 font-semibold pr-1">
                                             Me • {{ $msg->created_at->format('h:i A') }}
                                         </span>
                                     </div>
@@ -161,7 +161,7 @@
                                           placeholder="Type your response to support here..."></textarea>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-[10px] text-slate-400 font-semibold flex items-center gap-1">
+                                <span class="text-xs text-slate-400 font-semibold flex items-center gap-1">
                                     <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
                                     Secure Support Thread
                                 </span>
@@ -190,7 +190,7 @@
                                 <i data-lucide="check" class="w-2.5 h-2.5 text-white"></i>
                             </span>
                             <span class="block text-xs font-bold text-slate-700">Ticket Created</span>
-                            <span class="text-[10px] text-slate-400 font-medium mt-0.5 block">{{ $ticket->created_at->format('M d, h:i A') }}</span>
+                            <span class="text-xs text-slate-400 font-medium mt-0.5 block">{{ $ticket->created_at->format('M d, h:i A') }}</span>
                         </div>
 
                         {{-- Step 2 --}}
@@ -204,7 +204,7 @@
                                 @endif
                             </span>
                             <span class="block text-xs font-bold {{ $reviewed ? 'text-slate-700' : 'text-slate-400' }}">Under Review</span>
-                            <span class="text-[10px] text-slate-400 font-medium mt-0.5 block">Assigned to official support team</span>
+                            <span class="text-xs text-slate-400 font-medium mt-0.5 block">Assigned to official support team</span>
                         </div>
 
                         {{-- Step 3 --}}
@@ -218,7 +218,7 @@
                                 @endif
                             </span>
                             <span class="block text-xs font-bold {{ $responded ? 'text-slate-700' : 'text-slate-400' }}">Agent Responded</span>
-                            <span class="text-[10px] text-slate-400 font-medium mt-0.5 block">Official resolution provided</span>
+                            <span class="text-xs text-slate-400 font-medium mt-0.5 block">Official resolution provided</span>
                         </div>
 
                         {{-- Step 4 --}}
@@ -232,7 +232,7 @@
                                 @endif
                             </span>
                             <span class="block text-xs font-bold {{ $closed ? 'text-slate-700' : 'text-slate-400' }}">Resolved / Closed</span>
-                            <span class="text-[10px] text-slate-400 font-medium mt-0.5 block">Ticket resolved and archived</span>
+                            <span class="text-xs text-slate-400 font-medium mt-0.5 block">Ticket resolved and archived</span>
                         </div>
                     </div>
                 </div>
@@ -243,12 +243,12 @@
 
                     <div class="space-y-4">
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Category</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Category</span>
                             <span class="font-bold text-sm text-slate-800 mt-0.5 block capitalize">{{ $ticket->category }}</span>
                         </div>
 
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Last Activity</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Last Activity</span>
                             <span class="font-semibold text-xs text-slate-600 mt-0.5 block">{{ $ticket->updated_at->format('M d, Y h:i A') }}</span>
                         </div>
                     </div>

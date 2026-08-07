@@ -58,7 +58,7 @@
         <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <!-- Total Plans -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-violet-600 via-indigo-650 to-indigo-800 glow-purple border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-600/20 group">
+            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-violet-600 via-indigo-700 to-indigo-800 glow-purple border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-600/20 group">
                 <div class="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
                 <div class="absolute right-4 top-4 w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"></div>
                 <div class="flex items-center justify-between relative z-10">
@@ -77,7 +77,7 @@
             </div>
 
             <!-- Active Plans -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-emerald-500 via-teal-550 to-teal-700 glow-emerald border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-550/20 group">
+            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-emerald-500 via-teal-550 to-teal-700 glow-emerald border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-600/20 group">
                 <div class="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
                 <div class="absolute right-4 top-4 w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"></div>
                 <div class="flex items-center justify-between relative z-10">
@@ -96,7 +96,7 @@
             </div>
 
             <!-- Disabled Plans -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 glow-rose border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-rose-550/20 group">
+            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 glow-rose border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-rose-600/20 group">
                 <div class="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
                 <div class="absolute right-4 top-4 w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"></div>
                 <div class="flex items-center justify-between relative z-10">
@@ -165,7 +165,7 @@
                     <!-- Reset Button -->
                     @if(request('search') || request('network') || request('status'))
                         <div class="flex items-center flex-shrink-0">
-                            <a href="{{ route('admin.sme-plans.index') }}" class="w-full lg:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-650 border border-slate-200/50 rounded-2xl transition-all duration-150 hover:shadow-sm">
+                            <a href="{{ route('admin.sme-plans.index') }}" class="w-full lg:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/50 rounded-2xl transition-all duration-150 hover:shadow-sm">
                                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                                 Reset
                             </a>
@@ -178,7 +178,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider bg-slate-50/30">
+                        <tr class="border-b border-slate-100 text-xs font-extrabold text-slate-400 uppercase tracking-wider bg-slate-50/30">
                             <th class="py-4 px-6 text-center w-16">S/N</th>
                             <th class="py-4 px-6">Plan Info</th>
                             <th class="py-4 px-6">Data ID</th>
@@ -191,7 +191,7 @@
                             <th class="py-4 px-6 text-right pr-8">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-750">
+                    <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-800">
                         @forelse($plans as $plan)
                             <tr class="group border-l-4 border-l-transparent hover:border-l-[#0056D2] hover:bg-slate-50/40 transition-all duration-200">
                                 <td class="py-4 px-6 text-center text-slate-400 text-xs font-semibold">
@@ -215,8 +215,8 @@
                                              onerror="this.src='{{ asset('assets/images/apps/default.png') }}'">
                                         <div>
                                             <span class="block text-slate-800 font-extrabold text-sm leading-tight">{{ $plan->size }}</span>
-                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-extrabold mt-1 rounded-full uppercase tracking-wider
-                                                {{ strtoupper($plan->plan_type) === 'SME' ? 'bg-indigo-55 bg-opacity-70 text-indigo-700 border border-indigo-100' : 'bg-amber-55 bg-opacity-70 text-amber-700 border border-amber-100' }}">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-extrabold mt-1 rounded-full uppercase tracking-wider
+                                                {{ strtoupper($plan->plan_type) === 'SME' ? 'bg-indigo-50 bg-opacity-70 text-indigo-700 border border-indigo-100' : 'bg-amber-50 bg-opacity-70 text-amber-700 border border-amber-100' }}">
                                                 {{ $plan->plan_type }}
                                             </span>
                                         </div>
@@ -242,7 +242,7 @@
                                 </td>
                                 <td class="py-4 px-6">
                                     @if($plan->status === 'enabled')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-150 rounded-full uppercase tracking-wider whitespace-nowrap">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full uppercase tracking-wider whitespace-nowrap">
                                             <span class="relative flex h-2 w-2">
                                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -250,7 +250,7 @@
                                             Active
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-500 border border-rose-150 rounded-full uppercase tracking-wider whitespace-nowrap">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-rose-50 text-rose-500 border border-rose-200 rounded-full uppercase tracking-wider whitespace-nowrap">
                                             <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
                                             Disabled
                                         </span>
@@ -347,14 +347,14 @@
                         <div class="space-y-4 max-h-[60vh] overflow-y-auto px-1">
                             <!-- Data ID -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Data ID (API Plan Code)</label>
+                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Data ID (API Plan Code)</label>
                                 <input type="text" name="data_id" required placeholder="e.g., MTN_SME_1GB" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                             </div>
 
                             <!-- Network & Type -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Network</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Network</label>
                                     <select name="network" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                         <option value="MTN">MTN</option>
                                         <option value="GLO">GLO</option>
@@ -363,7 +363,7 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Plan Type</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Plan Type</label>
                                     <input type="text" name="plan_type" required placeholder="SME, GIFTING, etc" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                                 </div>
                             </div>
@@ -371,11 +371,11 @@
                             <!-- Size & Validity -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Size</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Size</label>
                                     <input type="text" name="size" required placeholder="e.g., 5GB SME" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Validity (Days)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Validity (Days)</label>
                                     <input type="text" name="validity" required placeholder="30" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                                 </div>
                             </div>
@@ -383,19 +383,19 @@
                             <!-- Prices Grid -->
                             <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Business Price (₦)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Business Price (₦)</label>
                                     <input type="number" step="0.01" name="business_price" required placeholder="7150.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Personal Price (₦)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Personal Price (₦)</label>
                                     <input type="number" step="0.01" name="personal_price" required placeholder="7500.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Agent Price (₦)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Agent Price (₦)</label>
                                     <input type="number" step="0.01" name="agent_price" required placeholder="7200.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Partner Price (₦)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Partner Price (₦)</label>
                                     <input type="number" step="0.01" name="partner_price" required placeholder="7300.00" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                             </div>
@@ -403,7 +403,7 @@
                             <!-- Status Toggle -->
                             <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200/65 rounded-2xl shadow-sm">
                                 <div>
-                                    <span class="block text-sm font-bold text-slate-850">Enabled Status</span>
+                                    <span class="block text-sm font-bold text-slate-900">Enabled Status</span>
                                     <span class="block text-xs text-slate-400 mt-0.5">Control availability of this data plan on frontend.</span>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
@@ -414,7 +414,7 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-5">
-                            <button type="button" @click="addModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-105 hover:bg-slate-200 text-slate-650 border border-slate-200 rounded-2xl transition-all duration-150">
+                            <button type="button" @click="addModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-2xl transition-all duration-150">
                                 Cancel
                             </button>
                             <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
@@ -460,14 +460,14 @@
                         <div class="space-y-4 max-h-[60vh] overflow-y-auto px-1">
                             <!-- Data ID -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Data ID (API Plan Code)</label>
+                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Data ID (API Plan Code)</label>
                                 <input type="text" name="data_id" :value="editPlan.data_id" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Network & Type -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Network</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Network</label>
                                     <select name="network" :value="editPlan.network" x-model="editPlan.network" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                         <option value="MTN">MTN</option>
                                         <option value="GLO">GLO</option>
@@ -476,7 +476,7 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Plan Type</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Plan Type</label>
                                     <input type="text" name="plan_type" :value="editPlan.plan_type" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                             </div>
@@ -484,11 +484,11 @@
                             <!-- Size & Validity -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Size</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Size</label>
                                     <input type="text" name="size" :value="editPlan.size" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Validity (Days)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Validity (Days)</label>
                                     <input type="text" name="validity" :value="editPlan.validity" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                             </div>
@@ -496,19 +496,19 @@
                             <!-- Prices Grid -->
                             <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Business Price (₦)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Business Price (₦)</label>
                                     <input type="number" step="0.01" name="business_price" :value="editPlan.business_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Personal Price (₦)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Personal Price (₦)</label>
                                     <input type="number" step="0.01" name="personal_price" :value="editPlan.personal_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Agent Price (₦)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Agent Price (₦)</label>
                                     <input type="number" step="0.01" name="agent_price" :value="editPlan.agent_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Partner Price (₦)</label>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Partner Price (₦)</label>
                                     <input type="number" step="0.01" name="partner_price" :value="editPlan.partner_price" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                                 </div>
                             </div>
@@ -516,7 +516,7 @@
                             <!-- Status Toggle -->
                             <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200/65 rounded-2xl shadow-sm">
                                 <div>
-                                    <span class="block text-sm font-bold text-slate-850">Enabled Status</span>
+                                    <span class="block text-sm font-bold text-slate-900">Enabled Status</span>
                                     <span class="block text-xs text-slate-400 mt-0.5">Control availability of this data plan on frontend.</span>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
@@ -527,7 +527,7 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-5">
-                            <button type="button" @click="editModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-105 hover:bg-slate-200 text-slate-650 border border-slate-200 rounded-2xl transition-all duration-150">
+                            <button type="button" @click="editModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-2xl transition-all duration-150">
                                 Cancel
                             </button>
                             <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">

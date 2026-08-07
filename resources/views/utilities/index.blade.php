@@ -138,7 +138,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-bold text-slate-800 font-display">Instant Recharge</h3>
-                                    <span class="inline-block text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mt-0.5">Zero Fee</span>
+                                    <span class="inline-block text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mt-0.5">Zero Fee</span>
                                 </div>
                             </div>
                         </div>
@@ -188,7 +188,7 @@
                                                  class="rounded-full w-9 h-9 object-contain shadow-sm border border-slate-100 mb-1" 
                                                  onerror="this.src='{{ asset('assets/images/apps/default.png') }}'">
                                             
-                                            <span class="text-[10px] font-bold text-slate-700">{{ $network['name'] }}</span>
+                                            <span class="text-xs font-bold text-slate-700">{{ $network['name'] }}</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -220,7 +220,7 @@
 
                                 <div id="amount_in_words" class="text-xs font-bold text-[#0056D2] text-center hidden italic mt-1.5"></div>
 
-                                <div class="flex justify-between text-[10px] text-slate-400 font-semibold px-1">
+                                <div class="flex justify-between text-xs text-slate-400 font-semibold px-1">
                                     <span>Min: ₦50.00</span>
                                     <span>Max: ₦5,000.00</span>
                                 </div>
@@ -249,7 +249,7 @@
                     </div>
 
                     <div class="mt-8 border-t border-slate-100 pt-4 text-center">
-                        <span class="text-[10px] text-slate-400 font-semibold inline-flex items-center gap-1.5">
+                        <span class="text-xs text-slate-400 font-semibold inline-flex items-center gap-1.5">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
                             Secure 256-bit Encrypted Transaction
                         </span>
@@ -297,7 +297,7 @@
                                                     <div class="flex items-center gap-2 mt-0.5">
                                                         <span class="text-xs text-slate-500 font-semibold">{{ $recipient['bank_name'] }}</span>
                                                         <span class="text-slate-300 text-xs">•</span>
-                                                        <span class="text-[10px] text-slate-400 font-semibold">{{ $recipient['date'] }}</span>
+                                                        <span class="text-xs text-slate-400 font-semibold">{{ $recipient['date'] }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -306,15 +306,15 @@
                                                 <span class="font-bold text-sm text-slate-800 block">₦{{ number_format($recipient['amount'], 2) }}</span>
                                                 <div class="mt-0.5">
                                                     @if($recipient['status'] === 'successful' || $recipient['status'] === 'completed')
-                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700">
                                                             Success
                                                         </span>
                                                     @elseif($recipient['status'] === 'failed')
-                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700">
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-700">
                                                             Failed
                                                         </span>
                                                     @else
-                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700">
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700">
                                                             Processing
                                                         </span>
                                                     @endif
@@ -339,7 +339,7 @@
                     </div>
 
                     <div class="mt-8 border-t border-slate-100 pt-4 text-center">
-                        <span class="text-[10px] text-slate-400 font-semibold inline-flex items-center gap-1.5">
+                        <span class="text-xs text-slate-400 font-semibold inline-flex items-center gap-1.5">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
                             Protected by SmartSIM Multi-Factor Authentication
                         </span>

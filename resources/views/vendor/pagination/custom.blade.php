@@ -85,7 +85,7 @@
                     Next
                 </a>
             @else
-                <span class="px-3 py-1.5 text-xs text-slate-350 bg-slate-50 border border-slate-100 rounded-xl cursor-not-allowed font-semibold">Next</span>
+                <span class="px-3 py-1.5 text-xs text-slate-400 bg-slate-50 border border-slate-100 rounded-xl cursor-not-allowed font-semibold">Next</span>
             @endif
         </nav>
     </div>

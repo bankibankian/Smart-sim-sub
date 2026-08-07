@@ -78,14 +78,14 @@
 
         <!-- Floating card 1 -->
         <div class="absolute -left-6 top-8 hidden w-44 rounded-xl border p-4 shadow-lg sm:block" style="border-color: var(--lp-border); background: var(--lp-surface);">
-            <p class="text-[10px] font-semibold uppercase tracking-wide text-primary">Data bonus</p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-primary">Data bonus</p>
             <p class="mt-1.5 text-sm font-semibold text-[var(--lp-text)]">100GB active data</p>
             <p class="text-xs text-[var(--lp-text-faint)]">Claimed successfully</p>
         </div>
 
         <!-- Floating card 2 -->
         <div class="absolute -bottom-6 -right-4 hidden w-44 rounded-xl border p-4 shadow-lg sm:block" style="border-color: var(--lp-border); background: var(--lp-surface);">
-            <p class="text-[10px] font-semibold uppercase tracking-wide text-vibrant">Cashback</p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-vibrant">Cashback</p>
             <p class="mt-1.5 text-sm font-semibold text-[var(--lp-text)]">Up to 10% off</p>
             <p class="text-xs text-[var(--lp-text-faint)]">On every data purchase</p>
         </div>

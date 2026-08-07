@@ -39,7 +39,7 @@
         @if($errors->any())
             <div class="p-4 bg-rose-50 border border-rose-100 text-rose-700 rounded-2xl flex flex-col gap-1.5 shadow-sm">
                 <div class="flex items-center gap-3">
-                    <i data-lucide="alert-circle" class="w-5 h-5 text-rose-550 flex-shrink-0 animate-pulse"></i>
+                    <i data-lucide="alert-circle" class="w-5 h-5 text-rose-600 flex-shrink-0 animate-pulse"></i>
                     <span class="text-sm font-extrabold uppercase tracking-wider">Validation Errors Found:</span>
                 </div>
                 <ul class="list-disc list-inside text-xs text-rose-600 mt-1 pl-8 font-semibold space-y-1">
@@ -54,7 +54,7 @@
         <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
             <div class="flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
                 @if($service->image)
-                    <div class="w-16 h-16 rounded-2xl border border-slate-150 overflow-hidden bg-slate-50 flex items-center justify-center p-2">
+                    <div class="w-16 h-16 rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex items-center justify-center p-2">
                         <img src="{{ $service->image }}" class="w-full h-full object-contain" alt="{{ $service->name }}">
                     </div>
                 @else
@@ -67,12 +67,12 @@
                     <p class="text-xs text-slate-400 mt-1 max-w-xl font-medium">{{ $service->description ?? 'No description provided' }}</p>
                     <div class="mt-3 flex items-center gap-2 justify-center md:justify-start">
                         @if($service->is_active)
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
                                 <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                                 Active
                             </span>
                         @else
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
                                 <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
                                 Inactive
                             </span>
@@ -100,7 +100,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                             <th class="py-4 px-6">S/N</th>
                             <th class="py-4 px-6">Variant Name</th>
                             <th class="py-4 px-6">Field Code</th>
@@ -126,12 +126,12 @@
                                 </td>
                                 <td class="py-4 px-6">
                                     @if($field->is_active)
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                                             Active
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
                                             Inactive
                                         </span>
@@ -201,7 +201,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                             <th class="py-4 px-6">S/N</th>
                             <th class="py-4 px-6">Target</th>
                             <th class="py-4 px-6">Linked Variant</th>
@@ -220,10 +220,10 @@
                                     @if($price->user_id)
                                         <div class="flex flex-col">
                                             <span class="font-bold text-slate-800">{{ $price->user->name ?? 'User Account' }}</span>
-                                            <span class="text-[10px] text-slate-400 font-semibold mt-0.5">{{ $price->user->email ?? 'No email' }}</span>
+                                            <span class="text-xs text-slate-400 font-semibold mt-0.5">{{ $price->user->email ?? 'No email' }}</span>
                                         </div>
                                     @else
-                                        <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 uppercase tracking-wider">
+                                        <span class="px-2.5 py-1 text-xs font-extrabold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 uppercase tracking-wider">
                                             Role: {{ $price->user_type }}
                                         </span>
                                     @endif
@@ -232,7 +232,7 @@
                                     @if($price->serviceField)
                                         <div class="flex flex-col">
                                             <span class="font-bold text-slate-800">{{ $price->serviceField->field_name }}</span>
-                                            <span class="text-[10px] text-slate-400 font-semibold mt-0.5">Code: {{ $price->serviceField->field_code }}</span>
+                                            <span class="text-xs text-slate-400 font-semibold mt-0.5">Code: {{ $price->serviceField->field_code }}</span>
                                         </div>
                                     @else
                                         <span class="text-slate-400 text-xs italic">All Variants</span>
@@ -340,7 +340,7 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="addFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-550 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <button type="button" @click="addFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 Cancel
                             </button>
                             <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
@@ -400,7 +400,7 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="editFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-550 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <button type="button" @click="editFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 Cancel
                             </button>
                             <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
@@ -443,10 +443,10 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Selection</label>
                                 <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
-                                    <button type="button" @click="addTarget = 'role'" :class="addTarget === 'role' ? 'bg-[#0056D2] text-white' : 'text-slate-650 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
+                                    <button type="button" @click="addTarget = 'role'" :class="addTarget === 'role' ? 'bg-[#0056D2] text-white' : 'text-slate-700 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
                                         Role Group
                                     </button>
-                                    <button type="button" @click="addTarget = 'user'" :class="addTarget === 'user' ? 'bg-[#0056D2] text-white' : 'text-slate-650 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
+                                    <button type="button" @click="addTarget = 'user'" :class="addTarget === 'user' ? 'bg-[#0056D2] text-white' : 'text-slate-700 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
                                         Specific User
                                     </button>
                                 </div>
@@ -492,7 +492,7 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="addPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-550 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <button type="button" @click="addPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 Cancel
                             </button>
                             <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
@@ -533,10 +533,10 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Selection</label>
                                 <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
-                                    <button type="button" @click="editPrice.price_target = 'role'" :class="editPrice.price_target === 'role' ? 'bg-[#0056D2] text-white' : 'text-slate-650 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
+                                    <button type="button" @click="editPrice.price_target = 'role'" :class="editPrice.price_target === 'role' ? 'bg-[#0056D2] text-white' : 'text-slate-700 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
                                         Role Group
                                     </button>
-                                    <button type="button" @click="editPrice.price_target = 'user'" :class="editPrice.price_target === 'user' ? 'bg-[#0056D2] text-white' : 'text-slate-650 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
+                                    <button type="button" @click="editPrice.price_target = 'user'" :class="editPrice.price_target === 'user' ? 'bg-[#0056D2] text-white' : 'text-slate-700 hover:bg-slate-200/50'" class="py-2 text-xs font-bold rounded-lg transition-all duration-150">
                                         Specific User
                                     </button>
                                 </div>
@@ -582,7 +582,7 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="editPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-550 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <button type="button" @click="editPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 Cancel
                             </button>
                             <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">

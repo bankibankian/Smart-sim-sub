@@ -158,7 +158,7 @@
                                         <i data-lucide="info" class="w-4 h-4 text-indigo-500 mb-1.5"></i>
                                         <div>
                                             <span class="block text-xs font-bold text-slate-700">General</span>
-                                            <span class="text-[9px] text-slate-400 font-medium">Inquiry / feedback</span>
+                                            <span class="text-xs text-slate-400 font-medium">Inquiry / feedback</span>
                                         </div>
                                     </div>
                                     <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
@@ -166,7 +166,7 @@
                                         <i data-lucide="cpu" class="w-4 h-4 text-emerald-500 mb-1.5"></i>
                                         <div>
                                             <span class="block text-xs font-bold text-slate-700">Technical</span>
-                                            <span class="text-[9px] text-slate-400 font-medium">App bugs / downtime</span>
+                                            <span class="text-xs text-slate-400 font-medium">App bugs / downtime</span>
                                         </div>
                                     </div>
                                     <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
@@ -174,7 +174,7 @@
                                         <i data-lucide="credit-card" class="w-4 h-4 text-rose-500 mb-1.5"></i>
                                         <div>
                                             <span class="block text-xs font-bold text-slate-700">Billing</span>
-                                            <span class="text-[9px] text-slate-400 font-medium">Funding / charges</span>
+                                            <span class="text-xs text-slate-400 font-medium">Funding / charges</span>
                                         </div>
                                     </div>
                                     <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
@@ -182,7 +182,7 @@
                                         <i data-lucide="arrow-up-circle" class="w-4 h-4 text-amber-500 mb-1.5"></i>
                                         <div>
                                             <span class="block text-xs font-bold text-slate-700">Upgrade</span>
-                                            <span class="text-[9px] text-slate-400 font-medium">Role verification</span>
+                                            <span class="text-xs text-slate-400 font-medium">Role verification</span>
                                         </div>
                                     </div>
                                 </div>
@@ -259,7 +259,7 @@
                                                 <div class="font-bold text-sm text-slate-800 truncate max-w-[150px]">
                                                     {{ $ticket->subject }}
                                                 </div>
-                                                <div class="text-[10px] font-semibold text-slate-400 mt-0.5">
+                                                <div class="text-xs font-semibold text-slate-400 mt-0.5">
                                                     ID: #{{ $ticket->id }} • {{ $ticket->created_at->format('M d, Y') }}
                                                 </div>
                                             </td>
@@ -267,12 +267,12 @@
                                                 {{ ucfirst($ticket->category) }}
                                             </td>
                                             <td class="py-3.5 px-4">
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $ticket->priority_badge }}">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold border {{ $ticket->priority_badge }}">
                                                     {{ ucfirst($ticket->priority) }}
                                                 </span>
                                             </td>
                                             <td class="py-3.5 px-4">
-                                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $ticket->status_badge }}">
+                                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-bold border {{ $ticket->status_badge }}">
                                                     <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
                                                     {{ ucfirst($ticket->status) }}
                                                 </span>

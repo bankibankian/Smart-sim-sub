@@ -132,7 +132,7 @@
                             <label for="add_numbers" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">SIM Numbers</label>
                             <textarea id="add_numbers" name="numbers" rows="6" required placeholder="08030000000&#10;08031111111&#10;08032222222"
                                       class="w-full py-2 px-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-800 font-semibold placeholder:font-normal placeholder:text-slate-400"></textarea>
-                            <p class="text-[10px] text-slate-400">Separate numbers by comma or new lines.</p>
+                            <p class="text-xs text-slate-400">Separate numbers by comma or new lines.</p>
                         </div>
 
                         <button type="submit" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition-all duration-200 flex items-center justify-center gap-2">
@@ -163,7 +163,7 @@
                                 <div class="space-y-1.5">
                                     <i data-lucide="file-up" class="w-8 h-8 text-slate-400 mx-auto"></i>
                                     <p class="text-xs font-semibold text-slate-600" id="excel-file-name">Click or drag Excel file here</p>
-                                    <p class="text-[10px] text-slate-400">Supports .xlsx, .xls, .csv up to 5MB</p>
+                                    <p class="text-xs text-slate-400">Supports .xlsx, .xls, .csv up to 5MB</p>
                                 </div>
                             </div>
                         </div>
@@ -211,17 +211,17 @@
                                     <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
                                         <td class="py-3">
                                             <span class="font-bold text-slate-700">{{ $req->user->first_name }} {{ $req->user->last_name }}</span>
-                                            <span class="block text-[10px] text-slate-400">{{ $req->user->role }}</span>
+                                            <span class="block text-xs text-slate-400">{{ $req->user->role }}</span>
                                         </td>
                                         <td class="py-3 font-semibold text-slate-800">{{ $req->number }}</td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $req->request_type === 'activation' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-[#0056D2]' }}">
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold {{ $req->request_type === 'activation' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-[#0056D2]' }}">
                                                 {{ $req->request_type }}
                                             </span>
                                         </td>
                                         <td class="py-3">
                                             <span class="font-medium text-slate-600 block">{{ $req->category }}</span>
-                                            <span class="text-[10px] text-slate-400 block uppercase">{{ $req->provider }}</span>
+                                            <span class="text-xs text-slate-400 block uppercase">{{ $req->provider }}</span>
                                         </td>
                                         <td class="py-3">
                                             <span class="font-bold text-slate-700">₦{{ number_format($req->amount, 2) }}</span>
@@ -284,17 +284,17 @@
                                     <tr class="border-b border-slate-50">
                                         <td class="py-3">
                                             <span class="font-bold text-slate-700">{{ $req->user->first_name }} {{ $req->user->last_name }}</span>
-                                            <span class="block text-[10px] text-slate-400">{{ $req->user->role }}</span>
+                                            <span class="block text-xs text-slate-400">{{ $req->user->role }}</span>
                                         </td>
                                         <td class="py-3 font-semibold text-slate-800">{{ $req->number }}</td>
                                         <td class="py-3 font-semibold capitalize">{{ $req->request_type }}</td>
                                         <td class="py-3 font-bold text-slate-700">₦{{ number_format($req->amount, 2) }}</td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $req->status === 'approved' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold {{ $req->status === 'approved' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
                                                 {{ $req->status }}
                                             </span>
                                             @if ($req->admin_notes)
-                                                <span class="block text-[9px] text-slate-400 italic mt-0.5">{{ $req->admin_notes }}</span>
+                                                <span class="block text-xs text-slate-400 italic mt-0.5">{{ $req->admin_notes }}</span>
                                             @endif
                                         </td>
                                         <td class="py-3 text-slate-400 font-medium">{{ $req->created_at->format('M d, Y H:i') }}</td>
@@ -452,16 +452,16 @@
                                                        @change="toggleSim({{ $sim->id }}, $event.target.checked)"
                                                        class="sim-checkbox rounded text-[#0056D2] focus:ring-[#0056D2]">
                                             @else
-                                                <input type="checkbox" disabled class="rounded bg-slate-50 border-slate-200 text-slate-350 cursor-not-allowed">
+                                                <input type="checkbox" disabled class="rounded bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed">
                                             @endif
                                         </td>
                                         <td class="py-3 font-bold text-slate-800">{{ $sim->number }}</td>
                                         <td class="py-3">
                                             <span class="font-semibold text-slate-700 block">{{ $sim->category }}</span>
-                                            <span class="text-[10px] text-slate-400 block uppercase">{{ $sim->provider }}</span>
+                                            <span class="text-xs text-slate-400 block uppercase">{{ $sim->provider }}</span>
                                         </td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase 
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase 
                                                 {{ $sim->status === 'active' ? 'bg-emerald-50 text-emerald-600' : ($sim->status === 'assigned' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-600') }}">
                                                 @if($sim->status === 'active')
                                                     ACTIVATED
@@ -475,7 +475,7 @@
                                         <td class="py-3">
                                             @if ($sim->user)
                                                 <span class="font-semibold text-slate-700">{{ $sim->user->first_name }} {{ $sim->user->last_name }}</span>
-                                                <span class="block text-[10px] text-slate-400 capitalize">{{ $sim->user->role }}</span>
+                                                <span class="block text-xs text-slate-400 capitalize">{{ $sim->user->role }}</span>
                                             @else
                                                 <span class="text-slate-400 font-semibold italic">None</span>
                                             @endif

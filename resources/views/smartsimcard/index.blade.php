@@ -60,7 +60,7 @@
                              </div>
                              <div>
                                  <h3 class="font-bold text-slate-800 font-display">Check Number Result</h3>
-                                 <p class="text-xs text-slate-400">Query for Number: <span class="font-bold text-slate-650">{{ request('number') }}</span></p>
+                                 <p class="text-xs text-slate-400">Query for Number: <span class="font-bold text-slate-700">{{ request('number') }}</span></p>
                              </div>
                          </div>
 
@@ -69,8 +69,8 @@
                          @else
                              <div class="space-y-3">
                                  <div class="flex justify-between items-center text-sm">
-                                     <span class="text-slate-450 font-semibold">SIM Status:</span>
-                                     <span class="font-bold uppercase px-2.5 py-0.5 rounded-full text-[10px] tracking-wider {{ $res['status'] === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-primary/10 text-primary' }}">
+                                     <span class="text-slate-500 font-semibold">SIM Status:</span>
+                                     <span class="font-bold uppercase px-2.5 py-0.5 rounded-full text-xs tracking-wider {{ $res['status'] === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-primary/10 text-primary' }}">
                                          @if($res['status'] === 'active')
                                              ACTIVATED
                                          @elseif($res['status'] === 'available')
@@ -81,11 +81,11 @@
                                      </span>
                                  </div>
                                  <div class="flex justify-between items-center text-sm">
-                                     <span class="text-slate-450 font-semibold">Category:</span>
+                                     <span class="text-slate-500 font-semibold">Category:</span>
                                      <span class="font-bold text-slate-700">{{ $res['category'] }}</span>
                                  </div>
                                  <div class="flex justify-between items-center text-sm">
-                                     <span class="text-slate-450 font-semibold">Provider:</span>
+                                     <span class="text-slate-500 font-semibold">Provider:</span>
                                      <span class="font-bold text-slate-700 uppercase">{{ $res['provider'] }}</span>
                                  </div>
 
@@ -159,7 +159,7 @@
                                 <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Activation Fee</span>
                                 <span id="activation-price-value" class="text-base font-extrabold text-primary font-display">₦0.00</span>
                             </div>
-                            <p class="text-[10px] text-slate-400">This amount will be debited from your wallet balance.</p>
+                            <p class="text-xs text-slate-400">This amount will be debited from your wallet balance.</p>
                         </div>
 
                         <button type="submit" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition-all duration-200 flex items-center justify-center gap-2">
@@ -321,10 +321,10 @@
                                         <td class="py-3 font-bold text-slate-800">{{ $sim->number }}</td>
                                         <td class="py-3">
                                             <span class="font-semibold text-slate-700 block">{{ $sim->category }}</span>
-                                            <span class="text-[10px] text-slate-400 block uppercase">{{ $sim->provider }}</span>
+                                            <span class="text-xs text-slate-400 block uppercase">{{ $sim->provider }}</span>
                                         </td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase 
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase 
                                                 {{ $sim->status === 'active' ? 'bg-emerald-50 text-emerald-600' : ($sim->status === 'assigned' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-600') }}">
                                                 @if($sim->status === 'active')
                                                     ACTIVATED
@@ -339,7 +339,7 @@
                                             <td class="py-3">
                                                 @if ($sim->user_id !== $sim->partner_id && $sim->user)
                                                     <span class="font-semibold text-slate-700">{{ $sim->user->first_name }} {{ $sim->user->last_name }}</span>
-                                                    <span class="block text-[10px] text-slate-400 capitalize">{{ $sim->user->role }}</span>
+                                                    <span class="block text-xs text-slate-400 capitalize">{{ $sim->user->role }}</span>
                                                 @else
                                                     <span class="text-slate-400 font-semibold italic">Owned by You</span>
                                                 @endif
@@ -378,11 +378,11 @@
                                                             document.body.appendChild(f);
                                                             f.submit();
                                                         }
-                                                    })" class="bg-primary hover:bg-[#0049b8] text-white font-bold px-2 py-1 rounded-lg font-display text-[10px] tracking-wide">
+                                                    })" class="bg-primary hover:bg-[#0049b8] text-white font-bold px-2 py-1 rounded-lg font-display text-xs tracking-wide">
                                                         Delegate
                                                     </button>
                                                 @else
-                                                    <span class="text-[10px] text-slate-400 font-semibold">Delegated</span>
+                                                    <span class="text-xs text-slate-400 font-semibold">Delegated</span>
                                                 @endif
                                             </td>
                                         @endif
@@ -420,16 +420,16 @@
                                         <td class="py-3 capitalize font-semibold text-slate-700">{{ $req->request_type }}</td>
                                         <td class="py-3">
                                             <span class="font-semibold text-slate-600 block">{{ $req->category }}</span>
-                                            <span class="text-[10px] text-slate-400 block uppercase">{{ $req->provider }}</span>
+                                            <span class="text-xs text-slate-400 block uppercase">{{ $req->provider }}</span>
                                         </td>
                                         <td class="py-3 font-bold text-slate-700">₦{{ number_format($req->amount, 2) }}</td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase
                                                 {{ $req->status === 'approved' ? 'bg-emerald-50 text-emerald-600' : ($req->status === 'pending' ? 'bg-amber-50 text-amber-600' : 'bg-rose-50 text-rose-600') }}">
                                                 {{ $req->status }}
                                             </span>
                                             @if ($req->admin_notes)
-                                                <span class="block text-[9px] text-slate-400 italic mt-0.5">{{ $req->admin_notes }}</span>
+                                                <span class="block text-xs text-slate-400 italic mt-0.5">{{ $req->admin_notes }}</span>
                                             @endif
                                         </td>
                                         <td class="py-3 text-slate-400 font-medium">{{ $req->created_at->format('M d, Y H:i') }}</td>

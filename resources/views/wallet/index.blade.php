@@ -213,12 +213,12 @@
                             <div class="bg-slate-50 border border-slate-100 rounded-lg p-5 space-y-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="space-y-1">
-                                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account Name</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Account Name</span>
                                         <span class="block text-xs font-bold text-slate-800">{{ $virtualAccount->account_name ?? $virtualAccount->accountName }}</span>
                                     </div>
 
                                     <div class="space-y-1">
-                                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bank Name</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Bank Name</span>
                                         <span class="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
                                             <i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-400"></i>
                                             {{ $virtualAccount->bank_name ?? $virtualAccount->bankName }}
@@ -227,12 +227,12 @@
                                 </div>
 
                                 <div class="border-t border-slate-200/60 pt-4 space-y-1" x-data="{ copied: false }">
-                                    <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account Number</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Account Number</span>
                                     <div class="flex items-center gap-3">
                                         <span class="text-2xl font-extrabold font-display text-[#0056D2] tracking-wide" x-ref="accNum">{{ $virtualAccount->account_number ?? $virtualAccount->accountNo }}</span>
                                         <button @click="navigator.clipboard.writeText($refs.accNum.innerText); copied = true; setTimeout(() => copied = false, 2000)" 
                                                 type="button" 
-                                                class="px-2.5 py-1.5 bg-white border border-slate-200 text-slate-500 hover:text-[#0056D2] rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-slate-50 shadow-sm transition-all">
+                                                class="px-2.5 py-1.5 bg-white border border-slate-200 text-slate-500 hover:text-[#0056D2] rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-slate-50 shadow-sm transition-all">
                                             <i x-show="!copied" data-lucide="copy" class="w-3.5 h-3.5"></i>
                                             <i x-show="copied" data-lucide="check" class="w-3.5 h-3.5 text-emerald-500" style="display: none;"></i>
                                             <span x-text="copied ? 'Copied' : 'Copy'">Copy</span>
@@ -258,7 +258,7 @@
                                 <form method="POST" action="{{ route('virtual.account.create') }}" class="space-y-4">
                                     @csrf
                                     <div>
-                                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Full Name</label>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Full Name</label>
                                         <input type="text" name="name" 
                                                value="{{ auth()->user()->first_name }} {{ auth()->user()->last_name }} {{ auth()->user()->middle_name }}" 
                                                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
@@ -266,7 +266,7 @@
                                     </div>
                                     
                                     <div>
-                                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Phone Number</label>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Phone Number</label>
                                         <input type="tel" name="phone" 
                                                value="{{ auth()->user()->phone }}" 
                                                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
@@ -274,7 +274,7 @@
                                     </div>
 
                                     <div>
-                                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Bank Verification Number (BVN)</label>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Bank Verification Number (BVN)</label>
                                         <input type="text" name="bvn" 
                                                value="{{ old('bvn', auth()->user()->bvn) }}" 
                                                placeholder="Enter 11-digit BVN"
@@ -303,7 +303,7 @@
                     </div>
 
                     <!-- Card Footer -->
-                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-between text-[10px] text-slate-400 font-semibold">
+                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-between text-xs text-slate-400 font-semibold">
                         <div class="flex items-center gap-1.5">
                             <i data-lucide="lock" class="w-3.5 h-3.5"></i>
                             <span>PCI-DSS Compliant</span>

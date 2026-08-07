@@ -140,7 +140,7 @@
                             Filter
                         </button>
                         @if(request('search') || request('status') || request('role'))
-                            <a href="{{ route('admin.manage.users') }}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-650 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <a href="{{ route('admin.manage.users') }}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                                 Reset
                             </a>
@@ -153,7 +153,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                             <th class="py-4 px-6">Name</th>
                             <th class="py-4 px-6">Email / Phone</th>
                             <th class="py-4 px-6">Role</th>
@@ -177,31 +177,31 @@
                                 </td>
                                 <td class="py-4 px-6">
                                     <span class="block text-xs font-semibold text-slate-500">{{ $u->email }}</span>
-                                    <span class="block text-[10px] text-slate-400 mt-0.5">{{ $u->phone ?? 'No Phone' }}</span>
+                                    <span class="block text-xs text-slate-400 mt-0.5">{{ $u->phone ?? 'No Phone' }}</span>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
+                                    <span class="px-2.5 py-1 text-xs font-extrabold rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
                                         {{ $u->role }}
                                     </span>
                                 </td>
                                 <td class="py-4 px-6">
                                     @if ($u->status === 'active')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                                             Active
                                         </span>
                                     @elseif ($u->status === 'suspended')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-amber-50 text-amber-600 border border-amber-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-amber-50 text-amber-600 border border-amber-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
                                             Suspended
                                         </span>
                                     @elseif ($u->status === 'inactive')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-slate-100 text-slate-500 border border-slate-200 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-slate-100 text-slate-500 border border-slate-200 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-slate-400 rounded-full"></span>
                                             Inactive
                                         </span>
                                     @elseif ($u->status === 'banned')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
                                             Banned
                                         </span>

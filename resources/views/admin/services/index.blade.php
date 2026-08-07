@@ -42,7 +42,7 @@
         <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <!-- Total Services -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-violet-600 via-indigo-650 to-indigo-800 glow-purple border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-600/20 group">
+            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-violet-600 via-indigo-700 to-indigo-800 glow-purple border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-600/20 group">
                 <div class="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
                 <div class="absolute right-4 top-4 w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"></div>
                 <div class="flex items-center justify-between relative z-10">
@@ -61,7 +61,7 @@
             </div>
 
             <!-- Active Services -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-emerald-500 via-teal-550 to-teal-700 glow-emerald border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-550/20 group">
+            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-emerald-500 via-teal-550 to-teal-700 glow-emerald border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-600/20 group">
                 <div class="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
                 <div class="absolute right-4 top-4 w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"></div>
                 <div class="flex items-center justify-between relative z-10">
@@ -80,7 +80,7 @@
             </div>
 
             <!-- Inactive Services -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 glow-rose border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-rose-550/20 group">
+            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 glow-rose border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-rose-600/20 group">
                 <div class="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
                 <div class="absolute right-4 top-4 w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"></div>
                 <div class="flex items-center justify-between relative z-10">
@@ -165,7 +165,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider bg-slate-50/30">
+                        <tr class="border-b border-slate-100 text-xs font-extrabold text-slate-400 uppercase tracking-wider bg-slate-50/30">
                             <th class="py-4 px-6 text-center w-16">S/N</th>
                             <th class="py-4 px-6">Service Details</th>
                             <th class="py-4 px-6">Variants</th>
@@ -175,7 +175,7 @@
                             <th class="py-4 px-6 text-right pr-8">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-750">
+                    <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-800">
                         @forelse($services as $service)
                             <tr class="group border-l-4 border-l-transparent hover:border-l-[#0056D2] hover:bg-slate-50/40 transition-all duration-200">
                                 <td class="py-4 px-6 text-center text-slate-400 text-xs font-semibold">
@@ -188,7 +188,7 @@
                                                 <img src="{{ $service->image }}" class="w-full h-full object-contain rounded-xl" alt="{{ $service->name }}">
                                             </div>
                                         @else
-                                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#0056D2]/10 to-[#0049b8]/5 text-[#0056D2] border border-slate-150 flex items-center justify-center font-bold text-xs tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105 uppercase">
+                                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#0056D2]/10 to-[#0049b8]/5 text-[#0056D2] border border-slate-200 flex items-center justify-center font-bold text-xs tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105 uppercase">
                                                 {{ strtoupper(substr($service->name, 0, 2)) }}
                                             </div>
                                         @endif
@@ -199,13 +199,13 @@
                                     </div>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-extrabold rounded-full bg-blue-50 text-blue-600 border border-blue-150 uppercase tracking-wider whitespace-nowrap">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-extrabold rounded-full bg-blue-50 text-blue-600 border border-blue-200 uppercase tracking-wider whitespace-nowrap">
                                         <i data-lucide="layers" class="w-3 h-3"></i>
                                         {{ $service->fields_count }} Variants
                                     </span>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-extrabold rounded-full bg-amber-50/80 text-amber-700 border border-amber-150 uppercase tracking-wider whitespace-nowrap">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-extrabold rounded-full bg-amber-50/80 text-amber-700 border border-amber-200 uppercase tracking-wider whitespace-nowrap">
                                         <i data-lucide="tag" class="w-3 h-3"></i>
                                         {{ $service->prices_count }} Prices
                                     </span>
@@ -215,7 +215,7 @@
                                 </td>
                                 <td class="py-4 px-6">
                                     @if($service->is_active)
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-150 rounded-full uppercase tracking-wider whitespace-nowrap">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full uppercase tracking-wider whitespace-nowrap">
                                             <span class="relative flex h-2 w-2">
                                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -223,7 +223,7 @@
                                             Active
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-500 border border-rose-150 rounded-full uppercase tracking-wider whitespace-nowrap">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold bg-rose-50 text-rose-500 border border-rose-200 rounded-full uppercase tracking-wider whitespace-nowrap">
                                             <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
                                             Inactive
                                         </span>
@@ -339,20 +339,20 @@
 
                             <!-- Name -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Service Name</label>
+                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Service Name</label>
                                 <input type="text" name="name" required placeholder="e.g., MTN VTU" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
                             </div>
 
                             <!-- Description -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Description</label>
+                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Description</label>
                                 <textarea name="description" rows="3" placeholder="Provide brief details about this service..." class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400"></textarea>
                             </div>
 
                             <!-- Status Toggle -->
                             <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200/65 rounded-2xl shadow-sm">
                                 <div>
-                                    <span class="block text-sm font-bold text-slate-850">Active Status</span>
+                                    <span class="block text-sm font-bold text-slate-900">Active Status</span>
                                     <span class="block text-xs text-slate-400 mt-0.5">Control availability of this service in system.</span>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
@@ -363,7 +363,7 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-5">
-                            <button type="button" @click="addModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-105 hover:bg-slate-200 text-slate-650 border border-slate-200 rounded-2xl transition-all duration-150">
+                            <button type="button" @click="addModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-2xl transition-all duration-150">
                                 Cancel
                             </button>
                             <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
@@ -420,17 +420,17 @@
                                         </template>
                                         <template x-if="!editService.image">
                                             <div class="mx-auto w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 shadow-sm">
-                                                <i data-lucide="image" class="w-7 h-7 text-slate-350"></i>
+                                                <i data-lucide="image" class="w-7 h-7 text-slate-400"></i>
                                             </div>
                                         </template>
-                                        <span class="block text-[9px] text-slate-400 font-extrabold uppercase tracking-wider mt-1.5">Current Icon</span>
+                                        <span class="block text-xs text-slate-400 font-extrabold uppercase tracking-wider mt-1.5">Current Icon</span>
                                     </div>
                                     <!-- New Preview (JS-driven) -->
                                     <div id="edit-preview-container" class="hidden">
-                                        <div class="mx-auto w-14 h-14 bg-white border border-slate-150 rounded-2xl p-1.5 flex items-center justify-center shadow-sm">
+                                        <div class="mx-auto w-14 h-14 bg-white border border-slate-200 rounded-2xl p-1.5 flex items-center justify-center shadow-sm">
                                             <img id="edit-preview-img" src="" class="w-full h-full object-contain rounded-xl" alt="New Preview">
                                         </div>
-                                        <span class="block text-[9px] text-emerald-500 font-extrabold uppercase tracking-wider mt-1.5">New Selection</span>
+                                        <span class="block text-xs text-emerald-500 font-extrabold uppercase tracking-wider mt-1.5">New Selection</span>
                                     </div>
                                 </div>
                                 <div class="text-xs text-slate-400 mb-2 font-medium">Select a new logo icon if you want to replace it</div>
@@ -443,20 +443,20 @@
 
                             <!-- Name -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Service Name</label>
+                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Service Name</label>
                                 <input type="text" name="name" :value="editService.name" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
                             </div>
 
                             <!-- Description -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-550 uppercase tracking-wider mb-2">Description</label>
+                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Description</label>
                                 <textarea name="description" rows="3" :value="editService.description" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200"></textarea>
                             </div>
 
                             <!-- Status Toggle -->
                             <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200/65 rounded-2xl shadow-sm">
                                 <div>
-                                    <span class="block text-sm font-bold text-slate-850">Active Status</span>
+                                    <span class="block text-sm font-bold text-slate-900">Active Status</span>
                                     <span class="block text-xs text-slate-400 mt-0.5">Control availability of this service in system.</span>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
@@ -467,7 +467,7 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-5">
-                            <button type="button" @click="editModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-105 hover:bg-slate-200 text-slate-650 border border-slate-200 rounded-2xl transition-all duration-150">
+                            <button type="button" @click="editModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-2xl transition-all duration-150">
                                 Cancel
                             </button>
                             <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">

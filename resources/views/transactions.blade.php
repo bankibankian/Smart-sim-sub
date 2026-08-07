@@ -106,7 +106,7 @@
                         Filter
                     </button>
                     @if(request('search') || request('type') || request('status'))
-                        <a href="{{ route('transactions') }}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-650 border border-slate-200/50 rounded-xl transition-all duration-150">
+                        <a href="{{ route('transactions') }}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/50 rounded-xl transition-all duration-150">
                             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                             Reset
                         </a>
@@ -122,7 +122,7 @@
                     <i data-lucide="receipt" class="w-4.5 h-4.5 text-primary"></i>
                     Transaction Records
                 </h3>
-                <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-primary/10 text-primary uppercase tracking-wider">
+                <span class="px-2.5 py-1 text-xs font-extrabold rounded-full bg-primary/10 text-primary uppercase tracking-wider">
                     SmartSIM Wallet
                 </span>
             </div>
@@ -131,7 +131,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                             <th class="py-4 px-6">Date</th>
                             <th class="py-4 px-6 hidden md:table-cell">Reference</th>
                             <th class="py-4 px-6">Description</th>
@@ -161,21 +161,21 @@
                                 class="hover:bg-slate-50/50 hover:shadow-inner transition-all duration-150">
                                 <td class="py-4 px-6 text-slate-900 font-bold">
                                     {{ $transaction->created_at->format('d M Y') }}
-                                    <span class="block text-[10px] text-slate-400 font-normal mt-0.5">{{ $transaction->created_at->format('h:i A') }}</span>
+                                    <span class="block text-xs text-slate-400 font-normal mt-0.5">{{ $transaction->created_at->format('h:i A') }}</span>
                                 </td>
-                                <td class="py-4 px-6 font-mono text-xs text-slate-450 hidden md:table-cell">
+                                <td class="py-4 px-6 font-mono text-xs text-slate-500 hidden md:table-cell">
                                     {{ Str::limit($transaction->transaction_ref, 15) }}
                                 </td>
-                                <td class="py-4 px-6 text-slate-655 max-w-[260px] truncate" title="{{ $transaction->description }}">
+                                <td class="py-4 px-6 text-slate-700 max-w-[260px] truncate" title="{{ $transaction->description }}">
                                     {{ $transaction->description }}
                                 </td>
                                 <td class="py-4 px-6 text-center hidden sm:table-cell">
                                     @if(in_array($transaction->type, ['credit', 'refund', 'bonus', 'manual_credit']))
-                                        <span class="inline-flex items-center px-2.5 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100/50 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100/50 rounded-full uppercase tracking-wider">
                                             {{ $transaction->type == 'manual_credit' ? 'Credit' : ucfirst($transaction->type) }}
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center px-2.5 py-1 text-[10px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200/50 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center px-2.5 py-1 text-xs font-extrabold bg-slate-100 text-slate-700 border border-slate-200/50 rounded-full uppercase tracking-wider">
                                             {{ $transaction->type == 'manual_debit' ? 'Debit' : 'Debit' }}
                                         </span>
                                     @endif
@@ -185,15 +185,15 @@
                                 </td>
                                 <td class="py-4 px-6 text-center whitespace-nowrap">
                                     @if(in_array($transaction->status, ['completed', 'successful']))
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Success
                                         </span>
                                     @elseif($transaction->status == 'failed')
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-extrabold bg-rose-50 text-rose-700 border border-rose-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span> Failed
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold bg-amber-50 text-amber-700 border border-amber-100 rounded-full uppercase tracking-wider">
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-extrabold bg-amber-50 text-amber-700 border border-amber-100 rounded-full uppercase tracking-wider">
                                             <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span> {{ ucfirst($transaction->status) }}
                                         </span>
                                     @endif
@@ -208,7 +208,7 @@
                                         </div>
                                         <div>
                                             <h6 class="font-extrabold text-slate-800 font-display">No transactions found</h6>
-                                            <p class="text-xs text-slate-450 mt-1 leading-relaxed">We couldn't find any transaction matches in your history. Try clearing filters or refining your search query.</p>
+                                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">We couldn't find any transaction matches in your history. Try clearing filters or refining your search query.</p>
                                         </div>
                                     </div>
                                 </td>
@@ -253,7 +253,7 @@
                         </div>
                         <div>
                             <h5 class="font-bold text-slate-800 font-display text-sm">Transaction Detail</h5>
-                            <small class="text-slate-455 font-mono text-[10px] block mt-0.5" x-text="'Ref: ' + selectedTx?.ref"></small>
+                            <small class="text-slate-500 font-mono text-xs block mt-0.5" x-text="'Ref: ' + selectedTx?.ref"></small>
                         </div>
                     </div>
                     <button type="button" @click="selectedTx = null" class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg hover:bg-slate-100">
@@ -266,34 +266,34 @@
                     <!-- Details grid -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 bg-slate-50 rounded-lg border border-slate-100">
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Amount</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Amount</span>
                             <span class="text-base font-extrabold" 
                                   :class="['credit', 'refund', 'bonus', 'manual_credit'].includes(selectedTx?.type) ? 'text-emerald-600' : 'text-rose-600'"
                                   x-text="(['credit', 'refund', 'bonus', 'manual_credit'].includes(selectedTx?.type) ? '+' : '-') + '₦' + selectedTx?.amount">
                             </span>
                         </div>
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Status</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Status</span>
                             <div>
                                 <template x-if="['completed', 'successful'].includes(selectedTx?.status)">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-[9px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full uppercase tracking-wider mt-0.5">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full uppercase tracking-wider mt-0.5">
                                         <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Success
                                     </span>
                                 </template>
                                 <template x-if="selectedTx?.status === 'failed'">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-[9px] font-extrabold bg-rose-50 text-rose-700 border border-rose-100 rounded-full uppercase tracking-wider mt-0.5">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-extrabold bg-rose-50 text-rose-700 border border-rose-100 rounded-full uppercase tracking-wider mt-0.5">
                                         <span class="w-1.5 h-1.5 bg-rose-500 rounded-full"></span> Failed
                                     </span>
                                 </template>
                                 <template x-if="!['completed', 'successful', 'failed'].includes(selectedTx?.status)">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-[9px] font-extrabold bg-amber-50 text-amber-700 border border-amber-100 rounded-full uppercase tracking-wider mt-0.5">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-extrabold bg-amber-50 text-amber-700 border border-amber-100 rounded-full uppercase tracking-wider mt-0.5">
                                         <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span> <span x-text="selectedTx?.status"></span>
                                     </span>
                                 </template>
                             </div>
                         </div>
                         <div class="col-span-2">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Date & Time</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Date & Time</span>
                             <span class="text-sm font-bold text-slate-700 block mt-0.5" x-text="selectedTx?.date"></span>
                         </div>
                     </div>
@@ -301,17 +301,17 @@
                     <!-- Description Card -->
                     <div class="p-5 bg-slate-50/50 rounded-lg border border-slate-100/50 space-y-4">
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Description</span>
                             <p class="text-sm font-semibold text-slate-700 mt-1 leading-relaxed" x-text="selectedTx?.description"></p>
                         </div>
                         
                         <!-- Pin Copy Area -->
                         <div x-show="selectedTx?.purchased_pin" class="p-4 bg-primary/5 border border-primary/10 rounded-xl flex items-center justify-between shadow-inner">
                             <div>
-                                <span class="block text-[10px] font-bold text-primary uppercase tracking-wider">Purchased PIN/Token</span>
+                                <span class="block text-xs font-bold text-primary uppercase tracking-wider">Purchased PIN/Token</span>
                                 <span class="font-mono font-bold text-slate-900 text-sm mt-1 block select-all" x-text="selectedTx?.purchased_pin"></span>
                             </div>
-                            <button class="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-primary/5 border border-primary/20 text-primary rounded-lg text-[10px] font-bold shadow-sm transition-all duration-150" 
+                            <button class="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-primary/5 border border-primary/20 text-primary rounded-lg text-xs font-bold shadow-sm transition-all duration-150" 
                                     @click="navigator.clipboard.writeText(selectedTx?.purchased_pin).then(() => Swal.fire({title: 'Copied!', text: 'PIN copied to clipboard', icon: 'success', timer: 1500, showConfirmButton: false}))">
                                 <i class="w-3.5 h-3.5" data-lucide="copy"></i> Copy PIN
                             </button>

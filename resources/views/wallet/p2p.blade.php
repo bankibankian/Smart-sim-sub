@@ -70,7 +70,7 @@
                                     <p class="text-xs text-slate-200 mt-0.5 font-medium">Instantly credit another wallet.</p>
                                 </div>
                             </div>
-                            <span class="inline-block text-[9px] font-extrabold text-[#0056D2] bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">P2P</span>
+                            <span class="inline-block text-xs font-extrabold text-[#0056D2] bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">P2P</span>
                         </div>
 
                         <!-- Card Body -->
@@ -91,7 +91,7 @@
 
                                 {{-- Recipient Identifier --}}
                                 <div class="space-y-2">
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Recipient Identifier</label>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Recipient Identifier</label>
                                     <div class="flex gap-2">
                                         <div class="relative flex-grow">
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -119,19 +119,19 @@
                                             </div>
                                             <div class="space-y-0.5">
                                                 <h6 id="recipientName" class="font-bold text-xs text-slate-800"></h6>
-                                                <span class="block text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Verified SmartSIM User</span>
+                                                <span class="block text-xs text-slate-400 font-semibold uppercase tracking-wider">Verified SmartSIM User</span>
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <div class="mt-1">
-                                        <small id="userErrorDisplay" class="text-rose-600 font-bold text-[10px] flex items-center gap-1"></small>
+                                        <small id="userErrorDisplay" class="text-rose-600 font-bold text-xs flex items-center gap-1"></small>
                                     </div>
                                 </div>
 
                                 {{-- Amount --}}
                                 <div class="space-y-2">
-                                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                    <div class="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-wider">
                                         <label for="amount">Amount</label>
                                         <span class="text-slate-400 lowercase">Balance: 
                                             <strong class="text-emerald-600 font-extrabold uppercase">
@@ -154,7 +154,7 @@
 
                                 {{-- Description --}}
                                 <div class="space-y-2">
-                                    <label for="description" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description (Optional)</label>
+                                    <label for="description" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Description (Optional)</label>
                                     <div class="relative">
                                         <div class="absolute top-3 left-3 pointer-events-none text-slate-400">
                                             <i data-lucide="text" class="w-4 h-4"></i>
@@ -176,7 +176,7 @@
                     </div>
 
                     <!-- Footer Info -->
-                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold">
+                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center gap-1.5 text-xs text-slate-400 font-semibold">
                         <i data-lucide="shield-check" class="w-4 h-4 text-[#0056D2]/80"></i>
                         <span>Protected by Multi-Factor Authentication</span>
                     </div>
@@ -205,7 +205,7 @@
                             @if(isset($recentRecipients) && count($recentRecipients) > 0)
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     @foreach($recentRecipients as $recipient)
-                                        <div class="flex items-center gap-3 p-3 bg-white border border-slate-150 hover:border-[#0056D2]/30 hover:bg-[#0056D2]/5 rounded-2xl shadow-sm transition-all duration-200 cursor-pointer"
+                                        <div class="flex items-center gap-3 p-3 bg-white border border-slate-200 hover:border-[#0056D2]/30 hover:bg-[#0056D2]/5 rounded-2xl shadow-sm transition-all duration-200 cursor-pointer"
                                              onclick="selectRecentBank('{{ $recipient['bank_code'] }}', '{{ $recipient['account_no'] }}', '{{ $recipient['account_name'] }}')">
 
                                             <div class="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
@@ -220,8 +220,8 @@
                                             </div>
 
                                             <div class="flex-grow min-w-0">
-                                                <span class="block text-xs font-bold text-slate-850 truncate leading-snug">{{ $recipient['account_name'] }}</span>
-                                                <span class="block text-[10px] text-slate-400 font-medium truncate mt-0.5">
+                                                <span class="block text-xs font-bold text-slate-900 truncate leading-snug">{{ $recipient['account_name'] }}</span>
+                                                <span class="block text-xs text-slate-400 font-medium truncate mt-0.5">
                                                     {{ $recipient['bank_name'] }} &bull; {{ $recipient['account_no'] }}
                                                 </span>
                                             </div>
@@ -245,7 +245,7 @@
                     </div>
 
                     <!-- Footer -->
-                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center text-[10px] text-slate-400 font-semibold gap-1">
+                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center text-xs text-slate-400 font-semibold gap-1">
                         <span>PCI-DSS Secured System Gateway</span>
                     </div>
 

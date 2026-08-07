@@ -31,7 +31,7 @@
                                     <p class="text-xs text-slate-200 mt-0.5">Enter details exactly as they appear on the NIN record.</p>
                                 </div>
                             </div>
-                            <span class="text-[10px] font-bold text-primary bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            <span class="text-xs font-bold text-primary bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">
                                 Demographic
                             </span>
                         </div>
@@ -80,7 +80,7 @@
                                 <div class="row g-3 text-start">
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">First Name <span class="text-rose-500">*</span></label>
+                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">First Name <span class="text-rose-500">*</span></label>
                                             <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all" 
                                                 name="firstName" type="text"
                                                 placeholder="Enter First Name" required value="{{ old('firstName') }}">
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Last Name <span class="text-rose-500">*</span></label>
+                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Last Name <span class="text-rose-500">*</span></label>
                                             <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all" 
                                                 name="lastName" type="text"
                                                 placeholder="Enter Last Name" required value="{{ old('lastName') }}">
@@ -100,7 +100,7 @@
                                 <div class="row g-3 text-start">
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Gender <span class="text-rose-500">*</span></label>
+                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Gender <span class="text-rose-500">*</span></label>
                                             <select class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all appearance-none" name="gender" required style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2394a3b8%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpolyline points=%276 9 12 15 18 9%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;">
                                                 <option value="" disabled selected>Select Gender</option>
                                                 <option value="M" {{ old('gender') == 'M' ? 'selected' : '' }}>Male</option>
@@ -110,11 +110,11 @@
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Date of Birth <span class="text-rose-500">*</span></label>
+                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Date of Birth <span class="text-rose-500">*</span></label>
                                             <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all" 
                                                 name="dateOfBirth" type="text"
                                                 placeholder="DD-MM-YYYY" required value="{{ old('dateOfBirth') }}">
-                                            <small class="text-[10px] text-slate-450 block mt-0.5">Format: 20-02-1966</small>
+                                            <small class="text-xs text-slate-500 block mt-0.5">Format: 20-02-1966</small>
                                         </div>
                                     </div>
                                 </div>
@@ -125,13 +125,13 @@
                                             <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                                                 <i data-lucide="tag" class="w-4 h-4"></i>
                                             </div>
-                                            <span class="text-xs font-bold text-slate-750">Service Fee</span>
+                                            <span class="text-xs font-bold text-slate-800">Service Fee</span>
                                         </div>
                                         <span class="text-base font-extrabold font-display text-[#0056D2]">₦{{ number_format($demoPrice ?? 0, 2) }}</span>
                                     </div>
                                     <div class="flex justify-between items-center text-[11px] px-1">
                                         <span class="text-slate-400 font-medium">Your current balance:</span>
-                                        <span class="font-bold text-slate-650">
+                                        <span class="font-bold text-slate-700">
                                             Wallet: <strong class="text-emerald-600 font-display">₦{{ number_format($wallet->balance ?? 0, 2) }}</strong>
                                         </span>
                                     </div>
@@ -180,44 +180,44 @@
                                                     <img src="data:image/jpeg;base64,{{ session('verification')['data']['photo'] }}"
                                                         alt="ID Photo" class="w-full h-full object-cover rounded-lg">
                                                 @else
-                                                    <div class="w-full h-full bg-slate-50 flex flex-col items-center justify-center text-slate-350 rounded-lg">
+                                                    <div class="w-full h-full bg-slate-50 flex flex-col items-center justify-center text-slate-400 rounded-lg">
                                                         <i data-lucide="user" class="w-10 h-10 mb-1"></i>
-                                                        <span class="text-[9px] font-bold uppercase">No Image</span>
+                                                        <span class="text-xs font-bold uppercase">No Image</span>
                                                     </div>
                                                 @endif
                                             </div>
                                         </div>
-                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-2.5">Passport Photograph</span>
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2.5">Passport Photograph</span>
                                     </div>
 
                                     {{-- Details List --}}
                                     <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 divide-y divide-slate-200/50">
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">NIN Number</span>
+                                            <span class="text-slate-500 font-medium">NIN Number</span>
                                             <span class="font-bold text-[#0056D2] font-display tracking-wider">{{ session('verification')['data']['nin'] }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">First Name</span>
+                                            <span class="text-slate-500 font-medium">First Name</span>
                                             <span class="font-semibold text-slate-800">{{ session('verification')['data']['firstName'] }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Last Name</span>
+                                            <span class="text-slate-500 font-medium">Last Name</span>
                                             <span class="font-semibold text-slate-800">{{ session('verification')['data']['surname'] }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Middle Name</span>
+                                            <span class="text-slate-500 font-medium">Middle Name</span>
                                             <span class="font-semibold text-slate-800">{{ session('verification')['data']['middleName'] ?? 'N/A' }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Date of Birth</span>
+                                            <span class="text-slate-500 font-medium">Date of Birth</span>
                                             <span class="font-semibold text-slate-800">{{ session('verification')['data']['birthDate'] ?? 'N/A' }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Gender</span>
+                                            <span class="text-slate-500 font-medium">Gender</span>
                                             <span class="font-semibold text-slate-800">{{ strtoupper(session('verification')['data']['gender'] ?? 'N/A') }}</span>
                                         </div>
                                         <div class="flex justify-between items-center py-2 text-xs">
-                                            <span class="text-slate-450 font-medium">Phone</span>
+                                            <span class="text-slate-500 font-medium">Phone</span>
                                             <span class="font-semibold text-slate-800">{{ session('verification')['data']['telephoneNo'] ?? 'N/A' }}</span>
                                         </div>
                                     </div>
@@ -231,7 +231,7 @@
                                                         class="w-100 flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/60 text-slate-700 rounded-xl transition duration-200 font-display space-y-1">
                                                     <i data-lucide="file-text" class="w-4.5 h-4.5 text-slate-500"></i>
                                                     <span class="text-xs font-bold mt-1">Regular</span>
-                                                    <span class="text-[10px] font-bold text-slate-400">₦{{ number_format($regularSlipPrice ?? 0, 2) }}</span>
+                                                    <span class="text-xs font-bold text-slate-400">₦{{ number_format($regularSlipPrice ?? 0, 2) }}</span>
                                                 </button>
                                             </div>
                                             <div class="col-4">
@@ -239,7 +239,7 @@
                                                         class="w-100 flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/60 text-slate-700 rounded-xl transition duration-200 font-display space-y-1">
                                                     <i data-lucide="file-check" class="w-4.5 h-4.5 text-slate-500"></i>
                                                     <span class="text-xs font-bold mt-1">Standard</span>
-                                                    <span class="text-[10px] font-bold text-slate-400">₦{{ number_format($standardSlipPrice ?? 0, 2) }}</span>
+                                                    <span class="text-xs font-bold text-slate-400">₦{{ number_format($standardSlipPrice ?? 0, 2) }}</span>
                                                 </button>
                                             </div>
                                             <div class="col-4">
@@ -247,7 +247,7 @@
                                                         class="w-100 flex flex-col items-center justify-center p-3 bg-primary/10 hover:bg-primary/15 border border-primary/20 text-primary rounded-xl transition duration-200 font-display space-y-1">
                                                     <i data-lucide="award" class="w-4.5 h-4.5 text-[#0056D2]"></i>
                                                     <span class="text-xs font-bold mt-1">Premium</span>
-                                                    <span class="text-[10px] font-bold text-primary/70">₦{{ number_format($premiumSlipPrice ?? 0, 2) }}</span>
+                                                    <span class="text-xs font-bold text-primary/70">₦{{ number_format($premiumSlipPrice ?? 0, 2) }}</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -260,7 +260,7 @@
                                     </div>
                                     <div class="space-y-1 max-w-xs mx-auto">
                                         <h4 class="font-bold text-slate-800 text-sm">Awaiting Verification</h4>
-                                        <p class="text-xs text-slate-450 leading-relaxed">
+                                        <p class="text-xs text-slate-500 leading-relaxed">
                                             Enter details on the left and submit to view the verified demographic identity profile.
                                         </p>
                                     </div>

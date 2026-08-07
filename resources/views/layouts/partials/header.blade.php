@@ -52,9 +52,9 @@
                        @focus="open = true"
                        x-ref="headerSearchInput"
                        type="text" 
-                       placeholder="Search settings, services, users..." 
-                       class="w-full pl-9 pr-12 py-1.5 text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200/80 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] focus:outline-none transition-all">
-                <span class="absolute right-2.5 top-1.5 px-1.5 py-0.5 text-[9px] font-bold text-slate-400 bg-white border border-slate-200 rounded-md shadow-sm pointer-events-none">Ctrl K</span>
+                       placeholder="Search settings, services, users..."
+                       class="w-full pl-9 pr-14 py-2 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all">
+                <span class="absolute right-2.5 top-1.5 px-1.5 py-0.5 text-xs font-bold text-slate-400 bg-white border border-slate-200 rounded-md shadow-sm pointer-events-none">Ctrl K</span>
             </div>
 
             <!-- Floating Search Dropdown Card -->
@@ -71,20 +71,20 @@
                 <!-- Loading State -->
                 <div x-show="loading" class="flex items-center justify-center py-6 gap-2 text-slate-400">
                     <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-[#0056D2]"></i>
-                    <span class="text-[11px] font-semibold font-display">Searching SmartSIM...</span>
+                    <span class="text-xs font-semibold font-display">Searching SmartSIM...</span>
                 </div>
 
                 <!-- No Results State -->
                 <div x-show="!loading && results.length === 0" class="px-4 py-4 text-center text-slate-400">
                     <i data-lucide="search" class="w-5 h-5 mx-auto text-slate-300 mb-1"></i>
-                    <span class="block text-[11px] font-semibold font-display">No matches found for "<span class="text-slate-600" x-text="query"></span>"</span>
+                    <span class="block text-xs font-semibold font-display">No matches found for "<span class="text-slate-600" x-text="query"></span>"</span>
                 </div>
 
                 <!-- Results List -->
                 <div x-show="!loading && results.length > 0" class="space-y-3 px-1">
                     <template x-for="category in [...new Set(results.map(r => r.category))]" :key="category">
                         <div>
-                            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1 font-display" x-text="category"></span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider px-3 mb-1 font-display" x-text="category"></span>
                             <div class="space-y-0.5">
                                 <template x-for="item in results.filter(r => r.category === category)" :key="item.title + item.url">
                                     <a :href="item.url" class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-slate-50 hover:text-[#0056D2] group transition-colors">
@@ -93,9 +93,9 @@
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <span class="block text-xs font-semibold text-slate-700 group-hover:text-slate-900 truncate font-display" x-text="item.title"></span>
-                                            <span class="block text-[9px] text-slate-400 truncate mt-0.5 font-display" x-text="item.description"></span>
+                                            <span class="block text-xs text-slate-400 truncate mt-0.5 font-display" x-text="item.description"></span>
                                         </div>
-                                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-305 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all"></i>
+                                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all"></i>
                                     </a>
                                 </template>
                             </div>
@@ -144,9 +144,9 @@
                         <span class="text-xs font-bold text-slate-800 font-display">
                             {{ auth()->user() && auth()->user()->isStaff() ? 'System Transactions' : 'Recent Transactions' }}
                         </span>
-                        <span x-show="badge > 0" class="px-1.5 py-0.5 text-[10px] font-bold bg-[#0056D2]/10 text-[#0056D2] rounded-md font-display" x-text="badge"></span>
+                        <span x-show="badge > 0" class="px-1.5 py-0.5 text-xs font-bold bg-[#0056D2]/10 text-[#0056D2] rounded-md font-display" x-text="badge"></span>
                     </div>
-                    <button x-show="badge > 0" @click="badge = 0; notifications = notifications.map(n => ({ ...n, read: true }))" class="text-[10px] font-bold text-[#0056D2] hover:underline font-display">
+                    <button x-show="badge > 0" @click="badge = 0; notifications = notifications.map(n => ({ ...n, read: true }))" class="text-xs font-bold text-[#0056D2] hover:underline font-display">
                         Mark all as read
                     </button>
                 </div>
@@ -164,9 +164,9 @@
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="block text-xs font-semibold text-slate-700 truncate font-display" x-text="notif.title"></span>
-                                    <span class="text-[9px] text-slate-400 font-medium whitespace-nowrap font-display" x-text="notif.time"></span>
+                                    <span class="text-xs text-slate-400 font-medium whitespace-nowrap font-display" x-text="notif.time"></span>
                                 </div>
-                                <span class="block text-[11px] text-slate-500 mt-0.5 leading-normal" x-text="notif.desc"></span>
+                                <span class="block text-xs text-slate-500 mt-0.5 leading-normal" x-text="notif.desc"></span>
                             </div>
                         </div>
                     </template>
@@ -193,7 +193,7 @@
                 <!-- User Details (Hidden on tiny screens) -->
                 <div class="hidden md:block text-left pr-1">
                     <span class="block text-xs font-semibold text-slate-700 font-display leading-none">{{ Auth::user()->first_name ?? Auth::user()->name }}  {{ Auth::user()->last_name ?? Auth::user()->name }}</span>
-                    <span class="block text-[10px] text-slate-400 font-medium mt-0.5 leading-none">{{ Auth::user()->email }}</span>
+                    <span class="block text-xs text-slate-400 font-medium mt-0.5 leading-none">{{ Auth::user()->email }}</span>
                 </div>
                 <i data-lucide="chevron-down" :class="open ? 'rotate-180' : ''" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200"></i>
             </button>
@@ -212,7 +212,7 @@
                 <!-- Header details for mobile -->
                 <div class="md:hidden px-4 py-2 border-b border-slate-50">
                     <span class="block text-xs font-semibold text-slate-700">{{ Auth::user()->first_name ?? Auth::user()->name }}</span>
-                    <span class="block text-[10px] text-slate-400 truncate mt-0.5">{{ Auth::user()->email }}</span>
+                    <span class="block text-xs text-slate-400 truncate mt-0.5">{{ Auth::user()->email }}</span>
                 </div>
 
                 <!-- Profile Link -->
@@ -319,7 +319,7 @@ class="relative">
                         <i data-lucide="command" class="w-8 h-8 text-slate-300"></i>
                         <div>
                             <p class="text-xs font-bold text-slate-500 font-display">Universal Search Palette</p>
-                            <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed font-display">Search for features, virtual accounts, settings, or users instantly.</p>
+                            <p class="text-xs text-slate-400 mt-0.5 leading-relaxed font-display">Search for features, virtual accounts, settings, or users instantly.</p>
                         </div>
                     </div>
 
@@ -328,7 +328,7 @@ class="relative">
                         <i data-lucide="search" class="w-8 h-8 text-slate-300 animate-pulse"></i>
                         <div>
                             <p class="text-xs font-bold text-slate-500 font-display">No results found</p>
-                            <p class="text-[11px] text-slate-400 mt-0.5 font-display">We couldn't find anything matching "<span class="font-semibold text-slate-600" x-text="query"></span>".</p>
+                            <p class="text-xs text-slate-400 mt-0.5 font-display">We couldn't find anything matching "<span class="font-semibold text-slate-600" x-text="query"></span>".</p>
                         </div>
                     </div>
 
@@ -336,7 +336,7 @@ class="relative">
                     <div x-show="!loading && results.length > 0" class="space-y-4">
                         <template x-for="category in [...new Set(results.map(r => r.category))]" :key="category">
                             <div>
-                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2.5 mb-1.5 font-display" x-text="category"></span>
+                                <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider px-2.5 mb-1.5 font-display" x-text="category"></span>
                                 <div class="space-y-1">
                                     <template x-for="item in results.filter(r => r.category === category)" :key="item.title + item.url">
                                         <a :href="item.url" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 hover:text-slate-900 group transition-all">
@@ -345,7 +345,7 @@ class="relative">
                                             </div>
                                             <div class="flex-1 min-w-0">
                                                 <span class="block text-xs font-semibold text-slate-700 group-hover:text-slate-900 truncate font-display" x-text="item.title"></span>
-                                                <span class="block text-[10px] text-slate-400 truncate mt-0.5 leading-none font-display" x-text="item.description"></span>
+                                                <span class="block text-xs text-slate-400 truncate mt-0.5 leading-none font-display" x-text="item.description"></span>
                                             </div>
                                             <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all"></i>
                                         </a>
@@ -357,7 +357,7 @@ class="relative">
                 </div>
 
                 <!-- Footer with instructions -->
-                <div class="border-t border-slate-100 bg-slate-50/50 px-4 py-2.5 flex items-center justify-between text-[10px] text-slate-400 font-semibold font-display">
+                <div class="border-t border-slate-100 bg-slate-50/50 px-4 py-2.5 flex items-center justify-between text-xs text-slate-400 font-semibold font-display">
                     <div class="flex items-center gap-1.5">
                         <span class="px-1.5 py-0.5 bg-white border border-slate-200 rounded-md shadow-sm">Esc</span>
                         <span>to close</span>

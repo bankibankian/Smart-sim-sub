@@ -68,13 +68,13 @@
                             <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight font-display">
                                 {{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}
                             </h1>
-                            <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
+                            <span class="px-2.5 py-1 text-xs font-extrabold rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
                                 {{ $user->role }}
                             </span>
                         </div>
                         <p class="text-xs text-slate-400 mt-1 flex items-center gap-2">
                             <span>Account ID: #{{ $user->id }}</span>
-                            <span class="text-slate-350">•</span>
+                            <span class="text-slate-400">•</span>
                             <span>Member since {{ $user->created_at->format('M d, Y') }}</span>
                         </p>
                     </div>
@@ -84,11 +84,11 @@
                 <div class="flex flex-wrap items-center gap-4 z-10">
                     <div class="hidden sm:flex items-center gap-4 bg-slate-50 border border-slate-100 p-3 rounded-2xl">
                         <div class="border-r border-slate-200 pr-4">
-                            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Tier Level</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Tier Level</span>
                             <span class="text-xs font-bold text-indigo-600">Tier {{ $user->account_tier ?? 1 }}</span>
                         </div>
                         <div>
-                            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Wallet Balance</span>
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Wallet Balance</span>
                             <span class="text-xs font-bold text-slate-700">
                                 ₦{{ $user->wallet ? number_format($user->wallet->spendable(), 2) : '0.00' }}
                             </span>
@@ -182,35 +182,35 @@
                             <!-- First Name -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">First Name</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">First Name</span>
                                     <span class="text-xs font-bold text-slate-700">{{ $user->first_name }}</span>
                                 </div>
                             </div>
                             <!-- Middle Name -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Middle Name</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Middle Name</span>
                                     <span class="text-xs font-bold text-slate-700">{{ $user->middle_name ?? 'N/A' }}</span>
                                 </div>
                             </div>
                             <!-- Last Name -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Last Name</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Last Name</span>
                                     <span class="text-xs font-bold text-slate-700">{{ $user->last_name }}</span>
                                 </div>
                             </div>
                             <!-- Gender -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Gender</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Gender</span>
                                     <span class="text-xs font-bold text-slate-700 capitalize">{{ $user->gender ?? 'N/A' }}</span>
                                 </div>
                             </div>
                             <!-- Email -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between col-span-1 sm:col-span-2">
                                 <div class="min-w-0">
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Email Address</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Email Address</span>
                                     <span class="text-xs font-bold text-slate-700 truncate block">{{ $user->email }}</span>
                                 </div>
                                 <button @click="copy('{{ $user->email }}', 'Email Address')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
@@ -220,7 +220,7 @@
                             <!-- Phone -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Phone Number</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Phone Number</span>
                                     <span class="text-xs font-bold text-slate-700">{{ $user->phone ?? 'N/A' }}</span>
                                 </div>
                                 @if ($user->phone)
@@ -232,7 +232,7 @@
                             <!-- Date of Birth -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Date of Birth</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Date of Birth</span>
                                     <span class="text-xs font-bold text-slate-700">
                                         {{ $user->date_of_birth ? $user->date_of_birth->format('M d, Y') : 'N/A' }}
                                     </span>
@@ -241,7 +241,7 @@
                             <!-- Referral Code -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Referral Code</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Referral Code</span>
                                     <span class="text-xs font-bold text-slate-700 font-mono">{{ $user->referral_code ?? 'N/A' }}</span>
                                 </div>
                                 @if ($user->referral_code)
@@ -266,7 +266,7 @@
                             <!-- BVN -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">BVN Number</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">BVN Number</span>
                                     <span class="text-xs font-mono font-bold text-slate-700">{{ $user->bvn ?? 'Not Provided' }}</span>
                                 </div>
                                 @if ($user->bvn)
@@ -278,7 +278,7 @@
                             <!-- NIN -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">NIN Number</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">NIN Number</span>
                                     <span class="text-xs font-mono font-bold text-slate-700">{{ $user->nin ?? 'Not Provided' }}</span>
                                 </div>
                                 @if ($user->nin)
@@ -290,21 +290,21 @@
                             <!-- Address -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between col-span-1 sm:col-span-2">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Home Address</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Home Address</span>
                                     <span class="text-xs font-bold text-slate-700">{{ $user->address ?? 'Not Provided' }}</span>
                                 </div>
                             </div>
                             <!-- State -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">State</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">State</span>
                                     <span class="text-xs font-bold text-slate-700 capitalize">{{ $user->state ?? 'Not Provided' }}</span>
                                 </div>
                             </div>
                             <!-- LGA -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">LGA</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">LGA</span>
                                     <span class="text-xs font-bold text-slate-700 capitalize">{{ $user->lga ?? 'Not Provided' }}</span>
                                 </div>
                             </div>
@@ -322,7 +322,7 @@
                                 </div>
                                 <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Business Credentials & Upgrades</h2>
                             </div>
-                            <span class="px-3 py-1 text-[10px] font-extrabold rounded-full 
+                            <span class="px-3 py-1 text-xs font-extrabold rounded-full 
                                 @if($user->upgrade_status === 'pending') bg-amber-50 text-amber-700 border border-amber-100
                                 @elseif($user->upgrade_status === 'approved') bg-emerald-50 text-emerald-700 border border-emerald-100
                                 @else bg-slate-100 text-slate-500 border border-slate-200 @endif uppercase tracking-wider">
@@ -333,18 +333,18 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                             <!-- Business Name -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
-                                <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Business Name</span>
+                                <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Business Name</span>
                                 <span class="text-xs font-bold text-slate-700">{{ $user->business_name ?? 'N/A' }}</span>
                             </div>
                             <!-- Business Type -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
-                                <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Business Type</span>
+                                <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Business Type</span>
                                 <span class="text-xs font-bold text-slate-700 capitalize">{{ str_replace('_', ' ', $user->business_type ?? 'N/A') }}</span>
                             </div>
                             <!-- CAC Number -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between">
                                 <div>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">CAC Number</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">CAC Number</span>
                                     <span class="text-xs font-mono font-bold text-slate-700">{{ $user->cac_number ?? 'N/A' }}</span>
                                 </div>
                                 @if ($user->cac_number)
@@ -355,7 +355,7 @@
                             </div>
                             <!-- Requested Role -->
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
-                                <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Requested Tier Role</span>
+                                <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Requested Tier Role</span>
                                 <span class="text-xs font-bold text-[#0056D2] uppercase tracking-wider">{{ $user->pending_role ?? 'N/A' }}</span>
                             </div>
                         </div>
@@ -378,7 +378,7 @@
                             </div>
                             @if ($user->wallet)
                                 <div class="flex items-center gap-1">
-                                    <span class="px-2.5 py-1 text-[10px] font-mono font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wider">
+                                    <span class="px-2.5 py-1 text-xs font-mono font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wider">
                                         {{ $user->wallet->wallet_number }}
                                     </span>
                                     <button @click="copy('{{ $user->wallet->wallet_number }}', 'Wallet Account Number')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
@@ -392,15 +392,15 @@
                             <!-- Financial Ledger Balances Grid -->
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                                 <!-- Virtual Debit Card representation -->
-                                <div class="sm:col-span-3 lg:col-span-1 relative overflow-hidden p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 text-white min-h-[170px] flex flex-col justify-between shadow-lg">
+                                <div class="sm:col-span-3 lg:col-span-1 relative overflow-hidden p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 border border-slate-800 text-white min-h-[170px] flex flex-col justify-between shadow-lg">
                                     <div class="absolute right-0 top-0 w-32 h-32 bg-[#0049b8]/10 rounded-full blur-2xl pointer-events-none"></div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[9px] font-extrabold tracking-widest uppercase opacity-70">SmartSIM wallet</span>
+                                        <span class="text-xs font-extrabold tracking-widest uppercase opacity-70">SmartSIM wallet</span>
                                         <i data-lucide="contactless" class="w-4 h-4 opacity-50"></i>
                                     </div>
                                     
                                     <div>
-                                        <span class="block text-[8px] font-bold uppercase opacity-60 tracking-wider">Spendable Balance</span>
+                                        <span class="block text-xs font-bold uppercase opacity-60 tracking-wider">Spendable Balance</span>
                                         <span class="text-xl font-extrabold tracking-tight">
                                             ₦{{ number_format($user->wallet->spendable(), 2) }}
                                         </span>
@@ -408,8 +408,8 @@
                                     
                                     <div class="flex justify-between items-end">
                                         <div>
-                                            <span class="block text-[7px] opacity-45 uppercase font-medium">Wallet ID</span>
-                                            <span class="text-[10px] font-mono font-bold tracking-wider opacity-80">{{ implode(' ', str_split($user->wallet->wallet_number, 4)) }}</span>
+                                            <span class="block text-xs opacity-45 uppercase font-medium">Wallet ID</span>
+                                            <span class="text-xs font-mono font-bold tracking-wider opacity-80">{{ implode(' ', str_split($user->wallet->wallet_number, 4)) }}</span>
                                         </div>
                                         <div class="w-8 h-5 rounded bg-white/10 border border-white/5 flex items-center justify-center">
                                             <div class="w-3 h-3 rounded-full bg-red-500 opacity-80 translate-x-1"></div>
@@ -421,19 +421,19 @@
                                 <!-- Sub-Balances metrics -->
                                 <div class="sm:col-span-3 lg:col-span-2 grid grid-cols-2 gap-4">
                                     <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
-                                        <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Main Balance</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Main Balance</span>
                                         <span class="text-sm font-extrabold text-slate-700">₦{{ number_format($user->wallet->balance, 2) }}</span>
                                     </div>
                                     <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
-                                        <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Bonus Balance</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Bonus Balance</span>
                                         <span class="text-sm font-extrabold text-slate-700">₦{{ number_format($user->wallet->bonus, 2) }}</span>
                                     </div>
                                     <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
-                                        <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Hold Amount</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Hold Amount</span>
                                         <span class="text-sm font-extrabold text-slate-700">₦{{ number_format($user->wallet->hold_amount, 2) }}</span>
                                     </div>
                                     <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl">
-                                        <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Currency Type</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Currency Type</span>
                                         <span class="text-sm font-extrabold text-[#0056D2] uppercase tracking-wider">{{ $user->wallet->currency }}</span>
                                     </div>
                                 </div>
@@ -443,7 +443,7 @@
                             <div class="border-t border-slate-50 pt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div class="p-4 bg-emerald-50/30 border border-emerald-100/50 rounded-2xl flex items-center justify-between">
                                     <div>
-                                        <span class="block text-[8px] font-bold text-emerald-500 uppercase tracking-wider">Total Fundings (Credited)</span>
+                                        <span class="block text-xs font-bold text-emerald-500 uppercase tracking-wider">Total Fundings (Credited)</span>
                                         <span class="text-base font-extrabold text-emerald-700">+₦{{ number_format($user->wallet->total_credited, 2) }}</span>
                                     </div>
                                     <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
@@ -452,7 +452,7 @@
                                 </div>
                                 <div class="p-4 bg-rose-50/30 border border-rose-100/50 rounded-2xl flex items-center justify-between">
                                     <div>
-                                        <span class="block text-[8px] font-bold text-rose-500 uppercase tracking-wider">Total Debits (Spent)</span>
+                                        <span class="block text-xs font-bold text-rose-500 uppercase tracking-wider">Total Debits (Spent)</span>
                                         <span class="text-base font-extrabold text-rose-700">-₦{{ number_format($user->wallet->total_debited, 2) }}</span>
                                     </div>
                                     <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center">
@@ -471,7 +471,7 @@
                                             <span class="font-bold text-slate-700">₦{{ number_format($user->wallet->daily_limit, 2) }}</span>
                                         </div>
                                         <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                            <div class="bg-indigo-650 h-full rounded-full" style="width: 100%"></div>
+                                            <div class="bg-indigo-700 h-full rounded-full" style="width: 100%"></div>
                                         </div>
                                     </div>
                                     <div>
@@ -480,7 +480,7 @@
                                             <span class="font-bold text-slate-700">₦{{ number_format($user->wallet->monthly_limit, 2) }}</span>
                                         </div>
                                         <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                            <div class="bg-indigo-650 h-full rounded-full" style="width: 100%"></div>
+                                            <div class="bg-indigo-700 h-full rounded-full" style="width: 100%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -515,12 +515,12 @@
                                             @if ($user->wallet->is_locked) text-rose-700 @else text-emerald-700 @endif">
                                             Wallet is {{ $user->wallet->is_locked ? 'locked' : 'unlocked' }}
                                         </span>
-                                        <span class="block text-[9px] text-slate-400 mt-0.5">Locks debit activity</span>
+                                        <span class="block text-xs text-slate-400 mt-0.5">Locks debit activity</span>
                                     </div>
                                 </div>
                                 
                                 <div class="bg-slate-50 p-4 border border-slate-100 rounded-2xl">
-                                    <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-1">Last Balance Activity</span>
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Last Balance Activity</span>
                                     <span class="block text-xs font-semibold text-slate-700">
                                         {{ $user->wallet->last_activity ? $user->wallet->last_activity->format('M d, Y h:i A') : 'No Recent Ledger Activity' }}
                                     </span>
@@ -545,30 +545,30 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         @forelse ($user->virtualAccounts as $acc)
-                            <div class="p-5 bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-150 rounded-2xl space-y-4 relative hover:shadow-md transition-all duration-200">
+                            <div class="p-5 bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200 rounded-2xl space-y-4 relative hover:shadow-md transition-all duration-200">
                                 <div class="flex items-center justify-between">
-                                    <span class="px-2.5 py-1 text-[9px] font-extrabold rounded-full bg-[#0056D2]/10 text-[#0056D2] uppercase tracking-wider">
+                                    <span class="px-2.5 py-1 text-xs font-extrabold rounded-full bg-[#0056D2]/10 text-[#0056D2] uppercase tracking-wider">
                                         {{ $acc->provider }}
                                     </span>
                                     @if ($acc->is_active)
-                                        <span class="px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase tracking-wider flex items-center gap-1">
+                                        <span class="px-2 py-0.5 text-xs font-extrabold rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase tracking-wider flex items-center gap-1">
                                             <span class="w-1 h-1 bg-emerald-500 rounded-full"></span>
                                             Active
                                         </span>
                                     @else
-                                        <span class="px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-slate-100 text-slate-400 border border-slate-200 uppercase tracking-wider">
+                                        <span class="px-2 py-0.5 text-xs font-extrabold rounded-full bg-slate-100 text-slate-400 border border-slate-200 uppercase tracking-wider">
                                             Inactive
                                         </span>
                                     @endif
                                 </div>
                                 <div class="space-y-2">
                                     <div>
-                                        <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Bank Name</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Bank Name</span>
                                         <span class="text-xs font-bold text-slate-700">{{ $acc->bank_name }}</span>
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Account Number</span>
+                                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Account Number</span>
                                             <span class="text-sm font-mono font-bold text-slate-800 tracking-wider">{{ $acc->account_number }}</span>
                                         </div>
                                         <button @click="copy('{{ $acc->account_number }}', 'Account Number')" class="text-slate-400 hover:text-[#0056D2] p-1.5 rounded-lg hover:bg-slate-200/50 transition-colors">
@@ -576,14 +576,14 @@
                                         </button>
                                     </div>
                                     <div>
-                                        <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Account Name</span>
-                                        <span class="text-[10px] font-semibold text-slate-500">{{ $acc->account_name }}</span>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Account Name</span>
+                                        <span class="text-xs font-semibold text-slate-500">{{ $acc->account_name }}</span>
                                     </div>
                                 </div>
                             </div>
                         @empty
                             <div class="col-span-full py-10 text-center text-slate-400 text-sm flex flex-col items-center justify-center border border-dashed rounded-3xl">
-                                <i data-lucide="piggy-bank" class="w-10 h-10 text-slate-350 mb-2.5"></i>
+                                <i data-lucide="piggy-bank" class="w-10 h-10 text-slate-400 mb-2.5"></i>
                                 No virtual bank accounts linked to this profile.
                             </div>
                         @endforelse

@@ -105,7 +105,7 @@
                                     <p class="text-xs text-slate-200 mt-0.5 font-medium">Verify recipient before submitting.</p>
                                 </div>
                             </div>
-                            <span class="inline-block text-[9px] font-extrabold text-[#0056D2] bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">Settlement</span>
+                            <span class="inline-block text-xs font-extrabold text-[#0056D2] bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">Settlement</span>
                         </div>
 
                         <!-- Card Body -->
@@ -137,13 +137,13 @@
                                 {{-- Bank Preview (shown after selection) --}}
                                 <div id="bankPreviewWrapper" class="d-none">
                                     <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 shadow-inner">
-                                        <div class="w-10 h-10 rounded-full bg-white border border-slate-150 flex items-center justify-center shrink-0 shadow-sm">
+                                        <div class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
                                             <i data-lucide="bank" class="w-5 h-5 text-[#0056D2]" id="defaultBankIcon"></i>
                                             <img src="" id="selectedBankLogo" class="d-none w-6 h-6 object-contain">
                                         </div>
                                         <div class="min-w-0 flex-grow">
                                             <p id="previewBankName" class="font-bold text-xs text-slate-800 truncate">Select a Bank</p>
-                                            <small id="previewAccountNo" class="text-[10px] text-slate-400 font-semibold tracking-wide">Enter details below</small>
+                                            <small id="previewAccountNo" class="text-xs text-slate-400 font-semibold tracking-wide">Enter details below</small>
                                         </div>
                                     </div>
                                 </div>
@@ -163,7 +163,7 @@
 
                                 {{-- Custom Bank Picker --}}
                                 <div class="space-y-1.5" id="bankPickerWrapper">
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Select Bank <span class="text-rose-500">*</span></label>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Select Bank <span class="text-rose-500">*</span></label>
                                     <div class="relative">
                                         {{-- Trigger --}}
                                         <div class="w-full flex items-center border border-slate-200 rounded-xl bg-white shadow-sm cursor-pointer select-none" id="bankPickerTrigger" role="button" tabindex="0">
@@ -178,7 +178,7 @@
                                         </div>
 
                                         {{-- Dropdown Panel --}}
-                                        <div id="bankPickerDropdown" class="d-none absolute left-0 right-0 z-50 mt-1.5 bg-white border border-slate-150 rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-100">
+                                        <div id="bankPickerDropdown" class="d-none absolute left-0 right-0 z-50 mt-1.5 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-100">
                                             {{-- Search Input --}}
                                             <div class="p-2 border-b border-slate-100 bg-slate-50">
                                                 <div class="relative">
@@ -218,7 +218,7 @@
 
                                 {{-- Account Number --}}
                                 <div class="space-y-1.5">
-                                    <label for="account_no" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account Number <span class="text-rose-500">*</span></label>
+                                    <label for="account_no" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Account Number <span class="text-rose-500">*</span></label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                                             <i data-lucide="credit-card" class="w-4 h-4"></i>
@@ -231,15 +231,15 @@
                                                required>
                                     </div>
                                     <div class="mt-1.5 min-h-[22px] flex flex-wrap gap-2 items-center">
-                                        <div id="accountNameDisplay" class="text-[10px] font-bold"></div>
-                                        <div id="accountErrorDisplay" class="text-[10px] font-bold text-rose-600"></div>
+                                        <div id="accountNameDisplay" class="text-xs font-bold"></div>
+                                        <div id="accountErrorDisplay" class="text-xs font-bold text-rose-600"></div>
                                         <input type="hidden" name="account_name" id="account_name_hidden">
                                     </div>
                                 </div>
 
                                 {{-- Amount --}}
                                 <div class="space-y-1.5">
-                                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                    <div class="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-wider">
                                         <label for="amount_display">Withdrawal Amount <span class="text-rose-500">*</span></label>
                                         <span class="text-slate-400 lowercase">Balance: 
                                             <strong class="text-emerald-600 font-extrabold uppercase">
@@ -259,9 +259,9 @@
                                         <input type="hidden" id="amount" name="amount" required>
                                     </div>
                                     
-                                    <div id="amount_in_words" class="text-[10px] font-bold text-[#0056D2] bg-[#0056D2]/5 px-3 py-2 rounded-xl mt-1.5 hidden leading-normal"></div>
+                                    <div id="amount_in_words" class="text-xs font-bold text-[#0056D2] bg-[#0056D2]/5 px-3 py-2 rounded-xl mt-1.5 hidden leading-normal"></div>
                                     
-                                    <div class="flex justify-between items-center text-[10px] text-slate-400 font-semibold pt-1">
+                                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold pt-1">
                                         <span>Min: ₦100.00</span>
                                         <span>Daily Limit: ₦{{ number_format($user->limit, 2) }}</span>
                                     </div>
@@ -284,7 +284,7 @@
 
                                 @if(auth()->user()->role === 'super_admin')
                                     <div class="text-center pt-2">
-                                        <a href="{{ route('withdraw.syncBanks') }}" class="inline-flex items-center gap-1 text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 border border-slate-200/60 px-3 py-1.5 rounded-full">
+                                        <a href="{{ route('withdraw.syncBanks') }}" class="inline-flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 border border-slate-200/60 px-3 py-1.5 rounded-full">
                                             <i data-lucide="refresh-cw" class="w-3 h-3"></i> Sync Bank Infrastructure
                                         </a>
                                     </div>
@@ -294,7 +294,7 @@
                     </div>
 
                     <!-- Footer Info -->
-                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold">
+                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center gap-1.5 text-xs text-slate-400 font-semibold">
                         <i data-lucide="shield-check" class="w-4 h-4 text-[#0056D2]/80"></i>
                         <span>PCI-DSS Secured Bank Gateway</span>
                     </div>
@@ -323,7 +323,7 @@
                             @if(isset($recentRecipients) && count($recentRecipients) > 0)
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     @foreach($recentRecipients as $recipient)
-                                        <div class="flex items-center gap-3 p-3 bg-white border border-slate-150 hover:border-[#0056D2]/30 hover:bg-[#0056D2]/5 rounded-2xl shadow-sm transition-all duration-200 cursor-pointer"
+                                        <div class="flex items-center gap-3 p-3 bg-white border border-slate-200 hover:border-[#0056D2]/30 hover:bg-[#0056D2]/5 rounded-2xl shadow-sm transition-all duration-200 cursor-pointer"
                                              onclick="selectRecentBank('{{ $recipient['bank_code'] }}', '{{ $recipient['account_no'] }}', '{{ $recipient['account_name'] }}')">
 
                                             <div class="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
@@ -336,8 +336,8 @@
                                             </div>
 
                                             <div class="flex-grow min-w-0">
-                                                <span class="block text-xs font-bold text-slate-850 truncate leading-snug">{{ $recipient['account_name'] }}</span>
-                                                <span class="block text-[10px] text-slate-400 font-medium truncate mt-0.5">
+                                                <span class="block text-xs font-bold text-slate-900 truncate leading-snug">{{ $recipient['account_name'] }}</span>
+                                                <span class="block text-xs text-slate-400 font-medium truncate mt-0.5">
                                                     {{ $recipient['bank_name'] }} &bull; {{ $recipient['account_no'] }}
                                                 </span>
                                             </div>
@@ -361,7 +361,7 @@
                     </div>
 
                     <!-- Footer -->
-                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center text-[10px] text-slate-400 font-semibold gap-1">
+                    <div class="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-center text-xs text-slate-400 font-semibold gap-1">
                         <span>Protected by Multi-Factor Authentication</span>
                     </div>
 
@@ -590,7 +590,7 @@
             updateBankPreview();
 
             if (bankCode && acctNo.length === 10) {
-                accountNameDisp.innerHTML  = '<span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1 rounded-full"><span class="w-2.5 h-2.5 border border-slate-400 border-t-transparent rounded-full animate-spin"></span> Verifying...</span>';
+                accountNameDisp.innerHTML  = '<span class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1 rounded-full"><span class="w-2.5 h-2.5 border border-slate-400 border-t-transparent rounded-full animate-spin"></span> Verifying...</span>';
                 accountErrorDisp.innerHTML = '';
 
                 fetch("{{ route('withdraw.verifyAccount') }}", {
@@ -601,19 +601,19 @@
                 .then(r => r.json())
                 .then(data => {
                     if (data.success) {
-                        accountNameDisp.innerHTML  = `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="check-circle" class="w-3.5 h-3.5 inline-block"></i> ${data.account_name}</span>`;
+                        accountNameDisp.innerHTML  = `<span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="check-circle" class="w-3.5 h-3.5 inline-block"></i> ${data.account_name}</span>`;
                         accountNameHidden.value    = data.account_name;
                         accountErrorDisp.innerHTML = '';
                     } else {
                         accountNameDisp.innerHTML  = '';
-                        accountErrorDisp.innerHTML = `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="alert-circle" class="w-3.5 h-3.5 inline-block"></i> ${data.message}</span>`;
+                        accountErrorDisp.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-bold text-rose-600 bg-rose-50 border border-rose-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="alert-circle" class="w-3.5 h-3.5 inline-block"></i> ${data.message}</span>`;
                         accountNameHidden.value    = '';
                     }
                     if (typeof lucide !== 'undefined') lucide.createIcons();
                 })
                 .catch(() => {
                     accountNameDisp.innerHTML  = '';
-                    accountErrorDisp.innerHTML = '<span class="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="wifi-off" class="w-3.5 h-3.5 inline-block"></i> Connection failed</span>';
+                    accountErrorDisp.innerHTML = '<span class="inline-flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="wifi-off" class="w-3.5 h-3.5 inline-block"></i> Connection failed</span>';
                     if (typeof lucide !== 'undefined') lucide.createIcons();
                 });
             }
@@ -730,7 +730,7 @@
             accountNoInput.classList.add('border-emerald-500');
             setTimeout(() => accountNoInput.classList.remove('border-emerald-500'), 2000);
 
-            accountNameDisp.innerHTML  = `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="check-circle" class="w-3.5 h-3.5 inline-block"></i> ${accountName}</span>`;
+            accountNameDisp.innerHTML  = `<span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="check-circle" class="w-3.5 h-3.5 inline-block"></i> ${accountName}</span>`;
             accountNameHidden.value    = accountName;
             accountErrorDisp.innerHTML = '';
             updateBankPreview();

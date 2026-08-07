@@ -28,7 +28,7 @@
                     <i data-lucide="message-square" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Tickets</span>
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Total Tickets</span>
                     <span class="text-xl font-black text-slate-800 font-display mt-0.5 block">{{ $totalTickets }}</span>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                     <i data-lucide="clock" class="w-5 h-5 animate-pulse"></i>
                 </div>
                 <div>
-                    <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Open Tickets</span>
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Open Tickets</span>
                     <span class="text-xl font-black text-slate-800 font-display mt-0.5 block">{{ $openTickets }}</span>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                     <i data-lucide="reply" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Responded</span>
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Responded</span>
                     <span class="text-xl font-black text-slate-800 font-display mt-0.5 block">{{ $respondedTickets }}</span>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                     <i data-lucide="archive" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Closed Tickets</span>
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Closed Tickets</span>
                     <span class="text-xl font-black text-slate-800 font-display mt-0.5 block">{{ $closedTickets }}</span>
                 </div>
             </div>
@@ -71,14 +71,14 @@
         <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
             <form method="GET" action="{{ route('admin.manage.support.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                 <div>
-                    <label for="search" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Search Query</label>
+                    <label for="search" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Search Query</label>
                     <input type="text" id="search" name="search" value="{{ request('search') }}"
                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2]"
                            placeholder="Subject, email, or name...">
                 </div>
 
                 <div>
-                    <label for="status" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Status</label>
+                    <label for="status" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Status</label>
                     <select id="status" name="status"
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2]">
                         <option value="">All Statuses</option>
@@ -89,7 +89,7 @@
                 </div>
 
                 <div>
-                    <label for="priority" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Priority</label>
+                    <label for="priority" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Priority</label>
                     <select id="priority" name="priority"
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2]">
                         <option value="">All Priorities</option>
@@ -119,7 +119,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                             <th class="py-4 px-6">Ticket Details</th>
                             <th class="py-4 px-6">Customer Details</th>
                             <th class="py-4 px-6">Category</th>
@@ -135,7 +135,7 @@
                                     <span class="block text-slate-800 font-bold font-display truncate max-w-[220px]">
                                         {{ $ticket->subject }}
                                     </span>
-                                    <span class="block text-[10px] text-slate-400 mt-0.5">
+                                    <span class="block text-xs text-slate-400 mt-0.5">
                                         ID: #{{ $ticket->id }} • Created: {{ $ticket->created_at->format('M d, Y h:i A') }}
                                     </span>
                                 </td>
@@ -143,7 +143,7 @@
                                     <span class="block text-slate-800 font-bold font-display">
                                         {{ $ticket->user->first_name }} {{ $ticket->user->last_name }}
                                     </span>
-                                    <span class="block text-[10px] text-slate-400 mt-0.5">
+                                    <span class="block text-xs text-slate-400 mt-0.5">
                                         {{ $ticket->user->email }}
                                     </span>
                                 </td>
@@ -151,12 +151,12 @@
                                     {{ $ticket->category }}
                                 </td>
                                 <td class="py-4 px-6">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold border {{ $ticket->priority_badge }}">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-extrabold border {{ $ticket->priority_badge }}">
                                         {{ ucfirst($ticket->priority) }}
                                     </span>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold border rounded-full uppercase tracking-wider {{ $ticket->status_badge }}">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-extrabold border rounded-full uppercase tracking-wider {{ $ticket->status_badge }}">
                                         <span class="w-1.5 h-1.5 rounded-full bg-current {{ $ticket->status === 'open' ? 'animate-ping' : '' }}"></span>
                                         {{ $ticket->status }}
                                     </span>
