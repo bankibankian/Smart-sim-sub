@@ -53,7 +53,7 @@
                        x-ref="headerSearchInput"
                        type="text" 
                        placeholder="Search settings, services, users..." 
-                       class="w-full pl-9 pr-12 py-1.5 text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200/80 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] focus:outline-none transition-all">
+                       class="w-full pl-9 pr-12 py-1.5 text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200/80 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] focus:outline-none transition-all">
                 <span class="absolute right-2.5 top-1.5 px-1.5 py-0.5 text-[9px] font-bold text-slate-400 bg-white border border-slate-200 rounded-md shadow-sm pointer-events-none">Ctrl K</span>
             </div>
 
@@ -70,7 +70,7 @@
 
                 <!-- Loading State -->
                 <div x-show="loading" class="flex items-center justify-center py-6 gap-2 text-slate-400">
-                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-[#42517c]"></i>
+                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-[#0056D2]"></i>
                     <span class="text-[11px] font-semibold font-display">Searching SmartSIM...</span>
                 </div>
 
@@ -87,8 +87,8 @@
                             <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1 font-display" x-text="category"></span>
                             <div class="space-y-0.5">
                                 <template x-for="item in results.filter(r => r.category === category)" :key="item.title + item.url">
-                                    <a :href="item.url" class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-slate-50 hover:text-[#42517c] group transition-colors">
-                                        <div class="w-7 h-7 rounded-lg bg-slate-50 group-hover:bg-white border border-slate-100 flex items-center justify-center text-slate-500 group-hover:text-[#42517c] transition-colors shadow-sm">
+                                    <a :href="item.url" class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-slate-50 hover:text-[#0056D2] group transition-colors">
+                                        <div class="w-7 h-7 rounded-lg bg-slate-50 group-hover:bg-white border border-slate-100 flex items-center justify-center text-slate-500 group-hover:text-[#0056D2] transition-colors shadow-sm">
                                             <i :data-lucide="item.icon" class="w-3.5 h-3.5"></i>
                                         </div>
                                         <div class="flex-1 min-w-0">
@@ -144,9 +144,9 @@
                         <span class="text-xs font-bold text-slate-800 font-display">
                             {{ auth()->user() && auth()->user()->isStaff() ? 'System Transactions' : 'Recent Transactions' }}
                         </span>
-                        <span x-show="badge > 0" class="px-1.5 py-0.5 text-[10px] font-bold bg-[#42517c]/10 text-[#42517c] rounded-md font-display" x-text="badge"></span>
+                        <span x-show="badge > 0" class="px-1.5 py-0.5 text-[10px] font-bold bg-[#0056D2]/10 text-[#0056D2] rounded-md font-display" x-text="badge"></span>
                     </div>
-                    <button x-show="badge > 0" @click="badge = 0; notifications = notifications.map(n => ({ ...n, read: true }))" class="text-[10px] font-bold text-[#42517c] hover:underline font-display">
+                    <button x-show="badge > 0" @click="badge = 0; notifications = notifications.map(n => ({ ...n, read: true }))" class="text-[10px] font-bold text-[#0056D2] hover:underline font-display">
                         Mark all as read
                     </button>
                 </div>
@@ -160,7 +160,7 @@
 
                     <template x-for="notif in notifications" :key="notif.id">
                         <div class="p-3 hover:bg-slate-50/50 transition-colors flex gap-2.5 items-start">
-                            <div class="mt-1 flex-shrink-0 w-2 h-2 rounded-full" :class="notif.read ? 'bg-slate-200' : 'bg-[#42517c]'"></div>
+                            <div class="mt-1 flex-shrink-0 w-2 h-2 rounded-full" :class="notif.read ? 'bg-slate-200' : 'bg-[#0056D2]'"></div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="block text-xs font-semibold text-slate-700 truncate font-display" x-text="notif.title"></span>
@@ -186,7 +186,7 @@
                          alt="{{ Auth::user()->first_name ?? Auth::user()->name }}" 
                          class="w-8 h-8 rounded-xl object-cover shadow-inner">
                 @else
-                    <div class="w-8 h-8 rounded-xl bg-[#42517c]/10 text-[#42517c] flex items-center justify-center font-bold text-xs font-display shadow-inner">
+                    <div class="w-8 h-8 rounded-xl bg-[#0056D2]/10 text-[#0056D2] flex items-center justify-center font-bold text-xs font-display shadow-inner">
                         {{ strtoupper(substr(Auth::user()->first_name ?? Auth::user()->name ?? 'U', 0, 1)) }}{{ strtoupper(substr(Auth::user()->last_name ?? '', 0, 1)) }}
                     </div>
                 @endif
@@ -302,7 +302,7 @@ class="relative">
                            @keydown.escape="searchOpen = false; query = ''; results = []"
                            type="text" 
                            placeholder="Type to search users, services, accounts..." 
-                           class="w-full pl-10 pr-4 py-2.5 text-sm text-slate-700 bg-slate-50 border border-slate-200/80 rounded-xl focus:bg-white focus:border-[#42517c] focus:ring-1 focus:ring-[#42517c] focus:outline-none transition-all"
+                           class="w-full pl-10 pr-4 py-2.5 text-sm text-slate-700 bg-slate-50 border border-slate-200/80 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] focus:outline-none transition-all"
                            x-ref="searchInput">
                 </div>
 
@@ -310,7 +310,7 @@ class="relative">
                 <div class="flex-1 overflow-y-auto p-3 min-h-[120px]">
                     <!-- Loading state -->
                     <div x-show="loading" class="flex flex-col items-center justify-center py-10 gap-2 text-slate-400">
-                        <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-[#42517c]"></i>
+                        <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-[#0056D2]"></i>
                         <span class="text-xs font-semibold font-display">Searching SmartSIM...</span>
                     </div>
 
@@ -340,7 +340,7 @@ class="relative">
                                 <div class="space-y-1">
                                     <template x-for="item in results.filter(r => r.category === category)" :key="item.title + item.url">
                                         <a :href="item.url" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 hover:text-slate-900 group transition-all">
-                                            <div class="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-white border border-slate-100 flex items-center justify-center text-slate-500 group-hover:text-[#42517c] transition-colors shadow-sm">
+                                            <div class="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-white border border-slate-100 flex items-center justify-center text-slate-500 group-hover:text-[#0056D2] transition-colors shadow-sm">
                                                 <i :data-lucide="item.icon" class="w-4 h-4"></i>
                                             </div>
                                             <div class="flex-1 min-w-0">
