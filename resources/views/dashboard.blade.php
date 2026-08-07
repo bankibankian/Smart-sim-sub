@@ -235,7 +235,8 @@
                 Quick Transaction Services
             </h3>
             
-            <div class="row row-cols-3 row-cols-md-5 g-2 g-md-4 justify-content-center">
+            <div class="row row-cols-3 row-cols-md-6 g-2 g-md-4 justify-content-center">
+
                 <!-- Service 1: Buy Airtime -->
                 <div class="col">
                     <a href="{{ route('airtime') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
@@ -243,7 +244,7 @@
                             <i data-lucide="phone" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-800 mb-0 font-display text-xs sm:text-sm">Buy Airtime</h4>
+                            <h4 class="font-bold text-slate-800 mb-0 font-display text-sm sm:text-sm">Buy Airtime</h4>
                             <p class="text-slate-400 hidden md:block mb-0 mt-1 text-[9px]">Top-up instantly</p>
                         </div>
                     </a>
@@ -256,7 +257,7 @@
                             <i data-lucide="wifi" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-800 mb-0 font-display text-xs sm:text-sm">Buy Data</h4>
+                            <h4 class="font-bold text-slate-800 mb-0 font-display text-sm sm:text-sm">Buy Data</h4>
                             <p class="text-slate-400 hidden md:block mb-0 mt-1 text-[9px]">SME & Retail data</p>
                         </div>
                     </a>
@@ -269,7 +270,7 @@
                             <i data-lucide="cpu" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-800 mb-0 font-display text-xs sm:text-sm">SIM Plan</h4>
+                            <h4 class="font-bold text-slate-800 mb-0 font-display text-sm sm:text-sm">SIM Plan</h4>
                             <p class="text-slate-400 hidden md:block mb-0 mt-1 text-[9px]">Activations & SIMs</p>
                         </div>
                     </a>
@@ -282,7 +283,7 @@
                             <i data-lucide="banknote" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-800 mb-0 font-display text-xs sm:text-sm">Withdraw</h4>
+                            <h4 class="font-bold text-slate-800 mb-0 font-display text-sm sm:text-sm">Withdraw</h4>
                             <p class="text-slate-400 hidden md:block mb-0 mt-1 text-[9px]">Pay out to bank</p>
                         </div>
                     </a>
@@ -300,6 +301,60 @@
                         </div>
                     </a>
                 </div>
+
+                <!-- Service 6: NIN -->
+                <div class="col">
+                    <a href="{{ route('nin.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                        <div class="p-2 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center transition-all w-10 h-10">
+                            <i data-lucide="id-card" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-0 font-display text-sm sm:text-sm">NIN Verification</h4>
+                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-[9px]">Verify your identity</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Service 7: BVN -->
+                <div class="col">
+                    <a href="{{ route('bvn.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                        <div class="p-2 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center transition-all w-10 h-10">
+                            <i data-lucide="id-card" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-0 font-display text-sm sm:text-sm">BVN Verification</h4>
+                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-[9px]">BVN verification service</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Service 8: NIN by Phone -->
+                <div class="col">
+                    <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                        <div class="p-2 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center transition-all w-10 h-10">
+                            <i data-lucide="id-card" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-0 font-display text-sm sm:text-sm">NIN by Phone</h4>
+                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-[9px]">NIN retrieval by phone</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Service 9: NIN by Demo -->
+                <div class="col">
+                    <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center gap-2 h-100">
+                        <div class="p-2 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center transition-all w-10 h-10">
+                            <i data-lucide="id-card" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-0 font-display text-sm sm:text-sm">NIN by Demo</h4>
+                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-[9px]">NIN retrieval by demo</p>
+                        </div>
+                    </a>
+                </div>
+
+                
             </div>
         </div>
 
