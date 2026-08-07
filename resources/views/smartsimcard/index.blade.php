@@ -6,7 +6,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="cpu" class="w-5 h-5"></i>
                     </div>
                     SIM Services
@@ -17,19 +17,19 @@
 
         {{-- Flash Messages --}}
         @if (session('success'))
-            <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-emerald-800 flex items-start gap-3 shadow-sm">
+            <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4 text-emerald-800 flex items-start gap-3 shadow-sm">
                 <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
                 <div class="text-sm font-semibold">{{ session('success') }}</div>
             </div>
         @endif
         @if (session('warning'))
-            <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-amber-800 flex items-start gap-3 shadow-sm">
+            <div class="bg-amber-50 border border-amber-100 rounded-lg p-4 text-amber-800 flex items-start gap-3 shadow-sm">
                 <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5"></i>
                 <div class="text-sm font-semibold">{{ session('warning') }}</div>
             </div>
         @endif
         @if (session('error'))
-            <div class="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-rose-800 flex items-start gap-3 shadow-sm">
+            <div class="bg-rose-50 border border-rose-100 rounded-lg p-4 text-rose-800 flex items-start gap-3 shadow-sm">
                 <i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0 mt-0.5"></i>
                 <div class="text-sm font-semibold">{{ session('error') }}</div>
             </div>
@@ -49,13 +49,13 @@
                  style="display: none;">
                 <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openResultModal = false"></div>
                 <div class="flex min-h-screen items-center justify-center p-4">
-                    <div class="relative w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all space-y-4">
+                    <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all space-y-4">
                          <button type="button" @click="openResultModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
                              <i data-lucide="x" class="w-5 h-5"></i>
                          </button>
                          
                          <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
-                             <div class="w-9 h-9 rounded-xl {{ $res['success'] && isset($res['assigned']) && $res['assigned'] ? 'bg-indigo-50 text-[#0056D2]' : 'bg-emerald-50 text-emerald-600' }} flex items-center justify-center">
+                             <div class="w-9 h-9 rounded-xl {{ $res['success'] && isset($res['assigned']) && $res['assigned'] ? 'bg-primary/10 text-primary' : 'bg-emerald-50 text-emerald-600' }} flex items-center justify-center">
                                  <i data-lucide="search" class="w-4 h-4"></i>
                              </div>
                              <div>
@@ -70,7 +70,7 @@
                              <div class="space-y-3">
                                  <div class="flex justify-between items-center text-sm">
                                      <span class="text-slate-450 font-semibold">SIM Status:</span>
-                                     <span class="font-bold uppercase px-2.5 py-0.5 rounded-full text-[10px] tracking-wider {{ $res['status'] === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-[#0056D2]' }}">
+                                     <span class="font-bold uppercase px-2.5 py-0.5 rounded-full text-[10px] tracking-wider {{ $res['status'] === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-primary/10 text-primary' }}">
                                          @if($res['status'] === 'active')
                                              ACTIVATED
                                          @elseif($res['status'] === 'available')
@@ -90,7 +90,7 @@
                                  </div>
 
                                  @if (isset($res['assigned']) && $res['assigned'])
-                                     <div class="bg-indigo-50/50 rounded-2xl p-4 border border-indigo-100/50 space-y-2 mt-2">
+                                     <div class="bg-primary/5 rounded-lg p-4 border border-primary/10 space-y-2 mt-2">
                                          <h5 class="text-xs font-bold text-[#0056D2] uppercase tracking-wider">Assigned User Details</h5>
                                          <div class="flex justify-between text-sm">
                                              <span class="text-slate-500 font-semibold text-xs">Name:</span>
@@ -120,9 +120,9 @@
             <!-- Left Panel: Actions & Forms (Forms Column) -->
             <div class="lg:col-span-5 flex flex-col gap-6">
                 <!-- Activation Request Form Card -->
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+                <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
                     <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
+                        <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                             <i data-lucide="zap" class="w-4 h-4"></i>
                         </div>
                         <div>
@@ -154,10 +154,10 @@
                         </div>
 
                         <!-- Dynamic Price indicator for Activation Request -->
-                        <div id="activation-price-box" class="hidden bg-indigo-50/70 border border-indigo-100 rounded-2xl p-4 space-y-1 shadow-inner">
+                        <div id="activation-price-box" class="hidden bg-primary/5 border border-primary/10 rounded-lg p-4 space-y-1 shadow-inner">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Activation Fee</span>
-                                <span id="activation-price-value" class="text-base font-extrabold text-indigo-700 font-display">₦0.00</span>
+                                <span id="activation-price-value" class="text-base font-extrabold text-primary font-display">₦0.00</span>
                             </div>
                             <p class="text-[10px] text-slate-400">This amount will be debited from your wallet balance.</p>
                         </div>
@@ -173,7 +173,7 @@
             <!-- Right Panel: Data Lists & Tabbed Tables -->
             <div class="lg:col-span-7 flex flex-col gap-6" x-data="{ currentTab: 'sims' }">
                 <!-- Action Row -->
-                <div class="flex flex-wrap items-center gap-3 bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
+                <div class="flex flex-wrap items-center gap-3 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
                     <button type="button" @click="openRequestSimModal = true" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-xs rounded-xl shadow-sm transition-all duration-150">
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                         Request SIM Card
@@ -198,12 +198,12 @@
                      style="display: none;">
                     <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openRequestSimModal = false"></div>
                     <div class="flex min-h-screen items-center justify-center p-4">
-                        <div class="relative w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all">
+                        <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all">
                              <button type="button" @click="openRequestSimModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
                                  <i data-lucide="x" class="w-5 h-5"></i>
                              </button>
                              <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
-                                 <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
+                                 <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                      <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                                  </div>
                                  <div>
@@ -258,12 +258,12 @@
                      style="display: none;">
                     <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openLookupModal = false"></div>
                     <div class="flex min-h-screen items-center justify-center p-4">
-                        <div class="relative w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all">
+                        <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all">
                              <button type="button" @click="openLookupModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
                                  <i data-lucide="x" class="w-5 h-5"></i>
                              </button>
                              <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
-                                 <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
+                                 <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                      <i data-lucide="search" class="w-4 h-4"></i>
                                  </div>
                                  <div>
@@ -287,7 +287,7 @@
                 </div>
 
                 <!-- Navigation Tabs -->
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-2 flex gap-1">
+                <div class="bg-white rounded-lg border border-slate-100 shadow-sm p-2 flex gap-1">
                     <button type="button" @click="currentTab = 'sims'" :class="currentTab === 'sims' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
                         <i data-lucide="cpu" class="w-4 h-4"></i> My SIM Cards
                     </button>
@@ -297,7 +297,7 @@
                 </div>
 
                 <!-- Tab: SIM Inventory / My SIM Cards -->
-                <div x-show="currentTab === 'sims'" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                <div x-show="currentTab === 'sims'" class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">
                         My Registered SIMs
                     </h3>
@@ -378,7 +378,7 @@
                                                             document.body.appendChild(f);
                                                             f.submit();
                                                         }
-                                                    })" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-2 py-1 rounded-lg font-display text-[10px] tracking-wide">
+                                                    })" class="bg-primary hover:bg-[#0049b8] text-white font-bold px-2 py-1 rounded-lg font-display text-[10px] tracking-wide">
                                                         Delegate
                                                     </button>
                                                 @else
@@ -399,7 +399,7 @@
                 </div>
 
                 <!-- Tab: My Requests -->
-                <div x-show="currentTab === 'my_requests'" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                <div x-show="currentTab === 'my_requests'" class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">My SIM Requests</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">

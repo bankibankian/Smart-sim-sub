@@ -6,7 +6,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
                     </div>
                     BVN Verification
@@ -19,7 +19,7 @@
         <div class="row g-4">
             <!-- BVN Verification Form Card -->
             <div class="col-12 col-lg-6">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
+                <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
                     <div>
                         <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
                             <div class="flex items-center gap-3">
@@ -31,7 +31,7 @@
                                     <p class="text-xs text-slate-200 mt-0.5">Perform instant bank identification query.</p>
                                 </div>
                             </div>
-                            <span class="text-[10px] font-bold text-indigo-600 bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            <span class="text-[10px] font-bold text-primary bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">
                                 Instant
                             </span>
                         </div>
@@ -43,7 +43,7 @@
 
                             {{-- Alerts --}}
                             @if (session('error'))
-                                <div class="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-rose-800 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
+                                <div class="bg-rose-50 border border-rose-100 rounded-lg p-4 text-rose-800 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
                                     <i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0 mt-0.5"></i>
                                     <div class="text-xs font-semibold">{{ session('error') }}</div>
                                 </div>
@@ -51,12 +51,12 @@
 
                             @if (session('status') && session('message'))
                                 @if (session('status') === 'success')
-                                    <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-emerald-800 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
+                                    <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4 text-emerald-800 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
                                         <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
                                         <div class="text-xs font-semibold">{{ session('message') }}</div>
                                     </div>
                                 @else
-                                    <div class="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-rose-800 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
+                                    <div class="bg-rose-50 border border-rose-100 rounded-lg p-4 text-rose-800 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
                                         <i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0 mt-0.5"></i>
                                         <div class="text-xs font-semibold">{{ session('message') }}</div>
                                     </div>
@@ -64,7 +64,7 @@
                             @endif
 
                             @if ($errors->any())
-                                <div class="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-rose-800 space-y-2 shadow-sm animate-in fade-in duration-300">
+                                <div class="bg-rose-50 border border-rose-100 rounded-lg p-4 text-rose-800 space-y-2 shadow-sm animate-in fade-in duration-300">
                                     <div class="flex items-start gap-3">
                                         <i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0 mt-0.5"></i>
                                         <div class="text-xs font-bold">Please correct the following errors:</div>
@@ -88,9 +88,9 @@
                                 </div>
 
                                 <div class="space-y-3">
-                                    <div class="bg-indigo-50/40 border border-indigo-100/60 rounded-2xl p-4 flex justify-between items-center">
+                                    <div class="bg-primary/5 border border-primary/10 rounded-lg p-4 flex justify-between items-center">
                                         <div class="flex items-center gap-2.5">
-                                            <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-[#0056D2]">
+                                            <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                                                 <i data-lucide="tag" class="w-4 h-4"></i>
                                             </div>
                                             <span class="text-xs font-bold text-slate-750">Service Fee</span>
@@ -117,9 +117,9 @@
 
             <!-- Verification Info Card -->
             <div class="col-12 col-lg-6">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between min-h-[400px]">
+                <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between min-h-[400px]">
                     <div>
-                        <div class="bg-gradient-to-r from-emerald-600 to-teal-500 px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+                        <div class="bg-gradient-to-r from-vibrant to-[#008f4c] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
                                     <i data-lucide="file-check-2" class="w-5 h-5"></i>
@@ -134,7 +134,7 @@
                         <div class="p-6 flex-grow">
                             @if (session('verification') && isset(session('verification')['data']))
                                 <div class="space-y-6">
-                                    <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-emerald-800 flex items-center gap-3 shadow-sm animate-in fade-in duration-300">
+                                    <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4 text-emerald-800 flex items-center gap-3 shadow-sm animate-in fade-in duration-300">
                                         <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0"></i>
                                         <div class="text-xs font-bold">Verification Successful!</div>
                                     </div>
@@ -142,13 +142,13 @@
                                     {{-- Passport Frame --}}
                                     <div class="flex flex-col items-center">
                                         <div class="relative group">
-                                            <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500 to-teal-500 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-300"></div>
-                                            <div class="relative p-1 bg-white border border-slate-100 rounded-3xl shadow-md overflow-hidden w-36 h-40 flex items-center justify-center">
+                                            <div class="absolute inset-0 bg-gradient-to-tr from-vibrant to-[#008f4c] rounded-xl blur opacity-20 group-hover:opacity-30 transition duration-300"></div>
+                                            <div class="relative p-1 bg-white border border-slate-100 rounded-xl shadow-md overflow-hidden w-36 h-40 flex items-center justify-center">
                                                 @if (!empty(session('verification')['data']['photo']))
                                                     <img src="data:image/jpeg;base64,{{ session('verification')['data']['photo'] }}"
-                                                        alt="ID Photo" class="w-full h-full object-cover rounded-2xl">
+                                                        alt="ID Photo" class="w-full h-full object-cover rounded-lg">
                                                 @else
-                                                    <div class="w-full h-full bg-slate-50 flex flex-col items-center justify-center text-slate-350 rounded-2xl">
+                                                    <div class="w-full h-full bg-slate-50 flex flex-col items-center justify-center text-slate-350 rounded-lg">
                                                         <i data-lucide="user" class="w-10 h-10 mb-1"></i>
                                                         <span class="text-[9px] font-bold uppercase">No Image</span>
                                                     </div>
@@ -159,7 +159,7 @@
                                     </div>
 
                                     {{-- Details List --}}
-                                    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 divide-y divide-slate-200/50">
+                                    <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 divide-y divide-slate-200/50">
                                         <div class="flex justify-between items-center py-2 text-xs">
                                             <span class="text-slate-450 font-medium">BVN Number</span>
                                             <span class="font-bold text-[#0056D2] font-display tracking-wider">{{ session('verification')['data']['bvn'] }}</span>
@@ -208,10 +208,10 @@
                                             </div>
                                             <div class="col-4">
                                                 <button onclick="confirmDownload('{{ route('premiumBVN', session('verification')['data']['bvn']) }}', 'Premium Slip', {{ $premiumSlipPrice ?? 0 }})"
-                                                        class="w-100 flex flex-col items-center justify-center p-3 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100/50 text-[#0056D2] rounded-xl transition duration-200 font-display space-y-1">
+                                                        class="w-100 flex flex-col items-center justify-center p-3 bg-primary/10 hover:bg-primary/15 border border-primary/20 text-primary rounded-xl transition duration-200 font-display space-y-1">
                                                     <i data-lucide="file-check" class="w-4.5 h-4.5 text-[#0056D2]"></i>
                                                     <span class="text-xs font-bold mt-1">Premium</span>
-                                                    <span class="text-[10px] font-bold text-[#0056D2]/70">₦{{ number_format($premiumSlipPrice ?? 0, 2) }}</span>
+                                                    <span class="text-[10px] font-bold text-primary/70">₦{{ number_format($premiumSlipPrice ?? 0, 2) }}</span>
                                                 </button>
                                             </div>
                                             <div class="col-4">
@@ -259,7 +259,7 @@
                 confirmButtonText: 'Yes, Proceed!',
                 cancelButtonText: 'Cancel',
                 customClass: {
-                    popup: 'rounded-3xl border border-slate-100 shadow-xl p-6',
+                    popup: 'rounded-xl border border-slate-100 shadow-xl p-6',
                     title: 'text-lg font-bold font-display text-slate-900',
                     htmlContainer: 'text-xs text-slate-500 mt-2',
                     confirmButton: 'px-5 py-2.5 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md transition-all duration-200 mx-2 focus:outline-none',
@@ -282,7 +282,7 @@
                             Swal.showLoading();
                         },
                         customClass: {
-                            popup: 'rounded-3xl border border-slate-100 shadow-xl p-6',
+                            popup: 'rounded-xl border border-slate-100 shadow-xl p-6',
                             title: 'text-lg font-bold font-display text-slate-900',
                             htmlContainer: 'text-xs text-slate-500 mt-2'
                         }
