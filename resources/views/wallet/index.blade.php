@@ -258,35 +258,32 @@
                                 <form method="POST" action="{{ route('virtual.account.create') }}" class="space-y-4">
                                     @csrf
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Full Name</label>
-                                        <input type="text" name="name" 
-                                               value="{{ auth()->user()->first_name }} {{ auth()->user()->last_name }} {{ auth()->user()->middle_name }}" 
-                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
-                                               required>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Phone Number</label>
-                                        <input type="tel" name="phone" 
-                                               value="{{ auth()->user()->phone }}" 
-                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
-                                               required>
+                                        <x-input-label value="Full Name" />
+                                        <x-text-input type="text" name="name"
+                                               :value="auth()->user()->first_name . ' ' . auth()->user()->last_name . ' ' . auth()->user()->middle_name"
+                                               required />
                                     </div>
 
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Bank Verification Number (BVN)</label>
-                                        <input type="text" name="bvn" 
-                                               value="{{ old('bvn', auth()->user()->bvn) }}" 
+                                        <x-input-label value="Phone Number" />
+                                        <x-text-input type="tel" name="phone"
+                                               :value="auth()->user()->phone"
+                                               required />
+                                    </div>
+
+                                    <div>
+                                        <x-input-label value="Bank Verification Number (BVN)" />
+                                        <x-text-input type="text" name="bvn"
+                                               :value="old('bvn', auth()->user()->bvn)"
                                                placeholder="Enter 11-digit BVN"
                                                maxlength="11"
                                                pattern="\d{11}"
                                                title="BVN must be exactly 11 digits"
-                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
-                                               required>
+                                               required />
                                     </div>
 
                                     <div class="flex items-start gap-2.5 pt-2">
-                                        <input type="checkbox" id="confirmCheck" class="mt-0.5 rounded border-slate-300 text-[#0056D2] focus:ring-[#0056D2] shrink-0" required>
+                                        <input type="checkbox" id="confirmCheck" class="mt-0.5 rounded border-slate-300 text-primary focus:ring-primary/20 shrink-0" required>
                                         <label for="confirmCheck" class="text-[11px] text-slate-500 leading-relaxed">
                                             I confirm that the above details are accurate and consent to create a virtual account.
                                         </label>

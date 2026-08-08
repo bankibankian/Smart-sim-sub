@@ -80,18 +80,16 @@
                                 <div class="row g-3 text-start">
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">First Name <span class="text-rose-500">*</span></label>
-                                            <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all" 
-                                                name="firstName" type="text"
-                                                placeholder="Enter First Name" required value="{{ old('firstName') }}">
+                                            <x-input-label value="First Name *" />
+                                            <x-text-input name="firstName" type="text"
+                                                placeholder="Enter First Name" required :value="old('firstName')" />
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Last Name <span class="text-rose-500">*</span></label>
-                                            <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all" 
-                                                name="lastName" type="text"
-                                                placeholder="Enter Last Name" required value="{{ old('lastName') }}">
+                                            <x-input-label value="Last Name *" />
+                                            <x-text-input name="lastName" type="text"
+                                                placeholder="Enter Last Name" required :value="old('lastName')" />
                                         </div>
                                     </div>
                                 </div>
@@ -100,20 +98,19 @@
                                 <div class="row g-3 text-start">
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Gender <span class="text-rose-500">*</span></label>
-                                            <select class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all appearance-none" name="gender" required style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2394a3b8%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpolyline points=%276 9 12 15 18 9%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;">
+                                            <x-input-label value="Gender *" />
+                                            <x-select-input name="gender" required>
                                                 <option value="" disabled selected>Select Gender</option>
                                                 <option value="M" {{ old('gender') == 'M' ? 'selected' : '' }}>Male</option>
                                                 <option value="F" {{ old('gender') == 'F' ? 'selected' : '' }}>Female</option>
-                                            </select>
+                                            </x-select-input>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Date of Birth <span class="text-rose-500">*</span></label>
-                                            <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all" 
-                                                name="dateOfBirth" type="text"
-                                                placeholder="DD-MM-YYYY" required value="{{ old('dateOfBirth') }}">
+                                            <x-input-label value="Date of Birth *" />
+                                            <x-text-input name="dateOfBirth" type="text"
+                                                placeholder="DD-MM-YYYY" required :value="old('dateOfBirth')" />
                                             <small class="text-xs text-slate-500 block mt-0.5">Format: 20-02-1966</small>
                                         </div>
                                     </div>

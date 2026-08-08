@@ -69,34 +69,34 @@
             <form method="GET" action="{{ route('transactions') }}" class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
                 <!-- Search Input -->
                 <div class="relative flex-grow">
-                    <input type="text" 
-                           name="search" 
-                           value="{{ request('search') }}" 
-                           placeholder="Search by description, reference or amount..." 
-                           class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm">
-                    <div class="absolute left-4 top-3.5 text-slate-400">
+                    <x-text-input type="text"
+                           name="search"
+                           :value="request('search')"
+                           placeholder="Search by description, reference or amount..."
+                           class="pl-11 pr-4" />
+                    <div class="absolute left-4 top-3 text-slate-400">
                         <i data-lucide="search" class="w-4 h-4"></i>
                     </div>
                 </div>
 
                 <!-- Type Filter -->
                 <div class="w-full md:w-44">
-                    <select name="type" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                    <x-select-input name="type">
                         <option value="">All Types</option>
                         <option value="credit" {{ request('type') == 'credit' ? 'selected' : '' }}>Credit</option>
                         <option value="debit" {{ request('type') == 'debit' ? 'selected' : '' }}>Debit</option>
                         <option value="refund" {{ request('type') == 'refund' ? 'selected' : '' }}>Refund</option>
-                    </select>
+                    </x-select-input>
                 </div>
 
                 <!-- Status Filter -->
                 <div class="w-full md:w-44">
-                    <select name="status" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                    <x-select-input name="status">
                         <option value="">All Statuses</option>
                         <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
                         <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Failed</option>
-                    </select>
+                    </x-select-input>
                 </div>
 
                 <!-- Action Buttons -->

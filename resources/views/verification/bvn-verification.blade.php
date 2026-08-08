@@ -80,11 +80,11 @@
                             <form method="POST" action="{{ route('bvn.verification.store') }}" class="space-y-6 m-0">
                                 @csrf
                                 <div class="space-y-1.5 text-start">
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">BVN Number <span class="text-rose-500">*</span></label>
-                                    <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-sm font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all text-center tracking-widest font-display" 
-                                        name="bvn" type="text"
+                                    <x-input-label value="BVN Number *" />
+                                    <x-text-input name="bvn" type="text"
+                                        class="text-center tracking-widest font-display"
                                         placeholder="Enter 11 Digit BVN" maxlength="11" minlength="11" pattern="[0-9]{11}"
-                                        required value="{{ old('bvn') }}">
+                                        required :value="old('bvn')" />
                                 </div>
 
                                 <div class="space-y-3">

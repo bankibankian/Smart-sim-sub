@@ -97,10 +97,10 @@
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                                                 <i data-lucide="user-check" class="w-4 h-4"></i>
                                             </div>
-                                            <input type="text" id="wallet_id" name="wallet_id"
-                                                   class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 focus:outline-none transition-all shadow-sm"
+                                            <x-text-input type="text" id="wallet_id" name="wallet_id"
+                                                   class="pl-10 pr-4"
                                                    placeholder="Wallet ID, Email, or Phone"
-                                                   required>
+                                                   required />
                                         </div>
                                         <button class="px-5 py-3 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-[0.98] shrink-0" 
                                                 type="button" id="verifyBtn" onclick="verifyUser()">
@@ -144,11 +144,11 @@
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-bold text-sm">
                                             ₦
                                         </div>
-                                        <input type="number" id="amount" name="amount"
-                                               class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 focus:outline-none transition-all shadow-sm"
+                                        <x-text-input type="number" id="amount" name="amount"
+                                               class="pl-8 pr-4"
                                                placeholder="0.00"
                                                min="0.01" step="0.01"
-                                               required>
+                                               required />
                                     </div>
                                 </div>
 
@@ -159,9 +159,9 @@
                                         <div class="absolute top-3 left-3 pointer-events-none text-slate-400">
                                             <i data-lucide="text" class="w-4 h-4"></i>
                                         </div>
-                                        <textarea id="description" name="description" 
-                                                  class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 focus:outline-none transition-all shadow-sm" 
-                                                  rows="2" placeholder="What is this transfer for?"></textarea>
+                                        <x-textarea-input id="description" name="description"
+                                                  class="pl-10 pr-4"
+                                                  rows="2" placeholder="What is this transfer for?"></x-textarea-input>
                                     </div>
                                 </div>
 
