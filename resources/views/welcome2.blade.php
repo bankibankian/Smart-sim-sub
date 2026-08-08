@@ -9,7 +9,7 @@
     <meta name="description" content="SmartSIM is a wholesale telecom platform: buy premium SIM cards loaded with free data and airtime, or become a distribution agent with wholesale rates, instant activation and real-time earnings tracking.">
     <meta name="keywords" content="telecom, SIM card, wholesale SIM, sell SIMs, data welcome bonus, mobile network, SmartSIM, SmartSIMSub, Nigeria SIM, agent SIM distribution">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{{ url('/welcome2') }}">
+    <link rel="canonical" href="{{ url('/') }}">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -17,7 +17,7 @@
     <meta property="og:title" content="SmartSIM — Empowering Businesses Through Smart Connectivity">
     <meta property="og:description" content="Premium SIM cards with massive data bonuses for the public, and wholesale distribution tools for agents.">
     <meta property="og:image" content="{{ asset('assets/images/logo/logo1.png') }}">
-    <meta property="og:url" content="{{ url('/welcome2') }}">
+    <meta property="og:url" content="{{ url('/') }}">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
@@ -39,7 +39,7 @@
         "@@context": "https://schema.org",
         "@@type": "Organization",
         "name": "SmartSIM",
-        "url": "{{ url('/welcome2') }}",
+        "url": "{{ url('/') }}",
         "logo": "{{ asset('assets/images/logo/logo1.png') }}",
         "email": "Support@smartsimsub.com",
         "contactPoint": {

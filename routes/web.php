@@ -4,12 +4,12 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/welcome2', function () {
     return view('welcome2');
 })->name('welcome2');
+
+Route::get('/welcome2', function () {
+    return redirect()->route('welcome2', [], 301);
+});
 
 Route::post('/palmpay/webhook', [\App\Http\Controllers\PaymentWebhookController::class, 'handleWebhook'])->name('palmpay.webhook');
 
