@@ -1,23 +1,23 @@
 @php
     $simTypes = [
         [
-            'name' => 'POS SIM', 'price' => '1,000', 'desc' => 'For payment terminals',
+            'name' => 'POS SIM', 'price' => '8,500', 'desc' => 'For payment terminals',
             'illustration' => 'pages.welcome2.illustrations.pos-sim',
         ],
         [
-            'name' => 'Camera SIM', 'price' => '1,500', 'desc' => 'For connected cameras',
+            'name' => 'Camera SIM', 'price' => '5,500', 'desc' => 'For connected cameras',
             'illustration' => 'pages.welcome2.illustrations.cctv-sim',
         ],
         [
-            'name' => 'CCTV SIM', 'price' => '2,000', 'desc' => 'For surveillance systems',
+            'name' => 'CCTV SIM', 'price' => '8,000', 'desc' => 'For surveillance systems',
             'illustration' => 'pages.welcome2.illustrations.cctv-sim',
         ],
         [
-            'name' => 'Router SIM', 'price' => '2,500', 'desc' => 'For mobile routers',
+            'name' => 'Router SIM', 'price' => '18,000', 'desc' => 'For mobile routers',
             'illustration' => 'pages.welcome2.illustrations.router-sim',
         ],
         [
-            'name' => 'GPS SIM', 'price' => '3,000', 'desc' => 'For tracking devices',
+            'name' => 'GPS SIM', 'price' => '5,000', 'desc' => 'For tracking devices',
             'illustration' => 'pages.welcome2.illustrations.gps-sim',
         ],
     ];
