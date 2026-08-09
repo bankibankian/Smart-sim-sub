@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivationBonusSettings;
 use App\Models\SmeData;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SmePlanController extends Controller
 {
@@ -49,35 +50,43 @@ class SmePlanController extends Controller
         $activePlansCount = SmeData::where('status', 'enabled')->count();
         $disabledPlansCount = SmeData::where('status', 'disabled')->count();
 
-        $bonusSettings = ActivationBonusSettings::current();
-        $bonusEligiblePlans = SmeData::where('status', 'enabled')->orderBy('network')->orderBy('size')->get();
+        $bonusSettingsByProvider = ActivationBonusSettings::allProviders();
+        $bonusEligiblePlansByNetwork = SmeData::where('status', 'enabled')
+            ->orderBy('size')
+            ->get()
+            ->groupBy('network');
 
         return view('admin.sme-plans.index', compact(
             'plans',
             'totalPlansCount',
             'activePlansCount',
             'disabledPlansCount',
-            'bonusSettings',
-            'bonusEligiblePlans'
+            'bonusSettingsByProvider',
+            'bonusEligiblePlansByNetwork'
         ));
     }
 
     /**
-     * Update the silent post-activation data bonus: on/off and which plan to grant.
+     * Update the silent post-activation data bonus for one SIM provider:
+     * on/off and which of that network's plans to grant.
      */
     public function updateActivationBonus(Request $request)
     {
         $validated = $request->validate([
+            'provider' => ['required', 'string', 'in:' . implode(',', ActivationBonusSettings::PROVIDERS)],
             'is_active' => ['nullable', 'boolean'],
-            'sme_data_id' => ['nullable', 'exists:sme_data,id'],
+            'sme_data_id' => [
+                'nullable',
+                Rule::exists('sme_data', 'id')->where('network', strtoupper($request->input('provider'))),
+            ],
         ]);
 
-        ActivationBonusSettings::current()->update([
+        ActivationBonusSettings::forProvider($validated['provider'])->update([
             'is_active' => $request->boolean('is_active'),
             'sme_data_id' => $validated['sme_data_id'] ?? null,
         ]);
 
-        return back()->with('success', 'Activation bonus settings updated.');
+        return back()->with('success', strtoupper($validated['provider']) . ' activation bonus settings updated.');
     }
 
     /**

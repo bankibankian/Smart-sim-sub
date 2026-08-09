@@ -30,7 +30,7 @@ class GrantActivationBonusData implements ShouldQueue
 
     public function handle(): void
     {
-        $settings = ActivationBonusSettings::current();
+        $settings = ActivationBonusSettings::forProvider($this->sim->provider);
         if (!$settings->is_active || !$settings->plan) {
             return;
         }

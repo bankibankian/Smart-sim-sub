@@ -63,33 +63,77 @@
                 </div>
                 <div>
                     <h3 class="text-sm font-semibold text-slate-800 font-display">SIM Activation Data Bonus</h3>
-                    <p class="text-xs text-slate-400">When on, every SIM that gets activated silently receives a free data top-up on its own number — no wallet is charged.</p>
+                    <p class="text-xs text-slate-400">When on for a network, every SIM on that network silently receives a free data top-up on its own number when activated — no wallet is charged. Each provider has its own plan and switch, since a MTN SIM can only be topped up with a MTN plan.</p>
                 </div>
             </div>
-            <form method="POST" action="{{ route('admin.sme-plans.activation-bonus.update') }}" class="flex flex-col sm:flex-row sm:items-end gap-4">
-                @csrf
-                @method('PUT')
-                <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 cursor-pointer shrink-0">
-                    <input type="checkbox" name="is_active" value="1" {{ $bonusSettings->is_active ? 'checked' : '' }}
-                           class="rounded border-slate-300 text-primary focus:ring-primary/20 w-4 h-4">
-                    <span class="text-sm font-semibold text-slate-700">Bonus is active</span>
-                </label>
-                <div class="flex-1">
-                    <x-input-label value="Bonus Plan" />
-                    <x-select-input name="sme_data_id" class="rounded-xl">
-                        <option value="">None selected</option>
-                        @foreach ($bonusEligiblePlans as $p)
-                            <option value="{{ $p->id }}" {{ $bonusSettings->sme_data_id === $p->id ? 'selected' : '' }}>
-                                {{ $p->network }} — {{ $p->size }} ({{ $p->plan_type }}, {{ $p->validity }})
-                            </option>
+            @php $bonusLogoMap = ['mtn' => 'mtn.jpg', 'airtel' => 'Airtel.png', 'glo' => 'glo.jpg', '9mobile' => '9Mobile.jpg']; @endphp
+
+            {{-- One hidden form per provider; row controls below reference it via form="..." so the table stays valid HTML. --}}
+            @foreach (\App\Models\ActivationBonusSettings::PROVIDERS as $provider)
+                <form id="bonus-form-{{ $provider }}" method="POST" action="{{ route('admin.sme-plans.activation-bonus.update') }}">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="provider" value="{{ $provider }}">
+                </form>
+            @endforeach
+
+            <div class="rounded-xl border border-slate-100 overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/50 text-xs font-extrabold text-slate-400 uppercase tracking-wider">
+                            <th class="py-3 px-4">Network</th>
+                            <th class="py-3 px-4">Active</th>
+                            <th class="py-3 px-4">Bonus Plan</th>
+                            <th class="py-3 px-4 text-right pr-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach (\App\Models\ActivationBonusSettings::PROVIDERS as $provider)
+                            @php
+                                $bonusSettings = $bonusSettingsByProvider[$provider];
+                                $eligiblePlans = $bonusEligiblePlansByNetwork[strtoupper($provider)] ?? collect();
+                            @endphp
+                            <tr class="align-middle">
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center gap-2.5">
+                                        <img src="{{ asset('assets/images/apps/' . $bonusLogoMap[$provider]) }}"
+                                             alt="{{ $provider }}"
+                                             class="w-8 h-8 rounded-xl object-contain border border-slate-100 flex-shrink-0"
+                                             onerror="this.src='{{ asset('assets/images/apps/default.png') }}'">
+                                        <span class="text-sm font-bold text-slate-700 uppercase">{{ $provider }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="is_active" value="1" form="bonus-form-{{ $provider }}"
+                                               {{ $bonusSettings->is_active ? 'checked' : '' }} class="sr-only peer">
+                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                    </label>
+                                </td>
+                                <td class="py-3 px-4 min-w-[240px]">
+                                    <x-select-input name="sme_data_id" form="bonus-form-{{ $provider }}" class="rounded-lg !py-2 !text-xs" :disabled="$eligiblePlans->isEmpty()">
+                                        <option value="">None selected</option>
+                                        @foreach ($eligiblePlans as $p)
+                                            <option value="{{ $p->id }}" {{ $bonusSettings->sme_data_id === $p->id ? 'selected' : '' }}>
+                                                {{ $p->size }} ({{ $p->plan_type }}, {{ $p->validity }})
+                                            </option>
+                                        @endforeach
+                                    </x-select-input>
+                                    @if ($eligiblePlans->isEmpty())
+                                        <p class="text-xs text-amber-600 mt-1">No enabled {{ strtoupper($provider) }} plans yet.</p>
+                                    @endif
+                                </td>
+                                <td class="py-3 px-4 text-right pr-4">
+                                    <x-primary-button type="submit" form="bonus-form-{{ $provider }}" class="!text-xs">
+                                        <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                                        Save
+                                    </x-primary-button>
+                                </td>
+                            </tr>
                         @endforeach
-                    </x-select-input>
-                </div>
-                <x-primary-button type="submit" class="!text-xs shrink-0">
-                    <i data-lucide="save" class="w-3.5 h-3.5"></i>
-                    Save
-                </x-primary-button>
-            </form>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Stats -->

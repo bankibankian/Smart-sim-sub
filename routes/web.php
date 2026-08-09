@@ -184,9 +184,9 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
     Route::prefix('admin/sme-plans')->name('admin.sme-plans.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\SmePlanController::class, 'index'])->name('index');
         Route::post('/', [\App\Http\Controllers\Admin\SmePlanController::class, 'store'])->name('store');
+        Route::put('/activation-bonus', [\App\Http\Controllers\Admin\SmePlanController::class, 'updateActivationBonus'])->name('activation-bonus.update');
         Route::put('/{plan}', [\App\Http\Controllers\Admin\SmePlanController::class, 'update'])->name('update');
         Route::delete('/{plan}', [\App\Http\Controllers\Admin\SmePlanController::class, 'destroy'])->name('destroy');
-        Route::put('/activation-bonus', [\App\Http\Controllers\Admin\SmePlanController::class, 'updateActivationBonus'])->name('activation-bonus.update');
     });
 
     // Admin SIM Plans / SIMs Management
