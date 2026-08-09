@@ -13,16 +13,38 @@ use Illuminate\Support\Facades\DB;
 class SimsController extends Controller
 {
     /**
-     * Display the SIM Services dashboard.
+     * Device pages exposed via the sidebar, keyed by URL slug.
+     * 'category' must match the exact service_fields.field_name / sims.category value in the database.
      */
-    public function index(Request $request)
-    {
-        $user = Auth::user();
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Please log in.');
-        }
+    private const DEVICE_PAGES = [
+        'pos' => [
+            'label' => 'POS SIM',
+            'category' => 'POS SIM',
+            'desc' => 'For payment terminals',
+            'icon' => 'credit-card',
+            'illustration' => 'pages.welcome2.illustrations.pos-sim',
+        ],
+        'cctv' => [
+            'label' => 'CCTV SIM',
+            'category' => 'CCTV',
+            'desc' => 'For surveillance systems',
+            'icon' => 'video',
+            'illustration' => 'pages.welcome2.illustrations.cctv-sim',
+        ],
+        'router' => [
+            'label' => 'Router SIM',
+            'category' => 'ROUTER SIM',
+            'desc' => 'For mobile routers',
+            'icon' => 'router',
+            'illustration' => 'pages.welcome2.illustrations.router-sim',
+        ],
+    ];
 
-        // Fetch categories and pricing dynamically from the database
+    /**
+     * Fetch SIM categories and pricing dynamically from the database.
+     */
+    private function resolveCategories($user): array
+    {
         $simService = \App\Models\Service::where('name', 'simcard')->first();
         $categories = [];
         if ($simService) {
@@ -40,40 +62,166 @@ class SimsController extends Controller
                 ];
             }
         }
+
+        return $categories;
+    }
+
+    /**
+     * SIM Services catalog: illustrated overview of every device SIM, linking to its device page.
+     */
+    public function overview(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        $categories = $this->resolveCategories($user);
+        $categoryPrices = collect($categories)->pluck('price', 'name');
+
+        $devices = [];
+        foreach (self::DEVICE_PAGES as $slug => $meta) {
+            $devices[] = [
+                'slug' => $slug,
+                'label' => $meta['label'],
+                'desc' => $meta['desc'],
+                'illustration' => $meta['illustration'],
+                'price' => $categoryPrices[$meta['category']] ?? null,
+                'route' => route('sims.' . $slug),
+                'comingSoon' => false,
+            ];
+        }
+
+        // GPS Tracking SIM is not yet sold — shown as a disabled "coming soon" entry.
+        $devices[] = [
+            'slug' => 'gps',
+            'label' => 'GPS Tracking SIM',
+            'desc' => 'For tracking devices',
+            'illustration' => 'pages.welcome2.illustrations.gps-sim',
+            'price' => null,
+            'route' => null,
+            'comingSoon' => true,
+        ];
+
+        return view('smartsimcard.overview', compact('user', 'devices'));
+    }
+
+    /**
+     * Shared renderer for a single device's request/activation page.
+     */
+    private function renderDevicePage(string $slug)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        $meta = self::DEVICE_PAGES[$slug];
+        $category = $meta['category'];
+        $categories = $this->resolveCategories($user);
+        $price = collect($categories)->firstWhere('name', $category)['price'] ?? null;
         $providers = ['mtn', 'airtel', 'glo', '9mobile'];
 
+        $sims = Sim::where(function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+                if ($user->role === 'partner') {
+                    $q->orWhere('partner_id', $user->id);
+                }
+            })
+            ->where('category', $category)
+            ->where('status', '!=', 'active')
+            ->latest()
+            ->get();
+
+        return view('smartsimcard.device', [
+            'user' => $user,
+            'device' => $meta,
+            'category' => $category,
+            'price' => $price,
+            'providers' => $providers,
+            'sims' => $sims,
+        ]);
+    }
+
+    public function pos()
+    {
+        return $this->renderDevicePage('pos');
+    }
+
+    public function cctv()
+    {
+        return $this->renderDevicePage('cctv');
+    }
+
+    public function router()
+    {
+        return $this->renderDevicePage('router');
+    }
+
+    /**
+     * Browsable stock of currently available (unassigned) SIM numbers, by category and network.
+     */
+    public function inventory(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        $categories = $this->resolveCategories($user);
+        $providers = ['mtn', 'airtel', 'glo', '9mobile'];
+
+        $query = Sim::where('status', 'available');
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->string('category'));
+        }
+        if ($request->filled('provider')) {
+            $query->where('provider', $request->string('provider'));
+        }
+
+        $available = $query->orderBy('category')->orderBy('provider')
+            ->paginate(15)->withQueryString();
+
+        // Quick stock counts per category, for the summary cards.
+        $stockCounts = Sim::where('status', 'available')
+            ->select('category', DB::raw('count(*) as total'))
+            ->groupBy('category')
+            ->pluck('total', 'category');
+
+        return view('smartsimcard.inventory', compact('user', 'categories', 'providers', 'available', 'stockCounts'));
+    }
+
+    /**
+     * "My SIM" — the user's own registered SIM cards and submitted requests.
+     */
+    public function mine(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
         if ($user->role === 'partner') {
-            // Partners fetch SIMs assigned to them (both direct ownership and downline delegation tracking)
             $sims = Sim::with('user')->where('partner_id', $user->id)
                 ->latest()->paginate(10, ['*'], 'sims_page');
-                
-            // Partner can assign to business and agent roles
+
             $assignableUsers = User::whereIn('role', ['business', 'agent'])
                 ->where('status', 'active')
                 ->orderBy('first_name')
                 ->get();
-                
-            $requests = SimRequest::with('sim')
-                ->where('user_id', $user->id)
-                ->latest()->paginate(10, ['*'], 'requests_page');
+        } else {
+            $sims = Sim::where('user_id', $user->id)
+                ->latest()->paginate(10, ['*'], 'sims_page');
 
-            return view('smartsimcard.index', compact(
-                'user', 'categories', 'providers', 'sims', 
-                'assignableUsers', 'requests'
-            ));
+            $assignableUsers = collect();
         }
 
-        // Standard Users (personal, business, agent, staff, checker)
-        $sims = Sim::where('user_id', $user->id)
-            ->latest()->paginate(10, ['*'], 'sims_page');
-            
         $requests = SimRequest::with('sim')
             ->where('user_id', $user->id)
             ->latest()->paginate(10, ['*'], 'requests_page');
 
-        return view('smartsimcard.index', compact(
-            'user', 'categories', 'providers', 'sims', 'requests'
-        ));
+        return view('smartsimcard.mine', compact('user', 'sims', 'requests', 'assignableUsers'));
     }
 
     /**
@@ -303,7 +451,7 @@ class SimsController extends Controller
 
         if ($sim->user_id && $sim->user) {
             $isOwnerOrAdmin = ($sim->user_id === Auth::id()) || (Auth::user() && Auth::user()->role === 'super_admin');
-            
+
             return back()->with('check_result', [
                 'success'      => true,
                 'found'        => true,

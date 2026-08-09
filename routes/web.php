@@ -63,7 +63,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/support/{ticket}/reply', [\App\Http\Controllers\SupportController::class, 'reply'])->name('support.reply');
 
     // SIM Services Routes
-    Route::get('/sims', [\App\Http\Controllers\smartsim\SimsController::class, 'index'])->name('sims.index');
+    Route::get('/sims', [\App\Http\Controllers\smartsim\SimsController::class, 'overview'])->name('sims.index');
+    Route::get('/sims/pos', [\App\Http\Controllers\smartsim\SimsController::class, 'pos'])->name('sims.pos');
+    Route::get('/sims/cctv', [\App\Http\Controllers\smartsim\SimsController::class, 'cctv'])->name('sims.cctv');
+    Route::get('/sims/router', [\App\Http\Controllers\smartsim\SimsController::class, 'router'])->name('sims.router');
+    Route::get('/sims/inventory', [\App\Http\Controllers\smartsim\SimsController::class, 'inventory'])->name('sims.inventory');
+    Route::get('/sims/mine', [\App\Http\Controllers\smartsim\SimsController::class, 'mine'])->name('sims.mine');
     Route::get('/sims/check', [\App\Http\Controllers\smartsim\SimsController::class, 'checkNumber'])->name('sims.check');
     Route::get('/sims/available-numbers', [\App\Http\Controllers\smartsim\SimsController::class, 'getAvailableNumbers'])->name('sims.available');
     Route::post('/sims/request', [\App\Http\Controllers\smartsim\SimsController::class, 'requestSim'])->name('sims.request');
