@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if ($this->foreignKeyExists('verifications', 'verifications_transaction_id_foreign')) {
+            return;
+        }
+
         Schema::table('verifications', function (Blueprint $table) {
             $table->foreign('transaction_id')
                 ->references('id')
@@ -24,8 +28,27 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! $this->foreignKeyExists('verifications', 'verifications_transaction_id_foreign')) {
+            return;
+        }
+
         Schema::table('verifications', function (Blueprint $table) {
             $table->dropForeign(['transaction_id']);
         });
+    }
+
+    /**
+     * Determine whether the given foreign key constraint already exists on the table.
+     */
+    private function foreignKeyExists(string $table, string $constraintName): bool
+    {
+        $connection = Schema::getConnection();
+
+        return $connection->table('information_schema.TABLE_CONSTRAINTS')
+            ->where('CONSTRAINT_SCHEMA', $connection->getDatabaseName())
+            ->where('TABLE_NAME', $table)
+            ->where('CONSTRAINT_NAME', $constraintName)
+            ->where('CONSTRAINT_TYPE', 'FOREIGN KEY')
+            ->exists();
     }
 };
