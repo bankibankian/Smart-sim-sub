@@ -21,7 +21,7 @@
         <nav aria-label="Page navigation" class="inline-flex items-center gap-1.5">
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
-                <span class="px-3 py-1.5 text-xs text-slate-300 bg-slate-50 border border-slate-100 rounded-xl cursor-not-allowed font-semibold">Previous</span>
+                <span class="px-3 py-1.5 text-xs text-slate-300 bg-slate-50 border border-slate-200 rounded-xl cursor-not-allowed font-semibold">Previous</span>
             @else
                 <a href="{{ $paginator->previousPageUrl() }}" rel="prev" 
                    class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-[#0056D2] bg-white hover:bg-slate-50 border border-slate-200/80 rounded-xl transition-all duration-150 shadow-sm">
@@ -85,7 +85,7 @@
                     Next
                 </a>
             @else
-                <span class="px-3 py-1.5 text-xs text-slate-400 bg-slate-50 border border-slate-100 rounded-xl cursor-not-allowed font-semibold">Next</span>
+                <span class="px-3 py-1.5 text-xs text-slate-400 bg-slate-50 border border-slate-200 rounded-xl cursor-not-allowed font-semibold">Next</span>
             @endif
         </nav>
     </div>

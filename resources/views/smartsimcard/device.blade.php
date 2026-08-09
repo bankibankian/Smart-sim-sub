@@ -9,10 +9,10 @@
         </a>
 
         <!-- Device Header Card -->
-        <div class="flex flex-col sm:flex-row items-center gap-6 bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row items-center gap-6 bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
             <x-sim-illustration :illustration="$device['illustration']" class="w-24 h-24 sm:w-28 sm:h-28 shrink-0" />
             <div class="flex-1 text-center sm:text-left">
-                <h1 class="text-2xl font-extrabold font-display text-slate-900">{{ $device['label'] }}</h1>
+                <h1 class="text-2xl font-bold font-display text-slate-800">{{ $device['label'] }}</h1>
                 <p class="text-sm text-slate-500 mt-1">{{ $device['desc'] }}</p>
             </div>
             <div class="shrink-0 text-center sm:text-right">
@@ -38,13 +38,13 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <!-- Left: Activation Request -->
             <div class="lg:col-span-6">
-                <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
                     <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
                         <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                             <i data-lucide="zap" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 font-display">Activate a {{ $device['label'] }}</h3>
+                            <h3 class="text-sm font-semibold text-slate-800 font-display">Activate a {{ $device['label'] }}</h3>
                             <p class="text-xs text-slate-400">Request activation for a {{ $device['label'] }} assigned to your account.</p>
                         </div>
                     </div>
@@ -81,13 +81,13 @@
 
             <!-- Right: Request a new number -->
             <div class="lg:col-span-6">
-                <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 flex flex-col items-start gap-4">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col items-start gap-4">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                             <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 font-display">Don't have a {{ $device['label'] }} yet?</h3>
+                            <h3 class="text-sm font-semibold text-slate-800 font-display">Don't have a {{ $device['label'] }} yet?</h3>
                             <p class="text-xs text-slate-400">Request one from our uploaded number inventory.</p>
                         </div>
                     </div>

@@ -5,7 +5,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="database" class="w-5 h-5"></i>
                     </div>
@@ -47,7 +47,7 @@
         </div>
 
         <!-- Filter Form -->
-        <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-4">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
             <form action="{{ route('sims.inventory') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <x-select-input name="category" class="rounded-xl !text-xs">
                     <option value="">All Categories</option>
@@ -71,7 +71,7 @@
         </div>
 
         <!-- Available Numbers Table -->
-        <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
             <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Available Numbers</h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs">
@@ -114,7 +114,7 @@
                  style="display: none;">
                 <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openResultModal = false"></div>
                 <div class="flex min-h-screen items-center justify-center p-4">
-                    <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all space-y-4">
+                    <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-200 shadow-2xl p-6 overflow-hidden transform transition-all space-y-4">
                          <button type="button" @click="openResultModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
                              <i data-lucide="x" class="w-5 h-5"></i>
                          </button>
@@ -124,7 +124,7 @@
                                  <i data-lucide="search" class="w-4 h-4"></i>
                              </div>
                              <div>
-                                 <h3 class="font-bold text-slate-800 font-display">Check Number Result</h3>
+                                 <h3 class="text-sm font-semibold text-slate-800 font-display">Check Number Result</h3>
                                  <p class="text-xs text-slate-400">Query for Number: <span class="font-bold text-slate-700">{{ request('number') }}</span></p>
                              </div>
                          </div>
@@ -192,7 +192,7 @@
              style="display: none;">
             <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openLookupModal = false"></div>
             <div class="flex min-h-screen items-center justify-center p-4">
-                <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-100 shadow-2xl p-6 overflow-hidden transform transition-all">
+                <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-200 shadow-2xl p-6 overflow-hidden transform transition-all">
                      <button type="button" @click="openLookupModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
                          <i data-lucide="x" class="w-5 h-5"></i>
                      </button>
@@ -201,7 +201,7 @@
                              <i data-lucide="search" class="w-4 h-4"></i>
                          </div>
                          <div>
-                             <h3 class="font-bold text-slate-800 font-display">SIM Owner Lookup</h3>
+                             <h3 class="text-sm font-semibold text-slate-800 font-display">SIM Owner Lookup</h3>
                              <p class="text-xs text-slate-400">Search system numbers for assignee details.</p>
                          </div>
                      </div>

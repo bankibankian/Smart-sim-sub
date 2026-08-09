@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight font-display">Manual Wallet Adjustment</h1>
+                <h1 class="text-2xl font-bold text-slate-800 tracking-tight font-display">Manual Wallet Adjustment</h1>
                 <p class="text-xs text-slate-400 mt-1">Fund or debit users manually, or execute general adjustments across all registered accounts.</p>
             </div>
         </div>
@@ -40,7 +40,7 @@
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Total Manual Credit Card -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Manual Credit</p>
@@ -54,7 +54,7 @@
             </div>
 
             <!-- Total Manual Debit Card -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Manual Debit</p>
@@ -68,7 +68,7 @@
             </div>
 
             <!-- Monthly Manual Credit Card -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Credit (This Month)</p>
@@ -82,7 +82,7 @@
             </div>
 
             <!-- Monthly Manual Debit Card -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Debit (This Month)</p>
@@ -99,7 +99,7 @@
         <!-- Action Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Single User Action Card -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between items-start gap-4">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between items-start gap-4">
                 <div class="space-y-2">
                     <div class="w-12 h-12 rounded-2xl bg-[#0056D2]/10 text-[#0056D2] flex items-center justify-center">
                         <i data-lucide="user-cog" class="w-6 h-6"></i>
@@ -114,7 +114,7 @@
             </div>
 
             <!-- General Action Card -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between items-start gap-4">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between items-start gap-4">
                 <div class="space-y-2">
                     <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
                         <i data-lucide="users" class="w-6 h-6"></i>
@@ -386,7 +386,7 @@
         </div>
 
         <!-- History Table Section -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-100 bg-slate-50/30">
                 <h2 class="text-lg font-bold text-slate-800 font-display">Recent Manual Activity Logs</h2>
                 <p class="text-xs text-slate-400 mt-1">Audit log of all manual credits and debits executed in the system.</p>

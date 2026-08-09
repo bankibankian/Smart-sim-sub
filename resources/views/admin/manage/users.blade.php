@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight font-display">Manage Users</h1>
+                <h1 class="text-2xl font-bold text-slate-800 tracking-tight font-display">Manage Users</h1>
                 <p class="text-xs text-slate-400 mt-1">View, search, and update accounts registered on SmartSIM.</p>
             </div>
         </div>
@@ -19,7 +19,7 @@
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Total Users Card -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Users</p>
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Active Users Card -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Users</p>
@@ -47,7 +47,7 @@
             </div>
 
             <!-- Inactive Users Card -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Inactive Users</p>
@@ -61,7 +61,7 @@
             </div>
 
             <!-- Transacting Users Card -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Transacting Users</p>
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Card Section -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <!-- Search & Filters -->
             <div class="p-6 border-b border-slate-100 bg-slate-50/30">
                 <form method="GET" action="{{ route('admin.manage.users') }}" class="flex flex-col md:flex-row items-stretch md:items-center gap-4">

@@ -5,7 +5,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-3">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-3">
                     <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="receipt" class="w-6 h-6"></i>
                     </div>
@@ -18,7 +18,7 @@
         <!-- Transaction Statistics Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Total Credits Card -->
-            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between min-h-[145px] hover:shadow-md transition-all duration-300 border-t-4 border-emerald-500 group">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between min-h-[145px] hover:shadow-md transition-all duration-300 border-t-4 border-emerald-500 group">
                 <div class="absolute -top-10 -right-10 w-28 h-28 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
@@ -37,7 +37,7 @@
             </div>
 
             <!-- Total Debits Card -->
-            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between min-h-[145px] hover:shadow-md transition-all duration-300 border-t-4 border-rose-500 group">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between min-h-[145px] hover:shadow-md transition-all duration-300 border-t-4 border-rose-500 group">
                 <div class="absolute -top-10 -right-10 w-28 h-28 bg-rose-500/5 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
@@ -56,7 +56,7 @@
             </div>
 
             <!-- Total Records Card -->
-            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between min-h-[145px] hover:shadow-md transition-all duration-300 border-t-4 border-indigo-500 group">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between min-h-[145px] hover:shadow-md transition-all duration-300 border-t-4 border-indigo-500 group">
                 <div class="absolute -top-10 -right-10 w-28 h-28 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Filter Form Section -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 bg-slate-50/30">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 bg-slate-50/30">
             <form method="GET" action="{{ route('admin.transactions') }}" class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
                 <!-- Search Input -->
                 <div class="relative flex-grow">
@@ -128,7 +128,7 @@
         </div>
 
         <!-- Transaction Records Table -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-50 flex items-center justify-between">
                 <h3 class="font-bold text-slate-800 font-display flex items-center gap-2">
                     <i data-lucide="receipt" class="w-4.5 h-4.5 text-[#0056D2]"></i>
@@ -344,7 +344,7 @@
 
                     <!-- User and Context Details -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="p-4 bg-slate-50/50 rounded-xl border border-slate-100/80">
+                        <div class="p-4 bg-slate-50/50 rounded-xl border border-slate-200/80">
                             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">User / Account Info</span>
                             <div class="space-y-1.5">
                                 <div class="text-sm font-semibold text-slate-800">
@@ -359,7 +359,7 @@
                             </div>
                         </div>
 
-                        <div class="p-4 bg-slate-50/50 rounded-xl border border-slate-100/80">
+                        <div class="p-4 bg-slate-50/50 rounded-xl border border-slate-200/80">
                             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Timestamp & Metadata</span>
                             <div class="space-y-1.5">
                                 <div class="text-xs text-slate-700">

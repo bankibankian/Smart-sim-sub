@@ -9,7 +9,7 @@
         </a>
 
         <!-- Page Header -->
-        <div class="flex items-center gap-4 bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+        <div class="flex items-center gap-4 bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <x-sim-illustration :illustration="$device['illustration']" class="w-16 h-16 shrink-0" />
             <div>
                 <h1 class="text-xl font-extrabold font-display text-slate-900">Request {{ $device['label'] }}</h1>
@@ -32,7 +32,7 @@
         @endif
 
         <!-- Request Form Card -->
-        <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 sm:p-8">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
             <form action="{{ route('sims.request') }}" method="POST" class="space-y-5">
                 @csrf
                 <input type="hidden" name="category" value="{{ $category }}">

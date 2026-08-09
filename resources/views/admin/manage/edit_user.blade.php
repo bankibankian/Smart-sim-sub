@@ -8,13 +8,13 @@
                 Back to Users List
             </a>
             <div>
-                <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight font-display">Edit User details</h1>
+                <h1 class="text-2xl font-bold text-slate-800 tracking-tight font-display">Edit User details</h1>
                 <p class="text-xs text-slate-400 mt-1">Modify account settings, tier permissions, and state status for {{ $user->first_name }}.</p>
             </div>
         </div>
 
         <!-- Form Card -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
             <form method="POST" action="{{ route('admin.manage.users.update', $user) }}" class="space-y-6">
                 @csrf
                 @method('PUT')

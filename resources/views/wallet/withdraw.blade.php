@@ -50,7 +50,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="banknote" class="w-5 h-5"></i>
                     </div>
@@ -91,7 +91,7 @@
             
             <!-- Left Card: Withdrawal Form -->
             <div class="lg:col-span-5">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden h-full flex flex-col justify-between">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-full flex flex-col justify-between">
                     
                     <div>
                         <!-- Card Header -->
@@ -304,7 +304,7 @@
 
             <!-- Right Card: Recent Recipients -->
             <div class="lg:col-span-7">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden h-full flex flex-col justify-between">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-full flex flex-col justify-between">
                     
                     <div>
                         <!-- Header -->
@@ -313,7 +313,7 @@
                                 <i data-lucide="history" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-slate-800 font-display">Recent Recipients</h3>
+                                <h3 class="text-sm font-semibold text-slate-800 font-display">Recent Recipients</h3>
                                 <p class="text-xs text-slate-400 mt-0.5 font-medium">Tap a recipient to auto-fill the withdrawal details.</p>
                             </div>
                         </div>

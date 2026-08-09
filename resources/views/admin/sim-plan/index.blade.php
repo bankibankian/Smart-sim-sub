@@ -5,7 +5,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="settings" class="w-5 h-5"></i>
                     </div>
@@ -18,7 +18,7 @@
         <!-- Header Statistics Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Card 1: Total Uploaded -->
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2] shrink-0">
                     <i data-lucide="database" class="w-6 h-6"></i>
                 </div>
@@ -29,7 +29,7 @@
             </div>
 
             <!-- Card 2: Total Available -->
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100/50 flex items-center justify-center text-blue-600 shrink-0">
                     <i data-lucide="check-circle" class="w-6 h-6"></i>
                 </div>
@@ -40,7 +40,7 @@
             </div>
 
             <!-- Card 3: Total Assigned -->
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100/50 flex items-center justify-center text-purple-600 shrink-0">
                     <i data-lucide="user-check" class="w-6 h-6"></i>
                 </div>
@@ -51,7 +51,7 @@
             </div>
 
             <!-- Card 4: Total Activated -->
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100/50 flex items-center justify-center text-emerald-600 shrink-0">
                     <i data-lucide="zap" class="w-6 h-6"></i>
                 </div>
@@ -86,13 +86,13 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <!-- Left Side: Upload Numbers Form -->
             <div class="lg:col-span-4 space-y-6" x-data="{ uploadTab: 'manual' }">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
                     <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
                         <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i>
                         </div>
                         <div class="flex-1">
-                            <h3 class="font-bold text-slate-800 font-display">Add Available Numbers</h3>
+                            <h3 class="text-sm font-semibold text-slate-800 font-display">Add Available Numbers</h3>
                             <p class="text-xs text-slate-400">Add inventory numbers for users to request.</p>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
             <!-- Right Side: Requests & Inventory Tabs -->
             <div class="lg:col-span-8 space-y-6" x-data="{ currentTab: 'requests' }">
                 <!-- Navigation Tabs -->
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-2 flex gap-1">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-2 flex gap-1">
                     <button type="button" @click="currentTab = 'requests'" :class="currentTab === 'requests' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
                         <i data-lucide="inbox" class="w-4 h-4"></i> Pending Requests ({{ count($pendingRequests) }})
                     </button>
@@ -192,7 +192,7 @@
                 </div>
 
                 <!-- Tab: Pending Requests -->
-                <div x-show="currentTab === 'requests'" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                <div x-show="currentTab === 'requests'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Pending Actions</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
@@ -265,7 +265,7 @@
                 </div>
 
                 <!-- Tab: Resolved Requests -->
-                <div x-show="currentTab === 'resolved'" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                <div x-show="currentTab === 'resolved'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Resolved Requests Log</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
@@ -338,9 +338,9 @@
                             }
                         }
                      }"
-                     class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                     class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-3 border-b border-slate-100">
-                        <h3 class="font-bold text-slate-800 font-display">SIM Inventory pool</h3>
+                        <h3 class="text-sm font-semibold text-slate-800 font-display">SIM Inventory pool</h3>
                     </div>
 
                     <!-- Filter Form -->

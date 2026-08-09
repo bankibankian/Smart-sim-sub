@@ -36,7 +36,7 @@
             </a>
             
             <!-- Hero User Info Profile -->
-            <div class="relative overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div class="relative overflow-hidden bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <!-- Background decoration -->
                 <div class="absolute right-0 top-0 w-64 h-64 bg-[#0056D2]/2.5 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -65,7 +65,7 @@
 
                     <div>
                         <div class="flex flex-wrap items-center gap-2.5">
-                            <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight font-display">
+                            <h1 class="text-2xl font-bold text-slate-800 tracking-tight font-display">
                                 {{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}
                             </h1>
                             <span class="px-2.5 py-1 text-xs font-extrabold rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
@@ -135,7 +135,7 @@
             <div x-show="activeTab === 'overview'" class="space-y-6" x-cloak>
                 
                 <!-- KYC Completion Indicator -->
-                <div class="p-5 rounded-3xl border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 
+                <div class="p-5 rounded-xl border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 
                     @if ($user->bvn && $user->nin) bg-emerald-50/50 border-emerald-100 @else bg-amber-50/50 border-amber-100 @endif">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0
@@ -170,7 +170,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Personal Profile Info -->
-                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-6">
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
                                 <i data-lucide="user-cog" class="w-4 h-4"></i>
@@ -254,7 +254,7 @@
                     </div>
 
                     <!-- KYC Details & Documents -->
-                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-6">
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                                 <i data-lucide="file-check" class="w-4 h-4"></i>
@@ -314,7 +314,7 @@
 
                 <!-- Business Upgrade Details -->
                 @if ($user->business_name || $user->cac_number || $user->pending_role)
-                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-6">
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                             <div class="flex items-center gap-2.5">
                                 <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
@@ -368,7 +368,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
                     <!-- Wallet balances card -->
-                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-6 md:col-span-2">
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6 md:col-span-2">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2.5">
                                 <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
@@ -494,7 +494,7 @@
                     </div>
 
                     <!-- Wallet lock state -->
-                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-6">
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
                                 <i data-lucide="shield-alert" class="w-4 h-4"></i>
@@ -535,7 +535,7 @@
                 </div>
 
                 <!-- Linked Virtual Bank Accounts -->
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
                     <div class="flex items-center gap-2.5">
                         <div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
                             <i data-lucide="landmark" class="w-4 h-4"></i>
@@ -593,7 +593,7 @@
 
             <!-- Transaction Logs Tab -->
             <div x-show="activeTab === 'transactions'" class="space-y-6" x-cloak>
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
                     <div class="flex items-center gap-2.5">
                         <div class="w-8 h-8 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
                             <i data-lucide="receipt" class="w-4 h-4"></i>

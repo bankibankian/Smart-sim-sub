@@ -27,7 +27,7 @@
                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 </a>
                 <div>
-                    <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2">
+                    <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2">
                         Ticket #{{ $ticket->id }} — {{ $ticket->subject }}
                     </h1>
                     <p class="text-xs text-slate-500 mt-0.5">Submitted by {{ $ticket->user->first_name }} {{ $ticket->user->last_name }}</p>
@@ -64,7 +64,7 @@
             
             <!-- Left/Main Column: Chat Conversation Stream -->
             <div class="lg:col-span-8 flex flex-col">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm flex flex-col h-[680px] overflow-hidden">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[680px] overflow-hidden">
                     
                     <!-- Chat Header Mockup -->
                     <div class="px-6 py-4 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between">
@@ -178,7 +178,7 @@
             <!-- Right Column: Sidebar Details & Customer Card -->
             <div class="lg:col-span-4 flex flex-col gap-6">
                 <!-- Customer Details Card -->
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-50">Customer Profile</h3>
 
                     <div class="flex items-center gap-3">
@@ -218,7 +218,7 @@
                 </div>
 
                 <!-- Lifecycle Progress Tracker -->
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-50">Ticket Lifecycle</h3>
                     
                     <div class="space-y-6 relative pl-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-100">
@@ -276,7 +276,7 @@
                 </div>
 
                 <!-- Action Panel Card -->
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-50">Ticket Actions</h3>
 
                     <div class="space-y-4">

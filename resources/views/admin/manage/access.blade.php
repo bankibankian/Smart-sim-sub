@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight font-display">Manage Access Control</h1>
+                <h1 class="text-2xl font-bold text-slate-800 tracking-tight font-display">Manage Access Control</h1>
                 <p class="text-xs text-slate-400 mt-1">Configure user access levels, system permissions, and promote users between roles.</p>
             </div>
         </div>
@@ -17,7 +17,7 @@
         @endif
 
         <!-- Card Section -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <!-- Search -->
             <div class="p-6 border-b border-slate-50 bg-slate-50/50">
                 <form method="GET" action="{{ route('admin.manage.access') }}" class="w-full sm:max-w-md relative">

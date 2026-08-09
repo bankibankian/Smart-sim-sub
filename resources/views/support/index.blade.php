@@ -36,7 +36,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm animate-pulse">
                         <i data-lucide="help-circle" class="w-5 h-5"></i>
                     </div>
@@ -79,7 +79,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- WhatsApp Card -->
             <a href="https://wa.me/2347048932365?text=Hello%20SmartSIM%20Support,%20I%20need%20assistance." target="_blank"
-               class="channel-card rounded-3xl border border-slate-100/80 p-6 flex items-center gap-4 hover:border-emerald-200 group">
+               class="channel-card rounded-xl border border-slate-200/80 p-6 flex items-center gap-4 hover:border-emerald-200 group">
                 <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center border border-emerald-100/50 group-hover:scale-110 transition-transform">
                     <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
                         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.451 5.486.002 9.95-4.437 9.954-9.899.002-2.647-1.03-5.132-2.903-7.005C16.552 1.826 14.07 .797 11.44 .797c-5.49 0-9.958 4.437-9.96 9.898-.001 1.702.469 3.361 1.36 4.816L1.81 21.17l5.837-1.53M18.847 15.3c-.31-.155-1.837-.905-2.115-1.006-.279-.101-.482-.152-.684.152-.202.304-.785.987-.962 1.189-.177.202-.355.228-.666.073-1.096-.548-1.825-1.015-2.548-2.257-.193-.332.193-.309.553-1.026.061-.122.03-.228-.015-.304-.045-.076-.482-1.162-.66-1.593-.173-.418-.349-.36-.482-.367-.125-.007-.27-.008-.415-.008-.146 0-.383.055-.584.275-.202.22-1.77 1.728-1.77 4.212s1.808 4.88 2.06 5.22c.253.34 3.563 5.44 8.63 7.636 1.206.52 2.148.83 2.88 1.062 1.213.385 2.316.33 3.19.2.975-.145 3.011-1.23 3.431-2.42.42-1.19.42-2.21.295-2.42-.125-.21-.462-.31-.772-.465z"/>
@@ -96,24 +96,24 @@
 
             <!-- Call Card -->
             <a href="tel:+2347048932365"
-               class="channel-card rounded-3xl border border-slate-100/80 p-6 flex items-center gap-4 hover:border-indigo-200 group">
+               class="channel-card rounded-xl border border-slate-200/80 p-6 flex items-center gap-4 hover:border-indigo-200 group">
                 <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-[#0056D2] flex items-center justify-center border border-indigo-100/50 group-hover:scale-110 transition-transform">
                     <i data-lucide="phone-call" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h3 class="font-bold text-slate-800 font-display">Phone Call Support</h3>
+                    <h3 class="text-sm font-semibold text-slate-800 font-display">Phone Call Support</h3>
                     <p class="text-xs text-slate-500 mt-0.5">Speak with a customer representative.</p>
                 </div>
             </a>
 
             <!-- Email Card -->
             <a href="mailto:Support@smartsimsub.com"
-               class="channel-card rounded-3xl border border-slate-100/80 p-6 flex items-center gap-4 hover:border-blue-200 group">
+               class="channel-card rounded-xl border border-slate-200/80 p-6 flex items-center gap-4 hover:border-blue-200 group">
                 <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center border border-blue-100/50 group-hover:scale-110 transition-transform">
                     <i data-lucide="mail" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h3 class="font-bold text-slate-800 font-display">Email Support</h3>
+                    <h3 class="text-sm font-semibold text-slate-800 font-display">Email Support</h3>
                     <p class="text-xs text-slate-500 mt-0.5">Drop a mail to Support@smartsimsub.com</p>
                 </div>
             </a>
@@ -124,14 +124,14 @@
             
             <!-- Left Side: Create Support Ticket Form -->
             <div class="lg:col-span-5 flex flex-col gap-6">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-col justify-between h-full">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between h-full">
                     <div class="space-y-6">
                         <div class="flex items-center gap-3 pb-4 border-b border-slate-50">
                             <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
                                 <i data-lucide="message-square" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-slate-800 font-display">Create Support Ticket</h3>
+                                <h3 class="text-sm font-semibold text-slate-800 font-display">Create Support Ticket</h3>
                                 <p class="text-xs text-slate-400">Our support agents typically respond in minutes.</p>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Category</label>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
+                                    <div class="category-option p-3 rounded-xl border border-slate-200 hover:bg-slate-50 flex flex-col justify-between" 
                                          data-value="general">
                                         <i data-lucide="info" class="w-4 h-4 text-indigo-500 mb-1.5"></i>
                                         <div>
@@ -160,7 +160,7 @@
                                             <span class="text-xs text-slate-400 font-medium">Inquiry / feedback</span>
                                         </div>
                                     </div>
-                                    <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
+                                    <div class="category-option p-3 rounded-xl border border-slate-200 hover:bg-slate-50 flex flex-col justify-between" 
                                          data-value="technical">
                                         <i data-lucide="cpu" class="w-4 h-4 text-emerald-500 mb-1.5"></i>
                                         <div>
@@ -168,7 +168,7 @@
                                             <span class="text-xs text-slate-400 font-medium">App bugs / downtime</span>
                                         </div>
                                     </div>
-                                    <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
+                                    <div class="category-option p-3 rounded-xl border border-slate-200 hover:bg-slate-50 flex flex-col justify-between" 
                                          data-value="billing">
                                         <i data-lucide="credit-card" class="w-4 h-4 text-rose-500 mb-1.5"></i>
                                         <div>
@@ -176,7 +176,7 @@
                                             <span class="text-xs text-slate-400 font-medium">Funding / charges</span>
                                         </div>
                                     </div>
-                                    <div class="category-option p-3 rounded-xl border border-slate-100 hover:bg-slate-50 flex flex-col justify-between" 
+                                    <div class="category-option p-3 rounded-xl border border-slate-200 hover:bg-slate-50 flex flex-col justify-between" 
                                          data-value="upgrade">
                                         <i data-lucide="arrow-up-circle" class="w-4 h-4 text-amber-500 mb-1.5"></i>
                                         <div>
@@ -190,7 +190,7 @@
                             {{-- Interactive Segmented Priority Selector --}}
                             <div class="space-y-1.5">
                                 <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Priority</label>
-                                <div class="flex bg-slate-50 rounded-xl p-1 border border-slate-100">
+                                <div class="flex bg-slate-50 rounded-xl p-1 border border-slate-200">
                                     <button type="button" class="priority-btn flex-1 py-2 text-center text-xs font-bold rounded-lg" data-value="low">
                                         Low
                                     </button>
@@ -224,7 +224,7 @@
 
             <!-- Right Side: Ticket History -->
             <div class="lg:col-span-7 flex flex-col gap-6">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-col justify-between h-full">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between h-full">
                     <div class="space-y-6">
                         <div class="flex items-center justify-between pb-4 border-b border-slate-50">
                             <div class="flex items-center gap-3">
@@ -232,7 +232,7 @@
                                     <i data-lucide="history" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold text-slate-800 font-display">My Tickets History</h3>
+                                    <h3 class="text-sm font-semibold text-slate-800 font-display">My Tickets History</h3>
                                     <p class="text-xs text-slate-400">View and respond to your active or past support tickets</p>
                                 </div>
                             </div>

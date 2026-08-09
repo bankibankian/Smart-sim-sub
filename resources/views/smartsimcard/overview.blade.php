@@ -4,7 +4,7 @@
     <div class="max-w-4xl mx-auto space-y-6">
         <!-- Page Header -->
         <div>
-            <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+            <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                     <i data-lucide="cpu" class="w-5 h-5"></i>
                 </div>
@@ -31,7 +31,7 @@
         <div class="flex flex-col gap-4">
             @foreach ($devices as $device)
                 @if ($device['comingSoon'])
-                    <div class="flex flex-col sm:flex-row items-center gap-6 bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 opacity-60 cursor-not-allowed" aria-disabled="true">
+                    <div class="flex flex-col sm:flex-row items-center gap-6 bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 opacity-60 cursor-not-allowed" aria-disabled="true">
                         <x-sim-illustration :illustration="$device['illustration']" class="w-28 h-28 sm:w-32 sm:h-32 shrink-0" />
                         <div class="flex-1 text-center sm:text-left">
                             <div class="flex items-center justify-center sm:justify-start gap-2">
@@ -46,7 +46,7 @@
                     </div>
                 @else
                     <a href="{{ $device['route'] }}"
-                       class="group flex flex-col sm:flex-row items-center gap-6 bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-primary/30">
+                       class="group flex flex-col sm:flex-row items-center gap-6 bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-primary/30">
                         <x-sim-illustration :illustration="$device['illustration']" class="w-28 h-28 sm:w-32 sm:h-32 shrink-0" />
                         <div class="flex-1 text-center sm:text-left">
                             <h3 class="text-lg font-bold text-slate-800 font-display group-hover:text-primary transition-colors">{{ $device['label'] }}</h3>

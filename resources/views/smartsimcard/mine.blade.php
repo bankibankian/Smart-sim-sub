@@ -4,7 +4,7 @@
     <div x-data="{ currentTab: 'sims' }" class="max-w-6xl mx-auto space-y-6">
         <!-- Page Header -->
         <div>
-            <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+            <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                     <i data-lucide="smartphone" class="w-5 h-5"></i>
                 </div>
@@ -38,7 +38,7 @@
         </div>
 
         <!-- Tab: My Registered SIMs -->
-        <div x-show="currentTab === 'sims'" class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+        <div x-show="currentTab === 'sims'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
             <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">
                 My Registered SIMs
             </h3>
@@ -140,7 +140,7 @@
         </div>
 
         <!-- Tab: My Requests -->
-        <div x-show="currentTab === 'my_requests'" class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+        <div x-show="currentTab === 'my_requests'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
             <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">My SIM Requests</h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs">

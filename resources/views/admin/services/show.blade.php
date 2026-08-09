@@ -51,7 +51,7 @@
         @endif
 
         <!-- Service Profile Card -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
             <div class="flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
                 @if($service->image)
                     <div class="w-16 h-16 rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex items-center justify-center p-2">
@@ -84,7 +84,7 @@
         </div>
 
         <!-- Service Fields Card -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between">
                 <div>
                     <h3 class="text-md font-bold text-slate-800 font-display">Service Variants (Fields)</h3>
@@ -185,7 +185,7 @@
         </div>
 
         <!-- Custom Pricing Configuration Card -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between">
                 <div>
                     <h3 class="text-md font-bold text-slate-800 font-display">Target / Group Custom Pricing</h3>
@@ -533,7 +533,7 @@
                             <!-- Display Linked Variant (Readonly context) -->
                             <div>
                                 <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Linked Variant (Inherited)</span>
-                                <span class="block text-sm font-bold text-slate-800 bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5">
+                                <span class="block text-sm font-bold text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5">
                                     <span x-text="editPrice.service_fields_id ? 'Variant Level Pricing' : 'Service Base Level Pricing'"></span>
                                 </span>
                             </div>

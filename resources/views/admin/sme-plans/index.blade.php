@@ -6,7 +6,7 @@
     }" class="space-y-8 max-w-7xl mx-auto">
         
         <!-- Header -->
-        <div class="relative overflow-hidden p-6 sm:p-8 bg-white border border-slate-100/80 rounded-3xl shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-grid-pattern">
+        <div class="relative overflow-hidden p-6 sm:p-8 bg-white border border-slate-200/80 rounded-xl shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-grid-pattern">
             <div class="absolute -right-16 -top-16 w-36 h-36 rounded-full bg-slate-50 blur-2xl opacity-50"></div>
             <div class="relative z-10">
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#0056D2] bg-clip-text text-transparent">SME Data Plans Management</h1>
@@ -58,7 +58,7 @@
         <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <!-- Total Plans -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Plans</p>
@@ -75,7 +75,7 @@
             </div>
 
             <!-- Active Plans -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Plans</p>
@@ -92,7 +92,7 @@
             </div>
 
             <!-- Disabled Plans -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Disabled Plans</p>
@@ -110,7 +110,7 @@
         </div>
 
         <!-- Filter & Table Card -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-md shadow-slate-100/40 overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-md shadow-slate-100/40 overflow-hidden">
             <!-- Search & Filters -->
             <div class="p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50/50 via-white to-slate-50/20">
                 <form method="GET" action="{{ route('admin.sme-plans.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">

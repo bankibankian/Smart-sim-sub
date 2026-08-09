@@ -1,7 +1,7 @@
 <x-app-layout>
     <!-- Page Header Hero Card -->
     <div class="mb-8">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
             <!-- Decorative Accent Gradients -->
             <div class="absolute -top-24 -left-24 w-48 h-48 bg-[#0056D2]/5 rounded-full blur-3xl"></div>
             <div class="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl"></div>
@@ -55,7 +55,7 @@
     }" class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
         
         <!-- Sidebar Navigation Options -->
-        <div class="lg:col-span-1 space-y-2 bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
+        <div class="lg:col-span-1 space-y-2 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
             <h3 class="px-3 mb-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Settings Menu</h3>
             
             <button @click="activeTab = 'profile'" 
@@ -116,7 +116,7 @@
                  x-transition:enter="transition ease-out duration-250"
                  x-transition:enter-start="opacity-0 translate-y-4"
                  x-transition:enter-end="opacity-100 translate-y-0"
-                 class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                 class="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
                 
                 <div>
                     <h2 class="text-lg font-bold text-slate-800 font-display">Personal Details</h2>
@@ -231,7 +231,7 @@
                  style="display: none;">
                 
                 <!-- Change password block -->
-                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                <div class="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
                     <div>
                         <h2 class="text-lg font-bold text-slate-800 font-display">Account Password</h2>
                         <p class="text-xs text-slate-400 mt-1">Make sure you use a secure, complex password for your login security.</p>
@@ -278,7 +278,7 @@
                 </div>
 
                 <!-- Transaction PIN block -->
-                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                <div class="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
                     <div class="flex items-start justify-between gap-4">
                         <div>
                             <h2 class="text-lg font-bold text-slate-800 font-display">Secure Transaction PIN</h2>
@@ -357,7 +357,7 @@
                  x-transition:enter="transition ease-out duration-250"
                  x-transition:enter-start="opacity-0 translate-y-4"
                  x-transition:enter-end="opacity-100 translate-y-0"
-                 class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6" 
+                 class="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6" 
                  style="display: none;">
                 
                 <div>
@@ -513,7 +513,7 @@
                  x-transition:enter="transition ease-out duration-250"
                  x-transition:enter-start="opacity-0 translate-y-4"
                  x-transition:enter-end="opacity-100 translate-y-0"
-                 class="bg-white p-6 sm:p-8 rounded-3xl border border-rose-100 shadow-sm space-y-6" 
+                 class="bg-white p-6 sm:p-8 rounded-xl border border-rose-200 shadow-sm space-y-6" 
                  style="display: none;">
                 
                 <div>
