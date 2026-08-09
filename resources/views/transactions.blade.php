@@ -69,42 +69,42 @@
             <form method="GET" action="{{ route('transactions') }}" class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
                 <!-- Search Input -->
                 <div class="relative flex-grow">
-                    <input type="text" 
-                           name="search" 
-                           value="{{ request('search') }}" 
-                           placeholder="Search by description, reference or amount..." 
-                           class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm">
-                    <div class="absolute left-4 top-3.5 text-slate-400">
+                    <x-text-input type="text"
+                           name="search"
+                           :value="request('search')"
+                           placeholder="Search by description, reference or amount..."
+                           class="pl-11 pr-4" />
+                    <div class="absolute left-4 top-3 text-slate-400">
                         <i data-lucide="search" class="w-4 h-4"></i>
                     </div>
                 </div>
 
                 <!-- Type Filter -->
                 <div class="w-full md:w-44">
-                    <select name="type" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                    <x-select-input name="type">
                         <option value="">All Types</option>
                         <option value="credit" {{ request('type') == 'credit' ? 'selected' : '' }}>Credit</option>
                         <option value="debit" {{ request('type') == 'debit' ? 'selected' : '' }}>Debit</option>
                         <option value="refund" {{ request('type') == 'refund' ? 'selected' : '' }}>Refund</option>
-                    </select>
+                    </x-select-input>
                 </div>
 
                 <!-- Status Filter -->
                 <div class="w-full md:w-44">
-                    <select name="status" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                    <x-select-input name="status">
                         <option value="">All Statuses</option>
                         <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
                         <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Failed</option>
-                    </select>
+                    </x-select-input>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="flex items-center gap-2">
-                    <button type="submit" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                    <x-primary-button type="submit" class="flex-1 md:flex-none">
                         <i data-lucide="filter" class="w-3.5 h-3.5"></i>
                         Filter
-                    </button>
+                    </x-primary-button>
                     @if(request('search') || request('type') || request('status'))
                         <a href="{{ route('transactions') }}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/50 rounded-xl transition-all duration-150">
                             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
@@ -320,9 +320,9 @@
                 </div>
                 
                 <div class="modal-footer py-4 px-6 bg-slate-50 border-t border-slate-100 flex justify-end">
-                    <button type="button" @click="selectedTx = null" class="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs rounded-xl border border-slate-200 shadow-sm transition-all duration-150 active:scale-[0.98]">
+                    <x-secondary-button @click="selectedTx = null" class="!text-xs">
                         Close
-                    </button>
+                    </x-secondary-button>
                 </div>
             </div>
         </div>

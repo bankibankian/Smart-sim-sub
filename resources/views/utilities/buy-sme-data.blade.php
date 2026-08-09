@@ -97,14 +97,14 @@
 
                             {{-- Phone Number Input --}}
                             <div class="space-y-1.5">
-                                <label for="mobileno" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Recipient Phone Number</label>
+                                <x-input-label for="mobileno" value="Recipient Phone Number" />
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
                                         <i data-lucide="phone" class="w-4 h-4"></i>
                                     </div>
-                                    <input type="tel" id="mobileno" name="mobileno" value="{{ old('mobileno') }}" 
-                                           class="w-full text-center pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-semibold" 
-                                           maxlength="11" pattern="\d{11}" placeholder="080 0000 0000" required>
+                                    <x-text-input type="tel" id="mobileno" name="mobileno" :value="old('mobileno')" required
+                                           class="pl-10 pr-4 text-center font-semibold"
+                                           maxlength="11" pattern="\d{11}" placeholder="080 0000 0000" />
                                 </div>
                                 <div id="networkResult" class="text-xs font-bold text-[#0056D2] text-center min-h-[1.2rem] mt-1"></div>
                             </div>
@@ -143,28 +143,24 @@
 
                             {{-- Data Type subselection --}}
                             <div class="space-y-1.5">
-                                <label for="type" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Data Plan Type</label>
-                                <select name="type" id="type" 
-                                        class="w-full text-center py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-semibold" 
-                                        required>
+                                <x-input-label for="type" value="Data Plan Type" />
+                                <x-select-input name="type" id="type" class="text-center font-semibold" required>
                                     <option value="">Select Type</option>
-                                </select>
+                                </x-select-input>
                             </div>
 
                             {{-- Data Plan --}}
                             <div class="space-y-1.5">
-                                <label for="plan" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Select Bundle Plan</label>
-                                <select name="plan" id="plan" 
-                                        class="w-full text-center py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-semibold" 
-                                        required>
+                                <x-input-label for="plan" value="Select Bundle Plan" />
+                                <x-select-input name="plan" id="plan" class="text-center font-semibold" required>
                                     <option value="">Select Plan</option>
-                                </select>
+                                </x-select-input>
                             </div>
 
                             {{-- Amount --}}
                             <div class="space-y-2">
                                 <div class="flex justify-between items-center">
-                                    <label for="amountToPay" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Amount to Pay</label>
+                                    <x-input-label for="amountToPay" value="Amount to Pay" class="!mb-0" />
                                     <div class="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
                                         <span>Balance:</span>
                                         <span id="walletBalance" class="font-bold text-emerald-600 hidden">₦{{ number_format($wallet->balance ?? 0, 2) }}</span>
@@ -179,19 +175,18 @@
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-bold text-lg">
                                         ₦
                                     </div>
-                                    <input type="text" id="amountToPay" name="amount" readonly
-                                           class="w-full text-center pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 font-extrabold text-lg" 
-                                           placeholder="0.00" required autocomplete="off">
+                                    <x-text-input type="text" id="amountToPay" name="amount" readonly required autocomplete="off"
+                                           class="pl-10 pr-4 text-center font-extrabold text-lg bg-slate-50"
+                                           placeholder="0.00" />
                                 </div>
                             </div>
 
                             {{-- Purchase Button --}}
                             <div class="pt-4">
-                                <button type="button" id="buy-data-btn" 
-                                        class="w-full py-3.5 px-6 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                                <x-primary-button type="button" id="buy-data-btn" class="w-full">
                                     <i data-lucide="zap" class="w-4 h-4"></i>
                                     Purchase Now
-                                </button>
+                                </x-primary-button>
                             </div>
                         </form>
                     </div>

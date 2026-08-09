@@ -109,36 +109,36 @@
                     <form x-show="uploadTab === 'manual'" action="{{ route('admin.sim-plan.store') }}" method="POST" class="space-y-4">
                         @csrf
                         <div class="space-y-1.5">
-                            <label for="add_category" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">SIM Category</label>
-                            <select id="add_category" name="category" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
+                            <x-input-label for="add_category" value="SIM Category" />
+                            <x-select-input id="add_category" name="category" required class="rounded-xl font-medium">
                                 <option value="">Select Category</option>
                                 @foreach ($categories as $cat)
                                     <option value="{{ $cat }}">{{ $cat }}</option>
                                 @endforeach
-                            </select>
+                            </x-select-input>
                         </div>
 
                         <div class="space-y-1.5">
-                            <label for="add_provider" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Network Operator</label>
-                            <select id="add_provider" name="provider" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
+                            <x-input-label for="add_provider" value="Network Operator" />
+                            <x-select-input id="add_provider" name="provider" required class="rounded-xl font-medium">
                                 <option value="">Select Network</option>
                                 @foreach ($providers as $prov)
                                     <option value="{{ $prov }}">{{ strtoupper($prov) }}</option>
                                 @endforeach
-                            </select>
+                            </x-select-input>
                         </div>
 
                         <div class="space-y-1.5">
-                            <label for="add_numbers" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">SIM Numbers</label>
-                            <textarea id="add_numbers" name="numbers" rows="6" required placeholder="08030000000&#10;08031111111&#10;08032222222"
-                                      class="w-full py-2 px-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-800 font-semibold placeholder:font-normal placeholder:text-slate-400"></textarea>
+                            <x-input-label for="add_numbers" value="SIM Numbers" />
+                            <x-textarea-input id="add_numbers" name="numbers" rows="6" required placeholder="08030000000&#10;08031111111&#10;08032222222"
+                                      class="rounded-xl font-semibold placeholder:font-normal" />
                             <p class="text-xs text-slate-400">Separate numbers by comma or new lines.</p>
                         </div>
 
-                        <button type="submit" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition-all duration-200 flex items-center justify-center gap-2">
+                        <x-primary-button type="submit" class="w-full !text-xs !bg-indigo-600 hover:!bg-indigo-700">
                             <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                             Upload Numbers
-                        </button>
+                        </x-primary-button>
                     </form>
 
                     <!-- Excel Upload Form -->
@@ -168,10 +168,10 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition-all duration-200 flex items-center justify-center gap-2">
+                        <x-primary-button type="submit" class="w-full !text-xs !bg-emerald-600 hover:!bg-emerald-700">
                             <i data-lucide="upload" class="w-3.5 h-3.5"></i>
                             Import Excel SIMs
-                        </button>
+                        </x-primary-button>
                     </form>
                 </div>
             </div>
@@ -346,35 +346,35 @@
                     <!-- Filter Form -->
                     <form action="{{ route('admin.sim-plan.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-5 gap-3 bg-slate-50 p-3 rounded-2xl">
                         <div>
-                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Number..." 
-                                   class="w-full text-xs py-2 px-3 rounded-xl border border-slate-200 focus:outline-none text-slate-800">
+                            <x-text-input type="text" name="search" :value="request('search')"
+                                   class="rounded-xl !text-xs" placeholder="Search Number..." />
                         </div>
                         <div>
-                            <select name="category" class="w-full text-xs py-2 px-3 rounded-xl border border-slate-200 text-slate-700">
+                            <x-select-input name="category" class="rounded-xl !text-xs">
                                 <option value="">Category</option>
                                 @foreach ($categories as $cat)
                                     <option value="{{ $cat }}" {{ request('category') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
                                 @endforeach
-                            </select>
+                            </x-select-input>
                         </div>
                         <div>
-                            <select name="provider" class="w-full text-xs py-2 px-3 rounded-xl border border-slate-200 text-slate-700">
+                            <x-select-input name="provider" class="rounded-xl !text-xs">
                                 <option value="">Network</option>
                                 @foreach ($providers as $prov)
                                     <option value="{{ $prov }}" {{ request('provider') === $prov ? 'selected' : '' }}>{{ strtoupper($prov) }}</option>
                                 @endforeach
-                            </select>
+                            </x-select-input>
                         </div>
                         <div>
-                            <select name="status" class="w-full text-xs py-2 px-3 rounded-xl border border-slate-200 text-slate-700">
+                            <x-select-input name="status" class="rounded-xl !text-xs">
                                 <option value="">Status</option>
                                 <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>NOT ASSIGNED</option>
                                 <option value="assigned" {{ request('status') === 'assigned' ? 'selected' : '' }}>ASSIGNED</option>
                                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>ACTIVATED</option>
-                            </select>
+                            </x-select-input>
                         </div>
                         <div class="flex gap-2">
-                            <button type="submit" class="flex-1 bg-[#0056D2] hover:bg-[#354062] text-white font-bold text-xs py-2 px-3 rounded-xl">Filter</button>
+                            <x-primary-button type="submit" class="flex-1 !py-2 !px-3 !text-xs">Filter</x-primary-button>
                             <a href="{{ route('admin.sim-plan.index') }}" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs py-2 px-3 rounded-xl flex items-center justify-center">Reset</a>
                         </div>
                     </form>

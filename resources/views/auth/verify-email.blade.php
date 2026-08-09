@@ -26,14 +26,14 @@
         @csrf
 
         <div>
-            <label for="code" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">{{ __('Verification Code') }}</label>
-            <input id="code" type="text" name="code" value="{{ old('code') }}" required autofocus 
-                   maxlength="6" 
+            <x-input-label for="code" value="{{ __('Verification Code') }}" />
+            <x-text-input id="code" type="text" name="code" :value="old('code')" required autofocus
+                   maxlength="6"
                    placeholder="••••••"
-                   inputmode="numeric" 
+                   inputmode="numeric"
                    pattern="[0-9]*"
                    autocomplete="one-time-code"
-                   class="w-full text-center text-3xl font-bold tracking-[0.55em] py-3.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 font-mono text-slate-800">
+                   class="text-center text-3xl tracking-[0.55em] py-3.5 font-mono" />
             
             @error('code')
                 <p class="text-sm text-red-600 mt-2 flex gap-1.5 items-center font-medium">
@@ -43,10 +43,10 @@
             @enderror
         </div>
 
-        <button type="submit" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-primary hover:bg-[#0049b8] text-white font-semibold text-sm rounded-lg transition-colors duration-200 font-display">
+        <x-primary-button type="submit" class="w-full font-display">
             <span>{{ __('Verify Code') }}</span>
             <i data-lucide="shield-check" class="w-4 h-4"></i>
-        </button>
+        </x-primary-button>
     </form>
 
     <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">

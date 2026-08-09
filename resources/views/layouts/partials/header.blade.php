@@ -10,18 +10,21 @@
         </button>
 
         <!-- Inline Search Bar (Desktop only) -->
-        <div x-data="{ 
-            query: '', 
-            results: [], 
-            loading: false, 
+        <div x-data="{
+            query: '',
+            results: [],
+            loading: false,
             open: false,
+            activeIndex: -1,
             performSearch() {
                 if (this.query.trim().length === 0) {
                     this.results = [];
+                    this.activeIndex = -1;
                     return;
                 }
                 this.loading = true;
                 this.open = true;
+                this.activeIndex = -1;
                 fetch('/search?q=' + encodeURIComponent(this.query))
                     .then(res => res.json())
                     .then(data => {
@@ -36,29 +39,57 @@
                     .catch(() => {
                         this.loading = false;
                     });
+            },
+            clearSearch() {
+                this.query = '';
+                this.results = [];
+                this.activeIndex = -1;
+                this.$refs.headerSearchInput.focus();
+            },
+            moveActive(delta) {
+                if (!this.results.length) return;
+                this.open = true;
+                this.activeIndex = (this.activeIndex + delta + this.results.length) % this.results.length;
+                this.$nextTick(() => {
+                    this.$refs.resultsList?.querySelector('[data-active=\'true\']')?.scrollIntoView({ block: 'nearest' });
+                });
+            },
+            selectActive() {
+                if (this.activeIndex > -1 && this.results[this.activeIndex]) {
+                    window.location.href = this.results[this.activeIndex].url;
+                }
             }
-        }" 
+        }"
         @click.away="open = false"
-        @keydown.window.cmd.k.prevent="$refs.headerSearchInput.focus()" 
+        @keydown.window.cmd.k.prevent="$refs.headerSearchInput.focus()"
         @keydown.window.ctrl.k.prevent="$refs.headerSearchInput.focus()"
         @keydown.window.slash.prevent="if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { $refs.headerSearchInput.focus() }"
         class="relative w-full hidden md:block">
-            
+
             <!-- Search Input -->
             <div class="relative">
-                <i data-lucide="search" class="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400"></i>
-                <input x-model.debounce.250ms="query" 
+                <i data-lucide="search" class="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400 z-10"></i>
+                <x-text-input x-model.debounce.250ms="query"
                        @input="performSearch()"
                        @focus="open = true"
+                       @keydown.down.prevent="moveActive(1)"
+                       @keydown.up.prevent="moveActive(-1)"
+                       @keydown.enter.prevent="selectActive()"
+                       @keydown.escape="open = false; $refs.headerSearchInput.blur()"
                        x-ref="headerSearchInput"
-                       type="text" 
+                       type="text"
+                       autocomplete="off"
                        placeholder="Search settings, services, users..."
-                       class="w-full pl-9 pr-14 py-2 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all">
-                <span class="absolute right-2.5 top-1.5 px-1.5 py-0.5 text-xs font-bold text-slate-400 bg-white border border-slate-200 rounded-md shadow-sm pointer-events-none">Ctrl K</span>
+                       class="pl-9 pr-14 !py-2 font-medium text-slate-700 bg-slate-50 focus:bg-white focus:!ring-1" />
+                <button type="button" x-show="query.length > 0" @click="clearSearch()" style="display:none"
+                        class="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition-colors">
+                    <i data-lucide="x" class="w-3 h-3"></i>
+                </button>
+                <span x-show="query.length === 0" class="absolute right-2.5 top-1.5 px-1.5 py-0.5 text-xs font-bold text-slate-400 bg-white border border-slate-200 rounded-md shadow-sm pointer-events-none">Ctrl K</span>
             </div>
 
             <!-- Floating Search Dropdown Card -->
-            <div x-show="open && (query.length > 0 || loading)" 
+            <div x-show="open && (query.length > 0 || loading)"
                  x-transition:enter="transition ease-out duration-100"
                  x-transition:enter-start="transform opacity-0 scale-95"
                  x-transition:enter-end="transform opacity-100 scale-100"
@@ -66,17 +97,18 @@
                  x-transition:leave-start="transform opacity-100 scale-100"
                  x-transition:leave-end="transform opacity-0 scale-95"
                  class="absolute left-0 mt-1.5 w-full bg-white border border-slate-200 rounded-2xl shadow-xl shadow-slate-200/30 py-2.5 z-50 outline-none max-h-96 overflow-y-auto"
+                 x-ref="resultsList"
                  style="display: none;">
 
                 <!-- Loading State -->
                 <div x-show="loading" class="flex items-center justify-center py-6 gap-2 text-slate-400">
-                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-[#0056D2]"></i>
+                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-primary"></i>
                     <span class="text-xs font-semibold font-display">Searching SmartSIM...</span>
                 </div>
 
                 <!-- No Results State -->
                 <div x-show="!loading && results.length === 0" class="px-4 py-4 text-center text-slate-400">
-                    <i data-lucide="search" class="w-5 h-5 mx-auto text-slate-300 mb-1"></i>
+                    <i data-lucide="search-x" class="w-5 h-5 mx-auto text-slate-300 mb-1"></i>
                     <span class="block text-xs font-semibold font-display">No matches found for "<span class="text-slate-600" x-text="query"></span>"</span>
                 </div>
 
@@ -87,20 +119,32 @@
                             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider px-3 mb-1 font-display" x-text="category"></span>
                             <div class="space-y-0.5">
                                 <template x-for="item in results.filter(r => r.category === category)" :key="item.title + item.url">
-                                    <a :href="item.url" class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-slate-50 hover:text-[#0056D2] group transition-colors">
-                                        <div class="w-7 h-7 rounded-lg bg-slate-50 group-hover:bg-white border border-slate-100 flex items-center justify-center text-slate-500 group-hover:text-[#0056D2] transition-colors shadow-sm">
+                                    <a :href="item.url"
+                                       :data-active="results[activeIndex] === item"
+                                       @mouseenter="activeIndex = results.indexOf(item)"
+                                       :class="results[activeIndex] === item ? 'bg-slate-50 text-primary ring-1 ring-primary/15' : 'hover:bg-slate-50 hover:text-primary'"
+                                       class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl group transition-colors">
+                                        <div :class="results[activeIndex] === item ? 'bg-white text-primary border-primary/20' : 'bg-slate-50 group-hover:bg-white text-slate-500 group-hover:text-primary border-slate-100'"
+                                             class="w-7 h-7 rounded-lg border flex items-center justify-center transition-colors shadow-sm shrink-0">
                                             <i :data-lucide="item.icon" class="w-3.5 h-3.5"></i>
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <span class="block text-xs font-semibold text-slate-700 group-hover:text-slate-900 truncate font-display" x-text="item.title"></span>
                                             <span class="block text-xs text-slate-400 truncate mt-0.5 font-display" x-text="item.description"></span>
                                         </div>
-                                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all"></i>
+                                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all shrink-0"></i>
                                     </a>
                                 </template>
                             </div>
                         </div>
                     </template>
+                </div>
+
+                <!-- Keyboard Hint Footer -->
+                <div x-show="!loading && results.length > 0" class="flex items-center gap-3 px-4 pt-2.5 mt-1 border-t border-slate-100 text-xs text-slate-400 font-semibold">
+                    <span class="flex items-center gap-1"><span class="px-1.5 py-0.5 bg-slate-50 border border-slate-200 rounded shadow-sm">&uarr;&darr;</span> navigate</span>
+                    <span class="flex items-center gap-1"><span class="px-1.5 py-0.5 bg-slate-50 border border-slate-200 rounded shadow-sm">&crarr;</span> select</span>
+                    <span class="flex items-center gap-1"><span class="px-1.5 py-0.5 bg-slate-50 border border-slate-200 rounded shadow-sm">Esc</span> close</span>
                 </div>
             </div>
         </div>
@@ -240,17 +284,20 @@
 </header>
 
 <!-- Mobile/Shortcut Search Command Palette Modal -->
-<div x-data="{ 
-    searchOpen: false, 
-    query: '', 
-    results: [], 
+<div x-data="{
+    searchOpen: false,
+    query: '',
+    results: [],
     loading: false,
+    activeIndex: -1,
     performSearch() {
         if (this.query.trim().length === 0) {
             this.results = [];
+            this.activeIndex = -1;
             return;
         }
         this.loading = true;
+        this.activeIndex = -1;
         fetch('/search?q=' + encodeURIComponent(this.query))
             .then(res => res.json())
             .then(data => {
@@ -265,8 +312,26 @@
             .catch(() => {
                 this.loading = false;
             });
+    },
+    clearSearch() {
+        this.query = '';
+        this.results = [];
+        this.activeIndex = -1;
+        this.$refs.searchInput.focus();
+    },
+    moveActive(delta) {
+        if (!this.results.length) return;
+        this.activeIndex = (this.activeIndex + delta + this.results.length) % this.results.length;
+        this.$nextTick(() => {
+            this.$refs.mobileResultsList?.querySelector('[data-active=\'true\']')?.scrollIntoView({ block: 'nearest' });
+        });
+    },
+    selectActive() {
+        if (this.activeIndex > -1 && this.results[this.activeIndex]) {
+            window.location.href = this.results[this.activeIndex].url;
+        }
     }
-}" 
+}"
 @open-search.window="searchOpen = true; $nextTick(() => { setTimeout(() => { $refs.searchInput.focus() }, 50) })"
 class="relative">
     <template x-teleport="body">
@@ -296,21 +361,29 @@ class="relative">
                 
                 <!-- Header / Search input -->
                 <div class="relative border-b border-slate-100 p-4">
-                    <i data-lucide="search" class="absolute left-7 top-[23px] w-5 h-5 text-slate-400"></i>
-                    <input x-model.debounce.250ms="query" 
+                    <i data-lucide="search" class="absolute left-7 top-[23px] w-5 h-5 text-slate-400 z-10"></i>
+                    <x-text-input x-model.debounce.250ms="query"
                            @input="performSearch()"
+                           @keydown.down.prevent="moveActive(1)"
+                           @keydown.up.prevent="moveActive(-1)"
+                           @keydown.enter.prevent="selectActive()"
                            @keydown.escape="searchOpen = false; query = ''; results = []"
-                           type="text" 
-                           placeholder="Type to search users, services, accounts..." 
-                           class="w-full pl-10 pr-4 py-2.5 text-sm text-slate-700 bg-slate-50 border border-slate-200/80 rounded-xl focus:bg-white focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] focus:outline-none transition-all"
-                           x-ref="searchInput">
+                           type="text"
+                           autocomplete="off"
+                           placeholder="Type to search users, services, accounts..."
+                           class="pl-10 pr-10 rounded-xl bg-slate-50 focus:bg-white focus:!ring-1"
+                           x-ref="searchInput" />
+                    <button type="button" x-show="query.length > 0" @click="clearSearch()" style="display:none"
+                            class="absolute right-7 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition-colors">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                    </button>
                 </div>
 
                 <!-- Content / Results -->
-                <div class="flex-1 overflow-y-auto p-3 min-h-[120px]">
+                <div class="flex-1 overflow-y-auto p-3 min-h-[120px]" x-ref="mobileResultsList">
                     <!-- Loading state -->
                     <div x-show="loading" class="flex flex-col items-center justify-center py-10 gap-2 text-slate-400">
-                        <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-[#0056D2]"></i>
+                        <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-primary"></i>
                         <span class="text-xs font-semibold font-display">Searching SmartSIM...</span>
                     </div>
 
@@ -325,7 +398,7 @@ class="relative">
 
                     <!-- No Results found state -->
                     <div x-show="!loading && query.length > 0 && results.length === 0" class="flex flex-col items-center justify-center py-10 text-slate-400 gap-1.5 text-center">
-                        <i data-lucide="search" class="w-8 h-8 text-slate-300 animate-pulse"></i>
+                        <i data-lucide="search-x" class="w-8 h-8 text-slate-300"></i>
                         <div>
                             <p class="text-xs font-bold text-slate-500 font-display">No results found</p>
                             <p class="text-xs text-slate-400 mt-0.5 font-display">We couldn't find anything matching "<span class="font-semibold text-slate-600" x-text="query"></span>".</p>
@@ -339,15 +412,20 @@ class="relative">
                                 <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider px-2.5 mb-1.5 font-display" x-text="category"></span>
                                 <div class="space-y-1">
                                     <template x-for="item in results.filter(r => r.category === category)" :key="item.title + item.url">
-                                        <a :href="item.url" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 hover:text-slate-900 group transition-all">
-                                            <div class="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-white border border-slate-100 flex items-center justify-center text-slate-500 group-hover:text-[#0056D2] transition-colors shadow-sm">
+                                        <a :href="item.url"
+                                           :data-active="results[activeIndex] === item"
+                                           @mouseenter="activeIndex = results.indexOf(item)"
+                                           :class="results[activeIndex] === item ? 'bg-slate-50 text-primary ring-1 ring-primary/15' : 'hover:bg-slate-50 hover:text-slate-900'"
+                                           class="flex items-center gap-3 px-3 py-2 rounded-xl group transition-all">
+                                            <div :class="results[activeIndex] === item ? 'bg-white text-primary border-primary/20' : 'bg-slate-50 group-hover:bg-white text-slate-500 group-hover:text-primary border-slate-100'"
+                                                 class="w-8 h-8 rounded-lg border flex items-center justify-center transition-colors shadow-sm shrink-0">
                                                 <i :data-lucide="item.icon" class="w-4 h-4"></i>
                                             </div>
                                             <div class="flex-1 min-w-0">
                                                 <span class="block text-xs font-semibold text-slate-700 group-hover:text-slate-900 truncate font-display" x-text="item.title"></span>
                                                 <span class="block text-xs text-slate-400 truncate mt-0.5 leading-none font-display" x-text="item.description"></span>
                                             </div>
-                                            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all"></i>
+                                            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all shrink-0"></i>
                                         </a>
                                     </template>
                                 </div>

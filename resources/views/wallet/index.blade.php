@@ -92,10 +92,10 @@
                         @if(isset($walletData) && $walletData['bonus'] > 0)
                             <form method="POST" action="{{ route('wallet.claimBonus') }}">
                                 @csrf
-                                <button type="submit" class="w-full py-3 px-6 bg-vibrant hover:bg-[#008f4c] text-white font-semibold text-xs rounded-lg transition flex items-center justify-center gap-2 font-display">
+                                <x-primary-button type="submit" class="w-full font-display !bg-vibrant hover:!bg-[#008f4c]">
                                     <i data-lucide="sparkles" class="w-4 h-4"></i>
                                     Claim & Transfer to Main Wallet
-                                </button>
+                                </x-primary-button>
                             </form>
                         @else
                             <button class="w-full py-3 px-6 bg-slate-50 border border-slate-200 text-slate-400 font-semibold text-xs rounded-lg flex items-center justify-center gap-2 cursor-not-allowed font-display" disabled>
@@ -107,33 +107,33 @@
                 </div>
 
                 <!-- Motivation & Progress Card -->
-                <div class="bg-primary rounded-xl p-5 text-white flex flex-col justify-between gap-4">
+                <div class="bg-primary/5 border border-primary/10 rounded-xl p-5 flex flex-col justify-between gap-4">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="bg-white/15 text-white text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <span class="bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
                                 <i data-lucide="zap" class="w-3 h-3"></i>
                                 Benefit
                             </span>
                         </div>
 
                         <div>
-                            <h3 class="text-base font-semibold font-display leading-snug">Turn Transactions into Real Cash Rewards</h3>
-                            <p class="text-xs text-blue-100 mt-1 leading-relaxed">Every transaction brings you closer to your next tier cash bonus.</p>
+                            <h3 class="text-base font-semibold font-display leading-snug text-slate-800">Turn Transactions into Real Cash Rewards</h3>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Every transaction brings you closer to your next tier cash bonus.</p>
                         </div>
 
                         <!-- Progress Tracker -->
-                        <div class="bg-white/10 rounded-lg p-3.5 space-y-2">
+                        <div class="bg-white rounded-lg p-3.5 space-y-2 border border-primary/10">
                             <div class="flex justify-between items-center text-xs font-semibold">
-                                <span class="text-blue-100">Next Target Level</span>
-                                <span class="text-white">₦{{ number_format($nextBonusTarget ?? 50000, 2) }}</span>
+                                <span class="text-slate-500">Next Target Level</span>
+                                <span class="text-primary">₦{{ number_format($nextBonusTarget ?? 50000, 2) }}</span>
                             </div>
 
                             <!-- Custom Progress Bar -->
-                            <div class="w-full bg-white/20 rounded-full h-2">
-                                <div class="bg-vibrant h-2 rounded-full transition-all duration-500" style="width: {{ $bonusProgress ?? 0 }}%"></div>
+                            <div class="w-full bg-primary/10 rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full transition-all duration-500" style="width: {{ $bonusProgress ?? 0 }}%"></div>
                             </div>
 
-                            <div class="flex justify-between items-center text-xs text-blue-100 font-medium">
+                            <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
                                 <span>Spend: ₦{{ number_format($currentSpend ?? 0, 2) }}</span>
                                 <span>Progress: {{ $bonusProgress ?? 0 }}%</span>
                             </div>
@@ -141,13 +141,13 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white/10 rounded-lg p-2.5 text-center">
-                            <i data-lucide="coins" class="w-4 h-4 text-white mx-auto mb-1"></i>
-                            <span class="block text-xs text-blue-100 font-semibold">5-10% Cashbacks</span>
+                        <div class="bg-white rounded-lg p-2.5 text-center border border-primary/10">
+                            <i data-lucide="coins" class="w-4 h-4 text-primary mx-auto mb-1"></i>
+                            <span class="block text-xs text-slate-600 font-semibold">5-10% Cashbacks</span>
                         </div>
-                        <div class="bg-white/10 rounded-lg p-2.5 text-center">
-                            <i data-lucide="medal" class="w-4 h-4 text-white mx-auto mb-1"></i>
-                            <span class="block text-xs text-blue-100 font-semibold">VIP Status Badges</span>
+                        <div class="bg-white rounded-lg p-2.5 text-center border border-primary/10">
+                            <i data-lucide="medal" class="w-4 h-4 text-primary mx-auto mb-1"></i>
+                            <span class="block text-xs text-slate-600 font-semibold">VIP Status Badges</span>
                         </div>
                     </div>
                 </div>
@@ -169,14 +169,14 @@
                 <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
                     
                     <!-- Card Header -->
-                    <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white">
+                    <div class="bg-white px-6 py-5 border-b border-slate-100">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
+                            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10 text-primary">
                                 <i data-lucide="bank" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold font-display">Automatic Funding</h3>
-                                <p class="text-xs text-slate-200 mt-0.5">Instant settlement to your wallet 24/7.</p>
+                                <h3 class="font-bold font-display text-slate-800">Automatic Funding</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Instant settlement to your wallet 24/7.</p>
                             </div>
                         </div>
                     </div>
@@ -258,44 +258,41 @@
                                 <form method="POST" action="{{ route('virtual.account.create') }}" class="space-y-4">
                                     @csrf
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Full Name</label>
-                                        <input type="text" name="name" 
-                                               value="{{ auth()->user()->first_name }} {{ auth()->user()->last_name }} {{ auth()->user()->middle_name }}" 
-                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
-                                               required>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Phone Number</label>
-                                        <input type="tel" name="phone" 
-                                               value="{{ auth()->user()->phone }}" 
-                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
-                                               required>
+                                        <x-input-label value="Full Name" />
+                                        <x-text-input type="text" name="name"
+                                               :value="auth()->user()->first_name . ' ' . auth()->user()->last_name . ' ' . auth()->user()->middle_name"
+                                               required />
                                     </div>
 
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Bank Verification Number (BVN)</label>
-                                        <input type="text" name="bvn" 
-                                               value="{{ old('bvn', auth()->user()->bvn) }}" 
+                                        <x-input-label value="Phone Number" />
+                                        <x-text-input type="tel" name="phone"
+                                               :value="auth()->user()->phone"
+                                               required />
+                                    </div>
+
+                                    <div>
+                                        <x-input-label value="Bank Verification Number (BVN)" />
+                                        <x-text-input type="text" name="bvn"
+                                               :value="old('bvn', auth()->user()->bvn)"
                                                placeholder="Enter 11-digit BVN"
                                                maxlength="11"
                                                pattern="\d{11}"
                                                title="BVN must be exactly 11 digits"
-                                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all"
-                                               required>
+                                               required />
                                     </div>
 
                                     <div class="flex items-start gap-2.5 pt-2">
-                                        <input type="checkbox" id="confirmCheck" class="mt-0.5 rounded border-slate-300 text-[#0056D2] focus:ring-[#0056D2] shrink-0" required>
+                                        <input type="checkbox" id="confirmCheck" class="mt-0.5 rounded border-slate-300 text-primary focus:ring-primary/20 shrink-0" required>
                                         <label for="confirmCheck" class="text-[11px] text-slate-500 leading-relaxed">
                                             I confirm that the above details are accurate and consent to create a virtual account.
                                         </label>
                                     </div>
 
-                                    <button type="submit" class="w-full mt-4 py-3 px-4 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 transition-all duration-200 flex items-center justify-center gap-2">
+                                    <x-primary-button type="submit" class="w-full mt-4">
                                         <i data-lucide="plus-circle" class="w-4 h-4"></i>
                                         Generate Virtual Account
-                                    </button>
+                                    </x-primary-button>
                                 </form>
                             </div>
                         @endif

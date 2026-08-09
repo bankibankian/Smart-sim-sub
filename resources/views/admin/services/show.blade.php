@@ -90,10 +90,10 @@
                     <h3 class="text-md font-bold text-slate-800 font-display">Service Variants (Fields)</h3>
                     <p class="text-xs text-slate-400 mt-1">Configure pricing plans and field codes for this service.</p>
                 </div>
-                <button @click="addFieldModalOpen = true" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm transition-all duration-150">
+                <x-primary-button @click="addFieldModalOpen = true" class="!px-3 !py-2 !text-xs">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     Add Variant
-                </button>
+                </x-primary-button>
             </div>
 
             <!-- Fields Table -->
@@ -191,10 +191,10 @@
                     <h3 class="text-md font-bold text-slate-800 font-display">Target / Group Custom Pricing</h3>
                     <p class="text-xs text-slate-400 mt-1">Set customized pricing rates for specific user roles or individual user accounts.</p>
                 </div>
-                <button @click="addPriceModalOpen = true" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm transition-all duration-150">
+                <x-primary-button @click="addPriceModalOpen = true" class="!px-3 !py-2 !text-xs">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     Add Custom Price
-                </button>
+                </x-primary-button>
             </div>
 
             <!-- Prices Table -->
@@ -310,20 +310,23 @@
                         <div class="space-y-5">
                             <!-- Name -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Variant Name</label>
-                                <input type="text" name="field_name" required placeholder="e.g., MTN VTU 1GB" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="Variant Name" />
+                                <x-text-input type="text" name="field_name" required placeholder="e.g., MTN VTU 1GB"
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Code -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Field Code</label>
-                                <input type="text" name="field_code" required placeholder="e.g., mtn_vtu_1gb" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="Field Code" />
+                                <x-text-input type="text" name="field_code" required placeholder="e.g., mtn_vtu_1gb"
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Base Price -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Base Price (₦)</label>
-                                <input type="number" step="0.01" name="base_price" required placeholder="e.500.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="Base Price (₦)" />
+                                <x-text-input type="number" step="0.01" name="base_price" required placeholder="e.500.00"
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Status -->
@@ -340,12 +343,12 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="addFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <x-secondary-button type="button" @click="addFieldModalOpen = false" class="!text-xs">
                                 Cancel
-                            </button>
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                            </x-secondary-button>
+                            <x-primary-button type="submit" class="!text-xs">
                                 Create Variant
-                            </button>
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
@@ -370,20 +373,23 @@
                         <div class="space-y-5">
                             <!-- Name -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Variant Name</label>
-                                <input type="text" name="field_name" :value="editField.field_name" required class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="Variant Name" />
+                                <x-text-input type="text" name="field_name" x-bind:value="editField.field_name" required
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Code -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Field Code</label>
-                                <input type="text" name="field_code" :value="editField.field_code" required class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="Field Code" />
+                                <x-text-input type="text" name="field_code" x-bind:value="editField.field_code" required
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Base Price -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Base Price (₦)</label>
-                                <input type="number" step="0.01" name="base_price" :value="editField.base_price" required class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="Base Price (₦)" />
+                                <x-text-input type="number" step="0.01" name="base_price" x-bind:value="editField.base_price" required
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Status -->
@@ -400,12 +406,12 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="editFieldModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <x-secondary-button type="button" @click="editFieldModalOpen = false" class="!text-xs">
                                 Cancel
-                            </button>
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                            </x-secondary-button>
+                            <x-primary-button type="submit" class="!text-xs">
                                 Update Variant
-                            </button>
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
@@ -430,13 +436,13 @@
                             
                             <!-- Variant select -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Variant</label>
-                                <select name="service_fields_id" class="w-full px-3 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm font-semibold text-slate-800 transition-all duration-200">
+                                <x-input-label value="Target Variant" />
+                                <x-select-input name="service_fields_id" class="rounded-xl bg-slate-50/50">
                                     <option value="">All Variants (Service Base Price)</option>
                                     @foreach($service->fields as $f)
                                         <option value="{{ $f->id }}">{{ $f->field_name }} (Base: ₦{{ number_format($f->base_price, 2) }})</option>
                                     @endforeach
-                                </select>
+                                </x-select-input>
                             </div>
 
                             <!-- Target Type Tabs/Buttons -->
@@ -455,8 +461,8 @@
 
                             <!-- Target Role Selection (x-show) -->
                             <div x-show="addTarget === 'role'">
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Role Group</label>
-                                <select name="user_type" class="w-full px-3 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm font-semibold text-slate-800 transition-all duration-200">
+                                <x-input-label value="User Role Group" />
+                                <x-select-input name="user_type" class="rounded-xl bg-slate-50/50">
                                     <option value="personal">Personal</option>
                                     <option value="agent">Agent</option>
                                     <option value="partner">Partner</option>
@@ -464,40 +470,43 @@
                                     <option value="staff">Staff</option>
                                     <option value="checker">Checker</option>
                                     <option value="super_admin">Super Admin</option>
-                                </select>
+                                </x-select-input>
                             </div>
 
                             <!-- Target Specific User Selection (x-show) -->
                             <div x-show="addTarget === 'user'" style="display: none;">
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Email Address</label>
-                                <input type="email" name="user_email" placeholder="e.g., user@example.com" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="User Email Address" />
+                                <x-text-input type="email" name="user_email" placeholder="e.g., user@example.com"
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Custom Price -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                <x-input-label>
                                     Custom Price <span x-text="'{{ $service->name }}' === 'airtime' ? '(%)' : '(₦)'"></span>
-                                </label>
-                                <input type="number" step="0.01" name="price" required placeholder="e.g., 480.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                </x-input-label>
+                                <x-text-input type="number" step="0.01" name="price" required placeholder="e.g., 480.00"
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Commission -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                <x-input-label>
                                     Commission <span x-text="'{{ $service->name }}' === 'airtime' ? '(%)' : '(₦)'"></span>
-                                </label>
-                                <input type="number" step="0.01" name="commission" required value="0.00" placeholder="e.g., 50.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                </x-input-label>
+                                <x-text-input type="number" step="0.01" name="commission" required value="0.00" placeholder="e.g., 50.00"
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="addPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <x-secondary-button type="button" @click="addPriceModalOpen = false" class="!text-xs">
                                 Cancel
-                            </button>
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                            </x-secondary-button>
+                            <x-primary-button type="submit" class="!text-xs">
                                 Save Price
-                            </button>
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
@@ -545,8 +554,8 @@
 
                             <!-- Target Role Selection (x-show) -->
                             <div x-show="editPrice.price_target === 'role'">
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Role Group</label>
-                                <select name="user_type" :value="editPrice.user_type" @change="editPrice.user_type = $event.target.value" class="w-full px-3 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm font-semibold text-slate-800 transition-all duration-200">
+                                <x-input-label value="User Role Group" />
+                                <x-select-input name="user_type" x-bind:value="editPrice.user_type" @change="editPrice.user_type = $event.target.value" class="rounded-xl bg-slate-50/50">
                                     <option value="personal">Personal</option>
                                     <option value="agent">Agent</option>
                                     <option value="partner">Partner</option>
@@ -554,40 +563,43 @@
                                     <option value="staff">Staff</option>
                                     <option value="checker">Checker</option>
                                     <option value="super_admin">Super Admin</option>
-                                </select>
+                                </x-select-input>
                             </div>
 
                             <!-- Target Specific User Selection (x-show) -->
                             <div x-show="editPrice.price_target === 'user'" style="display: none;">
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Email Address</label>
-                                <input type="email" name="user_email" :value="editPrice.user_email" @input="editPrice.user_email = $event.target.value" placeholder="e.g., user@example.com" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="User Email Address" />
+                                <x-text-input type="email" name="user_email" x-bind:value="editPrice.user_email" @input="editPrice.user_email = $event.target.value" placeholder="e.g., user@example.com"
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Custom Price -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                <x-input-label>
                                     Custom Price <span x-text="'{{ $service->name }}' === 'airtime' ? '(%)' : '(₦)'"></span>
-                                </label>
-                                <input type="number" step="0.01" name="price" :value="editPrice.price" required placeholder="e.g., 480.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                </x-input-label>
+                                <x-text-input type="number" step="0.01" name="price" x-bind:value="editPrice.price" required placeholder="e.g., 480.00"
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                             <!-- Commission -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                <x-input-label>
                                     Commission <span x-text="'{{ $service->name }}' === 'airtime' ? '(%)' : '(₦)'"></span>
-                                </label>
-                                <input type="number" step="0.01" name="commission" :value="editPrice.commission" required placeholder="e.g., 50.00" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                </x-input-label>
+                                <x-text-input type="number" step="0.01" name="commission" x-bind:value="editPrice.commission" required placeholder="e.g., 50.00"
+                                       class="rounded-xl bg-slate-50/50" />
                             </div>
 
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-4">
-                            <button type="button" @click="editPriceModalOpen = false" class="px-4 py-2.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/50 rounded-xl transition-all duration-150">
+                            <x-secondary-button type="button" @click="editPriceModalOpen = false" class="!text-xs">
                                 Cancel
-                            </button>
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                            </x-secondary-button>
+                            <x-primary-button type="submit" class="!text-xs">
                                 Update Price
-                            </button>
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>

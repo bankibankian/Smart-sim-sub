@@ -150,14 +150,14 @@
 
                             {{-- Phone Number Input --}}
                             <div class="space-y-1.5">
-                                <label for="mobileno" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Recipient Phone Number</label>
+                                <x-input-label for="mobileno" value="Recipient Phone Number" />
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
                                         <i data-lucide="phone" class="w-4 h-4"></i>
                                     </div>
-                                    <input type="tel" id="mobileno" name="mobileno" value="{{ old('mobileno') }}" 
-                                           class="w-full text-center pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-semibold" 
-                                           maxlength="11" pattern="\d{11}" placeholder="080 0000 0000" required>
+                                    <x-text-input type="tel" id="mobileno" name="mobileno" :value="old('mobileno')" required
+                                           class="pl-10 pr-4 text-center font-semibold"
+                                           maxlength="11" pattern="\d{11}" placeholder="080 0000 0000" />
                                 </div>
                                 <div id="networkResult" class="text-xs font-bold text-[#0056D2] text-center min-h-[1.2rem] mt-1"></div>
                             </div>
@@ -197,7 +197,7 @@
                             {{-- Amount Input --}}
                             <div class="space-y-2">
                                 <div class="flex justify-between items-center">
-                                    <label for="amount_display" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Amount</label>
+                                    <x-input-label for="amount_display" value="Amount" class="!mb-0" />
                                     <div class="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
                                         <span>Balance:</span>
                                         <span id="walletBalance" class="font-bold text-emerald-600 hidden">₦{{ number_format($wallet->balance ?? 0, 2) }}</span>
@@ -212,9 +212,9 @@
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-bold text-lg">
                                         ₦
                                     </div>
-                                    <input type="text" id="amount_display" 
-                                           class="w-full text-center pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-extrabold text-lg" 
-                                           placeholder="0.00" required autocomplete="off">
+                                    <x-text-input type="text" id="amount_display" required autocomplete="off"
+                                           class="pl-10 pr-4 text-center font-extrabold text-lg"
+                                           placeholder="0.00" />
                                     <input type="hidden" id="amount" name="amount" value="{{ old('amount') }}" required>
                                 </div>
 
@@ -239,11 +239,10 @@
 
                             {{-- Purchase Button --}}
                             <div class="pt-4">
-                                <button type="button" id="buy-airtime" 
-                                        class="w-full py-3.5 px-6 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                                <x-primary-button type="button" id="buy-airtime" class="w-full">
                                     <i data-lucide="zap" class="w-4 h-4"></i>
                                     Purchase Now
-                                </button>
+                                </x-primary-button>
                             </div>
                         </form>
                     </div>

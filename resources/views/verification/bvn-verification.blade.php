@@ -21,17 +21,17 @@
             <div class="col-12 col-lg-6">
                 <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
                     <div>
-                        <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+                        <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
+                                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10 text-primary">
                                     <i data-lucide="fingerprint" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold font-display text-white">Verify BVN</h3>
-                                    <p class="text-xs text-slate-200 mt-0.5">Perform instant bank identification query.</p>
+                                    <h3 class="font-bold font-display text-slate-800">Verify BVN</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5">Perform instant bank identification query.</p>
                                 </div>
                             </div>
-                            <span class="text-xs font-bold text-primary bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            <span class="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
                                 Instant
                             </span>
                         </div>
@@ -80,11 +80,11 @@
                             <form method="POST" action="{{ route('bvn.verification.store') }}" class="space-y-6 m-0">
                                 @csrf
                                 <div class="space-y-1.5 text-start">
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">BVN Number <span class="text-rose-500">*</span></label>
-                                    <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-sm font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all text-center tracking-widest font-display" 
-                                        name="bvn" type="text"
+                                    <x-input-label value="BVN Number *" />
+                                    <x-text-input name="bvn" type="text"
+                                        class="text-center tracking-widest font-display"
                                         placeholder="Enter 11 Digit BVN" maxlength="11" minlength="11" pattern="[0-9]{11}"
-                                        required value="{{ old('bvn') }}">
+                                        required :value="old('bvn')" />
                                 </div>
 
                                 <div class="space-y-3">
@@ -105,10 +105,10 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="w-full py-3.5 px-6 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 font-display">
+                                <x-primary-button type="submit" class="w-full font-display">
                                     <i data-lucide="search" class="w-4 h-4"></i>
                                     <span>Verify Now</span>
-                                </button>
+                                </x-primary-button>
                             </form>
                         </div>
                     </div>

@@ -143,10 +143,9 @@
 
                             {{-- Subject Input --}}
                             <div class="space-y-1.5">
-                                <label for="subject" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Subject</label>
-                                <input type="text" id="subject" name="subject" value="{{ old('subject') }}" 
-                                       class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-semibold" 
-                                       placeholder="e.g. Wallet Funding issue" required>
+                                <x-input-label for="subject" value="Subject" />
+                                <x-text-input type="text" id="subject" name="subject" :value="old('subject')" required
+                                       class="font-semibold" placeholder="e.g. Wallet Funding issue" />
                             </div>
 
                             {{-- Interactive Category Picker --}}
@@ -206,19 +205,17 @@
 
                             {{-- Message Input --}}
                             <div class="space-y-1.5">
-                                <label for="message" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Message Description</label>
-                                <textarea id="message" name="message" rows="4"
-                                          class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-medium" 
-                                          placeholder="Describe your issue or inquiry in detail..." required>{{ old('message') }}</textarea>
+                                <x-input-label for="message" value="Message Description" />
+                                <x-textarea-input id="message" name="message" rows="4" required
+                                          placeholder="Describe your issue or inquiry in detail...">{{ old('message') }}</x-textarea-input>
                             </div>
 
                             {{-- Submit Button --}}
                             <div class="pt-2">
-                                <button type="submit" 
-                                        class="w-full py-3.5 px-6 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                                <x-primary-button type="submit" class="w-full">
                                     <i data-lucide="send" class="w-4 h-4"></i>
                                     <span>Submit Ticket</span>
-                                </button>
+                                </x-primary-button>
                             </div>
                         </form>
                     </div>

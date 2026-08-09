@@ -13,10 +13,10 @@
                 <p class="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Configure and manage system services, dynamic variant fields, and custom pricing rules.</p>
             </div>
             <div class="relative z-10 flex-shrink-0">
-                <button @click="addModalOpen = true" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200">
+                <x-primary-button @click="addModalOpen = true" class="!text-xs">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     Add Service
-                </button>
+                </x-primary-button>
             </div>
         </div>
 
@@ -42,57 +42,51 @@
         <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <!-- Total Services -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-violet-600 via-indigo-700 to-indigo-800 glow-purple border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-600/20 group">
-                <div class="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
-                <div class="absolute right-4 top-4 w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"></div>
-                <div class="flex items-center justify-between relative z-10">
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+                <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/75 uppercase tracking-wider">Total Services</p>
-                        <h3 class="text-3xl font-extrabold text-white mt-2.5 tracking-tight font-display">{{ $totalServicesCount }}</h3>
-                        <p class="text-[11px] text-white/60 mt-2 font-medium flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-indigo-300"></span>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Services</p>
+                        <h3 class="text-3xl font-extrabold text-slate-900 mt-2.5 tracking-tight font-display">{{ $totalServicesCount }}</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
                             Configured in System
                         </p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/15 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner transition-transform duration-300 group-hover:rotate-6">
+                    <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/10 flex items-center justify-center text-primary transition-transform duration-300 group-hover:rotate-6">
                         <i data-lucide="server" class="w-5 h-5"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Active Services -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-emerald-500 via-teal-550 to-teal-700 glow-emerald border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-600/20 group">
-                <div class="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
-                <div class="absolute right-4 top-4 w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"></div>
-                <div class="flex items-center justify-between relative z-10">
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+                <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/75 uppercase tracking-wider">Active Services</p>
-                        <h3 class="text-3xl font-extrabold text-white mt-2.5 tracking-tight font-display">{{ $activeServicesCount }}</h3>
-                        <p class="text-[11px] text-white/60 mt-2 font-medium flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Services</p>
+                        <h3 class="text-3xl font-extrabold text-slate-900 mt-2.5 tracking-tight font-display">{{ $activeServicesCount }}</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                             Available to Users
                         </p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/15 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner transition-transform duration-300 group-hover:rotate-6">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100/50 flex items-center justify-center text-emerald-600 transition-transform duration-300 group-hover:rotate-6">
                         <i data-lucide="activity" class="w-5 h-5"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Inactive Services -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 glow-rose border border-white/15 transition-all duration-350 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:shadow-rose-600/20 group">
-                <div class="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
-                <div class="absolute right-4 top-4 w-14 h-14 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"></div>
-                <div class="flex items-center justify-between relative z-10">
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+                <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/75 uppercase tracking-wider">Inactive Services</p>
-                        <h3 class="text-3xl font-extrabold text-white mt-2.5 tracking-tight font-display">{{ $inactiveServicesCount }}</h3>
-                        <p class="text-[11px] text-white/60 mt-2 font-medium flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-rose-300"></span>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Inactive Services</p>
+                        <h3 class="text-3xl font-extrabold text-slate-900 mt-2.5 tracking-tight font-display">{{ $inactiveServicesCount }}</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
                             Temporarily Disabled
                         </p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/15 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner transition-transform duration-300 group-hover:rotate-6">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100/50 flex items-center justify-center text-rose-600 transition-transform duration-300 group-hover:rotate-6">
                         <i data-lucide="slash" class="w-5 h-5"></i>
                     </div>
                 </div>
@@ -106,11 +100,9 @@
                 <form method="GET" action="{{ route('admin.services.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
                     <!-- Search Input -->
                     <div class="relative flex-grow">
-                        <input type="text" 
-                               name="search" 
-                               value="{{ request('search') }}" 
-                               placeholder="Search by service name or description..." 
-                               class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm placeholder:text-slate-400">
+                        <x-text-input type="text" name="search" :value="request('search')"
+                               class="pl-11 pr-4 rounded-2xl font-semibold shadow-sm"
+                               placeholder="Search by service name or description..." />
                         <div class="absolute left-4 top-4 text-slate-400">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </div>
@@ -125,11 +117,12 @@
                     <!-- Status Filter -->
                     <div class="w-full lg:w-48">
                         <div class="relative">
-                            <select name="status" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
+                            <x-select-input name="status" onchange="this.form.submit()"
+                                    class="pl-3 pr-8 rounded-2xl !text-xs font-bold text-slate-600 shadow-sm appearance-none cursor-pointer">
                                 <option value="">All Statuses</option>
                                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active Only</option>
                                 <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive Only</option>
-                            </select>
+                            </x-select-input>
                             <div class="absolute right-3.5 top-4 pointer-events-none text-slate-400">
                                 <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                             </div>
@@ -139,10 +132,11 @@
                     <!-- Sort Filter -->
                     <div class="w-full lg:w-48">
                         <div class="relative">
-                            <select name="sort" onchange="this.form.submit()" class="w-full pl-3 pr-8 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm appearance-none cursor-pointer">
+                            <x-select-input name="sort" onchange="this.form.submit()"
+                                    class="pl-3 pr-8 rounded-2xl !text-xs font-bold text-slate-600 shadow-sm appearance-none cursor-pointer">
                                 <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Newest First</option>
                                 <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest First</option>
-                            </select>
+                            </x-select-input>
                             <div class="absolute right-3.5 top-4 pointer-events-none text-slate-400">
                                 <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                             </div>
@@ -339,14 +333,17 @@
 
                             <!-- Name -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Service Name</label>
-                                <input type="text" name="name" required placeholder="e.g., MTN VTU" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400">
+                                <x-input-label value="Service Name" />
+                                <x-text-input type="text" name="name" required placeholder="e.g., MTN VTU"
+                                       class="rounded-2xl bg-slate-50/50" />
                             </div>
 
                             <!-- Description -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Description</label>
-                                <textarea name="description" rows="3" placeholder="Provide brief details about this service..." class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200 placeholder:text-slate-400"></textarea>
+                                <x-input-label value="Description" />
+                                <x-textarea-input name="description" rows="3"
+                                          class="rounded-2xl bg-slate-50/50"
+                                          placeholder="Provide brief details about this service..." />
                             </div>
 
                             <!-- Status Toggle -->
@@ -363,12 +360,12 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-5">
-                            <button type="button" @click="addModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-2xl transition-all duration-150">
+                            <x-secondary-button type="button" @click="addModalOpen = false" class="!text-xs">
                                 Cancel
-                            </button>
-                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
+                            </x-secondary-button>
+                            <x-primary-button type="submit" class="!text-xs">
                                 Create Service
-                            </button>
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
@@ -443,14 +440,16 @@
 
                             <!-- Name -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Service Name</label>
-                                <input type="text" name="name" :value="editService.name" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="Service Name" />
+                                <x-text-input type="text" name="name" x-bind:value="editService.name" required
+                                       class="rounded-2xl bg-slate-50/50" />
                             </div>
 
                             <!-- Description -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Description</label>
-                                <textarea name="description" rows="3" :value="editService.description" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-2xl text-sm text-slate-800 font-semibold transition-all duration-200"></textarea>
+                                <x-input-label value="Description" />
+                                <x-textarea-input name="description" rows="3" x-bind:value="editService.description"
+                                          class="rounded-2xl bg-slate-50/50" />
                             </div>
 
                             <!-- Status Toggle -->
@@ -467,12 +466,12 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-3 mt-8 border-t border-slate-100 pt-5">
-                            <button type="button" @click="editModalOpen = false" class="px-5 py-3 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-2xl transition-all duration-150">
+                            <x-secondary-button type="button" @click="editModalOpen = false" class="!text-xs">
                                 Cancel
-                            </button>
-                            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#37446b] hover:to-[#0056D2] text-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-150">
+                            </x-secondary-button>
+                            <x-primary-button type="submit" class="!text-xs">
                                 Update Service
-                            </button>
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>

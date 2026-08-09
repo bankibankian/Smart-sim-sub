@@ -2,7 +2,7 @@
     <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
             <div class="lg:col-span-1">
-                <a href="{{ url('/welcome2') }}" class="inline-flex items-center">
+                <a href="{{ url('/') }}" class="inline-flex items-center">
                     <img src="{{ asset('assets/images/logo/logo1.png') }}" alt="SmartSIM" class="h-8 w-auto">
                 </a>
                 <p class="mt-4 max-w-xs text-sm leading-6 text-[var(--lp-text-soft)]">

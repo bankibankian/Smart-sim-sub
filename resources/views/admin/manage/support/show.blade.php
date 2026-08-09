@@ -155,20 +155,19 @@
                         <form method="POST" action="{{ route('admin.manage.support.reply', $ticket) }}" class="space-y-4">
                             @csrf
                             <div class="relative">
-                                <textarea name="message" rows="3" required
-                                          class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-medium placeholder-slate-400 text-sm shadow-inner" 
-                                          placeholder="Type your official administrative response here..."></textarea>
+                                <x-textarea-input name="message" rows="3" required
+                                          class="rounded-2xl shadow-inner"
+                                          placeholder="Type your official administrative response here..." />
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs text-slate-400 font-semibold">
                                     <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500 inline mr-1"></i>
                                     Secure Staff Channel
                                 </span>
-                                <button type="submit" 
-                                        class="py-2.5 px-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center gap-2">
+                                <x-primary-button type="submit" class="!bg-emerald-600 hover:!bg-emerald-700">
                                     <i data-lucide="reply" class="w-4 h-4"></i>
                                     <span>Send Agent Reply</span>
-                                </button>
+                                </x-primary-button>
                             </div>
                         </form>
                     </div>

@@ -21,17 +21,17 @@
             <div class="col-12 col-lg-6">
                 <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
                     <div>
-                        <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+                        <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
+                                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10 text-primary">
                                     <i data-lucide="contact" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold font-display text-white">Verify Identity</h3>
-                                    <p class="text-xs text-slate-200 mt-0.5">Enter details exactly as they appear on the NIN record.</p>
+                                    <h3 class="font-bold font-display text-slate-800">Verify Identity</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5">Enter details exactly as they appear on the NIN record.</p>
                                 </div>
                             </div>
-                            <span class="text-xs font-bold text-primary bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            <span class="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
                                 Demographic
                             </span>
                         </div>
@@ -80,18 +80,16 @@
                                 <div class="row g-3 text-start">
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">First Name <span class="text-rose-500">*</span></label>
-                                            <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all" 
-                                                name="firstName" type="text"
-                                                placeholder="Enter First Name" required value="{{ old('firstName') }}">
+                                            <x-input-label value="First Name *" />
+                                            <x-text-input name="firstName" type="text"
+                                                placeholder="Enter First Name" required :value="old('firstName')" />
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Last Name <span class="text-rose-500">*</span></label>
-                                            <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all" 
-                                                name="lastName" type="text"
-                                                placeholder="Enter Last Name" required value="{{ old('lastName') }}">
+                                            <x-input-label value="Last Name *" />
+                                            <x-text-input name="lastName" type="text"
+                                                placeholder="Enter Last Name" required :value="old('lastName')" />
                                         </div>
                                     </div>
                                 </div>
@@ -100,20 +98,19 @@
                                 <div class="row g-3 text-start">
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Gender <span class="text-rose-500">*</span></label>
-                                            <select class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all appearance-none" name="gender" required style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2394a3b8%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpolyline points=%276 9 12 15 18 9%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;">
+                                            <x-input-label value="Gender *" />
+                                            <x-select-input name="gender" required>
                                                 <option value="" disabled selected>Select Gender</option>
                                                 <option value="M" {{ old('gender') == 'M' ? 'selected' : '' }}>Male</option>
                                                 <option value="F" {{ old('gender') == 'F' ? 'selected' : '' }}>Female</option>
-                                            </select>
+                                            </x-select-input>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Date of Birth <span class="text-rose-500">*</span></label>
-                                            <input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] text-xs font-semibold text-slate-700 bg-white shadow-sm focus:outline-none transition-all" 
-                                                name="dateOfBirth" type="text"
-                                                placeholder="DD-MM-YYYY" required value="{{ old('dateOfBirth') }}">
+                                            <x-input-label value="Date of Birth *" />
+                                            <x-text-input name="dateOfBirth" type="text"
+                                                placeholder="DD-MM-YYYY" required :value="old('dateOfBirth')" />
                                             <small class="text-xs text-slate-500 block mt-0.5">Format: 20-02-1966</small>
                                         </div>
                                     </div>
@@ -137,10 +134,10 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="w-full py-3.5 px-6 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 font-display">
+                                <x-primary-button type="submit" class="w-full font-display">
                                     <i data-lucide="search" class="w-4 h-4"></i>
                                     <span>Verify Demographic</span>
-                                </button>
+                                </x-primary-button>
                             </form>
                         </div>
                     </div>

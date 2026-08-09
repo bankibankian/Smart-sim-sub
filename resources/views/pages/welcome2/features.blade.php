@@ -1,9 +1,8 @@
 <section id="features" class="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
     <div class="max-w-2xl">
-        <h2 class="text-3xl font-bold tracking-tight text-[var(--lp-text)] sm:text-4xl">How SmartSIM makes your life easier</h2>
+        <h2 class="text-3xl font-bold tracking-tight text-[var(--lp-text)] sm:text-4xl">How SmartSIM works</h2>
         <p class="mt-4 text-lg leading-8 text-[var(--lp-text-soft)]">
-            Get connected with maximum value: instant online activation, massive free welcome bonuses,
-            and the lowest daily telecom rates.
+            Instant activation, a wallet built in, and wholesale pricing for agents who sell at scale.
         </p>
     </div>
 
@@ -52,13 +51,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
                 </svg>
             </div>
-            <h3 class="mt-5 text-lg font-semibold text-[var(--lp-text)]">Unbeatable daily rates</h3>
+            <h3 class="mt-5 text-lg font-semibold text-[var(--lp-text)]">Wholesale agent pricing</h3>
             <p class="mt-2.5 text-sm leading-6 text-[var(--lp-text-soft)]">
-                Enjoy massive welcome bonuses up to 100GB data and ₦15,000 airtime, plus direct access to
-                the cheapest daily telecom rates in Nigeria.
+                Buying SIMs in bulk to resell? Agent accounts get discounted rates and commission on
+                every activation.
             </p>
             <a href="#pricing" class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-600 hover:underline dark:text-amber-300">
-                Claim welcome offer
+                See SIM pricing
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>

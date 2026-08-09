@@ -22,11 +22,9 @@
             <div class="p-6 border-b border-slate-50 bg-slate-50/50">
                 <form method="GET" action="{{ route('admin.manage.access') }}" class="w-full sm:max-w-md relative">
                     <div class="relative">
-                        <input type="text" 
-                               name="search" 
-                               value="{{ request('search') }}" 
-                               placeholder="Search user by name or email..." 
-                               class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                        <x-text-input type="text" name="search" :value="request('search')"
+                               class="pl-11 pr-4 rounded-xl font-semibold"
+                               placeholder="Search user by name or email..." />
                         <div class="absolute left-4 top-3.5 text-slate-400">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </div>
@@ -73,8 +71,8 @@
                                         @csrf
                                         @method('PUT')
                                         
-                                        <select name="role" 
-                                                class="px-3 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:outline-none rounded-xl text-xs text-slate-900 font-semibold transition-all duration-150">
+                                        <x-select-input name="role"
+                                                class="!w-auto !px-3 !py-1.5 rounded-xl !text-xs bg-slate-50 font-semibold">
                                             <option value="personal" {{ $u->role === 'personal' ? 'selected' : '' }}>Personal</option>
                                             <option value="agent" {{ $u->role === 'agent' ? 'selected' : '' }}>Agent</option>
                                             <option value="partner" {{ $u->role === 'partner' ? 'selected' : '' }}>Partner</option>
@@ -82,12 +80,11 @@
                                             <option value="staff" {{ $u->role === 'staff' ? 'selected' : '' }}>Staff</option>
                                             <option value="checker" {{ $u->role === 'checker' ? 'selected' : '' }}>Checker</option>
                                             <option value="super_admin" {{ $u->role === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
-                                        </select>
+                                        </x-select-input>
 
-                                        <button type="submit" 
-                                                class="px-4 py-1.5 bg-[#0056D2] hover:bg-[#003a8c] text-white font-semibold text-xs rounded-xl shadow-sm transition-all duration-150 active:scale-[0.98]">
+                                        <x-primary-button type="submit" class="!px-4 !py-1.5 !text-xs">
                                             Save
-                                        </button>
+                                        </x-primary-button>
                                     </form>
                                 </td>
                             </tr>
