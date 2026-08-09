@@ -1,24 +1,20 @@
 @php
     $simTypes = [
         [
-            'name' => 'POS SIM', 'price' => '8,500', 'desc' => 'For payment terminals',
+            'name' => 'POS SIM', 'price' => '7,999', 'desc' => 'For payment terminals',
             'illustration' => 'pages.welcome2.illustrations.pos-sim',
         ],
         [
-            'name' => 'Camera SIM', 'price' => '5,500', 'desc' => 'For connected cameras',
+            'name' => 'CCTV Camera SIM', 'price' => '19,999', 'desc' => 'For surveillance systems',
             'illustration' => 'pages.welcome2.illustrations.cctv-sim',
         ],
         [
-            'name' => 'CCTV SIM', 'price' => '8,000', 'desc' => 'For surveillance systems',
-            'illustration' => 'pages.welcome2.illustrations.cctv-sim',
-        ],
-        [
-            'name' => 'Router SIM', 'price' => '18,000', 'desc' => 'For mobile routers',
+            'name' => 'Router SIM', 'price' => '17,750', 'desc' => 'For mobile routers',
             'illustration' => 'pages.welcome2.illustrations.router-sim',
         ],
         [
-            'name' => 'GPS SIM', 'price' => '5,000', 'desc' => 'For tracking devices',
-            'illustration' => 'pages.welcome2.illustrations.gps-sim',
+            'name' => 'GPS Tracking SIM', 'price' => null, 'desc' => 'For tracking devices',
+            'illustration' => 'pages.welcome2.illustrations.gps-sim', 'comingSoon' => true,
         ],
     ];
 @endphp
@@ -31,16 +27,20 @@
         </p>
     </div>
 
-    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         @foreach ($simTypes as $sim)
             <div class="flex flex-col items-center rounded-xl border p-5 text-center" style="border-color: var(--lp-border); background: var(--lp-surface);">
                 @include($sim['illustration'])
                 <p class="mt-2 text-sm font-semibold text-[var(--lp-text)]">{{ $sim['name'] }}</p>
                 <p class="mt-1 text-xs text-[var(--lp-text-faint)]">{{ $sim['desc'] }}</p>
-                <p class="mt-4 flex items-baseline gap-1">
-                    <span class="text-sm font-semibold text-[var(--lp-text-soft)]">₦</span>
-                    <span class="text-2xl font-bold text-[var(--lp-text)]">{{ $sim['price'] }}</span>
-                </p>
+                @if (!empty($sim['comingSoon']))
+                    <p class="mt-4 text-xs font-bold uppercase tracking-wider text-primary">Coming Soon</p>
+                @else
+                    <p class="mt-4 flex items-baseline gap-1">
+                        <span class="text-sm font-semibold text-[var(--lp-text-soft)]">₦</span>
+                        <span class="text-2xl font-bold text-[var(--lp-text)]">{{ $sim['price'] }}</span>
+                    </p>
+                @endif
             </div>
         @endforeach
     </div>

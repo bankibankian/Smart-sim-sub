@@ -6,7 +6,7 @@
         ],
         [
             'q' => 'What SIM types are available?',
-            'a' => 'POS, Camera, CCTV, Router, and GPS SIMs — each priced for the device it\'s built for. See the pricing section above for current rates.',
+            'a' => 'POS, CCTV Camera, Router, and GPS Tracking SIMs — each priced for the device it\'s built for. See the pricing section above for current rates.',
         ],
         [
             'q' => 'Can I become a wholesale distribution agent?',
