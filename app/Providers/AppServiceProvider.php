@@ -21,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Commission Engine: App\Listeners\AwardCommissions is auto-discovered
+        // for the App\Events\SimActivated event by Laravel's listener discovery
+        // (its handle() method type-hints the event) — no explicit Event::listen needed.
+
         // Enforce strong password rules globally
         \Illuminate\Validation\Rules\Password::defaults(function () {
             return \Illuminate\Validation\Rules\Password::min(8)

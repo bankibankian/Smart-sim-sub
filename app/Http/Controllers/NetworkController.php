@@ -1,0 +1,152 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Support\RoleHierarchy;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+class NetworkController extends Controller
+{
+    /**
+     * "My Network" — the downline this user has onboarded (directly), plus
+     * their public sign-up link and, if their role can onboard a subordinate,
+     * a shortcut into the invite-downline flow.
+     */
+    public function index(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        $nextRole = RoleHierarchy::nextRole($user->role);
+        $referralLink = url('/register?ref=' . $user->referral_code);
+
+        $totalReferrals = $user->referrals()->count();
+        $activeReferrals = $user->referrals()->where('status', 'active')->count();
+        $pendingInvites = $user->referrals()->where('status', 'invited')->count();
+
+        $roleBreakdown = $user->referrals()
+            ->selectRaw('role, count(*) as total')
+            ->groupBy('role')
+            ->pluck('total', 'role');
+
+        $referrals = $user->referrals()
+            ->latest()
+            ->paginate(10);
+
+        return view('network.index', compact(
+            'user',
+            'nextRole',
+            'referralLink',
+            'totalReferrals',
+            'activeReferrals',
+            'pendingInvites',
+            'roleBreakdown',
+            'referrals'
+        ));
+    }
+
+    /**
+     * Partner looks up a phone number to see whether it belongs to a
+     * self-onboarded (unclaimed) User account they can claim into their network.
+     */
+    public function checkClaim(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        if ($user->role !== 'partner') {
+            abort(403, 'Only partners can claim downline members.');
+        }
+
+        $phone = trim((string) $request->query('phone', ''));
+
+        if (!preg_match('/^[0-9]{11}$/', $phone)) {
+            return back()->with('claim_result', [
+                'success' => false,
+                'message' => 'Enter a valid 11-digit phone number.',
+            ]);
+        }
+
+        $target = User::where('phone', $phone)->first();
+
+        if (!$target) {
+            return back()->with('claim_result', [
+                'success' => false,
+                'message' => 'No account found with that phone number.',
+            ]);
+        }
+
+        if ($target->id === $user->id) {
+            return back()->with('claim_result', [
+                'success' => false,
+                'message' => 'You cannot claim your own account.',
+            ]);
+        }
+
+        if ($target->role !== 'personal') {
+            return back()->with('claim_result', [
+                'success' => false,
+                'message' => 'This number does not belong to a self-onboarded User account.',
+            ]);
+        }
+
+        if (!is_null($target->referred_by)) {
+            return back()->with('claim_result', [
+                'success' => false,
+                'message' => 'This account has already been claimed by someone else.',
+            ]);
+        }
+
+        return back()->with('claim_result', [
+            'success'   => true,
+            'user_id'   => $target->id,
+            'name'      => trim($target->first_name . ' ' . $target->last_name) ?: $target->email,
+            'email'     => $target->email,
+            'phone'     => $target->phone,
+        ]);
+    }
+
+    /**
+     * Partner claims a validated, self-onboarded (unclaimed) User into their network.
+     */
+    public function claim(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        if ($user->role !== 'partner') {
+            abort(403, 'Only partners can claim downline members.');
+        }
+
+        $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
+        ]);
+
+        $claimed = DB::transaction(function () use ($request, $user) {
+            $target = User::where('id', $request->user_id)->lockForUpdate()->first();
+
+            if (!$target || $target->role !== 'personal' || !is_null($target->referred_by) || $target->id === $user->id) {
+                return null;
+            }
+
+            $target->update(['referred_by' => $user->id]);
+
+            return $target;
+        });
+
+        if (!$claimed) {
+            return back()->with('error', 'This account can no longer be claimed — it may have just been claimed by someone else.');
+        }
+
+        return back()->with('success', "Claimed {$claimed->first_name} {$claimed->last_name} into your network.");
+    }
+}

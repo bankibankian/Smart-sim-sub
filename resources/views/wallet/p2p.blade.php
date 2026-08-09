@@ -378,7 +378,7 @@
                 if (mt) mt.textContent = 'Authorize Payout';
                 if (ms) ms.textContent = 'Step 2 of 2 — Security PIN';
                 
-                setTimeout(() => document.getElementById('pinInput')?.focus(), 100);
+                setTimeout(() => document.getElementById('pinInput_1')?.focus(), 100);
             });
         }
 
@@ -391,8 +391,8 @@
             const pinErrorText = document.getElementById('pinErrorText');
             const pin = document.getElementById('pinInput').value.trim();
 
-            if (!pin || pin.length !== 5) {
-                pinErrorText.textContent = 'Please enter a valid 5-digit PIN.';
+            if (!pin || pin.length !== 4) {
+                pinErrorText.textContent = 'Please enter a valid 4-digit PIN.';
                 pinError.classList.remove('hidden');
                 return;
             }
@@ -431,8 +431,8 @@
                     confirmText.textContent = "Authorize Now";
                     
                     // Clear input
-                    document.getElementById('pinInput').value = '';
-                    document.getElementById('pinInput').focus();
+                    document.getElementById('pinInput_wrap').dispatchEvent(new CustomEvent('pin-reset'));
+                    document.getElementById('pinInput_1').focus();
                 }
             })
             .catch(err => {

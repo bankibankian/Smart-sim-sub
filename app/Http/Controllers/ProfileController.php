@@ -66,9 +66,9 @@ class ProfileController extends Controller
         // Step 1: Validate fields are present and PIN format is correct
         $request->validateWithBag('updatePin', [
             'password'        => ['required', 'string'],
-            'transaction_pin' => ['required', 'string', 'digits:5', 'confirmed'],
+            'transaction_pin' => ['required', 'string', 'digits:4', 'confirmed'],
         ], [
-            'transaction_pin.digits'    => 'Transaction PIN must be exactly 5 digits.',
+            'transaction_pin.digits'    => 'Transaction PIN must be exactly 4 digits.',
             'transaction_pin.confirmed' => 'The two PIN entries do not match.',
         ]);
 

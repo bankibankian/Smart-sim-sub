@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            RoleAccountsSeeder::class,
             SimSeeder::class,
             SmeDataSeeder::class,
             AirtimeSeeder::class,

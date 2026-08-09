@@ -282,7 +282,7 @@
                     <div class="flex items-start justify-between gap-4">
                         <div>
                             <h2 class="text-lg font-bold text-slate-800 font-display">Secure Transaction PIN</h2>
-                            <p class="text-xs text-slate-400 mt-1">A 5-digit security PIN is required to authorize all wallet transactions and service purchases.</p>
+                            <p class="text-xs text-slate-400 mt-1">A 4-digit security PIN is required to authorize all wallet transactions and service purchases.</p>
                         </div>
                         <div class="shrink-0">
                             @if ($user->transaction_pin)
@@ -324,23 +324,17 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
-                                <x-input-label value="New Transaction PIN" />
-                                <x-text-input type="password" name="transaction_pin" required
-                                       maxlength="5" minlength="5" pattern="[0-9]{5}"
-                                       inputmode="numeric" placeholder="5 digits"
-                                       :class="'tracking-[0.6em] text-center ' . ($errors->updatePin->has('transaction_pin') ? 'border-rose-400' : '')" />
+                                <x-input-label value="New Transaction PIN" class="text-center block" />
+                                <x-pin-input name="transaction_pin" :error="$errors->updatePin->has('transaction_pin')" />
                             </div>
                             <div>
-                                <x-input-label value="Confirm Transaction PIN" />
-                                <x-text-input type="password" name="transaction_pin_confirmation" required
-                                       maxlength="5" minlength="5" pattern="[0-9]{5}"
-                                       inputmode="numeric" placeholder="Repeat 5 digits"
-                                       class="tracking-[0.6em] text-center" />
+                                <x-input-label value="Confirm Transaction PIN" class="text-center block" />
+                                <x-pin-input name="transaction_pin_confirmation" :error="$errors->updatePin->has('transaction_pin_confirmation')" />
                             </div>
                         </div>
                         <p class="text-[11px] text-slate-400 flex items-center gap-1.5">
                             <i data-lucide="info" class="w-3.5 h-3.5 text-slate-300 shrink-0"></i>
-                            PIN must be exactly <strong>5 numeric digits</strong>. It is stored securely using bcrypt encryption and is never visible to anyone.
+                            PIN must be exactly <strong>4 numeric digits</strong>. It is stored securely using bcrypt encryption and is never visible to anyone.
                         </p>
 
                         <div class="flex justify-end pt-2">

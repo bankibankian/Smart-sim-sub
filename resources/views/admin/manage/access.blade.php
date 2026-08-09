@@ -76,6 +76,8 @@
                                             <option value="personal" {{ $u->role === 'personal' ? 'selected' : '' }}>Personal</option>
                                             <option value="agent" {{ $u->role === 'agent' ? 'selected' : '' }}>Agent</option>
                                             <option value="partner" {{ $u->role === 'partner' ? 'selected' : '' }}>Partner</option>
+                                            <option value="coordinator" {{ $u->role === 'coordinator' ? 'selected' : '' }}>Coordinator</option>
+                                            <option value="regional_manager" {{ $u->role === 'regional_manager' ? 'selected' : '' }}>Regional Manager</option>
                                             <option value="business" {{ $u->role === 'business' ? 'selected' : '' }}>Business</option>
                                             <option value="staff" {{ $u->role === 'staff' ? 'selected' : '' }}>Staff</option>
                                             <option value="checker" {{ $u->role === 'checker' ? 'selected' : '' }}>Checker</option>

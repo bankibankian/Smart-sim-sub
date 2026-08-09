@@ -467,6 +467,8 @@
                                     <option value="agent">Agent</option>
                                     <option value="partner">Partner</option>
                                     <option value="business">Business</option>
+                                    <option value="coordinator">Coordinator</option>
+                                    <option value="regional_manager">Regional Manager</option>
                                     <option value="staff">Staff</option>
                                     <option value="checker">Checker</option>
                                     <option value="super_admin">Super Admin</option>
@@ -560,6 +562,8 @@
                                     <option value="agent">Agent</option>
                                     <option value="partner">Partner</option>
                                     <option value="business">Business</option>
+                                    <option value="coordinator">Coordinator</option>
+                                    <option value="regional_manager">Regional Manager</option>
                                     <option value="staff">Staff</option>
                                     <option value="checker">Checker</option>
                                     <option value="super_admin">Super Admin</option>

@@ -50,10 +50,6 @@
                             <th class="py-2.5">Number</th>
                             <th class="py-2.5">Category/Network</th>
                             <th class="py-2.5">Status</th>
-                            @if ($user->role === 'partner')
-                                <th class="py-2.5">Assignee</th>
-                                <th class="py-2.5 text-right">Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -66,71 +62,18 @@
                                 </td>
                                 <td class="py-3">
                                     <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase
-                                        {{ $sim->status === 'active' ? 'bg-emerald-50 text-emerald-600' : ($sim->status === 'assigned' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-600') }}">
-                                        @if($sim->status === 'active')
-                                            ACTIVATED
-                                        @elseif($sim->status === 'available')
+                                        {{ $sim->status === 'ACTIVATED' ? 'bg-emerald-50 text-emerald-600' : (str_starts_with($sim->status, 'ASSIGNED_TO') ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-600') }}">
+                                        @if($sim->status === 'UNASSIGNED')
                                             NOT ASSIGNED
                                         @else
-                                            {{ $sim->status }}
+                                            {{ str_replace('_', ' ', $sim->status) }}
                                         @endif
                                     </span>
                                 </td>
-                                @if ($user->role === 'partner')
-                                    <td class="py-3">
-                                        @if ($sim->user_id !== $sim->partner_id && $sim->user)
-                                            <span class="font-semibold text-slate-700">{{ $sim->user->first_name }} {{ $sim->user->last_name }}</span>
-                                            <span class="block text-xs text-slate-400 capitalize">{{ $sim->user->role }}</span>
-                                        @else
-                                            <span class="text-slate-400 font-semibold italic">Owned by You</span>
-                                        @endif
-                                    </td>
-                                    <td class="py-3 text-right">
-                                        @if ($sim->user_id === $user->id)
-                                            <button type="button" @click="Swal.fire({
-                                                title: 'Assign SIM Card',
-                                                html: `
-                                                    <div class='text-left space-y-2'>
-                                                        <label class='text-xs font-bold text-slate-500 uppercase block'>Choose Business or Agent</label>
-                                                        <select id='partner_user_id' class='w-full py-2.5 border rounded-xl font-medium text-slate-700'>
-                                                            <option value=''>Select Account</option>
-                                                            @foreach ($assignableUsers as $au)
-                                                                <option value='{{ $au->id }}'>{{ $au->first_name }} {{ $au->last_name }} ({{ $au->role }})</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                `,
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#0056D2',
-                                                confirmButtonText: 'Assign Now',
-                                                preConfirm: () => {
-                                                    const val = document.getElementById('partner_user_id').value;
-                                                    if (!val) {
-                                                        Swal.showValidationMessage('Please select a user');
-                                                    }
-                                                    return val;
-                                                }
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    let f = document.createElement('form');
-                                                    f.action = '{{ route('partner.sims.assign') }}';
-                                                    f.method = 'POST';
-                                                    f.innerHTML = `@csrf<input type='hidden' name='sim_id' value='{{ $sim->id }}'><input type='hidden' name='user_id' value='${result.value}'>`;
-                                                    document.body.appendChild(f);
-                                                    f.submit();
-                                                }
-                                            })" class="bg-primary hover:bg-[#0049b8] text-white font-bold px-2 py-1 rounded-lg font-display text-xs tracking-wide">
-                                                Delegate
-                                            </button>
-                                        @else
-                                            <span class="text-xs text-slate-400 font-semibold">Delegated</span>
-                                        @endif
-                                    </td>
-                                @endif
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="py-8 text-center text-slate-400 font-semibold">No SIM records found.</td>
+                                <td colspan="3" class="py-8 text-center text-slate-400 font-semibold">No SIM records found.</td>
                             </tr>
                         @endforelse
                     </tbody>

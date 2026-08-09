@@ -42,6 +42,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/receipt', [\App\Http\Controllers\TransactionController::class, 'receipt'])->name('transactions.receipt');
     Route::get('/thankyou', [\App\Http\Controllers\TransactionController::class, 'receipt'])->name('thankyou');
 
+    // Onboarding & Network Routes
+    Route::get('/onboarding/invite', [\App\Http\Controllers\OnboardingController::class, 'inviteForm'])->name('onboarding.invite');
+    Route::post('/onboarding/invite', [\App\Http\Controllers\OnboardingController::class, 'sendInvite'])->name('onboarding.invite.send');
+    Route::get('/network', [\App\Http\Controllers\NetworkController::class, 'index'])->name('network');
+    Route::get('/network/claim/check', [\App\Http\Controllers\NetworkController::class, 'checkClaim'])->name('network.claim.check');
+    Route::post('/network/claim', [\App\Http\Controllers\NetworkController::class, 'claim'])->name('network.claim');
+
+    // Leaderboard & Commission Dashboard Routes
+    Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
+    Route::get('/commissions/dashboard', [\App\Http\Controllers\CommissionDashboardController::class, 'index'])->name('commissions.dashboard');
+
     // Airtime Routes
     Route::get('/airtime', [\App\Http\Controllers\Action\AirtimeController::class, 'airtime'])->name('airtime');
     Route::post('/airtime', [\App\Http\Controllers\Action\AirtimeController::class, 'buyAirtime'])->name('buyairtime');
@@ -182,11 +193,27 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
         Route::post('/store', [\App\Http\Controllers\Admin\SimPlanController::class, 'store'])->name('store');
         Route::post('/assign', [\App\Http\Controllers\Admin\SimPlanController::class, 'assign'])->name('assign');
         Route::post('/unassign/{sim}', [\App\Http\Controllers\Admin\SimPlanController::class, 'unassign'])->name('unassign');
+        Route::post('/activate/{sim}', [\App\Http\Controllers\Admin\SimPlanController::class, 'activate'])->name('activate');
         Route::post('/requests/{simRequest}/approve', [\App\Http\Controllers\Admin\SimPlanController::class, 'approveRequest'])->name('requests.approve');
         Route::post('/requests/{simRequest}/reject', [\App\Http\Controllers\Admin\SimPlanController::class, 'rejectRequest'])->name('requests.reject');
         Route::post('/import-excel', [\App\Http\Controllers\Admin\SimPlanController::class, 'importExcel'])->name('import');
         Route::get('/download-sample', [\App\Http\Controllers\Admin\SimPlanController::class, 'downloadSample'])->name('download-sample');
     });
+
+    // Admin Leaderboard Settings (activation tiers, counting period, on/off)
+    Route::prefix('admin/leaderboard')->name('admin.leaderboard.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\LeaderboardSettingsController::class, 'index'])->name('index');
+        Route::put('/settings', [\App\Http\Controllers\Admin\LeaderboardSettingsController::class, 'updateSettings'])->name('settings.update');
+        Route::post('/tiers', [\App\Http\Controllers\Admin\LeaderboardSettingsController::class, 'storeTier'])->name('tiers.store');
+        Route::put('/tiers/{tier}', [\App\Http\Controllers\Admin\LeaderboardSettingsController::class, 'updateTier'])->name('tiers.update');
+        Route::delete('/tiers/{tier}', [\App\Http\Controllers\Admin\LeaderboardSettingsController::class, 'destroyTier'])->name('tiers.destroy');
+    });
+});
+
+// Onboarding invite acceptance — invitee is not authenticated yet, gated by the signed URL instead.
+Route::middleware('signed')->group(function () {
+    Route::get('/onboarding/accept/{user}', [\App\Http\Controllers\OnboardingController::class, 'acceptInviteForm'])->name('onboarding.accept');
+    Route::post('/onboarding/accept/{user}', [\App\Http\Controllers\OnboardingController::class, 'completeInvite'])->name('onboarding.accept.complete');
 });
 
 // Removed temp-login backdoor route for production security.

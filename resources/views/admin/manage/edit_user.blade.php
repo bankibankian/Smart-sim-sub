@@ -61,9 +61,11 @@
                     <div>
                         <x-input-label value="System Role" />
                         <x-select-input name="role">
-                            <option value="personal" {{ old('role', $user->role) == 'personal' ? 'selected' : '' }}>Personal</option>
+                            <option value="personal" {{ old('role', $user->role) == 'personal' ? 'selected' : '' }}>Personal (User)</option>
                             <option value="agent" {{ old('role', $user->role) == 'agent' ? 'selected' : '' }}>Agent</option>
                             <option value="partner" {{ old('role', $user->role) == 'partner' ? 'selected' : '' }}>Partner</option>
+                            <option value="coordinator" {{ old('role', $user->role) == 'coordinator' ? 'selected' : '' }}>Coordinator</option>
+                            <option value="regional_manager" {{ old('role', $user->role) == 'regional_manager' ? 'selected' : '' }}>Regional Manager</option>
                             <option value="business" {{ old('role', $user->role) == 'business' ? 'selected' : '' }}>Business</option>
                             <option value="staff" {{ old('role', $user->role) == 'staff' ? 'selected' : '' }}>Staff</option>
                             <option value="checker" {{ old('role', $user->role) == 'checker' ? 'selected' : '' }}>Checker</option>

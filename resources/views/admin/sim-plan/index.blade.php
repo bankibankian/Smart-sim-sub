@@ -368,9 +368,13 @@
                         <div>
                             <x-select-input name="status" class="rounded-xl !text-xs">
                                 <option value="">Status</option>
-                                <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>NOT ASSIGNED</option>
-                                <option value="assigned" {{ request('status') === 'assigned' ? 'selected' : '' }}>ASSIGNED</option>
-                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>ACTIVATED</option>
+                                <option value="UNASSIGNED" {{ request('status') === 'UNASSIGNED' ? 'selected' : '' }}>NOT ASSIGNED</option>
+                                <option value="ASSIGNED_TO_RM" {{ request('status') === 'ASSIGNED_TO_RM' ? 'selected' : '' }}>ASSIGNED TO REGIONAL MANAGER</option>
+                                <option value="ASSIGNED_TO_COORDINATOR" {{ request('status') === 'ASSIGNED_TO_COORDINATOR' ? 'selected' : '' }}>ASSIGNED TO COORDINATOR</option>
+                                <option value="ASSIGNED_TO_PARTNER" {{ request('status') === 'ASSIGNED_TO_PARTNER' ? 'selected' : '' }}>ASSIGNED TO PARTNER</option>
+                                <option value="ACTIVATED" {{ request('status') === 'ACTIVATED' ? 'selected' : '' }}>ACTIVATED</option>
+                                <option value="DEACTIVATED" {{ request('status') === 'DEACTIVATED' ? 'selected' : '' }}>DEACTIVATED</option>
+                                <option value="SUSPENDED" {{ request('status') === 'SUSPENDED' ? 'selected' : '' }}>SUSPENDED</option>
                             </x-select-input>
                         </div>
                         <div class="flex gap-2">
@@ -446,8 +450,8 @@
                                 @forelse ($sims as $sim)
                                     <tr class="border-b border-slate-50 hover:bg-slate-50/50">
                                         <td class="py-3 pl-3">
-                                            @if ($sim->status === 'available')
-                                                <input type="checkbox" id="sim_cb_{{ $sim->id }}" value="{{ $sim->id }}" 
+                                            @if ($sim->status === 'UNASSIGNED')
+                                                <input type="checkbox" id="sim_cb_{{ $sim->id }}" value="{{ $sim->id }}"
                                                        :checked="selectedSims.includes({{ $sim->id }})"
                                                        @change="toggleSim({{ $sim->id }}, $event.target.checked)"
                                                        class="sim-checkbox rounded text-[#0056D2] focus:ring-[#0056D2]">
@@ -461,27 +465,35 @@
                                             <span class="text-xs text-slate-400 block uppercase">{{ $sim->provider }}</span>
                                         </td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase 
-                                                {{ $sim->status === 'active' ? 'bg-emerald-50 text-emerald-600' : ($sim->status === 'assigned' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-600') }}">
-                                                @if($sim->status === 'active')
-                                                    ACTIVATED
-                                                @elseif($sim->status === 'available')
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase
+                                                {{ $sim->status === 'ACTIVATED' ? 'bg-emerald-50 text-emerald-600' : (str_starts_with($sim->status, 'ASSIGNED_TO') ? 'bg-blue-50 text-blue-600' : ($sim->status === 'UNASSIGNED' ? 'bg-slate-100 text-slate-600' : 'bg-rose-50 text-rose-600')) }}">
+                                                @if($sim->status === 'UNASSIGNED')
                                                     NOT ASSIGNED
                                                 @else
-                                                    {{ $sim->status }}
+                                                    {{ str_replace('_', ' ', $sim->status) }}
                                                 @endif
                                             </span>
                                         </td>
                                         <td class="py-3">
-                                            @if ($sim->user)
-                                                <span class="font-semibold text-slate-700">{{ $sim->user->first_name }} {{ $sim->user->last_name }}</span>
-                                                <span class="block text-xs text-slate-400 capitalize">{{ $sim->user->role }}</span>
+                                            @if ($sim->regionalManager || $sim->coordinator || $sim->user)
+                                                @php $holder = $sim->regionalManager ?? $sim->coordinator ?? $sim->user; @endphp
+                                                <span class="font-semibold text-slate-700">{{ $holder->first_name }} {{ $holder->last_name }}</span>
+                                                <span class="block text-xs text-slate-400 capitalize">{{ str_replace('_', ' ', $holder->role) }}</span>
                                             @else
                                                 <span class="text-slate-400 font-semibold italic">None</span>
                                             @endif
                                         </td>
                                         <td class="py-3 text-right space-x-1 whitespace-nowrap">
-                                            @if ($sim->status === 'available')
+                                            @if (in_array($sim->status, ['ASSIGNED_TO_RM', 'ASSIGNED_TO_COORDINATOR', 'ASSIGNED_TO_PARTNER']))
+                                                <form action="{{ route('admin.sim-plan.activate', $sim->id) }}" method="POST" class="inline-block">
+                                                    @csrf
+                                                    <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-all duration-150">
+                                                        <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                                                        Activate
+                                                    </button>
+                                                </form>
+                                            @endif
+                                            @if ($sim->status === 'UNASSIGNED')
                                                 <button type="button" @click="Swal.fire({
                                                     title: 'Assign SIM Card',
                                                     html: `

@@ -56,6 +56,9 @@
                             <div class="text-center sm:text-right">
                                 <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">From</span>
                                 <span class="text-xl font-extrabold text-primary font-display">₦{{ number_format($device['price'] ?? 0, 2) }}</span>
+                                @if (!is_null($device['commission']) && $device['commission'] > 0)
+                                    <span class="block text-[11px] font-semibold text-emerald-600 mt-0.5">Earn ₦{{ number_format($device['commission'], 2) }} per sale</span>
+                                @endif
                             </div>
                             <div class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:translate-x-0.5">
                                 <i data-lucide="arrow-right" class="w-4 h-4"></i>

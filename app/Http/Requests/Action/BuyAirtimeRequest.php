@@ -25,7 +25,7 @@ class BuyAirtimeRequest extends FormRequest
             'network'  => ['required', 'string', 'in:mtn,airtel,glo,etisalat'],
             'mobileno' => ['required', 'string', 'digits:11'],
             'amount'   => ['required', 'numeric', 'min:50', 'max:5000'],
-            'pin'      => ['required', 'string', 'digits:5'],
+            'pin'      => ['required', 'string', 'digits:4'],
         ];
     }
 
@@ -40,7 +40,7 @@ class BuyAirtimeRequest extends FormRequest
             'amount.min'        => 'Minimum airtime amount is ₦50.',
             'amount.max'        => 'Maximum airtime amount per transaction is ₦5,000.',
             'pin.required'      => 'Transaction PIN is required.',
-            'pin.digits'        => 'PIN must be exactly 5 digits.',
+            'pin.digits'        => 'PIN must be exactly 4 digits.',
         ];
     }
 }

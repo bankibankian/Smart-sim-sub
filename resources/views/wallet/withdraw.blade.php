@@ -788,7 +788,7 @@
             pinStep.classList.remove('hidden');
             modalTitle.textContent    = 'Authorize Payout';
             modalSubtitle.textContent = 'Step 2 of 2 — Security PIN';
-            document.getElementById('pinInput').focus();
+            document.getElementById('pinInput_1').focus();
         });
 
         btnBackToConfirm?.addEventListener('click', () => {
@@ -812,7 +812,7 @@
                 pinError?.classList.remove('hidden');
             }
 
-            if (!pin || pin.length !== 5) { setPinError('Please enter your 5-digit PIN.'); return; }
+            if (!pin || pin.length !== 4) { setPinError('Please enter your 4-digit PIN.'); return; }
 
             confirmBtn.disabled = true;
             loader.classList.remove('hidden');
@@ -837,7 +837,8 @@
                     confirmBtn.disabled = false;
                     loader.classList.add('hidden');
                     confirmText.textContent = 'Authorize Now';
-                    document.getElementById('pinInput').value = '';
+                    document.getElementById('pinInput_wrap').dispatchEvent(new CustomEvent('pin-reset'));
+                    document.getElementById('pinInput_1').focus();
                 }
             })
             .catch(() => {

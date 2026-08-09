@@ -523,7 +523,7 @@
                 document.getElementById('pinStep')?.classList.add('hidden');
                 document.getElementById('modalTitle').textContent = 'Confirm Transaction Details';
                 document.getElementById('modalSubtitle').textContent = 'Step 1 of 2 — Summary';
-                document.getElementById('pinInput').value = '';
+                document.getElementById('pinInput_wrap')?.dispatchEvent(new CustomEvent('pin-reset'));
                 document.getElementById('pinError')?.classList.add('hidden');
 
                 pinModal.show();
@@ -540,7 +540,7 @@
                 document.getElementById('modalTitle').textContent = 'Authorize Data Purchase';
                 document.getElementById('modalSubtitle').textContent = 'Step 2 of 2 — Security PIN';
                 
-                setTimeout(() => document.getElementById('pinInput')?.focus(), 100);
+                setTimeout(() => document.getElementById('pinInput_1')?.focus(), 100);
             });
         }
 
@@ -552,8 +552,8 @@
                 const pinError = document.getElementById('pinError');
                 const pinErrorText = document.getElementById('pinErrorText');
                 
-                if (!pin || pin.length !== 5) {
-                    if (pinErrorText) pinErrorText.textContent = 'Please enter your 5-digit PIN.';
+                if (!pin || pin.length !== 4) {
+                    if (pinErrorText) pinErrorText.textContent = 'Please enter your 4-digit PIN.';
                     if (pinError) pinError.classList.remove('hidden');
                     return;
                 }
@@ -588,7 +588,8 @@
                         confirmPinBtn.disabled = false;
                         if (loader) loader.classList.add('hidden');
                         if (btnText) btnText.textContent = 'Authorize Now';
-                        document.getElementById('pinInput').value = '';
+                        document.getElementById('pinInput_wrap').dispatchEvent(new CustomEvent('pin-reset'));
+                        document.getElementById('pinInput_1').focus();
                     }
                 })
                 .catch(() => {

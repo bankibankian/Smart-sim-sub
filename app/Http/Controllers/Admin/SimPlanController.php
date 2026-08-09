@@ -8,6 +8,8 @@ use App\Models\SimRequest;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Transaction;
+use App\Services\SimAssignmentService;
+use App\Support\SimStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -61,9 +63,13 @@ class SimPlanController extends Controller
 
         // Header statistics
         $totalUploaded = Sim::count();
-        $totalAssigned = Sim::where('status', 'assigned')->count();
-        $totalAvailable = Sim::where('status', 'available')->count();
-        $totalActivated = Sim::where('status', 'active')->count();
+        $totalAssigned = Sim::whereIn('status', [
+            SimStatus::ASSIGNED_TO_RM,
+            SimStatus::ASSIGNED_TO_COORDINATOR,
+            SimStatus::ASSIGNED_TO_PARTNER,
+        ])->count();
+        $totalAvailable = Sim::where('status', SimStatus::UNASSIGNED)->count();
+        $totalActivated = Sim::where('status', SimStatus::ACTIVATED)->count();
 
         return view('admin.sim-plan.index', compact(
             'sims', 'pendingRequests', 'resolvedRequests', 'assignableUsers', 'categories', 'providers',
@@ -106,7 +112,7 @@ class SimPlanController extends Controller
                 'number'     => $number,
                 'category'   => $request->category,
                 'provider'   => $request->provider,
-                'status'     => 'available',
+                'status'     => SimStatus::UNASSIGNED,
                 'user_id'    => null,
                 'partner_id' => null,
             ]);
@@ -132,18 +138,16 @@ class SimPlanController extends Controller
         ]);
 
         $targetUser = User::find($request->user_id);
+        $actor = $request->user();
+        $service = app(SimAssignmentService::class);
 
         $sims = Sim::whereIn('id', $request->sim_ids)->get();
         $assignedCount = 0;
 
-        DB::transaction(function () use ($sims, $targetUser, &$assignedCount) {
+        DB::transaction(function () use ($sims, $targetUser, $actor, $service, &$assignedCount) {
             foreach ($sims as $sim) {
-                if ($sim->status === 'available') {
-                    $sim->update([
-                        'user_id'    => $targetUser->id,
-                        'partner_id' => $targetUser->role === 'partner' ? $targetUser->id : null,
-                        'status'     => 'assigned',
-                    ]);
+                if ($sim->status === SimStatus::UNASSIGNED) {
+                    $service->adminAssign($sim, $targetUser, $actor);
                     $assignedCount++;
                 }
             }
@@ -153,17 +157,27 @@ class SimPlanController extends Controller
     }
 
     /**
-     * Admin unassigns a SIM back to available pool.
+     * Admin unassigns a SIM back to the available pool, at any stage of the cascade.
      */
     public function unassign(Request $request, Sim $sim)
     {
-        $sim->update([
-            'user_id'    => null,
-            'partner_id' => null,
-            'status'     => 'available',
-        ]);
+        app(SimAssignmentService::class)->unassign($sim, $request->user());
 
         return back()->with('success', "SIM number {$sim->number} has been unassigned and is now available.");
+    }
+
+    /**
+     * Admin activates a SIM directly, without going through a user's activation request.
+     */
+    public function activate(Request $request, Sim $sim)
+    {
+        try {
+            app(SimAssignmentService::class)->activate($sim, $request->user());
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return back()->with('success', "SIM number {$sim->number} has been activated.");
     }
 
     /**
@@ -175,8 +189,10 @@ class SimPlanController extends Controller
             return back()->with('error', 'This request has already been processed.');
         }
 
+        $actor = $request->user();
+
         try {
-            DB::transaction(function () use ($simRequest) {
+            DB::transaction(function () use ($simRequest, $actor) {
                 // Lock the request for update
                 $lockedRequest = SimRequest::where('id', $simRequest->id)->lockForUpdate()->first();
                 if (!$lockedRequest || $lockedRequest->status !== 'pending') {
@@ -189,7 +205,7 @@ class SimPlanController extends Controller
                 }
 
                 if ($lockedRequest->request_type === 'purchase') {
-                    if (!$sim || $sim->status !== 'available') {
+                    if (!$sim || $sim->status !== SimStatus::UNASSIGNED) {
                         throw new \Exception('The requested SIM number is no longer available.');
                     }
 
@@ -201,89 +217,13 @@ class SimPlanController extends Controller
                     $sim->update([
                         'user_id'    => $requester->id,
                         'partner_id' => $requester->role === 'partner' ? $requester->id : null,
-                        'status'     => 'assigned',
+                        'status'     => SimStatus::ASSIGNED_TO_PARTNER,
                     ]);
                 } elseif ($lockedRequest->request_type === 'activation') {
-                    if ($sim) {
-                        $sim->update(['status' => 'active']);
-
-                        // Award commission if configured
-                        $service = \App\Models\Service::where('name', 'simcard')->first();
-                        $field = null;
-                        if ($service) {
-                            $field = \App\Models\ServiceField::where('service_id', $service->id)
-                                ->where('field_name', $sim->category)
-                                ->first();
-                        }
-
-                        if ($field) {
-                            $awardCommission = function($userId, $role, $simNumber, $simCategory, $simProvider, $roleName) use ($service, $field) {
-                                $userModel = \App\Models\User::where('id', $userId)->lockForUpdate()->first();
-                                if (!$userModel || $userModel->role === 'super_admin') {
-                                    return;
-                                }
-
-                                $servicePrice = \App\Models\ServicePrice::where('service_fields_id', $field->id)
-                                    ->where('user_type', $userModel->role ?? 'personal')
-                                    ->whereNull('user_id')
-                                    ->first();
-
-                                $commission = $servicePrice ? (float) $servicePrice->commission : 0.00;
-
-                                if ($commission > 0.00) {
-                                    $wallet = \App\Models\Wallet::where('user_id', $userId)->lockForUpdate()->first();
-                                    if ($wallet) {
-                                        $oldBalance = $wallet->bonus;
-                                        $wallet->increment('bonus', $commission);
-                                        $newBalance = $wallet->bonus;
-
-                                        $commRef = 'COMM-' . time() . '-' . rand(1000, 9999);
-
-                                        \App\Models\Transaction::create([
-                                            'transaction_ref' => $commRef,
-                                            'user_id'         => $userId,
-                                            'amount'          => $commission,
-                                            'fee'             => 0.00,
-                                            'net_amount'      => $commission,
-                                            'description'     => "Commission earned on SIM Activation (" . $simNumber . ") as {$roleName}",
-                                            'type'            => 'credit',
-                                            'status'          => 'completed',
-                                            'metadata'        => json_encode([
-                                                'sim_number' => $simNumber,
-                                                'category'   => $simCategory,
-                                                'type'       => 'activation_commission',
-                                                'role'       => $roleName
-                                            ]),
-                                            'performed_by' => 'System',
-                                        ]);
-
-                                        \App\Models\Report::create([
-                                            'user_id'      => $userId,
-                                            'phone_number' => $simNumber,
-                                            'network'      => $simProvider,
-                                            'ref'          => $commRef,
-                                            'amount'       => $commission,
-                                            'status'       => 'completed',
-                                            'type'         => 'commission',
-                                            'description'  => "Commission earned on SIM Activation: " . $simNumber . " ({$roleName})",
-                                            'old_balance'  => $oldBalance,
-                                            'new_balance'  => $newBalance,
-                                            'service_id'   => $service->id,
-                                        ]);
-                                    }
-                                }
-                            };
-
-                            // 1. Award to the assignee/user (excluding super_admin)
-                            if ($sim->user_id) {
-                                $awardCommission($sim->user_id, null, $sim->number, $sim->category, $sim->provider, 'assignee');
-                            }
-
-                            // 2. Award to the partner (excluding super_admin) if partner is different from assignee
-                            if ($sim->partner_id && $sim->partner_id !== $sim->user_id) {
-                                $awardCommission($sim->partner_id, null, $sim->number, $sim->category, $sim->provider, 'partner');
-                            }
-                        }
+                    if ($sim && $sim->status !== SimStatus::ACTIVATED) {
+                        // Marks the SIM ACTIVATED and fires SimActivated, which the
+                        // Commission Engine (AwardCommissions listener) pays out from.
+                        app(SimAssignmentService::class)->activate($sim, $actor);
                     }
                 }
 
@@ -502,7 +442,7 @@ class SimPlanController extends Controller
                         'number'     => $number,
                         'category'   => $category,
                         'provider'   => $provider,
-                        'status'     => 'available',
+                        'status'     => SimStatus::UNASSIGNED,
                         'user_id'    => null,
                         'partner_id' => null,
                     ]);

@@ -135,13 +135,11 @@
                              <div class="space-y-3">
                                  <div class="flex justify-between items-center text-sm">
                                      <span class="text-slate-500 font-semibold">SIM Status:</span>
-                                     <span class="font-bold uppercase px-2.5 py-0.5 rounded-full text-xs tracking-wider {{ $res['status'] === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-primary/10 text-primary' }}">
-                                         @if($res['status'] === 'active')
-                                             ACTIVATED
-                                         @elseif($res['status'] === 'available')
+                                     <span class="font-bold uppercase px-2.5 py-0.5 rounded-full text-xs tracking-wider {{ $res['status'] === 'ACTIVATED' ? 'bg-emerald-50 text-emerald-600' : 'bg-primary/10 text-primary' }}">
+                                         @if($res['status'] === 'UNASSIGNED')
                                              NOT ASSIGNED
                                          @else
-                                             {{ strtoupper($res['status']) }}
+                                             {{ str_replace('_', ' ', strtoupper($res['status'])) }}
                                          @endif
                                      </span>
                                  </div>
