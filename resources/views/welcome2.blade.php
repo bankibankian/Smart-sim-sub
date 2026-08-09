@@ -57,11 +57,28 @@
     }
     </script>
 
-    <!-- Set the color theme before first paint to avoid a light/dark flash -->
+    <!-- Set the color theme before first paint to avoid a light/dark flash.
+         With no saved preference, default to dark during Lagos night hours (7pm-6am WAT). -->
     <script>
         (function () {
             var stored = localStorage.getItem('smartsim-theme');
-            var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var dark;
+            if (stored) {
+                dark = stored === 'dark';
+            } else {
+                var isLagosNight;
+                try {
+                    var lagosHour = parseInt(new Intl.DateTimeFormat('en-US', {
+                        timeZone: 'Africa/Lagos',
+                        hour: 'numeric',
+                        hour12: false
+                    }).format(new Date()), 10);
+                    isLagosNight = lagosHour >= 19 || lagosHour < 6;
+                } catch (e) {
+                    isLagosNight = null;
+                }
+                dark = isLagosNight !== null ? isLagosNight : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
             document.documentElement.classList.toggle('dark', dark);
         })();
     </script>
