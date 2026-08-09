@@ -40,64 +40,56 @@
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Total Manual Credit Card -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white glow-purple bg-gradient-to-br from-violet-500 via-violet-600 to-indigo-700 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5">
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl"></div>
-                <div class="absolute right-4 top-4 w-16 h-16 rounded-full bg-white/5 border border-white/5"></div>
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider">Total Manual Credit</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-2 tracking-tight">₦{{ number_format($totalManualCredit, 2) }}</h3>
-                        <p class="text-[11px] text-white/70 mt-1.5 font-medium">All-time credit adjustments</p>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Manual Credit</p>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">₦{{ number_format($totalManualCredit, 2) }}</h3>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">All-time credit adjustments</p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/20 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100/50 flex items-center justify-center text-emerald-600">
                         <i data-lucide="plus-circle" class="w-5 h-5"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Total Manual Debit Card -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white glow-rose bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5">
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl"></div>
-                <div class="absolute right-4 top-4 w-16 h-16 rounded-full bg-white/5 border border-white/5"></div>
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider">Total Manual Debit</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-2 tracking-tight">₦{{ number_format($totalManualDebit, 2) }}</h3>
-                        <p class="text-[11px] text-white/70 mt-1.5 font-medium">All-time debit adjustments</p>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Manual Debit</p>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">₦{{ number_format($totalManualDebit, 2) }}</h3>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">All-time debit adjustments</p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/20 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100/50 flex items-center justify-center text-rose-600">
                         <i data-lucide="minus-circle" class="w-5 h-5"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Monthly Manual Credit Card -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white glow-emerald bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5">
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl"></div>
-                <div class="absolute right-4 top-4 w-16 h-16 rounded-full bg-white/5 border border-white/5"></div>
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider">Credit (This Month)</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-2 tracking-tight">₦{{ number_format($monthlyManualCredit, 2) }}</h3>
-                        <p class="text-[11px] text-white/70 mt-1.5 font-medium">Credited in {{ now()->format('F') }}</p>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Credit (This Month)</p>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">₦{{ number_format($monthlyManualCredit, 2) }}</h3>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">Credited in {{ now()->format('F') }}</p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/20 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner">
+                    <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="trending-up" class="w-5 h-5"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Monthly Manual Debit Card -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white glow-sky bg-gradient-to-br from-sky-400 via-sky-500 to-blue-600 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5">
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl"></div>
-                <div class="absolute right-4 top-4 w-16 h-16 rounded-full bg-white/5 border border-white/5"></div>
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider">Debit (This Month)</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-2 tracking-tight">₦{{ number_format($monthlyManualDebit, 2) }}</h3>
-                        <p class="text-[11px] text-white/70 mt-1.5 font-medium">Debited in {{ now()->format('F') }}</p>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Debit (This Month)</p>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">₦{{ number_format($monthlyManualDebit, 2) }}</h3>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">Debited in {{ now()->format('F') }}</p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/20 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200/50 flex items-center justify-center text-slate-600">
                         <i data-lucide="trending-down" class="w-5 h-5"></i>
                     </div>
                 </div>
@@ -115,10 +107,10 @@
                     <h3 class="text-base font-bold text-slate-800 font-display">Single User Adjustment</h3>
                     <p class="text-xs text-slate-400 leading-relaxed font-semibold">Credit or debit a specific user's wallet manually. Search and verify the user before performing the transaction.</p>
                 </div>
-                <button @click="singleModalOpen = true" class="w-full py-2.5 px-4 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-sm hover:shadow active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-1.5">
+                <x-primary-button @click="singleModalOpen = true" class="w-full !text-xs">
                     <i data-lucide="wallet" class="w-4 h-4"></i>
                     Open Single Adjustment Form
-                </button>
+                </x-primary-button>
             </div>
 
             <!-- General Action Card -->
@@ -133,10 +125,10 @@
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed font-semibold">Execute manual funding or debiting adjustments globally across all registered users in the database.</p>
                 </div>
-                <button @click="generalModalOpen = true" class="w-full py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm hover:shadow active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-1.5">
+                <x-danger-button @click="generalModalOpen = true" class="w-full !text-xs">
                     <i data-lucide="shield-alert" class="w-4 h-4"></i>
                     Open System-wide Form
-                </button>
+                </x-danger-button>
             </div>
         </div>
 
@@ -186,23 +178,17 @@
                                 <label for="identifier" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">User Identifier</label>
                                 <div class="flex gap-2">
                                     <div class="relative flex-grow">
-                                        <input type="text" 
-                                               id="identifier" 
-                                               name="identifier" 
-                                               value="{{ old('identifier') }}" 
-                                               placeholder="Enter user email, phone, or wallet number..." 
-                                               class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
-                                               required>
+                                        <x-text-input type="text" id="identifier" name="identifier" :value="old('identifier')" required
+                                               class="pl-10 pr-4 rounded-xl !text-xs bg-slate-50"
+                                               placeholder="Enter user email, phone, or wallet number..." />
                                         <div class="absolute left-3.5 top-3 text-slate-400">
                                             <i data-lucide="user" class="w-4 h-4"></i>
                                         </div>
                                     </div>
-                                    <button type="button" 
-                                            id="btn-verify" 
-                                            class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow-sm hover:shadow active:scale-[0.98] transition-all duration-150 flex items-center gap-1.5 shrink-0">
+                                    <x-primary-button type="button" id="btn-verify" class="!text-xs !bg-slate-800 hover:!bg-slate-700 shrink-0">
                                         <i data-lucide="search" class="w-3.5 h-3.5"></i>
                                         Verify
-                                    </button>
+                                    </x-primary-button>
                                 </div>
                             </div>
 
@@ -232,25 +218,20 @@
                             <!-- Adjustment Type -->
                             <div class="space-y-1.5">
                                 <label for="single-type" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Adjustment Type</label>
-                                <select id="single-type" name="type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200" required>
+                                <x-select-input id="single-type" name="type" required class="rounded-xl !text-xs bg-slate-50">
                                     <option value="credit" {{ old('type') === 'credit' ? 'selected' : '' }}>Credit (Add Funds)</option>
                                     <option value="debit" {{ old('type') === 'debit' ? 'selected' : '' }}>Debit (Deduct Funds)</option>
-                                </select>
+                                </x-select-input>
                             </div>
 
                             <!-- Amount -->
                             <div class="space-y-1.5">
                                 <label for="single-amount" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Amount (₦)</label>
                                 <div class="relative">
-                                    <input type="number" 
-                                           id="single-amount" 
-                                           name="amount" 
-                                           step="0.01" 
-                                           min="0.01" 
-                                           value="{{ old('amount') }}" 
-                                           placeholder="0.00" 
-                                           class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
-                                           required>
+                                    <x-text-input type="number" id="single-amount" name="amount" step="0.01" min="0.01"
+                                           :value="old('amount')" required
+                                           class="pl-8 pr-4 rounded-xl !text-xs bg-slate-50"
+                                           placeholder="0.00" />
                                     <div class="absolute left-3.5 top-3 text-slate-400 text-xs font-bold">₦</div>
                                 </div>
                             </div>
@@ -258,12 +239,9 @@
                             <!-- Description -->
                             <div class="space-y-1.5">
                                 <label for="single-description" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Reason / Description</label>
-                                <textarea id="single-description" 
-                                          name="description" 
-                                          rows="2" 
-                                          placeholder="Provide detail for this transaction (visible to the user)..." 
-                                          class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
-                                          required>{{ old('description') }}</textarea>
+                                <x-textarea-input id="single-description" name="description" rows="2" required
+                                          class="rounded-xl !text-xs bg-slate-50"
+                                          placeholder="Provide detail for this transaction (visible to the user)...">{{ old('description') }}</x-textarea-input>
                             </div>
 
                             <!-- Password Confirmation -->
@@ -272,23 +250,20 @@
                                     <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
                                     Confirm Admin Password
                                 </label>
-                                <input type="password" 
-                                       id="single-password" 
-                                       name="password" 
-                                       placeholder="Enter your admin login password..." 
-                                       class="w-full px-3.5 py-2.5 bg-slate-50 border border-rose-200 focus:bg-white focus:border-rose-400 focus:ring-2 focus:ring-rose-400/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
-                                       required>
+                                <x-text-input type="password" id="single-password" name="password" required
+                                       class="rounded-xl !text-xs bg-slate-50 !border-rose-200 focus:!border-rose-400 focus:!ring-rose-400/15"
+                                       placeholder="Enter your admin login password..." />
                             </div>
 
                             <!-- Action Buttons -->
                             <div class="flex gap-3 pt-2">
-                                <button type="button" @click="singleModalOpen = false" class="w-1/2 py-3 px-4 border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs rounded-xl active:scale-[0.98] transition-all duration-150">
+                                <x-secondary-button type="button" @click="singleModalOpen = false" class="w-1/2 !text-xs">
                                     Cancel
-                                </button>
-                                <button type="submit" class="w-1/2 py-3 px-4 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-1.5">
+                                </x-secondary-button>
+                                <x-primary-button type="submit" class="w-1/2 !text-xs">
                                     <i data-lucide="check-square" class="w-4 h-4"></i>
                                     Execute
-                                </button>
+                                </x-primary-button>
                             </div>
                         </form>
                     </div>
@@ -345,25 +320,20 @@
                             <!-- Adjustment Type -->
                             <div class="space-y-1.5">
                                 <label for="general-type" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Adjustment Type</label>
-                                <select id="general-type" name="type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200" required>
+                                <x-select-input id="general-type" name="type" required class="rounded-xl !text-xs bg-slate-50">
                                     <option value="credit" {{ old('type') === 'credit' ? 'selected' : '' }}>Credit All Users (Add Funds)</option>
                                     <option value="debit" {{ old('type') === 'debit' ? 'selected' : '' }}>Debit All Users (Deduct Funds)</option>
-                                </select>
+                                </x-select-input>
                             </div>
 
                             <!-- Amount -->
                             <div class="space-y-1.5">
                                 <label for="general-amount" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Amount per User (₦)</label>
                                 <div class="relative">
-                                    <input type="number" 
-                                           id="general-amount" 
-                                           name="amount" 
-                                           step="0.01" 
-                                           min="0.01" 
-                                           value="{{ old('amount') }}" 
-                                           placeholder="0.00" 
-                                           class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
-                                           required>
+                                    <x-text-input type="number" id="general-amount" name="amount" step="0.01" min="0.01"
+                                           :value="old('amount')" required
+                                           class="pl-8 pr-4 rounded-xl !text-xs bg-slate-50"
+                                           placeholder="0.00" />
                                     <div class="absolute left-3.5 top-3 text-slate-400 text-xs font-bold">₦</div>
                                 </div>
                             </div>
@@ -371,12 +341,9 @@
                             <!-- Description -->
                             <div class="space-y-1.5">
                                 <label for="general-description" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Reason / Description</label>
-                                <textarea id="general-description" 
-                                          name="description" 
-                                          rows="2" 
-                                          placeholder="Provide general adjustment reason..." 
-                                          class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
-                                          required>{{ old('description') }}</textarea>
+                                <x-textarea-input id="general-description" name="description" rows="2" required
+                                          class="rounded-xl !text-xs bg-slate-50"
+                                          placeholder="Provide general adjustment reason...">{{ old('description') }}</x-textarea-input>
                             </div>
 
                             <!-- Confirmation Switch -->
@@ -397,23 +364,20 @@
                                     <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
                                     Confirm Admin Password
                                 </label>
-                                <input type="password" 
-                                       id="general-password" 
-                                       name="password" 
-                                       placeholder="Enter your admin login password to confirm..." 
-                                       class="w-full px-3.5 py-2.5 bg-slate-50 border border-rose-200 focus:bg-white focus:border-rose-400 focus:ring-2 focus:ring-rose-400/15 focus:outline-none rounded-xl text-xs font-semibold text-slate-800 transition-all duration-200"
-                                       required>
+                                <x-text-input type="password" id="general-password" name="password" required
+                                       class="rounded-xl !text-xs bg-slate-50 !border-rose-200 focus:!border-rose-400 focus:!ring-rose-400/15"
+                                       placeholder="Enter your admin login password to confirm..." />
                             </div>
 
                             <!-- Action Buttons -->
                             <div class="flex gap-3 pt-2">
-                                <button type="button" @click="generalModalOpen = false" class="w-1/2 py-3 px-4 border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs rounded-xl active:scale-[0.98] transition-all duration-150">
+                                <x-secondary-button type="button" @click="generalModalOpen = false" class="w-1/2 !text-xs">
                                     Cancel
-                                </button>
-                                <button type="submit" class="w-1/2 py-3 px-4 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-1.5">
+                                </x-secondary-button>
+                                <x-danger-button type="submit" class="w-1/2 !text-xs">
                                     <i data-lucide="users" class="w-4 h-4"></i>
                                     Execute
-                                </button>
+                                </x-danger-button>
                             </div>
                         </form>
                     </div>

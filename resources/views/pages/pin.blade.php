@@ -25,17 +25,17 @@
          class="relative w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-2xl overflow-hidden flex flex-col">
         
         {{-- Modal Header --}}
-        <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+        <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
-                    <i data-lucide="shield-check" class="w-5 h-5 text-white"></i>
+                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10 text-primary">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h5 class="font-bold font-display" id="modalTitle">Confirm Transaction</h5>
-                    <p class="text-xs text-slate-200 mt-0.5" id="modalSubtitle">Please review details carefully</p>
+                    <h5 class="font-bold font-display text-slate-800" id="modalTitle">Confirm Transaction</h5>
+                    <p class="text-xs text-slate-400 mt-0.5" id="modalSubtitle">Please review details carefully</p>
                 </div>
             </div>
-            <button type="button" @click="show = false" class="p-1.5 hover:bg-white/10 rounded-lg text-white/80 hover:text-white transition-colors">
+            <button type="button" @click="show = false" class="p-1.5 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-600 transition-colors">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
@@ -71,10 +71,10 @@
                     </div>
                 </div>
 
-                <button type="button" id="btnGoToPin" class="w-full py-3.5 px-6 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+                <x-primary-button type="button" id="btnGoToPin" class="w-full">
                     Confirm & Pay
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
+                </x-primary-button>
             </div>
 
             {{-- Step 2: PIN Authorization Screen --}}
@@ -88,9 +88,9 @@
                 </div>
 
                 <div class="flex justify-center">
-                    <input type="password" id="pinInput" class="w-full max-w-[220px] h-14 text-center py-2 px-3 font-extrabold text-slate-700 bg-white border-2 border-slate-200 focus:border-[#0056D2] focus:ring-1 focus:ring-[#0056D2] rounded-xl focus:outline-none transition-all" 
+                    <x-text-input type="password" id="pinInput" class="w-full max-w-[220px] h-14 text-center font-bold"
                            maxlength="5" placeholder="•••••"
-                           style="font-size: 2rem; letter-spacing: 0.8rem;">
+                           style="font-size: 2rem; letter-spacing: 0.8rem;" />
                 </div>
 
                 {{-- Error Display --}}
@@ -102,10 +102,10 @@
                 </div>
 
                 <div class="space-y-2">
-                    <button type="button" id="confirmPinBtn" class="w-full py-3.5 px-6 bg-[#008245] hover:bg-[#006b38] text-white font-bold text-xs rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                    <x-primary-button type="button" id="confirmPinBtn" class="w-full !bg-[#008245] hover:!bg-[#006b38]">
                         <span id="pinLoader" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin hidden"></span>
                         <span id="confirmPinText">Authorize Now</span>
-                    </button>
+                    </x-primary-button>
                     
                     <button type="button" id="btnBackToConfirm" class="w-full py-2.5 text-center text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors flex items-center justify-center gap-1.5">
                         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>

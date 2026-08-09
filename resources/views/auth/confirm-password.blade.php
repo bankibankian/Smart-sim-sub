@@ -31,10 +31,10 @@
         </div>
 
         <div class="pt-2">
-            <button type="submit" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-primary hover:bg-[#0049b8] text-white font-semibold text-sm rounded-lg transition-colors duration-200 font-display">
+            <x-primary-button type="submit" class="w-full font-display">
                 <span>{{ __('Confirm') }}</span>
                 <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-            </button>
+            </x-primary-button>
         </div>
     </form>
 

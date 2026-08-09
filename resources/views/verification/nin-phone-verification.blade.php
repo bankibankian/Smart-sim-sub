@@ -21,17 +21,17 @@
             <div class="col-12 col-lg-6">
                 <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
                     <div>
-                        <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+                        <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
+                                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10 text-primary">
                                     <i data-lucide="smartphone" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold font-display text-white">Verify by Phone</h3>
-                                    <p class="text-xs text-slate-200 mt-0.5">Enter phone number linked to the identity record.</p>
+                                    <h3 class="font-bold font-display text-slate-800">Verify by Phone</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5">Enter phone number linked to the identity record.</p>
                                 </div>
                             </div>
-                            <span class="text-xs font-bold text-primary bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            <span class="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
                                 Phone
                             </span>
                         </div>
@@ -105,10 +105,10 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="w-full py-3.5 px-6 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#0056D2]/10 hover:shadow-[#0056D2]/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 font-display">
+                                <x-primary-button type="submit" class="w-full font-display">
                                     <i data-lucide="search" class="w-4 h-4"></i>
                                     <span>Verify Phone</span>
-                                </button>
+                                </x-primary-button>
                             </form>
                         </div>
                     </div>

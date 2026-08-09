@@ -169,72 +169,55 @@
                         <div class="text-center sm:text-left space-y-1.5">
                             <h4 class="text-sm font-bold text-slate-700">Avatar Photo</h4>
                             <p class="text-xs text-slate-400">Accepts PNG, JPG, or JPEG. Max file limit is 2MB.</p>
-                            <button type="button" 
-                                    @click="document.getElementById('profile_photo').click()" 
-                                    class="px-4 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-xs rounded-xl border border-slate-200 transition-all duration-150">
+                            <x-secondary-button type="button"
+                                    @click="document.getElementById('profile_photo').click()"
+                                    class="!py-1.5 !text-xs">
                                 Choose New File
-                            </button>
+                            </x-secondary-button>
                         </div>
                     </div>
 
                     <!-- Input Grid (Read-only / Disabled) -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">First Name</label>
-                            <input type="text" 
-                                   value="{{ old('first_name', $user->first_name) }}" 
-                                   class="w-full px-4 py-3 bg-slate-100 border border-slate-200 focus:outline-none rounded-xl text-sm text-slate-500 font-semibold cursor-not-allowed" 
-                                   disabled>
+                            <x-input-label value="First Name" />
+                            <x-text-input type="text" :value="old('first_name', $user->first_name)" disabled />
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Middle Name <span class="text-slate-400 font-medium">(Optional)</span></label>
-                            <input type="text" 
-                                   value="{{ old('middle_name', $user->middle_name) }}" 
-                                   class="w-full px-4 py-3 bg-slate-100 border border-slate-200 focus:outline-none rounded-xl text-sm text-slate-500 font-semibold cursor-not-allowed" 
-                                   disabled>
+                            <x-input-label value="Middle Name (Optional)" />
+                            <x-text-input type="text" :value="old('middle_name', $user->middle_name)" disabled />
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Name</label>
-                            <input type="text" 
-                                   value="{{ old('last_name', $user->last_name) }}" 
-                                   class="w-full px-4 py-3 bg-slate-100 border border-slate-200 focus:outline-none rounded-xl text-sm text-slate-500 font-semibold cursor-not-allowed" 
-                                   disabled>
+                            <x-input-label value="Last Name" />
+                            <x-text-input type="text" :value="old('last_name', $user->last_name)" disabled />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email Address</label>
-                            <input type="email" 
-                                   value="{{ old('email', $user->email) }}" 
-                                   class="w-full px-4 py-3 bg-slate-100 border border-slate-200 focus:outline-none rounded-xl text-sm text-slate-500 font-semibold cursor-not-allowed" 
-                                   disabled>
+                            <x-input-label value="Email Address" />
+                            <x-text-input type="email" :value="old('email', $user->email)" disabled />
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Phone Number</label>
-                            <input type="text" 
-                                   value="{{ old('phone', $user->phone) }}" 
-                                   class="w-full px-4 py-3 bg-slate-100 border border-slate-200 focus:outline-none rounded-xl text-sm text-slate-500 font-semibold cursor-not-allowed" 
-                                   disabled>
+                            <x-input-label value="Phone Number" />
+                            <x-text-input type="text" :value="old('phone', $user->phone)" disabled />
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Gender Identification</label>
-                        <select name="gender" 
-                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                        <x-input-label value="Gender Identification" />
+                        <x-select-input name="gender">
                             <option value="" disabled selected>Select Gender</option>
                             <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
                             <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
                             <option value="other" {{ old('gender', $user->gender) == 'other' ? 'selected' : '' }}>Other</option>
-                        </select>
+                        </x-select-input>
                     </div>
 
                     <div class="flex justify-end pt-4">
-                        <button type="submit" 
-                                class="px-6 py-3.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                        <x-primary-button type="submit">
                             Save Profile Changes
-                        </button>
+                        </x-primary-button>
                     </div>
                 </form>
             </div>
@@ -269,35 +252,27 @@
                         @endif
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Current Password</label>
-                            <input type="password" 
-                                   name="current_password" 
-                                   class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePassword->has('current_password') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
-                                   required>
+                            <x-input-label value="Current Password" />
+                            <x-text-input type="password" name="current_password" required
+                                   :class="$errors->updatePassword->has('current_password') ? 'border-rose-400' : ''" />
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">New Password</label>
-                                <input type="password" 
-                                       name="password" 
-                                       class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePassword->has('password') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
-                                       required>
+                                <x-input-label value="New Password" />
+                                <x-text-input type="password" name="password" required
+                                       :class="$errors->updatePassword->has('password') ? 'border-rose-400' : ''" />
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Confirm New Password</label>
-                                <input type="password" 
-                                       name="password_confirmation" 
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
-                                       required>
+                                <x-input-label value="Confirm New Password" />
+                                <x-text-input type="password" name="password_confirmation" required />
                             </div>
                         </div>
 
                         <div class="flex justify-end pt-2">
-                            <button type="submit" 
-                                    class="px-6 py-3.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                            <x-primary-button type="submit">
                                 Update Login Password
-                            </button>
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
@@ -341,38 +316,26 @@
                         @endif
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Confirm Account Password</label>
-                            <input type="password" 
-                                   name="password" 
+                            <x-input-label value="Confirm Account Password" />
+                            <x-text-input type="password" name="password" required
                                    placeholder="Enter password to authorise PIN update"
-                                   class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePin->has('password') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
-                                   required>
+                                   :class="$errors->updatePin->has('password') ? 'border-rose-400' : ''" />
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">New Transaction PIN <span class="text-rose-400">*</span></label>
-                                <input type="password" 
-                                       name="transaction_pin" 
-                                       maxlength="5"
-                                       minlength="5"
-                                       pattern="[0-9]{5}" 
-                                       inputmode="numeric"
-                                       placeholder="5 digits"
-                                       class="w-full px-4 py-3 bg-slate-50 border {{ $errors->updatePin->has('transaction_pin') ? 'border-rose-400' : 'border-slate-200' }} focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 tracking-[0.6em] text-center" 
-                                       required>
+                                <x-input-label value="New Transaction PIN" />
+                                <x-text-input type="password" name="transaction_pin" required
+                                       maxlength="5" minlength="5" pattern="[0-9]{5}"
+                                       inputmode="numeric" placeholder="5 digits"
+                                       :class="'tracking-[0.6em] text-center ' . ($errors->updatePin->has('transaction_pin') ? 'border-rose-400' : '')" />
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Confirm Transaction PIN <span class="text-rose-400">*</span></label>
-                                <input type="password" 
-                                       name="transaction_pin_confirmation" 
-                                       maxlength="5"
-                                       minlength="5"
-                                       pattern="[0-9]{5}" 
-                                       inputmode="numeric"
-                                       placeholder="Repeat 5 digits"
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 tracking-[0.6em] text-center" 
-                                       required>
+                                <x-input-label value="Confirm Transaction PIN" />
+                                <x-text-input type="password" name="transaction_pin_confirmation" required
+                                       maxlength="5" minlength="5" pattern="[0-9]{5}"
+                                       inputmode="numeric" placeholder="Repeat 5 digits"
+                                       class="tracking-[0.6em] text-center" />
                             </div>
                         </div>
                         <p class="text-[11px] text-slate-400 flex items-center gap-1.5">
@@ -381,10 +344,9 @@
                         </p>
 
                         <div class="flex justify-end pt-2">
-                            <button type="submit" 
-                                    class="px-6 py-3.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                            <x-primary-button type="submit">
                                 Save Transaction PIN
-                            </button>
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
@@ -486,70 +448,60 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Account Tier</label>
-                                <select name="role" 
-                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="Target Account Tier" />
+                                <x-select-input name="role">
                                     <option value="" disabled selected>Select Tier </option>
                                     <option value="agent" {{ old('role', $user->pending_role ?? $user->role) == 'agent' ? 'selected' : '' }}>Agent (Sub-distributor/Reseller benefits)</option>
                                     <option value="partner" {{ old('role', $user->pending_role ?? $user->role) == 'partner' ? 'selected' : '' }}>Partner (Integrator APIs & custom values)</option>
                                     <option value="business" {{ old('role', $user->pending_role ?? $user->role) == 'business' ? 'selected' : '' }}>Business (Wholesale pricing tiers)</option>
-                                </select>
+                                </x-select-input>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Confirm Gender</label>
-                                <select name="gender" 
-                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                <x-input-label value="Confirm Gender" />
+                                <x-select-input name="gender">
                                     <option value="" disabled selected>Select Gender</option>
                                     <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
                                     <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
                                     <option value="other" {{ old('gender', $user->gender) == 'other' ? 'selected' : '' }}>Other</option>
-                                </select>
+                                </x-select-input>
                             </div>
                         </div>
 
                         <div class="border-t border-slate-100 pt-6 space-y-6">
                             <h4 class="text-sm font-bold text-slate-700">Business Registration & Credentials</h4>
-                            
+
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Registered Business Name</label>
-                                <input type="text" 
-                                       name="business_name" 
-                                       value="{{ old('business_name', $user->business_name) }}" 
-                                       placeholder="e.g. Smart Telecoms Ltd"
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
-                                       required>
+                                <x-input-label value="Registered Business Name" />
+                                <x-text-input type="text" name="business_name" required
+                                       :value="old('business_name', $user->business_name)"
+                                       placeholder="e.g. Smart Telecoms Ltd" />
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Business Category Type</label>
-                                    <select name="business_type" 
-                                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200">
+                                    <x-input-label value="Business Category Type" />
+                                    <x-select-input name="business_type">
                                         <option value="" disabled selected>Select Category</option>
                                         <option value="sole_proprietor" {{ old('business_type', $user->business_type) == 'sole_proprietor' ? 'selected' : '' }}>Sole Proprietorship</option>
                                         <option value="llc" {{ old('business_type', $user->business_type) == 'llc' ? 'selected' : '' }}>Limited Liability Company (LLC)</option>
                                         <option value="partnership" {{ old('business_type', $user->business_type) == 'partnership' ? 'selected' : '' }}>Partnership</option>
-                                    </select>
+                                    </x-select-input>
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">CAC Registration Number</label>
-                                    <input type="text" 
-                                           name="cac_number" 
-                                           value="{{ old('cac_number', $user->cac_number) }}" 
-                                           placeholder="e.g. RC-1234567"
-                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#0056D2] focus:ring-4 focus:ring-[#0056D2]/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
-                                           required>
+                                    <x-input-label value="CAC Registration Number" />
+                                    <x-text-input type="text" name="cac_number" required
+                                           :value="old('cac_number', $user->cac_number)"
+                                           placeholder="e.g. RC-1234567" />
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex justify-end pt-4">
-                            <button type="submit" 
-                                    class="px-6 py-3.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#003a8c] hover:to-[#0056D2] text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                            <x-primary-button type="submit">
                                 Submit Upgrade Request
-                            </button>
+                            </x-primary-button>
                         </div>
                     </form>
                 @endif
@@ -576,12 +528,11 @@
                 </div>
 
                 <div class="flex justify-start">
-                    <button type="button" 
+                    <x-danger-button type="button"
                             x-data=""
-                            x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-                            class="px-6 py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-[0.98]">
+                            x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
                         Deactivate My SmartSIM Account
-                    </button>
+                    </x-danger-button>
                 </div>
 
                 <!-- Breeze Modal Integration -->
@@ -600,25 +551,20 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Account Password</label>
-                            <input type="password" 
-                                   name="password" 
-                                   placeholder="Type account password"
-                                   class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200" 
-                                   required>
+                            <x-input-label value="Account Password" />
+                            <x-text-input type="password" name="password" required
+                                   placeholder="Type account password" />
                             <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
                         </div>
 
                         <div class="flex justify-end gap-3 pt-2">
-                            <button type="button" 
-                                    x-on:click="$dispatch('close')"
-                                    class="px-5 py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-sm rounded-xl border border-slate-200 transition-all">
+                            <x-secondary-button type="button"
+                                    x-on:click="$dispatch('close')">
                                 Cancel
-                            </button>
-                            <button type="submit" 
-                                    class="px-5 py-3 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-sm rounded-xl transition-all">
+                            </x-secondary-button>
+                            <x-danger-button type="submit">
                                 Deactivate Account
-                            </button>
+                            </x-danger-button>
                         </div>
                     </form>
                 </x-modal>

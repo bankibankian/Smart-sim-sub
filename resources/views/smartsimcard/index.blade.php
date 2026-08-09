@@ -140,8 +140,8 @@
                     <form action="{{ route('sims.activate') }}" method="POST" class="space-y-4">
                         @csrf
                         <div class="space-y-1.5">
-                            <label for="activate_sim_id" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Select SIM Number</label>
-                            <select id="activate_sim_id" name="sim_id" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
+                            <x-input-label for="activate_sim_id" value="Select SIM Number" />
+                            <x-select-input id="activate_sim_id" name="sim_id" required class="rounded-xl font-medium">
                                 <option value="">Select SIM</option>
                                 @forelse ($sims as $sim)
                                     @if ($sim->status !== 'active')
@@ -150,7 +150,7 @@
                                 @empty
                                     <option value="" disabled>No inactive SIM cards found.</option>
                                 @endforelse
-                            </select>
+                            </x-select-input>
                         </div>
 
                         <!-- Dynamic Price indicator for Activation Request -->
@@ -162,10 +162,10 @@
                             <p class="text-xs text-slate-400">This amount will be debited from your wallet balance.</p>
                         </div>
 
-                        <button type="submit" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition-all duration-200 flex items-center justify-center gap-2">
+                        <x-primary-button type="submit" class="w-full !text-xs !bg-emerald-600 hover:!bg-emerald-700">
                             <i data-lucide="power" class="w-3.5 h-3.5"></i>
                             Request Activation
-                        </button>
+                        </x-primary-button>
                     </form>
                 </div>
             </div>
@@ -174,15 +174,15 @@
             <div class="lg:col-span-7 flex flex-col gap-6" x-data="{ currentTab: 'sims' }">
                 <!-- Action Row -->
                 <div class="flex flex-wrap items-center gap-3 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-                    <button type="button" @click="openRequestSimModal = true" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-xs rounded-xl shadow-sm transition-all duration-150">
+                    <x-primary-button type="button" @click="openRequestSimModal = true" class="!text-xs">
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                         Request SIM Card
-                    </button>
+                    </x-primary-button>
 
-                    <button type="button" @click="openLookupModal = true" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all duration-150">
+                    <x-primary-button type="button" @click="openLookupModal = true" class="!text-xs !bg-slate-800 hover:!bg-slate-700">
                         <i data-lucide="search" class="w-4 h-4"></i>
                         SIM Owner Lookup
-                    </button>
+                    </x-primary-button>
                 </div>
 
                 <!-- Modals -->
@@ -214,33 +214,33 @@
                              <form action="{{ route('sims.request') }}" method="POST" class="space-y-4">
                                  @csrf
                                  <div class="space-y-1.5">
-                                     <label for="req_category" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">SIM Category</label>
-                                     <select id="req_category" name="category" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
+                                     <x-input-label for="req_category" value="SIM Category" />
+                                     <x-select-input id="req_category" name="category" required class="rounded-xl font-medium">
                                          <option value="">Select Category</option>
                                          @foreach ($categories as $cat)
                                              <option value="{{ $cat['name'] }}">{{ $cat['name'] }}</option>
                                          @endforeach
-                                     </select>
+                                     </x-select-input>
                                  </div>
                                  <div class="space-y-1.5">
-                                     <label for="req_provider" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Network Operator</label>
-                                     <select id="req_provider" name="provider" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium">
+                                     <x-input-label for="req_provider" value="Network Operator" />
+                                     <x-select-input id="req_provider" name="provider" required class="rounded-xl font-medium">
                                          <option value="">Select Network</option>
                                          @foreach ($providers as $prov)
                                              <option value="{{ $prov }}">{{ strtoupper($prov) }}</option>
                                          @endforeach
-                                     </select>
+                                     </x-select-input>
                                  </div>
                                  <div class="space-y-1.5">
-                                     <label for="req_number" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Available Numbers</label>
-                                     <select id="req_number" name="sim_id" required class="w-full py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] text-slate-700 font-medium" disabled>
+                                     <x-input-label for="req_number" value="Available Numbers" />
+                                     <x-select-input id="req_number" name="sim_id" required disabled class="rounded-xl font-medium">
                                          <option value="">Select Number (Select Category & Network First)</option>
-                                     </select>
+                                     </x-select-input>
                                  </div>
-                                 <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#354062] hover:to-[#465784] text-white font-bold text-sm rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                                 <x-primary-button type="submit" class="w-full">
                                      <i data-lucide="send" class="w-4 h-4"></i>
                                      Submit Request
-                                 </button>
+                                 </x-primary-button>
                              </form>
                         </div>
                     </div>
@@ -273,14 +273,14 @@
                              </div>
                              <form action="{{ route('sims.check') }}" method="GET" class="space-y-4">
                                  <div class="space-y-1.5">
-                                     <label for="check_number" class="text-xs font-bold text-slate-500 uppercase tracking-wider block">SIM Phone Number</label>
-                                     <input type="tel" id="check_number" name="number" required placeholder="e.g. 08031234567"
-                                            class="w-full text-center py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2] transition-all text-slate-800 font-semibold">
+                                     <x-input-label for="check_number" value="SIM Phone Number" />
+                                     <x-text-input type="tel" id="check_number" name="number" required
+                                            class="rounded-xl text-center font-semibold" placeholder="e.g. 08031234567" />
                                  </div>
-                                 <button type="submit" class="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow transition-all duration-200 flex items-center justify-center gap-2">
+                                 <x-primary-button type="submit" class="w-full !text-xs !bg-slate-800 hover:!bg-slate-700">
                                      <i data-lucide="search" class="w-3.5 h-3.5"></i>
                                      Check SIM Owner
-                                 </button>
+                                 </x-primary-button>
                              </form>
                         </div>
                     </div>

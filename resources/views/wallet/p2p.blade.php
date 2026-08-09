@@ -60,17 +60,17 @@
                     
                     <div>
                         <!-- Card Header -->
-                        <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+                        <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
+                                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10 text-primary">
                                     <i data-lucide="send" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold font-display">Transfer Funds</h3>
-                                    <p class="text-xs text-slate-200 mt-0.5 font-medium">Instantly credit another wallet.</p>
+                                    <h3 class="font-bold font-display text-slate-800">Transfer Funds</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5 font-medium">Instantly credit another wallet.</p>
                                 </div>
                             </div>
-                            <span class="inline-block text-xs font-extrabold text-[#0056D2] bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">P2P</span>
+                            <span class="inline-block text-xs font-extrabold text-primary bg-primary/10 px-2.5 py-1 rounded-full uppercase tracking-wider">P2P</span>
                         </div>
 
                         <!-- Card Body -->
@@ -102,10 +102,9 @@
                                                    placeholder="Wallet ID, Email, or Phone"
                                                    required />
                                         </div>
-                                        <button class="px-5 py-3 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-[0.98] shrink-0" 
-                                                type="button" id="verifyBtn" onclick="verifyUser()">
+                                        <x-primary-button type="button" id="verifyBtn" onclick="verifyUser()" class="shrink-0">
                                             Verify
-                                        </button>
+                                        </x-primary-button>
                                     </div>
                                     
                                     {{-- Recipient Info Card (Photo + Name) --}}
@@ -166,11 +165,10 @@
                                 </div>
 
                                 {{-- Submit --}}
-                                <button type="button" class="w-full mt-4 py-3.5 px-6 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md disabled:bg-slate-100 disabled:border-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200 flex items-center justify-center gap-2"
-                                        id="proceedBtn" disabled>
-                                    Proceed to Transfer 
+                                <x-primary-button type="button" id="proceedBtn" disabled class="w-full mt-4">
+                                    Proceed to Transfer
                                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
+                                </x-primary-button>
                             </form>
                         </div>
                     </div>

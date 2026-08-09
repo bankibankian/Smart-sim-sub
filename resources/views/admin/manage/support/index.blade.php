@@ -71,39 +71,36 @@
         <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
             <form method="GET" action="{{ route('admin.manage.support.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                 <div>
-                    <label for="search" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Search Query</label>
-                    <input type="text" id="search" name="search" value="{{ request('search') }}"
-                           class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2]"
-                           placeholder="Subject, email, or name...">
+                    <x-input-label for="search" value="Search Query" />
+                    <x-text-input type="text" id="search" name="search" :value="request('search')"
+                           class="rounded-xl !text-xs font-semibold"
+                           placeholder="Subject, email, or name..." />
                 </div>
 
                 <div>
-                    <label for="status" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Status</label>
-                    <select id="status" name="status"
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2]">
+                    <x-input-label for="status" value="Status" />
+                    <x-select-input id="status" name="status" class="rounded-xl !text-xs font-semibold">
                         <option value="">All Statuses</option>
                         <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
                         <option value="responded" {{ request('status') == 'responded' ? 'selected' : '' }}>Responded</option>
                         <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Closed</option>
-                    </select>
+                    </x-select-input>
                 </div>
 
                 <div>
-                    <label for="priority" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Priority</label>
-                    <select id="priority" name="priority"
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-[#0056D2]/20 focus:border-[#0056D2]">
+                    <x-input-label for="priority" value="Priority" />
+                    <x-select-input id="priority" name="priority" class="rounded-xl !text-xs font-semibold">
                         <option value="">All Priorities</option>
                         <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Low</option>
                         <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
                         <option value="high" {{ request('priority') == 'high' ? 'selected' : '' }}>High</option>
-                    </select>
+                    </x-select-input>
                 </div>
 
                 <div class="flex gap-2">
-                    <button type="submit"
-                            class="flex-1 py-2.5 px-4 bg-[#0056D2] hover:bg-[#354062] text-white font-semibold text-xs rounded-xl shadow-sm transition-all duration-200">
+                    <x-primary-button type="submit" class="flex-1 !text-xs">
                         Apply Filters
-                    </button>
+                    </x-primary-button>
                     @if(request()->filled('search') || request()->filled('status') || request()->filled('priority'))
                         <a href="{{ route('admin.manage.support.index') }}"
                            class="py-2.5 px-4 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold text-xs rounded-xl transition-all duration-200 text-center flex items-center justify-center">

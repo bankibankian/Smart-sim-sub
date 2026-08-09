@@ -19,72 +19,56 @@
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Total Users Card -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white glow-purple bg-gradient-to-br from-violet-500 via-violet-600 to-indigo-700 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5">
-                <!-- Circular background details -->
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl"></div>
-                <div class="absolute right-4 top-4 w-16 h-16 rounded-full bg-white/5 border border-white/5"></div>
-                
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider">Total Users</p>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Users</p>
                         <h3 class="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">{{ number_format($totalUsers) }}</h3>
-                        <p class="text-[11px] text-white/70 mt-1.5 font-medium">Registered Accounts</p>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">Registered Accounts</p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/20 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner">
+                    <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="users" class="w-5 h-5"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Active Users Card -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white glow-emerald bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5">
-                <!-- Circular background details -->
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl"></div>
-                <div class="absolute right-4 top-4 w-16 h-16 rounded-full bg-white/5 border border-white/5"></div>
-
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider">Active Users</p>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Users</p>
                         <h3 class="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">{{ number_format($activeUsers) }}</h3>
-                        <p class="text-[11px] text-white/70 mt-1.5 font-medium">Currently Active</p>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">Currently Active</p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/20 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100/50 flex items-center justify-center text-emerald-600">
                         <i data-lucide="user-check" class="w-5 h-5"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Inactive Users Card -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white glow-rose bg-gradient-to-br from-rose-500 via-rose-600 to-red-600 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5">
-                <!-- Circular background details -->
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl"></div>
-                <div class="absolute right-4 top-4 w-16 h-16 rounded-full bg-white/5 border border-white/5"></div>
-
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider">Inactive Users</p>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Inactive Users</p>
                         <h3 class="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">{{ number_format($inactiveUsers) }}</h3>
-                        <p class="text-[11px] text-white/70 mt-1.5 font-medium">Requires Attention</p>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">Requires Attention</p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/20 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100/50 flex items-center justify-center text-amber-600">
                         <i data-lucide="user-x" class="w-5 h-5"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Transacting Users Card -->
-            <div class="relative overflow-hidden p-6 rounded-3xl text-white glow-sky bg-gradient-to-br from-sky-400 via-sky-500 to-blue-600 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5">
-                <!-- Circular background details -->
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/10 blur-xl"></div>
-                <div class="absolute right-4 top-4 w-16 h-16 rounded-full bg-white/5 border border-white/5"></div>
-
+            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-white/80 uppercase tracking-wider">Transacting Users</p>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Transacting Users</p>
                         <h3 class="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">{{ number_format($transactingUsers) }}</h3>
-                        <p class="text-[11px] text-white/70 mt-1.5 font-medium">With Activity</p>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">With Activity</p>
                     </div>
-                    <div class="w-12 h-12 rounded-2xl bg-white/20 border border-white/10 flex items-center justify-center text-white backdrop-blur-md shadow-inner">
+                    <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="credit-card" class="w-5 h-5"></i>
                     </div>
                 </div>
@@ -98,11 +82,9 @@
                 <form method="GET" action="{{ route('admin.manage.users') }}" class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
                     <!-- Search Input -->
                     <div class="relative flex-grow">
-                        <input type="text" 
-                               name="search" 
-                               value="{{ request('search') }}" 
-                               placeholder="Search by name, email or phone..." 
-                               class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-sm text-slate-800 font-semibold transition-all duration-200 shadow-sm">
+                        <x-text-input type="text" name="search" :value="request('search')"
+                               class="pl-11 pr-4 rounded-xl font-semibold shadow-sm"
+                               placeholder="Search by name, email or phone..." />
                         <div class="absolute left-4 top-3.5 text-slate-400">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </div>
@@ -110,18 +92,18 @@
 
                     <!-- Status Filter -->
                     <div class="w-full md:w-44">
-                        <select name="status" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                        <x-select-input name="status" class="rounded-xl !text-xs font-bold text-slate-600 shadow-sm">
                             <option value="">All Statuses</option>
                             <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
                             <option value="suspended" {{ request('status') === 'suspended' ? 'selected' : '' }}>Suspended</option>
                             <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
                             <option value="banned" {{ request('status') === 'banned' ? 'selected' : '' }}>Banned</option>
-                        </select>
+                        </x-select-input>
                     </div>
 
                     <!-- Role Filter -->
                     <div class="w-full md:w-44">
-                        <select name="role" class="w-full px-3 py-2.5 bg-white border border-slate-200 focus:border-[#0056D2] focus:ring-2 focus:ring-[#0056D2]/15 focus:outline-none rounded-xl text-xs font-bold text-slate-600 transition-all duration-200 shadow-sm">
+                        <x-select-input name="role" class="rounded-xl !text-xs font-bold text-slate-600 shadow-sm">
                             <option value="">All Roles</option>
                             <option value="personal" {{ request('role') === 'personal' ? 'selected' : '' }}>Personal</option>
                             <option value="agent" {{ request('role') === 'agent' ? 'selected' : '' }}>Agent</option>
@@ -130,15 +112,15 @@
                             <option value="staff" {{ request('role') === 'staff' ? 'selected' : '' }}>Staff</option>
                             <option value="checker" {{ request('role') === 'checker' ? 'selected' : '' }}>Checker</option>
                             <option value="super_admin" {{ request('role') === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
-                        </select>
+                        </x-select-input>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex items-center gap-2">
-                        <button type="submit" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                        <x-primary-button type="submit" class="flex-1 md:flex-none !text-xs">
                             <i data-lucide="filter" class="w-3.5 h-3.5"></i>
                             Filter
-                        </button>
+                        </x-primary-button>
                         @if(request('search') || request('status') || request('role'))
                             <a href="{{ route('admin.manage.users') }}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/50 rounded-xl transition-all duration-150">
                                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>

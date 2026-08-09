@@ -95,17 +95,17 @@
                     
                     <div>
                         <!-- Card Header -->
-                        <div class="bg-gradient-to-r from-[#0056D2] to-[#0049b8] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
+                        <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
+                                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10 text-primary">
                                     <i data-lucide="banknote" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold font-display">New Payout</h3>
-                                    <p class="text-xs text-slate-200 mt-0.5 font-medium">Verify recipient before submitting.</p>
+                                    <h3 class="font-bold font-display text-slate-800">New Payout</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5 font-medium">Verify recipient before submitting.</p>
                                 </div>
                             </div>
-                            <span class="inline-block text-xs font-extrabold text-[#0056D2] bg-white px-2.5 py-1 rounded-full uppercase tracking-wider">Settlement</span>
+                            <span class="inline-block text-xs font-extrabold text-primary bg-primary/10 px-2.5 py-1 rounded-full uppercase tracking-wider">Settlement</span>
                         </div>
 
                         <!-- Card Body -->
@@ -276,11 +276,11 @@
                                 </div>
 
                                 {{-- Submit Button --}}
-                                <button type="button" id="proceedBtn" class="w-full py-3.5 px-6 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md disabled:bg-slate-100 disabled:border-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200 flex items-center justify-center gap-2"
-                                        @if($totalVolume < $eligibilityAmount) disabled @endif>
+                                <x-primary-button type="button" id="proceedBtn" class="w-full"
+                                        :disabled="$totalVolume < $eligibilityAmount">
                                     <i data-lucide="zap" class="w-4 h-4"></i>
                                     Authorize Payout
-                                </button>
+                                </x-primary-button>
 
                                 @if(auth()->user()->role === 'super_admin')
                                     <div class="text-center pt-2">

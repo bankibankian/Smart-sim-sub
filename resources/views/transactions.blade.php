@@ -101,10 +101,10 @@
 
                 <!-- Action Buttons -->
                 <div class="flex items-center gap-2">
-                    <button type="submit" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-[#0056D2] hover:bg-[#0056D2]/90 text-white rounded-xl shadow-sm hover:shadow transition-all duration-150">
+                    <x-primary-button type="submit" class="flex-1 md:flex-none">
                         <i data-lucide="filter" class="w-3.5 h-3.5"></i>
                         Filter
-                    </button>
+                    </x-primary-button>
                     @if(request('search') || request('type') || request('status'))
                         <a href="{{ route('transactions') }}" class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/50 rounded-xl transition-all duration-150">
                             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
@@ -320,9 +320,9 @@
                 </div>
                 
                 <div class="modal-footer py-4 px-6 bg-slate-50 border-t border-slate-100 flex justify-end">
-                    <button type="button" @click="selectedTx = null" class="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs rounded-xl border border-slate-200 shadow-sm transition-all duration-150 active:scale-[0.98]">
+                    <x-secondary-button @click="selectedTx = null" class="!text-xs">
                         Close
-                    </button>
+                    </x-secondary-button>
                 </div>
             </div>
         </div>

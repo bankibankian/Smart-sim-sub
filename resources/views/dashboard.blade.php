@@ -280,6 +280,47 @@
                     </a>
                 </div>
 
+                <!-- Service 10: Bills Payment (Coming Soon) -->
+                <div class="col">
+                    <div class="service-btn relative p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2 opacity-60 cursor-not-allowed" aria-disabled="true">
+                        <span class="absolute top-1.5 right-1.5 text-[8px] font-bold uppercase tracking-wide text-slate-500 bg-slate-100 border border-slate-200 rounded-full px-1.5 py-0.5 leading-none">Coming Soon</span>
+                        <div class="p-2 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center w-10 h-10">
+                            <i data-lucide="receipt" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-500 mb-0 font-display text-sm">Bills Payment</h4>
+                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">Pay your bills easily</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 11: CAC Registration (Coming Soon) -->
+                <div class="col">
+                    <div class="service-btn relative p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2 opacity-60 cursor-not-allowed" aria-disabled="true">
+                        <span class="absolute top-1.5 right-1.5 text-[8px] font-bold uppercase tracking-wide text-slate-500 bg-slate-100 border border-slate-200 rounded-full px-1.5 py-0.5 leading-none">Coming Soon</span>
+                        <div class="p-2 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center w-10 h-10">
+                            <i data-lucide="briefcase" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-500 mb-0 font-display text-sm">CAC Registration</h4>
+                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">Register your business</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 12: Own Your Website (Coming Soon) -->
+                <div class="col">
+                    <div class="service-btn relative p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2 opacity-60 cursor-not-allowed" aria-disabled="true">
+                        <span class="absolute top-1.5 right-1.5 text-[8px] font-bold uppercase tracking-wide text-slate-500 bg-slate-100 border border-slate-200 rounded-full px-1.5 py-0.5 leading-none">Coming Soon</span>
+                        <div class="p-2 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center w-10 h-10">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-500 mb-0 font-display text-sm">Own Your Website</h4>
+                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">Get your own website</p>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -394,16 +435,16 @@
                     </div>
 
                     <!-- Milestone card -->
-                    <div class="p-3 rounded-lg text-white relative overflow-hidden bg-primary">
+                    <div class="p-3 rounded-lg relative overflow-hidden bg-primary/5 border border-primary/10">
                         <div class="relative space-y-2">
-                            <div class="flex justify-between items-center mb-1 text-xs font-semibold">
+                            <div class="flex justify-between items-center mb-1 text-xs font-semibold text-slate-700">
                                 <span>Monthly Spend Milestone</span>
-                                <span>{{ $bonusProgress }}%</span>
+                                <span class="text-primary">{{ $bonusProgress }}%</span>
                             </div>
-                            <div class="w-full bg-white/20 rounded-full" style="height: 6px;">
-                                <div class="bg-vibrant rounded-full" style="height: 6px; width: {{ $bonusProgress }}%;"></div>
+                            <div class="w-full bg-primary/10 rounded-full" style="height: 6px;">
+                                <div class="bg-primary rounded-full" style="height: 6px; width: {{ $bonusProgress }}%;"></div>
                             </div>
-                            <p class="mb-0 mt-2 text-white/70 text-xs" style="line-height: 1.4;">
+                            <p class="mb-0 mt-2 text-slate-500 text-xs" style="line-height: 1.4;">
                                 Spend ₦{{ number_format($currentSpend, 2) }} of ₦{{ number_format($nextBonusTarget, 2) }} limit. Reach target to claim a cashback coupon!
                             </p>
                         </div>
