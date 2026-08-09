@@ -65,8 +65,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // SIM Services Routes
     Route::get('/sims', [\App\Http\Controllers\smartsim\SimsController::class, 'overview'])->name('sims.index');
     Route::get('/sims/pos', [\App\Http\Controllers\smartsim\SimsController::class, 'pos'])->name('sims.pos');
+    Route::get('/sims/pos/request', [\App\Http\Controllers\smartsim\SimsController::class, 'posRequestForm'])->name('sims.pos.request');
     Route::get('/sims/cctv', [\App\Http\Controllers\smartsim\SimsController::class, 'cctv'])->name('sims.cctv');
+    Route::get('/sims/cctv/request', [\App\Http\Controllers\smartsim\SimsController::class, 'cctvRequestForm'])->name('sims.cctv.request');
     Route::get('/sims/router', [\App\Http\Controllers\smartsim\SimsController::class, 'router'])->name('sims.router');
+    Route::get('/sims/router/request', [\App\Http\Controllers\smartsim\SimsController::class, 'routerRequestForm'])->name('sims.router.request');
     Route::get('/sims/inventory', [\App\Http\Controllers\smartsim\SimsController::class, 'inventory'])->name('sims.inventory');
     Route::get('/sims/mine', [\App\Http\Controllers\smartsim\SimsController::class, 'mine'])->name('sims.mine');
     Route::get('/sims/check', [\App\Http\Controllers\smartsim\SimsController::class, 'checkNumber'])->name('sims.check');

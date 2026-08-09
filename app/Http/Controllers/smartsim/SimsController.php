@@ -136,6 +136,7 @@ class SimsController extends Controller
         return view('smartsimcard.device', [
             'user' => $user,
             'device' => $meta,
+            'slug' => $slug,
             'category' => $category,
             'price' => $price,
             'providers' => $providers,
@@ -156,6 +157,43 @@ class SimsController extends Controller
     public function router()
     {
         return $this->renderDevicePage('router');
+    }
+
+    /**
+     * Shared renderer for a device's dedicated "Request a SIM" page.
+     */
+    private function renderRequestPage(string $slug)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        $meta = self::DEVICE_PAGES[$slug];
+        $providers = ['mtn', 'airtel', 'glo', '9mobile'];
+
+        return view('smartsimcard.request', [
+            'user' => $user,
+            'device' => $meta,
+            'slug' => $slug,
+            'category' => $meta['category'],
+            'providers' => $providers,
+        ]);
+    }
+
+    public function posRequestForm()
+    {
+        return $this->renderRequestPage('pos');
+    }
+
+    public function cctvRequestForm()
+    {
+        return $this->renderRequestPage('cctv');
+    }
+
+    public function routerRequestForm()
+    {
+        return $this->renderRequestPage('router');
     }
 
     /**
