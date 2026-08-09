@@ -51,8 +51,9 @@ class NetworkController extends Controller
     }
 
     /**
-     * Partner looks up a phone number to see whether it belongs to a
-     * self-onboarded (unclaimed) User account they can claim into their network.
+     * Regional Manager / Coordinator / Partner look up a phone number to see
+     * whether it belongs to a self-onboarded (unclaimed) User account they
+     * can claim into their network.
      */
     public function checkClaim(Request $request)
     {
@@ -61,8 +62,8 @@ class NetworkController extends Controller
             return redirect()->route('login')->with('error', 'Please log in.');
         }
 
-        if ($user->role !== 'partner') {
-            abort(403, 'Only partners can claim downline members.');
+        if (!in_array($user->role, RoleHierarchy::onboardingRoles(), true)) {
+            abort(403, 'Only Regional Managers, Coordinators, and Partners can claim downline members.');
         }
 
         $phone = trim((string) $request->query('phone', ''));
@@ -104,17 +105,25 @@ class NetworkController extends Controller
             ]);
         }
 
+        $nextRole = RoleHierarchy::nextRole($user->role);
+        $roleLabel = $nextRole === 'personal' ? 'User' : str_replace('_', ' ', (string) $nextRole);
+
         return back()->with('claim_result', [
             'success'   => true,
             'user_id'   => $target->id,
             'name'      => trim($target->first_name . ' ' . $target->last_name) ?: $target->email,
             'email'     => $target->email,
             'phone'     => $target->phone,
+            'role_label' => $roleLabel,
         ]);
     }
 
     /**
-     * Partner claims a validated, self-onboarded (unclaimed) User into their network.
+     * Regional Manager / Coordinator / Partner claims a validated,
+     * self-onboarded (unclaimed) User into their network. Claiming promotes
+     * the claimed account to the claimer's immediate downline role — e.g. a
+     * Regional Manager claiming a self-onboarded signup makes them a
+     * Coordinator; a Partner claiming one leaves them as a personal User.
      */
     public function claim(Request $request)
     {
@@ -123,22 +132,26 @@ class NetworkController extends Controller
             return redirect()->route('login')->with('error', 'Please log in.');
         }
 
-        if ($user->role !== 'partner') {
-            abort(403, 'Only partners can claim downline members.');
+        $nextRole = RoleHierarchy::nextRole($user->role);
+        if (!$nextRole) {
+            abort(403, 'Only Regional Managers, Coordinators, and Partners can claim downline members.');
         }
 
         $request->validate([
             'user_id' => ['required', 'exists:users,id'],
         ]);
 
-        $claimed = DB::transaction(function () use ($request, $user) {
+        $claimed = DB::transaction(function () use ($request, $user, $nextRole) {
             $target = User::where('id', $request->user_id)->lockForUpdate()->first();
 
             if (!$target || $target->role !== 'personal' || !is_null($target->referred_by) || $target->id === $user->id) {
                 return null;
             }
 
-            $target->update(['referred_by' => $user->id]);
+            $target->update([
+                'referred_by' => $user->id,
+                'role' => $nextRole,
+            ]);
 
             return $target;
         });
@@ -147,6 +160,8 @@ class NetworkController extends Controller
             return back()->with('error', 'This account can no longer be claimed — it may have just been claimed by someone else.');
         }
 
-        return back()->with('success', "Claimed {$claimed->first_name} {$claimed->last_name} into your network.");
+        $roleLabel = $nextRole === 'personal' ? 'User' : str_replace('_', ' ', $nextRole);
+
+        return back()->with('success', "Claimed {$claimed->first_name} {$claimed->last_name} into your network as your {$roleLabel}.");
     }
 }

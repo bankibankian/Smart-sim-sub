@@ -21,7 +21,7 @@
             </div>
 
             <div class="flex items-center gap-2 shrink-0">
-                @if ($user->role === 'partner')
+                @if ($nextRole)
                     <button type="button" @click="openClaimModal = true"
                             class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-700 font-semibold text-xs shadow-sm transition-all hover:bg-slate-50 hover:border-slate-400 active:scale-[0.98] whitespace-nowrap">
                         <i data-lucide="search-check" class="w-3.5 h-3.5 text-slate-500"></i>
@@ -182,7 +182,7 @@
             </p>
         </x-card>
 
-        @if ($user->role === 'partner')
+        @if ($nextRole)
             <!-- Claim Downline Member Modal -->
             <div x-show="openClaimModal"
                  class="fixed inset-0 z-50 overflow-y-auto"
@@ -280,6 +280,10 @@
                                         <div class="flex justify-between text-sm">
                                             <span class="text-slate-500 font-semibold text-xs">Phone:</span>
                                             <span class="font-bold text-slate-800">{{ $claimResult['phone'] }}</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm pt-2 border-t border-primary/10">
+                                            <span class="text-slate-500 font-semibold text-xs">Will become:</span>
+                                            <span class="font-bold text-primary capitalize">{{ $claimResult['role_label'] }}</span>
                                         </div>
                                     </div>
                                     <form action="{{ route('network.claim') }}" method="POST"

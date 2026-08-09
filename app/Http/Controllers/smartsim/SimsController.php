@@ -143,7 +143,11 @@ class SimsController extends Controller
     }
 
     /**
-     * Shared renderer for a single device's request/activation page.
+     * Shared renderer for a single device's request/activation page. The
+     * left-panel action differs by role: Regional Manager / Coordinator only
+     * distribute a held SIM down to their next-tier downline; Partner
+     * activates a held SIM for one of their downline Users (debiting that
+     * user, not themselves); Agent keeps the old self-activate flow.
      */
     private function renderDevicePage(string $slug)
     {
@@ -158,25 +162,56 @@ class SimsController extends Controller
         $price = collect($categories)->firstWhere('name', $category)['price'] ?? null;
         $providers = ['mtn', 'airtel', 'glo', '9mobile'];
 
-        $sims = Sim::where(function ($q) use ($user) {
-                $q->where('user_id', $user->id);
-                if ($user->role === 'partner') {
-                    $q->orWhere('partner_id', $user->id);
-                }
-            })
-            ->where('category', $category)
-            ->where('status', '!=', SimStatus::ACTIVATED)
-            ->latest()
-            ->get();
+        $mode = match ($user->role) {
+            'regional_manager', 'coordinator' => 'distribute',
+            'partner' => 'activate_for_user',
+            default => 'self_activate',
+        };
+
+        $downlineUsers = collect();
+
+        $heldSims = match ($mode) {
+            'distribute' => Sim::where($user->role === 'regional_manager' ? 'regional_manager_id' : 'coordinator_id', $user->id)
+                ->where('status', $user->role === 'regional_manager' ? SimStatus::ASSIGNED_TO_RM : SimStatus::ASSIGNED_TO_COORDINATOR)
+                ->where('category', $category)
+                ->latest()->get(),
+            'activate_for_user' => Sim::where('partner_id', $user->id)
+                ->where('status', SimStatus::ASSIGNED_TO_PARTNER)
+                ->where('category', $category)
+                ->latest()->get(),
+            default => Sim::where('user_id', $user->id)
+                ->where('category', $category)
+                ->where('status', '!=', SimStatus::ACTIVATED)
+                ->latest()->get(),
+        };
+
+        $personalPrice = null;
+
+        if ($mode === 'distribute') {
+            $nextRole = \App\Support\RoleHierarchy::nextRole($user->role);
+            $downlineUsers = $user->referrals()->where('role', $nextRole)->where('status', 'active')->orderBy('first_name')->get();
+        } elseif ($mode === 'activate_for_user') {
+            $downlineUsers = $user->referrals()->where('role', 'personal')->where('status', 'active')->orderBy('first_name')->get();
+
+            // The fee shown is what the selected downline User (always 'personal') pays, not the partner's own rate.
+            $simService = \App\Models\Service::where('name', 'simcard')->first();
+            $field = $simService ? \App\Models\ServiceField::where('service_id', $simService->id)->where('field_name', $category)->first() : null;
+            $personalPrice = $field
+                ? (float) (\App\Models\ServicePrice::where('service_fields_id', $field->id)->where('user_type', 'personal')->whereNull('user_id')->value('price') ?? $field->base_price)
+                : null;
+        }
 
         return view('smartsimcard.device', [
             'user' => $user,
             'device' => $meta,
+            'personalPrice' => $personalPrice,
             'slug' => $slug,
             'category' => $category,
             'price' => $price,
             'providers' => $providers,
-            'sims' => $sims,
+            'mode' => $mode,
+            'heldSims' => $heldSims,
+            'downlineUsers' => $downlineUsers,
         ]);
     }
 
@@ -386,8 +421,8 @@ class SimsController extends Controller
 
         $user = Auth::user();
 
-        if (!SimAccess::canBrowseCatalog($user)) {
-            return back()->with('error', 'Self-activation isn\'t available on your account — your partner or admin will activate this SIM for you.');
+        if ($user->role !== 'agent') {
+            return back()->with('error', 'Self-activation isn\'t available on your account. Regional Managers and Coordinators distribute SIMs down the chain; Partners activate for their downline Users.');
         }
 
         $sim = Sim::find($request->sim_id);
@@ -527,6 +562,99 @@ class SimsController extends Controller
         }
 
         return back()->with('success', "SIM number {$sim->number} successfully assigned to {$targetUser->first_name} {$targetUser->last_name}.");
+    }
+
+    /**
+     * A Partner activates a SIM they hold on behalf of a User in their
+     * downline. The activation fee is debited from that User's wallet (not
+     * the partner's), then the SIM is marked ACTIVATED — which fires the
+     * commission payout up the whole chain (partner, coordinator, regional
+     * manager). Regional Managers and Coordinators never activate — they
+     * only distribute, via partnerAssignSim() above.
+     */
+    public function activateForDownlineUser(Request $request)
+    {
+        $request->validate([
+            'sim_id'  => 'required|exists:sims,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $partner = Auth::user();
+        if ($partner->role !== 'partner') {
+            return back()->with('error', 'Only partners can activate a SIM for a downline user.');
+        }
+
+        $sim = Sim::find($request->sim_id);
+        $targetUser = User::find($request->user_id);
+
+        if ($sim->partner_id !== $partner->id) {
+            return back()->with('error', 'You can only activate numbers currently allocated to you.');
+        }
+
+        if ($sim->status === SimStatus::ACTIVATED) {
+            return back()->with('error', 'This SIM card is already active.');
+        }
+
+        if ($targetUser->role !== 'personal' || $targetUser->referred_by !== $partner->id) {
+            return back()->with('error', 'You can only activate a SIM for a User in your downline.');
+        }
+
+        // Resolve the activation price for the target user's role/category.
+        $simService = \App\Models\Service::where('name', 'simcard')->first();
+        $serviceField = $simService
+            ? \App\Models\ServiceField::where('service_id', $simService->id)->where('field_name', $sim->category)->first()
+            : null;
+        $payableAmount = $serviceField ? $serviceField->priceForUser($targetUser) : 0.00;
+
+        try {
+            DB::transaction(function () use ($sim, $partner, $targetUser, $payableAmount, $simService) {
+                // Lock and debit the downline user's wallet — not the partner's.
+                $wallet = \App\Models\Wallet::where('user_id', $targetUser->id)->lockForUpdate()->first();
+                if (!$wallet || $wallet->balance < $payableAmount) {
+                    throw new \Exception("Insufficient wallet balance for {$targetUser->first_name}. They need ₦" . number_format($payableAmount, 2) . ' in their wallet.');
+                }
+
+                $oldBalance = $wallet->balance;
+                $wallet->decrement('balance', $payableAmount);
+                $newBalance = $wallet->balance;
+
+                $ref = 'ACT-' . time() . '-' . rand(1000, 9999);
+
+                \App\Models\Transaction::create([
+                    'transaction_ref' => $ref,
+                    'user_id'         => $targetUser->id,
+                    'amount'          => $payableAmount,
+                    'fee'             => 0.00,
+                    'net_amount'      => $payableAmount,
+                    'description'     => "SIM Card Activation: {$sim->number} (Category: {$sim->category}, Network: " . strtoupper($sim->provider) . "), activated by partner {$partner->first_name} {$partner->last_name}",
+                    'type'            => 'debit',
+                    'status'          => 'completed',
+                    'performed_by'    => $partner->first_name . ' ' . $partner->last_name,
+                ]);
+
+                \App\Models\Report::create([
+                    'user_id'      => $targetUser->id,
+                    'phone_number' => $sim->number,
+                    'network'      => $sim->provider,
+                    'ref'          => $ref,
+                    'amount'       => $payableAmount,
+                    'status'       => 'completed',
+                    'type'         => 'sim_activation',
+                    'description'  => "SIM Card Activation: {$sim->number} (Category: {$sim->category}), activated by partner",
+                    'old_balance'  => $oldBalance,
+                    'new_balance'  => $newBalance,
+                    'service_id'   => $simService ? $simService->id : null,
+                ]);
+
+                $sim->update(['user_id' => $targetUser->id]);
+
+                app(SimAssignmentService::class)->activate($sim, $partner);
+            });
+
+            return back()->with('success', "Activated {$sim->number} for {$targetUser->first_name} {$targetUser->last_name}.");
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     /**
