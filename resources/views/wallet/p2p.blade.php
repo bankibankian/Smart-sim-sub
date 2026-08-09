@@ -5,7 +5,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="send" class="w-5 h-5"></i>
                     </div>
@@ -56,7 +56,7 @@
             
             <!-- Left Card: Transfer Form -->
             <div class="lg:col-span-5">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden h-full flex flex-col justify-between">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-full flex flex-col justify-between">
                     
                     <div>
                         <!-- Card Header -->
@@ -184,7 +184,7 @@
 
             <!-- Right Card: Recent Recipients -->
             <div class="lg:col-span-7">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden h-full flex flex-col justify-between">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-full flex flex-col justify-between">
                     
                     <div>
                         <!-- Header -->
@@ -193,7 +193,7 @@
                                 <i data-lucide="clock-3" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-slate-800 font-display">Recent Recipients</h3>
+                                <h3 class="text-sm font-semibold text-slate-800 font-display">Recent Recipients</h3>
                                 <p class="text-xs text-slate-400 mt-0.5 font-medium">Tap a recipient to auto-fill the transfer details.</p>
                             </div>
                         </div>
@@ -378,7 +378,7 @@
                 if (mt) mt.textContent = 'Authorize Payout';
                 if (ms) ms.textContent = 'Step 2 of 2 — Security PIN';
                 
-                setTimeout(() => document.getElementById('pinInput')?.focus(), 100);
+                setTimeout(() => document.getElementById('pinInput_1')?.focus(), 100);
             });
         }
 
@@ -391,8 +391,8 @@
             const pinErrorText = document.getElementById('pinErrorText');
             const pin = document.getElementById('pinInput').value.trim();
 
-            if (!pin || pin.length !== 5) {
-                pinErrorText.textContent = 'Please enter a valid 5-digit PIN.';
+            if (!pin || pin.length !== 4) {
+                pinErrorText.textContent = 'Please enter a valid 4-digit PIN.';
                 pinError.classList.remove('hidden');
                 return;
             }
@@ -431,8 +431,8 @@
                     confirmText.textContent = "Authorize Now";
                     
                     // Clear input
-                    document.getElementById('pinInput').value = '';
-                    document.getElementById('pinInput').focus();
+                    document.getElementById('pinInput_wrap').dispatchEvent(new CustomEvent('pin-reset'));
+                    document.getElementById('pinInput_1').focus();
                 }
             })
             .catch(err => {

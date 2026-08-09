@@ -71,7 +71,44 @@
 
         @include('layouts.partials.sidebar-link', ['href' => route('airtime'), 'icon' => 'phone', 'label' => __('Buy Airtime'), 'active' => request()->routeIs('airtime')])
         @include('layouts.partials.sidebar-link', ['href' => route('buy-sme-data'), 'icon' => 'wifi', 'label' => __('Buy Data'), 'active' => request()->routeIs('buy-sme-data*')])
-        @include('layouts.partials.sidebar-link', ['href' => route('sims.index'), 'icon' => 'cpu', 'label' => __('SIM Services'), 'active' => request()->routeIs('sims.*')])
+
+        @php
+            $simsActive = request()->routeIs('sims.*');
+        @endphp
+        <div x-data="{ open: {{ $simsActive ? 'true' : 'false' }} }">
+            <button type="button"
+                    @click="if (sidebarCollapsed) { sidebarCollapsed = false; open = true } else { open = !open }"
+                    :aria-expanded="open" aria-controls="sidebar-sims-menu"
+                    :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : 'justify-between'"
+                    class="w-full flex items-center gap-3 py-2.5 px-3 rounded-md text-sm font-medium font-display transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary {{ $simsActive ? 'text-slate-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                <span class="flex items-center gap-3">
+                    <i data-lucide="cpu" class="w-5 h-5 shrink-0 {{ $simsActive ? 'text-slate-900' : 'text-slate-400' }}"></i>
+                    <span x-show="!sidebarCollapsed" x-cloak>{{ __('SIM Services') }}</span>
+                </span>
+                <i x-show="!sidebarCollapsed" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" aria-hidden="true"></i>
+            </button>
+
+            <div id="sidebar-sims-menu" x-show="open && !sidebarCollapsed"
+                 x-transition:enter="transition ease-out duration-150"
+                 x-transition:enter-start="opacity-0 -translate-y-1"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-100"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-1"
+                 class="mt-1 ml-[22px] space-y-0.5 border-l border-slate-200 pl-2.5" style="display: none;">
+
+                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('sims.index'), 'icon' => 'layout-grid', 'label' => __('Overview'), 'active' => request()->routeIs('sims.index')])
+                @if (\App\Support\SimAccess::canBrowseCatalog(auth()->user()))
+                    @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('sims.pos'), 'icon' => 'credit-card', 'label' => __('POS SIM'), 'active' => request()->routeIs('sims.pos')])
+                    @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('sims.cctv'), 'icon' => 'video', 'label' => __('CCTV SIM'), 'active' => request()->routeIs('sims.cctv')])
+                    @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('sims.router'), 'icon' => 'router', 'label' => __('Router SIM'), 'active' => request()->routeIs('sims.router')])
+                    @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('sims.inventory'), 'icon' => 'database', 'label' => __('Inventory'), 'active' => request()->routeIs('sims.inventory')])
+                @endif
+                @if (\App\Support\SimAccess::canViewMine(auth()->user()))
+                    @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('sims.mine'), 'icon' => 'smartphone', 'label' => __('My SIM'), 'active' => request()->routeIs('sims.mine')])
+                @endif
+            </div>
+        </div>
 
         @php
             $verificationActive = request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index');
@@ -106,6 +143,13 @@
         </div>
 
         @include('layouts.partials.sidebar-link', ['href' => route('transactions'), 'icon' => 'history', 'label' => __('Transaction'), 'active' => request()->routeIs('transactions')])
+        @include('layouts.partials.sidebar-link', ['href' => route('network'), 'icon' => 'users', 'label' => __('My Network'), 'active' => request()->routeIs('network')])
+        @if (auth()->user() && (\App\Support\SimAccess::canBrowseCatalog(auth()->user()) || auth()->user()->hasRole('super_admin')))
+            @include('layouts.partials.sidebar-link', ['href' => route('commissions.dashboard'), 'icon' => 'badge-percent', 'label' => __('Commissions'), 'active' => request()->routeIs('commissions.dashboard')])
+        @endif
+        @if (auth()->user() && in_array(auth()->user()->role, ['partner', 'super_admin']))
+            @include('layouts.partials.sidebar-link', ['href' => route('leaderboard'), 'icon' => 'trophy', 'label' => __('Leaderboard'), 'active' => request()->routeIs('leaderboard')])
+        @endif
         @include('layouts.partials.sidebar-link', ['href' => route('support'), 'icon' => 'help-circle', 'label' => __('Support'), 'active' => request()->routeIs('support')])
         @include('layouts.partials.sidebar-link', ['href' => route('profile.edit'), 'icon' => 'user-cog', 'label' => __('Profile Settings'), 'active' => request()->routeIs('profile.edit')])
 
@@ -148,6 +192,7 @@
                 @include('layouts.partials.sidebar-link', ['href' => route('admin.services.index'), 'icon' => 'server', 'label' => 'Services Pricing', 'active' => request()->routeIs('admin.services*')])
                 @include('layouts.partials.sidebar-link', ['href' => route('admin.sme-plans.index'), 'icon' => 'wifi', 'label' => 'SME Data Plans', 'active' => request()->routeIs('admin.sme-plans*')])
                 @include('layouts.partials.sidebar-link', ['href' => route('admin.sim-plan.index'), 'icon' => 'settings', 'label' => 'SIM Plans', 'active' => request()->routeIs('admin.sim-plan*')])
+                @include('layouts.partials.sidebar-link', ['href' => route('admin.leaderboard.index'), 'icon' => 'trophy', 'label' => 'Leaderboard Settings', 'active' => request()->routeIs('admin.leaderboard*')])
                 @include('layouts.partials.sidebar-link', ['href' => route('admin.transactions'), 'icon' => 'receipt', 'label' => 'All Transactions', 'active' => request()->routeIs('admin.transactions*')])
                 @include('layouts.partials.sidebar-link', ['href' => route('admin.manage.adminwallet'), 'icon' => 'wallet', 'label' => 'Admin Wallet', 'active' => request()->routeIs('admin.manage.adminwallet')])
                 @include('layouts.partials.sidebar-link', ['href' => route('admin.manage.support.index'), 'icon' => 'message-square', 'label' => 'Admin Support', 'active' => request()->routeIs('admin.manage.support*')])

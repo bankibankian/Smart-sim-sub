@@ -5,7 +5,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="settings" class="w-5 h-5"></i>
                     </div>
@@ -18,7 +18,7 @@
         <!-- Header Statistics Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Card 1: Total Uploaded -->
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2] shrink-0">
                     <i data-lucide="database" class="w-6 h-6"></i>
                 </div>
@@ -29,7 +29,7 @@
             </div>
 
             <!-- Card 2: Total Available -->
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100/50 flex items-center justify-center text-blue-600 shrink-0">
                     <i data-lucide="check-circle" class="w-6 h-6"></i>
                 </div>
@@ -40,7 +40,7 @@
             </div>
 
             <!-- Card 3: Total Assigned -->
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100/50 flex items-center justify-center text-purple-600 shrink-0">
                     <i data-lucide="user-check" class="w-6 h-6"></i>
                 </div>
@@ -51,7 +51,7 @@
             </div>
 
             <!-- Card 4: Total Activated -->
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100/50 flex items-center justify-center text-emerald-600 shrink-0">
                     <i data-lucide="zap" class="w-6 h-6"></i>
                 </div>
@@ -86,13 +86,13 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <!-- Left Side: Upload Numbers Form -->
             <div class="lg:col-span-4 space-y-6" x-data="{ uploadTab: 'manual' }">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
                     <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
                         <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2]">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i>
                         </div>
                         <div class="flex-1">
-                            <h3 class="font-bold text-slate-800 font-display">Add Available Numbers</h3>
+                            <h3 class="text-sm font-semibold text-slate-800 font-display">Add Available Numbers</h3>
                             <p class="text-xs text-slate-400">Add inventory numbers for users to request.</p>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
             <!-- Right Side: Requests & Inventory Tabs -->
             <div class="lg:col-span-8 space-y-6" x-data="{ currentTab: 'requests' }">
                 <!-- Navigation Tabs -->
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-2 flex gap-1">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-2 flex gap-1">
                     <button type="button" @click="currentTab = 'requests'" :class="currentTab === 'requests' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
                         <i data-lucide="inbox" class="w-4 h-4"></i> Pending Requests ({{ count($pendingRequests) }})
                     </button>
@@ -192,7 +192,7 @@
                 </div>
 
                 <!-- Tab: Pending Requests -->
-                <div x-show="currentTab === 'requests'" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                <div x-show="currentTab === 'requests'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Pending Actions</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
@@ -265,7 +265,7 @@
                 </div>
 
                 <!-- Tab: Resolved Requests -->
-                <div x-show="currentTab === 'resolved'" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                <div x-show="currentTab === 'resolved'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
                     <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Resolved Requests Log</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
@@ -338,9 +338,9 @@
                             }
                         }
                      }"
-                     class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
+                     class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-3 border-b border-slate-100">
-                        <h3 class="font-bold text-slate-800 font-display">SIM Inventory pool</h3>
+                        <h3 class="text-sm font-semibold text-slate-800 font-display">SIM Inventory pool</h3>
                     </div>
 
                     <!-- Filter Form -->
@@ -368,9 +368,13 @@
                         <div>
                             <x-select-input name="status" class="rounded-xl !text-xs">
                                 <option value="">Status</option>
-                                <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>NOT ASSIGNED</option>
-                                <option value="assigned" {{ request('status') === 'assigned' ? 'selected' : '' }}>ASSIGNED</option>
-                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>ACTIVATED</option>
+                                <option value="UNASSIGNED" {{ request('status') === 'UNASSIGNED' ? 'selected' : '' }}>NOT ASSIGNED</option>
+                                <option value="ASSIGNED_TO_RM" {{ request('status') === 'ASSIGNED_TO_RM' ? 'selected' : '' }}>ASSIGNED TO REGIONAL MANAGER</option>
+                                <option value="ASSIGNED_TO_COORDINATOR" {{ request('status') === 'ASSIGNED_TO_COORDINATOR' ? 'selected' : '' }}>ASSIGNED TO COORDINATOR</option>
+                                <option value="ASSIGNED_TO_PARTNER" {{ request('status') === 'ASSIGNED_TO_PARTNER' ? 'selected' : '' }}>ASSIGNED TO PARTNER</option>
+                                <option value="ACTIVATED" {{ request('status') === 'ACTIVATED' ? 'selected' : '' }}>ACTIVATED</option>
+                                <option value="DEACTIVATED" {{ request('status') === 'DEACTIVATED' ? 'selected' : '' }}>DEACTIVATED</option>
+                                <option value="SUSPENDED" {{ request('status') === 'SUSPENDED' ? 'selected' : '' }}>SUSPENDED</option>
                             </x-select-input>
                         </div>
                         <div class="flex gap-2">
@@ -446,8 +450,8 @@
                                 @forelse ($sims as $sim)
                                     <tr class="border-b border-slate-50 hover:bg-slate-50/50">
                                         <td class="py-3 pl-3">
-                                            @if ($sim->status === 'available')
-                                                <input type="checkbox" id="sim_cb_{{ $sim->id }}" value="{{ $sim->id }}" 
+                                            @if ($sim->status === 'UNASSIGNED')
+                                                <input type="checkbox" id="sim_cb_{{ $sim->id }}" value="{{ $sim->id }}"
                                                        :checked="selectedSims.includes({{ $sim->id }})"
                                                        @change="toggleSim({{ $sim->id }}, $event.target.checked)"
                                                        class="sim-checkbox rounded text-[#0056D2] focus:ring-[#0056D2]">
@@ -461,27 +465,35 @@
                                             <span class="text-xs text-slate-400 block uppercase">{{ $sim->provider }}</span>
                                         </td>
                                         <td class="py-3">
-                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase 
-                                                {{ $sim->status === 'active' ? 'bg-emerald-50 text-emerald-600' : ($sim->status === 'assigned' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-600') }}">
-                                                @if($sim->status === 'active')
-                                                    ACTIVATED
-                                                @elseif($sim->status === 'available')
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase
+                                                {{ $sim->status === 'ACTIVATED' ? 'bg-emerald-50 text-emerald-600' : (str_starts_with($sim->status, 'ASSIGNED_TO') ? 'bg-blue-50 text-blue-600' : ($sim->status === 'UNASSIGNED' ? 'bg-slate-100 text-slate-600' : 'bg-rose-50 text-rose-600')) }}">
+                                                @if($sim->status === 'UNASSIGNED')
                                                     NOT ASSIGNED
                                                 @else
-                                                    {{ $sim->status }}
+                                                    {{ str_replace('_', ' ', $sim->status) }}
                                                 @endif
                                             </span>
                                         </td>
                                         <td class="py-3">
-                                            @if ($sim->user)
-                                                <span class="font-semibold text-slate-700">{{ $sim->user->first_name }} {{ $sim->user->last_name }}</span>
-                                                <span class="block text-xs text-slate-400 capitalize">{{ $sim->user->role }}</span>
+                                            @if ($sim->regionalManager || $sim->coordinator || $sim->user)
+                                                @php $holder = $sim->regionalManager ?? $sim->coordinator ?? $sim->user; @endphp
+                                                <span class="font-semibold text-slate-700">{{ $holder->first_name }} {{ $holder->last_name }}</span>
+                                                <span class="block text-xs text-slate-400 capitalize">{{ str_replace('_', ' ', $holder->role) }}</span>
                                             @else
                                                 <span class="text-slate-400 font-semibold italic">None</span>
                                             @endif
                                         </td>
                                         <td class="py-3 text-right space-x-1 whitespace-nowrap">
-                                            @if ($sim->status === 'available')
+                                            @if (in_array($sim->status, ['ASSIGNED_TO_RM', 'ASSIGNED_TO_COORDINATOR', 'ASSIGNED_TO_PARTNER']))
+                                                <form action="{{ route('admin.sim-plan.activate', $sim->id) }}" method="POST" class="inline-block">
+                                                    @csrf
+                                                    <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-all duration-150">
+                                                        <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                                                        Activate
+                                                    </button>
+                                                </form>
+                                            @endif
+                                            @if ($sim->status === 'UNASSIGNED')
                                                 <button type="button" @click="Swal.fire({
                                                     title: 'Assign SIM Card',
                                                     html: `

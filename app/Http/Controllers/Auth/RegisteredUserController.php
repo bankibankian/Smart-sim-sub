@@ -20,9 +20,14 @@ class RegisteredUserController extends Controller
     /**
      * Show registration page
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.register');
+        $referrer = null;
+        if ($request->filled('ref')) {
+            $referrer = User::where('referral_code', $request->string('ref'))->first();
+        }
+
+        return view('auth.register', ['referrer' => $referrer]);
     }
 
     /**
@@ -49,6 +54,12 @@ class RegisteredUserController extends Controller
         DB::beginTransaction();
 
         try {
+            // Resolve the referring user (if a valid referral code was passed via ?ref=)
+            $referrer = null;
+            if ($request->filled('ref')) {
+                $referrer = User::where('referral_code', $request->string('ref'))->first();
+            }
+
             // Create user
             $user = User::create([
                 'email'         => $request->email,
@@ -56,6 +67,7 @@ class RegisteredUserController extends Controller
                 'role'          => 'personal',
                 'status'        => 'active',
                 'referral_code' => strtoupper(\Illuminate\Support\Str::random(8)),
+                'referred_by'   => $referrer?->id,
                 'limit'         => 20000.00,
             ]);
 

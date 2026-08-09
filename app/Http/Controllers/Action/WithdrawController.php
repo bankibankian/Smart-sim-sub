@@ -161,7 +161,7 @@ class WithdrawController extends Controller
             'account_no' => 'required|digits:10',
             'account_name' => 'required|string',
             'amount' => 'required|numeric|min:100', // Minimum 100 NGN
-            'pin' => 'required|digits:5',
+            'pin' => 'required|digits:4',
         ]);
 
         $user = Auth::user();

@@ -4,8 +4,18 @@
         <p class="text-sm text-slate-500 mt-1">Sign up to access smart connectivity services.</p>
     </div>
 
+    @if ($referrer)
+        <div class="mb-6 p-4 rounded-lg bg-primary/5 border border-primary/10 text-slate-700 text-sm flex gap-3 items-start">
+            <i data-lucide="user-plus" class="w-5 h-5 text-primary shrink-0 mt-0.5"></i>
+            <span>
+                You were invited by <strong class="text-slate-900">{{ $referrer->first_name ?? $referrer->email }}</strong>. Sign up to join their network.
+            </span>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('register') }}" class="space-y-5">
         @csrf
+        <input type="hidden" name="ref" value="{{ old('ref', request('ref')) }}">
 
         <!-- Email Address -->
         <div>

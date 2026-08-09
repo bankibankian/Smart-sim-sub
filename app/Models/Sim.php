@@ -17,6 +17,8 @@ class Sim extends Model
         'provider',
         'user_id',
         'partner_id',
+        'coordinator_id',
+        'regional_manager_id',
         'status',
     ];
 
@@ -37,10 +39,34 @@ class Sim extends Model
     }
 
     /**
+     * Get the coordinator currently holding this SIM in the cascade.
+     */
+    public function coordinator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'coordinator_id');
+    }
+
+    /**
+     * Get the regional manager currently holding this SIM in the cascade.
+     */
+    public function regionalManager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'regional_manager_id');
+    }
+
+    /**
      * Get the requests associated with the SIM.
      */
     public function requests(): HasMany
     {
         return $this->hasMany(SimRequest::class, 'sim_id');
+    }
+
+    /**
+     * Get the assignment/activation history log for this SIM.
+     */
+    public function history(): HasMany
+    {
+        return $this->hasMany(SimHistory::class, 'sim_id')->latest();
     }
 }

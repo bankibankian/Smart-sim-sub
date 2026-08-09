@@ -5,7 +5,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="wallet" class="w-5 h-5"></i>
                     </div>
@@ -166,7 +166,7 @@
 
             <!-- Right Side: Automatic Wallet Funding -->
             <div class="lg:col-span-7">
-                <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
                     
                     <!-- Card Header -->
                     <div class="bg-white px-6 py-5 border-b border-slate-100">
@@ -249,7 +249,7 @@
                             </div>
                         @else
                             <!-- Inline Setup Form (Creates Virtual Account) -->
-                            <div class="bg-slate-50 border border-slate-100 rounded-xl p-6 space-y-4">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-4">
                                 <div class="text-center space-y-1.5 mb-4">
                                     <h4 class="font-bold text-slate-800 text-sm">Generate Funding Account</h4>
                                     <p class="text-xs text-slate-400">Generate your dedicated virtual account to start automated funding.</p>

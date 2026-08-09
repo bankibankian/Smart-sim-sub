@@ -180,7 +180,7 @@
                  x-transition:leave="transition ease-in duration-75"
                  x-transition:leave-start="transform opacity-100 scale-100"
                  x-transition:leave-end="transform opacity-0 scale-95"
-                 class="absolute right-0 mt-2 w-80 bg-white border border-slate-100 rounded-xl shadow-xl shadow-slate-200/50 py-2 z-50 outline-none"
+                 class="absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-200/50 py-2 z-50 outline-none"
                  style="display: none;">
                 
                 <div class="px-4 py-2 border-b border-slate-100 flex items-center justify-between">
@@ -250,7 +250,7 @@
                  x-transition:leave="transition ease-in duration-75"
                  x-transition:leave-start="transform opacity-100 scale-100"
                  x-transition:leave-end="transform opacity-0 scale-95"
-                 class="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-xl shadow-slate-200/50 py-1.5 z-50 outline-none"
+                 class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-200/50 py-1.5 z-50 outline-none"
                  style="display: none;">
                 
                 <!-- Header details for mobile -->

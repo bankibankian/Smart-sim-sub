@@ -5,7 +5,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
                     </div>
@@ -19,7 +19,7 @@
         <div class="row g-4">
             <!-- BVN Verification Form Card -->
             <div class="col-12 col-lg-6">
-                <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-100 flex flex-col justify-between">
                     <div>
                         <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
@@ -117,7 +117,7 @@
 
             <!-- Verification Info Card -->
             <div class="col-12 col-lg-6">
-                <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden h-100 flex flex-col justify-between min-h-[400px]">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-100 flex flex-col justify-between min-h-[400px]">
                     <div>
                         <div class="bg-gradient-to-r from-vibrant to-[#008f4c] px-6 py-5 border-b border-slate-100 text-white flex items-center justify-between">
                             <div class="flex items-center gap-3">
@@ -143,7 +143,7 @@
                                     <div class="flex flex-col items-center">
                                         <div class="relative group">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-vibrant to-[#008f4c] rounded-xl blur opacity-20 group-hover:opacity-30 transition duration-300"></div>
-                                            <div class="relative p-1 bg-white border border-slate-100 rounded-xl shadow-md overflow-hidden w-36 h-40 flex items-center justify-center">
+                                            <div class="relative p-1 bg-white border border-slate-200 rounded-xl shadow-md overflow-hidden w-36 h-40 flex items-center justify-center">
                                                 @if (!empty(session('verification')['data']['photo']))
                                                     <img src="data:image/jpeg;base64,{{ session('verification')['data']['photo'] }}"
                                                         alt="ID Photo" class="w-full h-full object-cover rounded-lg">
@@ -259,7 +259,7 @@
                 confirmButtonText: 'Yes, Proceed!',
                 cancelButtonText: 'Cancel',
                 customClass: {
-                    popup: 'rounded-xl border border-slate-100 shadow-xl p-6',
+                    popup: 'rounded-xl border border-slate-200 shadow-xl p-6',
                     title: 'text-lg font-bold font-display text-slate-900',
                     htmlContainer: 'text-xs text-slate-500 mt-2',
                     confirmButton: 'px-5 py-2.5 bg-[#0056D2] hover:bg-[#003a8c] text-white font-bold text-xs rounded-xl shadow-md transition-all duration-200 mx-2 focus:outline-none',
@@ -282,7 +282,7 @@
                             Swal.showLoading();
                         },
                         customClass: {
-                            popup: 'rounded-xl border border-slate-100 shadow-xl p-6',
+                            popup: 'rounded-xl border border-slate-200 shadow-xl p-6',
                             title: 'text-lg font-bold font-display text-slate-900',
                             htmlContainer: 'text-xs text-slate-500 mt-2'
                         }

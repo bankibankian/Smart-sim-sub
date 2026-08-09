@@ -252,7 +252,7 @@ class SearchController extends Controller
                 $results[] = [
                     'title' => "SIM Request: {$simReq->provider}",
                     'description' => "Num: " . ($simReq->number ?? 'N/A') . " • Amount: ₦" . number_format($simReq->amount, 2) . " • Status: " . strtoupper($simReq->status),
-                    'url' => route('sims.index'),
+                    'url' => route('sims.mine'),
                     'icon' => 'cpu',
                     'category' => 'My SIM Orders'
                 ];

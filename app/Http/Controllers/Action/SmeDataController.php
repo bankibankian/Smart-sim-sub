@@ -261,54 +261,15 @@ class SmeDataController extends Controller
 
         // API Call to Fadeelposdatasub
         try {
-            $networkIdMap = [
-                'MTN'      => 1,
-                'GLO'      => 2,
-                'AIRTEL'   => 3,
-                '9MOBILE'  => 4,
-            ];
-            $networkId = $networkIdMap[strtoupper($plan->network)] ?? 1;
-
-            Log::info('SME Data API Request Payload', [
-                'url' => $this->getApiBaseUrl(),
-                'payload' => [
-                    'mobile_number' => $mobile,
-                    'network'       => $networkId,
-                    'plan'          => $planId,
-                    'request-id'    => $requestId,
-                ]
-            ]);
-
-            $response = Http::withHeaders([
-                'Authorization' => 'Token ' . $this->getApiToken(),
-                'Content-Type'  => 'application/json',
-                'Accept'        => 'application/json',
-            ])->withoutVerifying()->post($this->getApiBaseUrl(), [
-                'mobile_number' => $mobile,
-                'network'       => $networkId,
-                'plan'          => $planId,
-                'request-id'    => $requestId,
-            ]);
-
-            $data = $response->json();
-            Log::info('SME Data API Response', [
-                'status' => $response->status(),
-                'response' => $data,
-                'raw_body' => $response->body()
-            ]);
-
-            // Flexible success verification
-            $isSuccess = $response->successful() && (
-                (isset($data['status']) && ($data['status'] === 'success' || $data['status'] === 'successful')) ||
-                (isset($data['success']) && $data['success'] === true) ||
-                (isset($data['code']) && in_array((string)$data['code'], ['200', '201', '0', '00', '000']))
-            );
+            $result = \App\Services\SmeDataPurchaseApi::purchase($mobile, $plan->network, $planId, $requestId);
+            $data = $result['data'];
+            $isSuccess = $result['success'];
 
             if ($isSuccess) {
                 // Success path
-                $apiData = $data['data'] ?? [];
-                $transactionRef = $data['transid'] ?? $data['reference'] ?? $data['transaction_id'] ?? $apiData['transaction_ref'] ?? $apiData['reference'] ?? $requestId;
-                
+                $apiData = $result['api_data'];
+                $transactionRef = $result['transaction_ref'];
+
                 // Extract plan info from response if available, otherwise use our description
                 $apiDescription = $data['message'] ?? $apiData['plan'] ?? $description;
 

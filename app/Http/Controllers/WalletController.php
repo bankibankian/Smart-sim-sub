@@ -307,7 +307,7 @@ class WalletController extends Controller
         $request->validate([
             'wallet_id' => 'required|string',
             'amount' => 'required|numeric|min:1',
-            'pin' => 'required|string|digits:5',
+            'pin' => 'required|string|digits:4',
         ]);
 
         $sender = Auth::user();

@@ -84,14 +84,10 @@
                         <i data-lucide="key-round" class="w-5 h-5"></i>
                     </div>
                     <h6 class="font-bold text-slate-800 text-sm">Enter Security PIN</h6>
-                    <p class="text-xs text-slate-400 leading-relaxed px-6">Provide your 5-digit transaction PIN to authorize this transfer.</p>
+                    <p class="text-xs text-slate-400 leading-relaxed px-6">Provide your 4-digit transaction PIN to authorize this transfer.</p>
                 </div>
 
-                <div class="flex justify-center">
-                    <x-text-input type="password" id="pinInput" class="w-full max-w-[220px] h-14 text-center font-bold"
-                           maxlength="5" placeholder="•••••"
-                           style="font-size: 2rem; letter-spacing: 0.8rem;" />
-                </div>
+                <x-pin-input name="pin" id="pinInput" />
 
                 {{-- Error Display --}}
                 <div id="pinError" class="bg-rose-50 border border-rose-100 rounded-xl p-3 text-rose-800 hidden shadow-sm animate-in fade-in duration-200">

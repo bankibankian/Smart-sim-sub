@@ -5,7 +5,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-3">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-3">
                     <div class="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i data-lucide="history" class="w-5 h-5"></i>
                     </div>
@@ -116,7 +116,7 @@
         </div>
 
         <!-- Transaction Records Table -->
-        <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-50 flex items-center justify-between">
                 <h3 class="font-bold text-slate-800 font-display flex items-center gap-2">
                     <i data-lucide="receipt" class="w-4.5 h-4.5 text-primary"></i>
@@ -243,7 +243,7 @@
                  x-transition:leave="transition ease-in duration-200"
                  x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                  x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                 class="bg-white rounded-xl border border-slate-100 shadow-2xl max-w-lg w-full overflow-hidden relative">
+                 class="bg-white rounded-xl border border-slate-200 shadow-2xl max-w-lg w-full overflow-hidden relative">
                  
                 <!-- Modal Header -->
                 <div class="py-4 px-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between">

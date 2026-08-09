@@ -6,7 +6,7 @@
     }" class="space-y-8 max-w-7xl mx-auto">
         
         <!-- Header -->
-        <div class="relative overflow-hidden p-6 sm:p-8 bg-white border border-slate-100/80 rounded-3xl shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-grid-pattern">
+        <div class="relative overflow-hidden p-6 sm:p-8 bg-white border border-slate-200/80 rounded-xl shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-grid-pattern">
             <div class="absolute -right-16 -top-16 w-36 h-36 rounded-full bg-slate-50 blur-2xl opacity-50"></div>
             <div class="relative z-10">
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight font-display bg-gradient-to-r from-slate-900 via-slate-800 to-[#0056D2] bg-clip-text text-transparent">SME Data Plans Management</h1>
@@ -55,10 +55,91 @@
             </div>
         @endif
 
+        <!-- Activation Bonus Settings -->
+        <div class="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
+            <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
+                <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center text-[#0056D2]">
+                    <i data-lucide="gift" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-800 font-display">SIM Activation Data Bonus</h3>
+                    <p class="text-xs text-slate-400">When on for a network, every SIM on that network silently receives a free data top-up on its own number when activated — no wallet is charged. Each provider has its own plan and switch, since a MTN SIM can only be topped up with a MTN plan.</p>
+                </div>
+            </div>
+            @php $bonusLogoMap = ['mtn' => 'mtn.jpg', 'airtel' => 'Airtel.png', 'glo' => 'glo.jpg', '9mobile' => '9Mobile.jpg']; @endphp
+
+            {{-- One hidden form per provider; row controls below reference it via form="..." so the table stays valid HTML. --}}
+            @foreach (\App\Models\ActivationBonusSettings::PROVIDERS as $provider)
+                <form id="bonus-form-{{ $provider }}" method="POST" action="{{ route('admin.sme-plans.activation-bonus.update') }}">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="provider" value="{{ $provider }}">
+                </form>
+            @endforeach
+
+            <div class="rounded-xl border border-slate-100 overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/50 text-xs font-extrabold text-slate-400 uppercase tracking-wider">
+                            <th class="py-3 px-4">Network</th>
+                            <th class="py-3 px-4">Active</th>
+                            <th class="py-3 px-4">Bonus Plan</th>
+                            <th class="py-3 px-4 text-right pr-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach (\App\Models\ActivationBonusSettings::PROVIDERS as $provider)
+                            @php
+                                $bonusSettings = $bonusSettingsByProvider[$provider];
+                                $eligiblePlans = $bonusEligiblePlansByNetwork[strtoupper($provider)] ?? collect();
+                            @endphp
+                            <tr class="align-middle">
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center gap-2.5">
+                                        <img src="{{ asset('assets/images/apps/' . $bonusLogoMap[$provider]) }}"
+                                             alt="{{ $provider }}"
+                                             class="w-8 h-8 rounded-xl object-contain border border-slate-100 flex-shrink-0"
+                                             onerror="this.src='{{ asset('assets/images/apps/default.png') }}'">
+                                        <span class="text-sm font-bold text-slate-700 uppercase">{{ $provider }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="is_active" value="1" form="bonus-form-{{ $provider }}"
+                                               {{ $bonusSettings->is_active ? 'checked' : '' }} class="sr-only peer">
+                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                    </label>
+                                </td>
+                                <td class="py-3 px-4 min-w-[240px]">
+                                    <x-select-input name="sme_data_id" form="bonus-form-{{ $provider }}" class="rounded-lg !py-2 !text-xs" :disabled="$eligiblePlans->isEmpty()">
+                                        <option value="">None selected</option>
+                                        @foreach ($eligiblePlans as $p)
+                                            <option value="{{ $p->id }}" {{ $bonusSettings->sme_data_id === $p->id ? 'selected' : '' }}>
+                                                {{ $p->size }} ({{ $p->plan_type }}, {{ $p->validity }})
+                                            </option>
+                                        @endforeach
+                                    </x-select-input>
+                                    @if ($eligiblePlans->isEmpty())
+                                        <p class="text-xs text-amber-600 mt-1">No enabled {{ strtoupper($provider) }} plans yet.</p>
+                                    @endif
+                                </td>
+                                <td class="py-3 px-4 text-right pr-4">
+                                    <x-primary-button type="submit" form="bonus-form-{{ $provider }}" class="!text-xs">
+                                        <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                                        Save
+                                    </x-primary-button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <!-- Total Plans -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Plans</p>
@@ -75,7 +156,7 @@
             </div>
 
             <!-- Active Plans -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Plans</p>
@@ -92,7 +173,7 @@
             </div>
 
             <!-- Disabled Plans -->
-            <div class="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
+            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Disabled Plans</p>
@@ -110,7 +191,7 @@
         </div>
 
         <!-- Filter & Table Card -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-md shadow-slate-100/40 overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-md shadow-slate-100/40 overflow-hidden">
             <!-- Search & Filters -->
             <div class="p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50/50 via-white to-slate-50/20">
                 <form method="GET" action="{{ route('admin.sme-plans.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">

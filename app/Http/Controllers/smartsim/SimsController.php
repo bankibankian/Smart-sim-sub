@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Sim;
 use App\Models\SimRequest;
 use App\Models\User;
+use App\Services\SimAssignmentService;
+use App\Support\SimAccess;
+use App\Support\SimStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,16 +16,38 @@ use Illuminate\Support\Facades\DB;
 class SimsController extends Controller
 {
     /**
-     * Display the SIM Services dashboard.
+     * Device pages exposed via the sidebar, keyed by URL slug.
+     * 'category' must match the exact service_fields.field_name / sims.category value in the database.
      */
-    public function index(Request $request)
-    {
-        $user = Auth::user();
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Please log in.');
-        }
+    private const DEVICE_PAGES = [
+        'pos' => [
+            'label' => 'POS SIM',
+            'category' => 'POS SIM',
+            'desc' => 'For payment terminals',
+            'icon' => 'credit-card',
+            'illustration' => 'pages.welcome2.illustrations.pos-sim',
+        ],
+        'cctv' => [
+            'label' => 'CCTV SIM',
+            'category' => 'CCTV',
+            'desc' => 'For surveillance systems',
+            'icon' => 'video',
+            'illustration' => 'pages.welcome2.illustrations.cctv-sim',
+        ],
+        'router' => [
+            'label' => 'Router SIM',
+            'category' => 'ROUTER SIM',
+            'desc' => 'For mobile routers',
+            'icon' => 'router',
+            'illustration' => 'pages.welcome2.illustrations.router-sim',
+        ],
+    ];
 
-        // Fetch categories and pricing dynamically from the database
+    /**
+     * Fetch SIM categories and pricing dynamically from the database.
+     */
+    private function resolveCategories($user): array
+    {
         $simService = \App\Models\Service::where('name', 'simcard')->first();
         $categories = [];
         if ($simService) {
@@ -40,40 +65,282 @@ class SimsController extends Controller
                 ];
             }
         }
-        $providers = ['mtn', 'airtel', 'glo', '9mobile'];
 
-        if ($user->role === 'partner') {
-            // Partners fetch SIMs assigned to them (both direct ownership and downline delegation tracking)
-            $sims = Sim::with('user')->where('partner_id', $user->id)
-                ->latest()->paginate(10, ['*'], 'sims_page');
-                
-            // Partner can assign to business and agent roles
-            $assignableUsers = User::whereIn('role', ['business', 'agent'])
-                ->where('status', 'active')
-                ->orderBy('first_name')
-                ->get();
-                
-            $requests = SimRequest::with('sim')
-                ->where('user_id', $user->id)
-                ->latest()->paginate(10, ['*'], 'requests_page');
+        return $categories;
+    }
 
-            return view('smartsimcard.index', compact(
-                'user', 'categories', 'providers', 'sims', 
-                'assignableUsers', 'requests'
-            ));
+    /**
+     * SIM Services catalog: illustrated overview of every device SIM, linking to its device page.
+     */
+    public function overview(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
         }
 
-        // Standard Users (personal, business, agent, staff, checker)
-        $sims = Sim::where('user_id', $user->id)
-            ->latest()->paginate(10, ['*'], 'sims_page');
-            
+        $categories = $this->resolveCategories($user);
+        $categoryPrices = collect($categories)->pluck('price', 'name');
+
+        // Roles outside the SIM catalog (Personal, Business, ...) go straight to
+        // the request page — they don't browse/self-activate, someone in the
+        // hierarchy (or admin) activates on their behalf.
+        $goToRequest = !SimAccess::canBrowseCatalog($user);
+        $canEarn = SimAccess::canBrowseCatalog($user);
+
+        $devices = [];
+        foreach (self::DEVICE_PAGES as $slug => $meta) {
+            $devices[] = [
+                'slug' => $slug,
+                'label' => $meta['label'],
+                'desc' => $meta['desc'],
+                'illustration' => $meta['illustration'],
+                'price' => $categoryPrices[$meta['category']] ?? null,
+                'commission' => $canEarn ? $this->resolveCommissionForRole($user, $meta['category']) : null,
+                'route' => $goToRequest ? route('sims.' . $slug . '.request') : route('sims.' . $slug),
+                'comingSoon' => false,
+            ];
+        }
+
+        // GPS Tracking SIM is not yet sold — shown as a disabled "coming soon" entry.
+        $devices[] = [
+            'slug' => 'gps',
+            'label' => 'GPS Tracking SIM',
+            'desc' => 'For tracking devices',
+            'illustration' => 'pages.welcome2.illustrations.gps-sim',
+            'price' => null,
+            'commission' => null,
+            'route' => null,
+            'comingSoon' => true,
+        ];
+
+        return view('smartsimcard.overview', compact('user', 'devices'));
+    }
+
+    /**
+     * The per-sale commission this user's role earns for a given SIM category,
+     * read from ServicePrice — the same table admin manages per category/role
+     * at /admin/services. Mirrors App\Listeners\AwardCommissions.
+     */
+    private function resolveCommissionForRole(User $user, string $category): ?float
+    {
+        $service = \App\Models\Service::where('name', 'simcard')->first();
+        if (!$service) {
+            return null;
+        }
+
+        $field = \App\Models\ServiceField::where('service_id', $service->id)->where('field_name', $category)->first();
+        if (!$field) {
+            return null;
+        }
+
+        $servicePrice = \App\Models\ServicePrice::where('service_fields_id', $field->id)
+            ->where('user_type', $user->role)
+            ->whereNull('user_id')
+            ->first();
+
+        return $servicePrice ? (float) $servicePrice->commission : null;
+    }
+
+    /**
+     * Shared renderer for a single device's request/activation page. The
+     * left-panel action differs by role: Regional Manager / Coordinator only
+     * distribute a held SIM down to their next-tier downline; Partner
+     * activates a held SIM for one of their downline Users (debiting that
+     * user, not themselves); Agent keeps the old self-activate flow.
+     */
+    private function renderDevicePage(string $slug)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        $meta = self::DEVICE_PAGES[$slug];
+        $category = $meta['category'];
+        $categories = $this->resolveCategories($user);
+        $price = collect($categories)->firstWhere('name', $category)['price'] ?? null;
+        $providers = ['mtn', 'airtel', 'glo', '9mobile'];
+
+        $mode = match ($user->role) {
+            'regional_manager', 'coordinator' => 'distribute',
+            'partner' => 'activate_for_user',
+            default => 'self_activate',
+        };
+
+        $downlineUsers = collect();
+
+        $heldSims = match ($mode) {
+            'distribute' => Sim::where($user->role === 'regional_manager' ? 'regional_manager_id' : 'coordinator_id', $user->id)
+                ->where('status', $user->role === 'regional_manager' ? SimStatus::ASSIGNED_TO_RM : SimStatus::ASSIGNED_TO_COORDINATOR)
+                ->where('category', $category)
+                ->latest()->get(),
+            'activate_for_user' => Sim::where('partner_id', $user->id)
+                ->where('status', SimStatus::ASSIGNED_TO_PARTNER)
+                ->where('category', $category)
+                ->latest()->get(),
+            default => Sim::where('user_id', $user->id)
+                ->where('category', $category)
+                ->where('status', '!=', SimStatus::ACTIVATED)
+                ->latest()->get(),
+        };
+
+        $personalPrice = null;
+
+        if ($mode === 'distribute') {
+            $nextRole = \App\Support\RoleHierarchy::nextRole($user->role);
+            $downlineUsers = $user->referrals()->where('role', $nextRole)->where('status', 'active')->orderBy('first_name')->get();
+        } elseif ($mode === 'activate_for_user') {
+            $downlineUsers = $user->referrals()->where('role', 'personal')->where('status', 'active')->orderBy('first_name')->get();
+
+            // The fee shown is what the selected downline User (always 'personal') pays, not the partner's own rate.
+            $simService = \App\Models\Service::where('name', 'simcard')->first();
+            $field = $simService ? \App\Models\ServiceField::where('service_id', $simService->id)->where('field_name', $category)->first() : null;
+            $personalPrice = $field
+                ? (float) (\App\Models\ServicePrice::where('service_fields_id', $field->id)->where('user_type', 'personal')->whereNull('user_id')->value('price') ?? $field->base_price)
+                : null;
+        }
+
+        return view('smartsimcard.device', [
+            'user' => $user,
+            'device' => $meta,
+            'personalPrice' => $personalPrice,
+            'slug' => $slug,
+            'category' => $category,
+            'price' => $price,
+            'providers' => $providers,
+            'mode' => $mode,
+            'heldSims' => $heldSims,
+            'downlineUsers' => $downlineUsers,
+        ]);
+    }
+
+    public function pos()
+    {
+        $this->authorizeCatalogAccess();
+
+        return $this->renderDevicePage('pos');
+    }
+
+    public function cctv()
+    {
+        $this->authorizeCatalogAccess();
+
+        return $this->renderDevicePage('cctv');
+    }
+
+    public function router()
+    {
+        $this->authorizeCatalogAccess();
+
+        return $this->renderDevicePage('router');
+    }
+
+    /**
+     * POS SIM / CCTV SIM / Inventory are only for the catalog roles
+     * (Regional Manager, Coordinator, Partner, Agent) — everyone else
+     * requests a SIM directly and has it activated for them.
+     */
+    private function authorizeCatalogAccess(): void
+    {
+        $user = Auth::user();
+        if (!$user || !SimAccess::canBrowseCatalog($user)) {
+            abort(403, 'This page is only available to Regional Managers, Coordinators, Partners, and Agents.');
+        }
+    }
+
+    /**
+     * Shared renderer for a device's dedicated "Request a SIM" page.
+     */
+    private function renderRequestPage(string $slug)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        $meta = self::DEVICE_PAGES[$slug];
+        $providers = ['mtn', 'airtel', 'glo', '9mobile'];
+
+        return view('smartsimcard.request', [
+            'user' => $user,
+            'device' => $meta,
+            'slug' => $slug,
+            'category' => $meta['category'],
+            'providers' => $providers,
+        ]);
+    }
+
+    public function posRequestForm()
+    {
+        return $this->renderRequestPage('pos');
+    }
+
+    public function cctvRequestForm()
+    {
+        return $this->renderRequestPage('cctv');
+    }
+
+    public function routerRequestForm()
+    {
+        return $this->renderRequestPage('router');
+    }
+
+    /**
+     * Browsable stock of currently available (unassigned) SIM numbers, by category and network.
+     */
+    public function inventory(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+        $this->authorizeCatalogAccess();
+
+        $categories = $this->resolveCategories($user);
+        $providers = ['mtn', 'airtel', 'glo', '9mobile'];
+
+        $query = Sim::where('status', SimStatus::UNASSIGNED);
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->string('category'));
+        }
+        if ($request->filled('provider')) {
+            $query->where('provider', $request->string('provider'));
+        }
+
+        $available = $query->orderBy('category')->orderBy('provider')
+            ->paginate(15)->withQueryString();
+
+        // Quick stock counts per category, for the summary cards.
+        $stockCounts = Sim::where('status', SimStatus::UNASSIGNED)
+            ->select('category', DB::raw('count(*) as total'))
+            ->groupBy('category')
+            ->pluck('total', 'category');
+
+        return view('smartsimcard.inventory', compact('user', 'categories', 'providers', 'available', 'stockCounts'));
+    }
+
+    /**
+     * "My SIM" — the user's own registered SIM cards and submitted requests.
+     */
+    public function mine(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+        if (!SimAccess::canViewMine($user)) {
+            abort(403, 'My SIM is only available to Personal and Business accounts.');
+        }
+
+        $sims = Sim::where('user_id', $user->id)->latest()->paginate(10, ['*'], 'sims_page');
+
         $requests = SimRequest::with('sim')
             ->where('user_id', $user->id)
             ->latest()->paginate(10, ['*'], 'requests_page');
 
-        return view('smartsimcard.index', compact(
-            'user', 'categories', 'providers', 'sims', 'requests'
-        ));
+        return view('smartsimcard.mine', compact('user', 'sims', 'requests'));
     }
 
     /**
@@ -88,7 +355,7 @@ class SimsController extends Controller
 
         $numbers = Sim::where('category', $request->category)
             ->where('provider', $request->provider)
-            ->where('status', 'available')
+            ->where('status', SimStatus::UNASSIGNED)
             ->orderBy('number')
             ->get(['id', 'number']);
 
@@ -109,7 +376,7 @@ class SimsController extends Controller
         $user = Auth::user();
         $sim = Sim::find($request->sim_id);
 
-        if ($sim->status !== 'available') {
+        if ($sim->status !== SimStatus::UNASSIGNED) {
             return back()->with('error', 'The selected SIM number is no longer available.');
         }
 
@@ -153,6 +420,11 @@ class SimsController extends Controller
         ]);
 
         $user = Auth::user();
+
+        if ($user->role !== 'agent') {
+            return back()->with('error', 'Self-activation isn\'t available on your account. Regional Managers and Coordinators distribute SIMs down the chain; Partners activate for their downline Users.');
+        }
+
         $sim = Sim::find($request->sim_id);
 
         // Ensure the SIM belongs to the user or partner
@@ -160,7 +432,7 @@ class SimsController extends Controller
             return back()->with('error', 'Access denied. You do not own this SIM card.');
         }
 
-        if ($sim->status === 'active') {
+        if ($sim->status === SimStatus::ACTIVATED) {
             return back()->with('error', 'This SIM card is already active.');
         }
 
@@ -252,7 +524,10 @@ class SimsController extends Controller
     }
 
     /**
-     * Partner assigns their assigned SIM to agent or business role.
+     * A Regional Manager / Coordinator / Partner delegates a SIM they currently
+     * hold down to their direct subordinate. Also preserves the legacy
+     * Partner -> agent/business assignment, which sits outside the new
+     * Regional Manager -> Coordinator -> Partner -> User hierarchy.
      */
     public function partnerAssignSim(Request $request)
     {
@@ -261,26 +536,125 @@ class SimsController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        $partner = Auth::user();
+        $from = Auth::user();
         $sim = Sim::find($request->sim_id);
         $targetUser = User::find($request->user_id);
 
-        // Security check: SIM must be assigned to partner, and partner must own it
-        if ($sim->partner_id !== $partner->id || $sim->user_id !== $partner->id) {
-            return back()->with('error', 'You can only assign numbers currently allocated to you.');
+        // Legacy path: partner delegating to an agent/business account (outside the hierarchy).
+        if ($from->role === 'partner' && in_array($targetUser->role, ['agent', 'business'])) {
+            if ($sim->partner_id !== $from->id || $sim->user_id !== $from->id) {
+                return back()->with('error', 'You can only assign numbers currently allocated to you.');
+            }
+
+            $sim->update([
+                'user_id' => $targetUser->id,
+                'status'  => SimStatus::ASSIGNED_TO_PARTNER,
+            ]);
+
+            return back()->with('success', "SIM number {$sim->number} successfully assigned to {$targetUser->first_name} {$targetUser->last_name}.");
         }
 
-        // Security check: Target user must be agent or business
-        if (!in_array($targetUser->role, ['agent', 'business'])) {
-            return back()->with('error', 'You can only assign numbers to agent or business accounts.');
+        // Hierarchy path: Regional Manager -> Coordinator, Coordinator -> Partner, Partner -> User.
+        try {
+            app(SimAssignmentService::class)->assignDown($sim, $from, $targetUser);
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        $sim->update([
-            'user_id' => $targetUser->id,
-            'status'  => 'assigned',
-        ]);
 
         return back()->with('success', "SIM number {$sim->number} successfully assigned to {$targetUser->first_name} {$targetUser->last_name}.");
+    }
+
+    /**
+     * A Partner activates a SIM they hold on behalf of a User in their
+     * downline. The activation fee is debited from that User's wallet (not
+     * the partner's), then the SIM is marked ACTIVATED — which fires the
+     * commission payout up the whole chain (partner, coordinator, regional
+     * manager). Regional Managers and Coordinators never activate — they
+     * only distribute, via partnerAssignSim() above.
+     */
+    public function activateForDownlineUser(Request $request)
+    {
+        $request->validate([
+            'sim_id'  => 'required|exists:sims,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $partner = Auth::user();
+        if ($partner->role !== 'partner') {
+            return back()->with('error', 'Only partners can activate a SIM for a downline user.');
+        }
+
+        $sim = Sim::find($request->sim_id);
+        $targetUser = User::find($request->user_id);
+
+        if ($sim->partner_id !== $partner->id) {
+            return back()->with('error', 'You can only activate numbers currently allocated to you.');
+        }
+
+        if ($sim->status === SimStatus::ACTIVATED) {
+            return back()->with('error', 'This SIM card is already active.');
+        }
+
+        if ($targetUser->role !== 'personal' || $targetUser->referred_by !== $partner->id) {
+            return back()->with('error', 'You can only activate a SIM for a User in your downline.');
+        }
+
+        // Resolve the activation price for the target user's role/category.
+        $simService = \App\Models\Service::where('name', 'simcard')->first();
+        $serviceField = $simService
+            ? \App\Models\ServiceField::where('service_id', $simService->id)->where('field_name', $sim->category)->first()
+            : null;
+        $payableAmount = $serviceField ? $serviceField->priceForUser($targetUser) : 0.00;
+
+        try {
+            DB::transaction(function () use ($sim, $partner, $targetUser, $payableAmount, $simService) {
+                // Lock and debit the downline user's wallet — not the partner's.
+                $wallet = \App\Models\Wallet::where('user_id', $targetUser->id)->lockForUpdate()->first();
+                if (!$wallet || $wallet->balance < $payableAmount) {
+                    throw new \Exception("Insufficient wallet balance for {$targetUser->first_name}. They need ₦" . number_format($payableAmount, 2) . ' in their wallet.');
+                }
+
+                $oldBalance = $wallet->balance;
+                $wallet->decrement('balance', $payableAmount);
+                $newBalance = $wallet->balance;
+
+                $ref = 'ACT-' . time() . '-' . rand(1000, 9999);
+
+                \App\Models\Transaction::create([
+                    'transaction_ref' => $ref,
+                    'user_id'         => $targetUser->id,
+                    'amount'          => $payableAmount,
+                    'fee'             => 0.00,
+                    'net_amount'      => $payableAmount,
+                    'description'     => "SIM Card Activation: {$sim->number} (Category: {$sim->category}, Network: " . strtoupper($sim->provider) . "), activated by partner {$partner->first_name} {$partner->last_name}",
+                    'type'            => 'debit',
+                    'status'          => 'completed',
+                    'performed_by'    => $partner->first_name . ' ' . $partner->last_name,
+                ]);
+
+                \App\Models\Report::create([
+                    'user_id'      => $targetUser->id,
+                    'phone_number' => $sim->number,
+                    'network'      => $sim->provider,
+                    'ref'          => $ref,
+                    'amount'       => $payableAmount,
+                    'status'       => 'completed',
+                    'type'         => 'sim_activation',
+                    'description'  => "SIM Card Activation: {$sim->number} (Category: {$sim->category}), activated by partner",
+                    'old_balance'  => $oldBalance,
+                    'new_balance'  => $newBalance,
+                    'service_id'   => $simService ? $simService->id : null,
+                ]);
+
+                $sim->update(['user_id' => $targetUser->id]);
+
+                app(SimAssignmentService::class)->activate($sim, $partner);
+            });
+
+            return back()->with('success', "Activated {$sim->number} for {$targetUser->first_name} {$targetUser->last_name}.");
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -303,7 +677,7 @@ class SimsController extends Controller
 
         if ($sim->user_id && $sim->user) {
             $isOwnerOrAdmin = ($sim->user_id === Auth::id()) || (Auth::user() && Auth::user()->role === 'super_admin');
-            
+
             return back()->with('check_result', [
                 'success'      => true,
                 'found'        => true,

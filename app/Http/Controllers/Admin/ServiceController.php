@@ -197,7 +197,7 @@ class ServiceController extends Controller
         if ($priceTarget === 'user') {
             $rules['user_email'] = 'required|email|exists:users,email';
         } else {
-            $rules['user_type'] = 'required|in:personal,agent,partner,business,staff,checker,super_admin';
+            $rules['user_type'] = 'required|in:personal,agent,partner,business,staff,checker,super_admin,regional_manager,coordinator';
         }
 
         $validated = $request->validate($rules);
@@ -258,7 +258,7 @@ class ServiceController extends Controller
         if ($priceTarget === 'user') {
             $rules['user_email'] = 'required|email|exists:users,email';
         } else {
-            $rules['user_type'] = 'required|in:personal,agent,partner,business,staff,checker,super_admin';
+            $rules['user_type'] = 'required|in:personal,agent,partner,business,staff,checker,super_admin,regional_manager,coordinator';
         }
 
         $validated = $request->validate($rules);

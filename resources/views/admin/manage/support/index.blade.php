@@ -2,7 +2,7 @@
     <div class="space-y-8 max-w-7xl mx-auto">
         <!-- Page Header -->
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight font-display">Customer Support Dashboard</h1>
+            <h1 class="text-2xl font-bold text-slate-800 tracking-tight font-display">Customer Support Dashboard</h1>
             <p class="text-xs text-slate-400 mt-1">Review user support requests, respond to tickets, and manage customer service status.</p>
         </div>
 
@@ -23,7 +23,7 @@
         <!-- Support Tickets Statistics Grid -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Total Tickets -->
-            <div class="bg-gradient-to-br from-indigo-50/50 to-slate-50/50 p-5 rounded-3xl border border-indigo-100/60 shadow-sm flex items-center gap-4">
+            <div class="bg-gradient-to-br from-indigo-50/50 to-slate-50/50 p-5 rounded-xl border border-indigo-100/60 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-[#0056D2] border border-indigo-100/50 flex items-center justify-center shadow-sm">
                     <i data-lucide="message-square" class="w-5 h-5"></i>
                 </div>
@@ -34,7 +34,7 @@
             </div>
 
             <!-- Open Tickets -->
-            <div class="bg-gradient-to-br from-amber-50/50 to-orange-50/50 p-5 rounded-3xl border border-amber-100/60 shadow-sm flex items-center gap-4">
+            <div class="bg-gradient-to-br from-amber-50/50 to-orange-50/50 p-5 rounded-xl border border-amber-100/60 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 border border-amber-100/50 flex items-center justify-center shadow-sm">
                     <i data-lucide="clock" class="w-5 h-5 animate-pulse"></i>
                 </div>
@@ -45,7 +45,7 @@
             </div>
 
             <!-- Responded Tickets -->
-            <div class="bg-gradient-to-br from-blue-50/50 to-sky-50/50 p-5 rounded-3xl border border-blue-100/60 shadow-sm flex items-center gap-4">
+            <div class="bg-gradient-to-br from-blue-50/50 to-sky-50/50 p-5 rounded-xl border border-blue-100/60 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100/50 flex items-center justify-center shadow-sm">
                     <i data-lucide="reply" class="w-5 h-5"></i>
                 </div>
@@ -56,7 +56,7 @@
             </div>
 
             <!-- Closed Tickets -->
-            <div class="bg-gradient-to-br from-slate-50/50 to-slate-100/50 p-5 rounded-3xl border border-slate-200/50 shadow-sm flex items-center gap-4">
+            <div class="bg-gradient-to-br from-slate-50/50 to-slate-100/50 p-5 rounded-xl border border-slate-200/50 shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-600 border border-slate-200/50 flex items-center justify-center shadow-sm">
                     <i data-lucide="archive" class="w-5 h-5"></i>
                 </div>
@@ -68,7 +68,7 @@
         </div>
 
         <!-- Filters Block -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <form method="GET" action="{{ route('admin.manage.support.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                 <div>
                     <x-input-label for="search" value="Search Query" />
@@ -112,7 +112,7 @@
         </div>
 
         <!-- Tickets List Table -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>

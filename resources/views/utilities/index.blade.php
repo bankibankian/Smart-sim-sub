@@ -78,7 +78,7 @@
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2.5">
+                <h1 class="text-2xl font-bold font-display text-slate-800 flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-[#0056D2] border border-indigo-100/50 shadow-sm">
                         <i data-lucide="phone" class="w-5 h-5"></i>
                     </div>
@@ -129,7 +129,7 @@
             
             <!-- Left Side: Airtime Form -->
             <div class="lg:col-span-5 flex flex-col gap-6">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 relative flex flex-col justify-between h-full">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 relative flex flex-col justify-between h-full">
                     <div class="space-y-6">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
@@ -137,7 +137,7 @@
                                     <i data-lucide="smartphone" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold text-slate-800 font-display">Instant Recharge</h3>
+                                    <h3 class="text-sm font-semibold text-slate-800 font-display">Instant Recharge</h3>
                                     <span class="inline-block text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mt-0.5">Zero Fee</span>
                                 </div>
                             </div>
@@ -229,7 +229,7 @@
                                 <div class="amount-grid mt-2">
                                     @php $amounts = [100, 200, 500, 1000, 2000]; @endphp
                                     @foreach ($amounts as $amt)
-                                        <button type="button" class="amount-btn py-2 bg-slate-50 border border-slate-100 text-slate-600 hover:bg-slate-100 rounded-xl text-xs font-bold transition-all" 
+                                        <button type="button" class="amount-btn py-2 bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 rounded-xl text-xs font-bold transition-all" 
                                                 data-amount="{{ $amt }}">
                                             ₦{{ $amt }}
                                         </button>
@@ -258,7 +258,7 @@
 
             <!-- Right Side: Recent Airtime Purchases -->
             <div class="lg:col-span-7 flex flex-col gap-6">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 relative flex flex-col justify-between h-full">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 relative flex flex-col justify-between h-full">
                     <div class="space-y-6">
                         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                             <div class="flex items-center gap-3">
@@ -266,7 +266,7 @@
                                     <i data-lucide="history" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold text-slate-800 font-display">Recent Airtime Purchases</h3>
+                                    <h3 class="text-sm font-semibold text-slate-800 font-display">Recent Airtime Purchases</h3>
                                     <p class="text-xs text-slate-400">Tap a recent purchase to re-fill form details</p>
                                 </div>
                             </div>
@@ -689,7 +689,7 @@
                     document.getElementById('modalTitle').textContent = 'Authorize Airtime';
                     document.getElementById('modalSubtitle').textContent = 'Step 2 of 2 — Security PIN';
                     
-                    setTimeout(() => document.getElementById('pinInput')?.focus(), 100);
+                    setTimeout(() => document.getElementById('pinInput_1')?.focus(), 100);
                 });
             }
 
@@ -701,8 +701,8 @@
                     const pinError = document.getElementById('pinError');
                     const pinErrorText = document.getElementById('pinErrorText');
                     
-                    if (!pin || pin.length !== 5) {
-                        if (pinErrorText) pinErrorText.textContent = 'Please enter your 5-digit PIN.';
+                    if (!pin || pin.length !== 4) {
+                        if (pinErrorText) pinErrorText.textContent = 'Please enter your 4-digit PIN.';
                         if (pinError) pinError.classList.remove('hidden');
                         return;
                     }
@@ -737,7 +737,8 @@
                             confirmPinBtn.disabled = false;
                             if (loader) loader.classList.add('hidden');
                             if (btnText) btnText.textContent = 'Authorize Now';
-                            document.getElementById('pinInput').value = '';
+                            document.getElementById('pinInput_wrap').dispatchEvent(new CustomEvent('pin-reset'));
+                            document.getElementById('pinInput_1').focus();
                         }
                     })
                     .catch(() => {
