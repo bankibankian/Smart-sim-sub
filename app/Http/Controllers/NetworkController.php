@@ -23,7 +23,6 @@ class NetworkController extends Controller
         }
 
         $nextRole = RoleHierarchy::nextRole($user->role);
-        $referralLink = url('/register?ref=' . $user->referral_code);
 
         $totalReferrals = $user->referrals()->count();
         $activeReferrals = $user->referrals()->where('status', 'active')->count();
@@ -41,7 +40,6 @@ class NetworkController extends Controller
         return view('network.index', compact(
             'user',
             'nextRole',
-            'referralLink',
             'totalReferrals',
             'activeReferrals',
             'pendingInvites',

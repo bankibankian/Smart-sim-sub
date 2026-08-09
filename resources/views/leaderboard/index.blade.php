@@ -31,6 +31,83 @@
             @endif
         </div>
 
+        @if ($user->role === 'partner')
+            <!-- Public Sign-up Link -->
+            <x-card>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
+                        <i data-lucide="link" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-800 font-display">Public Sign-up Link</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Anyone who registers through this link joins your network as a standard User account — and counts toward your rankings above once they're activated.</p>
+                    </div>
+                </div>
+
+                <div x-data="{ copied: false }" class="flex flex-col sm:flex-row gap-2">
+                    <div class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 truncate">
+                        {{ $referralLink }}
+                    </div>
+                    <button type="button"
+                            @click="navigator.clipboard.writeText('{{ $referralLink }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-semibold text-xs shadow-sm transition-all hover:bg-slate-700 active:scale-[0.98] shrink-0">
+                        <i data-lucide="copy" class="w-3.5 h-3.5" x-show="!copied"></i>
+                        <i data-lucide="check" class="w-3.5 h-3.5" x-show="copied" x-cloak></i>
+                        <span x-text="copied ? 'Copied!' : 'Copy Link'"></span>
+                    </button>
+                </div>
+
+                <p class="text-xs text-slate-400 mt-3">
+                    Referral code: <span class="font-mono font-bold text-slate-600">{{ $user->referral_code }}</span>
+                </p>
+            </x-card>
+
+            @if ($referralGamification)
+                <!-- Referral Progress -->
+                <x-card padding="p-6">
+                    <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 shrink-0">
+                                <i data-lucide="award" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800 font-display">Referral Progress</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">
+                                    {{ number_format($referralGamification['totalDownline']) }} total &middot;
+                                    {{ number_format($referralGamification['weeklyReferrals']) }} this week
+                                </p>
+                            </div>
+                        </div>
+                        @if ($referralGamification['currentBadge'])
+                            <span class="px-3 py-1 text-xs font-extrabold bg-amber-50 text-amber-600 border border-amber-100 rounded-full uppercase tracking-wider">
+                                {{ $referralGamification['currentBadge']['label'] }}
+                            </span>
+                        @endif
+                    </div>
+
+                    @if ($referralGamification['nextBadge'])
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="font-semibold text-slate-600">Progress to {{ $referralGamification['nextBadge']['label'] }} ({{ $referralGamification['nextBadge']['threshold'] }} referrals)</span>
+                                <span class="font-bold text-amber-600">{{ $referralGamification['progressPercent'] }}%</span>
+                            </div>
+                            <div class="w-full bg-amber-50 rounded-full h-2">
+                                <div class="bg-amber-500 h-2 rounded-full transition-all duration-500" style="width: {{ $referralGamification['progressPercent'] }}%"></div>
+                            </div>
+                            <p class="text-xs text-slate-400">
+                                {{ max(0, $referralGamification['nextBadge']['threshold'] - $referralGamification['totalDownline']) }} more referral(s) to reach the next badge.
+                            </p>
+                        </div>
+                    @else
+                        <p class="text-xs text-emerald-600 font-semibold flex items-center gap-1.5">
+                            <i data-lucide="party-popper" class="w-3.5 h-3.5"></i>
+                            You've reached the highest referral badge available.
+                        </p>
+                    @endif
+                </x-card>
+            @endif
+        @endif
+
         @unless ($active ?? false)
             <x-card padding="p-10">
                 <div class="text-center">

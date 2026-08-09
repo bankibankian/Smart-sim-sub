@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivationBonusSettings;
 use App\Models\SmeData;
 use Illuminate\Http\Request;
 
@@ -48,12 +49,35 @@ class SmePlanController extends Controller
         $activePlansCount = SmeData::where('status', 'enabled')->count();
         $disabledPlansCount = SmeData::where('status', 'disabled')->count();
 
+        $bonusSettings = ActivationBonusSettings::current();
+        $bonusEligiblePlans = SmeData::where('status', 'enabled')->orderBy('network')->orderBy('size')->get();
+
         return view('admin.sme-plans.index', compact(
             'plans',
             'totalPlansCount',
             'activePlansCount',
-            'disabledPlansCount'
+            'disabledPlansCount',
+            'bonusSettings',
+            'bonusEligiblePlans'
         ));
+    }
+
+    /**
+     * Update the silent post-activation data bonus: on/off and which plan to grant.
+     */
+    public function updateActivationBonus(Request $request)
+    {
+        $validated = $request->validate([
+            'is_active' => ['nullable', 'boolean'],
+            'sme_data_id' => ['nullable', 'exists:sme_data,id'],
+        ]);
+
+        ActivationBonusSettings::current()->update([
+            'is_active' => $request->boolean('is_active'),
+            'sme_data_id' => $validated['sme_data_id'] ?? null,
+        ]);
+
+        return back()->with('success', 'Activation bonus settings updated.');
     }
 
     /**

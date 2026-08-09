@@ -55,6 +55,43 @@
             </div>
         @endif
 
+        <!-- Activation Bonus Settings -->
+        <div class="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
+            <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
+                <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center text-[#0056D2]">
+                    <i data-lucide="gift" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-800 font-display">SIM Activation Data Bonus</h3>
+                    <p class="text-xs text-slate-400">When on, every SIM that gets activated silently receives a free data top-up on its own number — no wallet is charged.</p>
+                </div>
+            </div>
+            <form method="POST" action="{{ route('admin.sme-plans.activation-bonus.update') }}" class="flex flex-col sm:flex-row sm:items-end gap-4">
+                @csrf
+                @method('PUT')
+                <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 cursor-pointer shrink-0">
+                    <input type="checkbox" name="is_active" value="1" {{ $bonusSettings->is_active ? 'checked' : '' }}
+                           class="rounded border-slate-300 text-primary focus:ring-primary/20 w-4 h-4">
+                    <span class="text-sm font-semibold text-slate-700">Bonus is active</span>
+                </label>
+                <div class="flex-1">
+                    <x-input-label value="Bonus Plan" />
+                    <x-select-input name="sme_data_id" class="rounded-xl">
+                        <option value="">None selected</option>
+                        @foreach ($bonusEligiblePlans as $p)
+                            <option value="{{ $p->id }}" {{ $bonusSettings->sme_data_id === $p->id ? 'selected' : '' }}>
+                                {{ $p->network }} — {{ $p->size }} ({{ $p->plan_type }}, {{ $p->validity }})
+                            </option>
+                        @endforeach
+                    </x-select-input>
+                </div>
+                <x-primary-button type="submit" class="!text-xs shrink-0">
+                    <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                    Save
+                </x-primary-button>
+            </form>
+        </div>
+
         <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <!-- Total Plans -->

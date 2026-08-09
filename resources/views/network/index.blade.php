@@ -152,36 +152,6 @@
             {{ $referrals->links('vendor.pagination.custom') }}
         </x-card>
 
-        <!-- Public Sign-up Link -->
-        <x-card>
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
-                    <i data-lucide="link" class="w-4 h-4"></i>
-                </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-slate-800 font-display">Public Sign-up Link</h3>
-                    <p class="text-xs text-slate-400 mt-0.5">Anyone who registers through this link joins your network as a standard User account.</p>
-                </div>
-            </div>
-
-            <div x-data="{ copied: false }" class="flex flex-col sm:flex-row gap-2">
-                <div class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 truncate">
-                    {{ $referralLink }}
-                </div>
-                <button type="button"
-                        @click="navigator.clipboard.writeText('{{ $referralLink }}'); copied = true; setTimeout(() => copied = false, 2000)"
-                        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-slate-800 text-white font-semibold text-xs shadow-sm transition-all hover:bg-slate-700 active:scale-[0.98] shrink-0">
-                    <i data-lucide="copy" class="w-3.5 h-3.5" x-show="!copied"></i>
-                    <i data-lucide="check" class="w-3.5 h-3.5" x-show="copied" x-cloak></i>
-                    <span x-text="copied ? 'Copied!' : 'Copy Link'"></span>
-                </button>
-            </div>
-
-            <p class="text-xs text-slate-400 mt-3">
-                Referral code: <span class="font-mono font-bold text-slate-600">{{ $user->referral_code }}</span>
-            </p>
-        </x-card>
-
         @if ($nextRole)
             <!-- Claim Downline Member Modal -->
             <div x-show="openClaimModal"

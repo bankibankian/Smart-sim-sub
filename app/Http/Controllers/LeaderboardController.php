@@ -6,6 +6,7 @@ use App\Models\LeaderboardSettings;
 use App\Models\LeaderboardTier;
 use App\Models\SimHistory;
 use App\Models\User;
+use App\Support\ReferralGamification;
 use App\Support\SimStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,12 +31,16 @@ class LeaderboardController extends Controller
 
         $settings = LeaderboardSettings::current();
         $hasTiers = LeaderboardTier::where('status', 'active')->exists();
+        $referralLink = url('/register?ref=' . $user->referral_code);
+        $referralGamification = $user->role === 'partner' ? ReferralGamification::build($user) : null;
 
         if (!$settings->is_active) {
             return view('leaderboard.index', [
                 'user' => $user,
                 'settings' => $settings,
                 'active' => false,
+                'referralLink' => $referralLink,
+                'referralGamification' => $referralGamification,
             ]);
         }
 
@@ -105,7 +110,9 @@ class LeaderboardController extends Controller
             'periodActivations',
             'currentTier',
             'nextTier',
-            'progressPercent'
+            'progressPercent',
+            'referralLink',
+            'referralGamification'
         ) + ['active' => true]);
     }
 }
