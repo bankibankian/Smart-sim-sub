@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
@@ -24,6 +26,13 @@ class AppServiceProvider extends ServiceProvider
         // Commission Engine: App\Listeners\AwardCommissions is auto-discovered
         // for the App\Events\SimActivated event by Laravel's listener discovery
         // (its handle() method type-hints the event) — no explicit Event::listen needed.
+
+        // Outbound vendor API rate limits (queued jobs only — see
+        // laravel-api-request-standards.md Rule 4). Works against whatever
+        // CACHE_STORE is configured (this app uses 'database'); no Redis
+        // dependency required.
+        RateLimiter::for('sme-data-vendor', fn () => Limit::perMinute(30));
+        RateLimiter::for('palmpay-vendor', fn () => Limit::perMinute(30));
 
         // Enforce strong password rules globally
         \Illuminate\Validation\Rules\Password::defaults(function () {

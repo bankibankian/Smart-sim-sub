@@ -36,7 +36,7 @@
                 </div>
                 <x-text-input id="password" type="password" name="password" required autocomplete="current-password"
                     class="pl-10 pr-10" placeholder="••••••••" />
-                <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition">
+                <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition">
                     <i data-lucide="eye" id="password-toggle-icon" class="w-4 h-4"></i>
                 </button>
             </div>

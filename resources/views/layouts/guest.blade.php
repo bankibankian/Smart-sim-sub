@@ -32,14 +32,14 @@
             </div>
         </section>
 
-        <section class="relative flex min-h-screen items-center justify-center bg-[#f4f5f7] px-5 py-12 sm:px-10">
-            <div class="absolute left-5 top-6 lg:hidden">
+        <section class="relative flex min-h-screen items-center justify-center bg-[#f4f5f7] px-5 py-16 sm:px-10 sm:py-20">
+            <div class="absolute left-5 top-6 sm:left-8 sm:top-8 lg:hidden">
                 <a href="/">
                     <img src="{{ asset('assets/images/logo/logo1.png') }}" alt="SmartSIMSub" class="h-auto w-[145px]">
                 </a>
             </div>
 
-            <div class="w-full max-w-[450px] rounded-xl bg-white px-6 py-8 shadow-[0_2px_5px_rgba(15,23,42,0.14)] sm:px-7">
+            <div class="mt-16 w-full max-w-[450px] rounded-xl bg-white px-6 py-8 shadow-[0_2px_5px_rgba(15,23,42,0.14)] sm:px-8 sm:py-10 lg:mt-0">
                 {{ $slot }}
             </div>
         </section>

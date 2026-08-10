@@ -10,7 +10,6 @@ use App\Models\Wallet;
 use App\Http\Requests\Action\BuyAirtimeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -279,27 +278,9 @@ class AirtimeController extends Controller implements HasMiddleware
 
         // 6. Call Airtime API (OUTSIDE the DB Transaction)
         try {
-            $response = Http::withHeaders([
-                'api-key'    => config('services.vtpass.api_key'),
-                'secret-key' => config('services.vtpass.secret_key'),
-            ])->when(app()->environment() !== 'production', fn($h) => $h->withoutVerifying())->timeout(30)->post(config('services.vtpass.payment_url'), [
-                'request_id' => $requestId,
-                'serviceID'  => $networkKey,
-                'amount'     => $amount,
-                'phone'      => $mobile,
-            ]);
-
-            $data = $response->json();
-            $successCodes = ['0', '00', '000', '200'];
-            $isSuccessful = false;
-            
-            if ($response->successful()) {
-                 if (isset($data['code']) && in_array((string)$data['code'], $successCodes)) {
-                    $isSuccessful = true;
-                } elseif (isset($data['status']) && strtolower($data['status']) === 'success') {
-                    $isSuccessful = true;
-                }
-            }
+            $result = \App\Services\VtpassAirtimeApi::purchase($mobile, $networkKey, $amount, $requestId);
+            $data = $result['data'];
+            $isSuccessful = $result['success'];
 
             if ($isSuccessful) {
                 // Award commission if configured

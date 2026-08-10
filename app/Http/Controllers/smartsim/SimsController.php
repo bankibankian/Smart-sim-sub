@@ -300,7 +300,7 @@ class SimsController extends Controller
         $categories = $this->resolveCategories($user);
         $providers = ['mtn', 'airtel', 'glo', '9mobile'];
 
-        $query = Sim::where('status', SimStatus::UNASSIGNED);
+        $query = $this->scopeToUserPortfolio(Sim::query(), $user);
 
         if ($request->filled('category')) {
             $query->where('category', $request->string('category'));
@@ -309,16 +309,31 @@ class SimsController extends Controller
             $query->where('provider', $request->string('provider'));
         }
 
-        $available = $query->orderBy('category')->orderBy('provider')
+        $mySims = $query->orderBy('category')->orderBy('provider')
             ->paginate(15)->withQueryString();
 
-        // Quick stock counts per category, for the summary cards.
-        $stockCounts = Sim::where('status', SimStatus::UNASSIGNED)
+        // Quick counts per category, for the summary cards — scoped to this user's own SIMs.
+        $stockCounts = $this->scopeToUserPortfolio(Sim::query(), $user)
             ->select('category', DB::raw('count(*) as total'))
             ->groupBy('category')
             ->pluck('total', 'category');
 
-        return view('smartsimcard.inventory', compact('user', 'categories', 'providers', 'available', 'stockCounts'));
+        return view('smartsimcard.inventory', compact('user', 'categories', 'providers', 'mySims', 'stockCounts'));
+    }
+
+    /**
+     * Scope a SIM query to only the rows tied to this user via their role's
+     * FK column — their full portfolio, at any status, since earlier tiers'
+     * FK columns are never cleared as a SIM cascades further down the chain.
+     */
+    private function scopeToUserPortfolio($query, User $user)
+    {
+        return match ($user->role) {
+            'regional_manager' => $query->where('regional_manager_id', $user->id),
+            'coordinator' => $query->where('coordinator_id', $user->id),
+            'partner' => $query->where('partner_id', $user->id),
+            default => $query->where('user_id', $user->id), // agent
+        };
     }
 
     /**

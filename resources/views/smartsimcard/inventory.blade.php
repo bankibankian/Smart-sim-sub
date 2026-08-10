@@ -11,7 +11,7 @@
                     </div>
                     SIM Inventory
                 </h1>
-                <p class="text-sm text-slate-500 mt-1">Browse currently available SIM numbers before requesting one.</p>
+                <p class="text-sm text-slate-500 mt-1">SIM numbers currently and previously assigned to you.</p>
             </div>
             <x-primary-button type="button" @click="openLookupModal = true" class="!text-xs !bg-slate-800 hover:!bg-slate-700">
                 <i data-lucide="search" class="w-4 h-4"></i>
@@ -39,7 +39,7 @@
                 <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
                     <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider truncate">{{ $cat['name'] }}</span>
                     <span class="text-xl font-extrabold text-slate-800 font-display mt-0.5 block">{{ $stockCounts[$cat['name']] ?? 0 }}</span>
-                    <span class="text-[11px] text-slate-400">numbers in stock</span>
+                    <span class="text-[11px] text-slate-400">SIMs with you</span>
                 </div>
             @empty
                 <div class="col-span-full text-center text-slate-400 text-sm py-6">No SIM categories configured yet.</div>
@@ -70,9 +70,9 @@
             </form>
         </div>
 
-        <!-- Available Numbers Table -->
+        <!-- Your SIMs Table -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
-            <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Available Numbers</h3>
+            <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Your SIMs</h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
@@ -80,24 +80,30 @@
                             <th class="py-2.5">Number</th>
                             <th class="py-2.5">Category</th>
                             <th class="py-2.5">Network</th>
+                            <th class="py-2.5">Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($available as $sim)
+                        @forelse ($mySims as $sim)
                             <tr class="border-b border-slate-50 hover:bg-slate-50/50">
                                 <td class="py-3 font-bold text-slate-800">{{ $sim->number }}</td>
                                 <td class="py-3 font-semibold text-slate-700">{{ $sim->category }}</td>
                                 <td class="py-3 text-slate-500 uppercase">{{ $sim->provider }}</td>
+                                <td class="py-3">
+                                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold border {{ \App\Support\SimStatus::badgeClasses($sim->status) }}">
+                                        {{ \App\Support\SimStatus::label($sim->status) }}
+                                    </span>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="py-8 text-center text-slate-400 font-semibold">No available numbers match this filter.</td>
+                                <td colspan="4" class="py-8 text-center text-slate-400 font-semibold">You don't have any SIMs yet.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-            {{ $available->links('vendor.pagination.custom') }}
+            {{ $mySims->links('vendor.pagination.custom') }}
         </div>
 
         @if (session('check_result'))

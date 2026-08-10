@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Verification;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\RequestIdHelper;
 use App\Helpers\ServiceManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\Verification;
 use App\Models\Transaction;
 use App\Models\Service;
@@ -15,7 +16,6 @@ use App\Models\ServiceField;
 use App\Models\Wallet;
 use App\Repositories\NIN_PDF_Repository;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 
 class NINPhoneVerificationController extends Controller
 {
@@ -167,20 +167,8 @@ class NINPhoneVerificationController extends Controller
 
         // 5. Call API outside transaction
         try {
-            $apiKey = env('AREWA_API_TOKEN');
-            $baseUrl = env('AREWA_BASE_URL');
-            $url = rtrim($baseUrl, '/') . '/nin/phone';
-
-            $payload = [
-                'value' => $request->phone_number,
-                'ref' => 'REF-' . Str::random(10),
-            ];
-
-            $response = Http::withoutVerifying()
-                ->withToken($apiKey)
-                ->acceptJson()
-                ->timeout(30)
-                ->post($url, $payload);
+            $requestId = RequestIdHelper::generateRequestId();
+            $response = \App\Services\ArewaVerificationApi::verifyNinByPhone($request->phone_number, $requestId);
 
             $data = $response->json();
 

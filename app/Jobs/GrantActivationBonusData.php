@@ -11,6 +11,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
@@ -24,8 +25,17 @@ class GrantActivationBonusData implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /** Background profile — patient, spread out, since nothing user-facing is waiting on this. */
+    public int $tries = 4;
+    public array $backoff = [30, 120, 600];
+
     public function __construct(public Sim $sim)
     {
+    }
+
+    public function middleware(): array
+    {
+        return [new RateLimited('sme-data-vendor')];
     }
 
     public function handle(): void
@@ -38,18 +48,11 @@ class GrantActivationBonusData implements ShouldQueue
         $plan = $settings->plan;
         $requestId = RequestIdHelper::generateRequestId();
 
-        try {
-            $result = SmeDataPurchaseApi::purchase($this->sim->number, $plan->network, $plan->data_id, $requestId);
-        } catch (\Exception $e) {
-            Log::error('Activation bonus data top-up failed to reach vendor', [
-                'sim' => $this->sim->number,
-                'error' => $e->getMessage(),
-            ]);
-
-            $this->logReport($this->sim, $plan, $requestId, false, 'Connection error: ' . $e->getMessage());
-
-            return;
-        }
+        // A ConnectionException here is intentionally left to propagate —
+        // that lets Laravel retry the whole job per $tries/$backoff instead
+        // of silently giving up on the first transient network blip. The
+        // final give-up (after all retries) is recorded once in failed().
+        $result = SmeDataPurchaseApi::purchase($this->sim->number, $plan->network, $plan->data_id, $requestId);
 
         $this->logReport($this->sim, $plan, $requestId, $result['success'], $result['success']
             ? "Activation bonus: {$plan->size} {$plan->plan_type} silently topped up on {$this->sim->number}"
@@ -57,6 +60,30 @@ class GrantActivationBonusData implements ShouldQueue
 
         if (!$result['success']) {
             Log::warning('Activation bonus data top-up failed', ['sim' => $this->sim->number, 'result' => $result]);
+        }
+    }
+
+    /**
+     * Called once, after every retry attempt has been exhausted (e.g. a
+     * sustained vendor outage) — records the final failure so support has
+     * an audit trail even though nothing user-facing was ever blocked.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('Activation bonus data top-up failed after all retries', [
+            'sim'   => $this->sim->number,
+            'error' => $exception->getMessage(),
+        ]);
+
+        $settings = ActivationBonusSettings::forProvider($this->sim->provider);
+        if ($settings->plan) {
+            $this->logReport(
+                $this->sim,
+                $settings->plan,
+                RequestIdHelper::generateRequestId(),
+                false,
+                'Connection error: ' . $exception->getMessage()
+            );
         }
     }
 
