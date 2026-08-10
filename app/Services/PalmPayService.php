@@ -4,11 +4,16 @@ namespace App\Services;
 
 use App\Helpers\noncestrHelper;
 use App\Helpers\signatureHelper;
+use App\Support\LogRedactor;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class PalmPayService
 {
+    private const CONNECT_TIMEOUT = 3;
+    private const TIMEOUT = 20;
+
     protected $baseUrl;
     protected $bearerToken;
     protected $merchantId;
@@ -82,47 +87,52 @@ class PalmPayService
         $signature = signatureHelper::generate_signature($data, config('keys.private'));
         $url = $this->baseUrl . ltrim($endpoint, '/');
 
-        Log::info("PalmPay Request to $url", ['data' => $data]);
+        Log::info("PalmPay Request to $url", ['data' => LogRedactor::redact($data)]);
+
+        $breaker = new CircuitBreaker('palmpay');
+
+        if ($breaker->isOpen()) {
+            Log::warning("PalmPay circuit is open — skipping request to $url");
+
+            return ['respCode' => '9999', 'respMsg' => 'PalmPay is temporarily unavailable. Please try again shortly.'];
+        }
 
         $token = $this->bearerToken;
         $headers = [
-            'Accept: application/json, text/plain, */*',
-            'CountryCode: NG',
-            "Authorization: Bearer $token",
-            "Signature: $signature",
-            'Content-Type: application/json',
+            'Accept'        => 'application/json, text/plain, */*',
+            'CountryCode'   => 'NG',
+            'Authorization' => "Bearer $token",
+            'Signature'     => $signature,
+            'Content-Type'  => 'application/json',
         ];
 
-        // Initialize cURL
-        $ch = curl_init();
+        try {
+            $response = Http::connectTimeout(self::CONNECT_TIMEOUT)
+                ->timeout(self::TIMEOUT)
+                ->retry(times: 2, sleepMilliseconds: 300, when: fn ($e) => $e instanceof ConnectionException, throw: false)
+                ->withHeaders($headers)
+                ->when(config('app.env') === 'local', fn ($h) => $h->withoutVerifying())
+                ->post($url, $data);
+        } catch (ConnectionException $e) {
+            // Deliberately re-thrown rather than swallowed into a normal
+            // ['respCode' => '9999', ...] return: a connection failure is
+            // genuinely ambiguous (the request may still have reached
+            // PalmPay), so callers must treat it differently from an
+            // explicit vendor rejection — this is what makes
+            // WithdrawController's "leave pending, don't auto-refund on
+            // ambiguous failure" logic around transfer() actually correct.
+            $breaker->recordFailure();
+            Log::error('PalmPay connection error: ' . $e->getMessage());
 
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-        // Disable SSL verification in local environment
-        if (config('app.env') === 'local') {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            throw $e;
         }
 
-        // Execute request
-        $response = curl_exec($ch);
+        Log::info("PalmPay Response from $url", ['response' => LogRedactor::redact((array) $response->json())]);
 
-        Log::info("PalmPay Response from $url", ['response' => $response]);
+        $decoded = $response->json();
+        $isSuccess = $response->successful() && is_array($decoded) && ($decoded['respCode'] ?? null) === '00000000';
+        $isSuccess ? $breaker->recordSuccess() : $breaker->recordFailure();
 
-        // Check for cURL errors
-        if (curl_errno($ch)) {
-            Log::error('cURL Error: ' . curl_error($ch));
-            return ['respCode' => '9999', 'respMsg' => curl_error($ch)];
-        }
-
-        // Close cURL session
-        curl_close($ch);
-
-        return json_decode($response, true);
+        return $decoded;
     }
 }

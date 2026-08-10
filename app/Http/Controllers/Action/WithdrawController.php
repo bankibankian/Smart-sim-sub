@@ -97,27 +97,9 @@ class WithdrawController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $response = $this->palmPay->queryBankList();
+        \App\Jobs\SyncPalmPayBankListJob::dispatch();
 
-        if (isset($response['respCode']) && $response['respCode'] === '00000000') {
-            $banksData = $response['data'];
-
-            foreach ($banksData as $bank) {
-                Bank::updateOrCreate(
-                    ['bank_code' => $bank['bankCode']],
-                    [
-                        'bank_name' => $bank['bankName'],
-                        'bank_url' => $bank['bankUrl'] ?? null,
-                        'bg_url' => $bank['bgUrl'] ?? null,
-                        'is_active' => true,
-                    ]
-                );
-            }
-
-            return back()->with('success', 'Banks synced successfully.');
-        }
-
-        return back()->with('error', 'Failed to sync banks: ' . ($response['respMsg'] ?? 'Unknown error'));
+        return back()->with('success', 'Bank sync queued — the list will update in a moment.');
     }
 
     /**
@@ -130,7 +112,14 @@ class WithdrawController extends Controller
             'account_no' => 'required|string|digits:10',
         ]);
 
-        $response = $this->palmPay->queryBankAccount($request->bankCode, $request->account_no);
+        try {
+            $response = $this->palmPay->queryBankAccount($request->bankCode, $request->account_no);
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to reach the bank verification service. Please try again shortly.',
+            ]);
+        }
 
         if (isset($response['respCode']) && $response['respCode'] === '00000000') {
             if ($response['data']['Status'] === 'Success') {

@@ -6,11 +6,18 @@ use Exception;
 use App\Helpers\noncestrHelper;
 use App\Helpers\signatureHelper;
 use App\Models\User;
+use App\Services\CircuitBreaker;
+use App\Support\LogRedactor;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class VirtualAccountRepository
 {
+    private const CONNECT_TIMEOUT = 3;
+    private const TIMEOUT = 20;
+
     /**
      * Create a PalmPay virtual account for the given user.
      */
@@ -41,7 +48,7 @@ class VirtualAccountRepository
                 'nonceStr'           => $noncestr,
             ];
 
-            Log::info('PalmPay virtual account request', $data);
+            Log::info('PalmPay virtual account request', LogRedactor::redact($data));
 
             $signature = signatureHelper::generate_signature($data, config('keys.private'));
 
@@ -55,49 +62,46 @@ class VirtualAccountRepository
 
             $url = rtrim($baseUrl, '/') . '/api/v2/virtual/account/label/create';
 
-            $headers = [
-                'Accept: application/json, text/plain, */*',
-                'CountryCode: NG',
-                "Authorization: Bearer {$token}",
-                "Signature: {$signature}",
-                'Content-Type: application/json',
-            ];
+            $breaker = new CircuitBreaker('palmpay');
 
-            // Initialize cURL
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-
-            $response = curl_exec($ch);
-
-            if (curl_errno($ch)) {
-                $curlError = curl_error($ch);
-                curl_close($ch);
-                throw new Exception('cURL Error: ' . $curlError);
+            if ($breaker->isOpen()) {
+                throw new Exception('PalmPay is temporarily unavailable. Please try again shortly.');
             }
 
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+            $headers = [
+                'Accept'        => 'application/json, text/plain, */*',
+                'CountryCode'   => 'NG',
+                'Authorization' => "Bearer {$token}",
+                'Signature'     => $signature,
+                'Content-Type'  => 'application/json',
+            ];
+
+            try {
+                $response = Http::connectTimeout(self::CONNECT_TIMEOUT)
+                    ->timeout(self::TIMEOUT)
+                    ->retry(times: 2, sleepMilliseconds: 300, when: fn ($e) => $e instanceof ConnectionException, throw: false)
+                    ->withHeaders($headers)
+                    ->post($url, $data);
+            } catch (ConnectionException $e) {
+                $breaker->recordFailure();
+                throw new Exception('Connection error: ' . $e->getMessage());
+            }
+
+            $httpCode = $response->status();
+            $decoded = $response->json();
 
             Log::info('PalmPay virtual account response', [
                 'http_code' => $httpCode,
-                'body'      => $response,
+                'body'      => LogRedactor::redact((array) $decoded),
             ]);
 
-            $decoded = json_decode($response, true);
-
             if ($decoded === null) {
+                $breaker->recordFailure();
                 throw new Exception('Invalid JSON response from PalmPay API.');
             }
 
             if (isset($decoded['respCode']) && $decoded['respCode'] === '00000000') {
+                $breaker->recordSuccess();
                 DB::table('virtual_accounts')->insert([
                     'user_id'           => $loginUserId,
                     'account_reference' => $decoded['data']['accountReference'],
@@ -114,6 +118,7 @@ class VirtualAccountRepository
                 return ['success' => true, 'message' => 'Virtual account created successfully.'];
             }
 
+            $breaker->recordFailure();
             $errorMsg = $decoded['respMsg'] ?? $decoded['message'] ?? 'Unknown error from PalmPay.';
             throw new Exception('PalmPay API error: ' . $errorMsg);
 

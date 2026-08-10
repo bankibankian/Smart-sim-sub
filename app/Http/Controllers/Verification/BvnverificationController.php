@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Verification;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\RequestIdHelper;
 use App\Helpers\ServiceManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Verification;
@@ -169,22 +169,8 @@ class BvnverificationController extends Controller
 
         // 5. Call API outside the transaction
         try {
-            $apiKey = env('AREWA_API_TOKEN');
-            $apiBaseUrl = env('AREWA_BASE_URL');
-            $apiUrl = rtrim($apiBaseUrl, '/') . '/bvn/verify';
-
-            $response = Http::withoutVerifying()
-                ->withToken($apiKey)
-                ->acceptJson()
-                ->post($apiUrl, [
-                    'bvn' => $request->bvn,
-                ]);
-
-            // Log the raw response for debugging
-            Log::info('BVN Verification Response', [
-                'status' => $response->status(),
-                'response' => $response->json()
-            ]);
+            $requestId = RequestIdHelper::generateRequestId();
+            $response = \App\Services\ArewaVerificationApi::verifyBvn($request->bvn, $requestId);
 
             $decodedData = $response->json();
 

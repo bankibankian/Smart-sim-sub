@@ -11,7 +11,7 @@ use App\Models\User;
  *   SIM they hold.
  * - Everyone else (Personal, Business, ...) only requests a SIM — activation
  *   is done for them by their partner/admin — and uses "My SIM" to track
- *   what they've requested/own. Router SIM stays open to everyone.
+ *   what they've requested/own.
  */
 class SimAccess
 {

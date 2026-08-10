@@ -32,4 +32,28 @@ class SimStatus
             self::UNASSIGNED,
         ];
     }
+
+    public static function label(string $status): string
+    {
+        return match ($status) {
+            self::UNASSIGNED => 'Unassigned',
+            self::ASSIGNED_TO_RM => 'With Regional Manager',
+            self::ASSIGNED_TO_COORDINATOR => 'With Coordinator',
+            self::ASSIGNED_TO_PARTNER => 'With Partner',
+            self::ACTIVATED => 'Activated',
+            self::DEACTIVATED => 'Deactivated',
+            self::SUSPENDED => 'Suspended',
+            default => str_replace('_', ' ', $status),
+        };
+    }
+
+    public static function badgeClasses(string $status): string
+    {
+        return match ($status) {
+            self::ACTIVATED => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+            self::DEACTIVATED, self::SUSPENDED => 'bg-rose-50 text-rose-600 border-rose-100',
+            self::UNASSIGNED => 'bg-slate-50 text-slate-500 border-slate-200',
+            default => 'bg-primary/10 text-primary border-primary/10', // ASSIGNED_TO_*
+        };
+    }
 }
