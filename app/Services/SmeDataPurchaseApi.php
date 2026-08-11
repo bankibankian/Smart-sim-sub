@@ -31,12 +31,14 @@ class SmeDataPurchaseApi
 
     public static function baseUrl(): string
     {
-        return env('BASE_URL', 'https://fadeelposdatasub.com.ng/api/data/purchase');
+        // config(), not env() directly — env() outside a config file
+        // silently returns null once config is cached.
+        return config('services.smedata.base_url');
     }
 
     public static function token(): ?string
     {
-        return env('API_KEYS');
+        return config('services.smedata.api_key');
     }
 
     /**
