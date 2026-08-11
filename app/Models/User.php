@@ -87,6 +87,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the user's single saved cash-out destination bank account.
+     */
+    public function withdrawalAccount(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(WithdrawalAccount::class);
+    }
+
+    /**
      * Get custom service prices assigned to this user.
      */
     public function servicePrices(): \Illuminate\Database\Eloquent\Relations\HasMany

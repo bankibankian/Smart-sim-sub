@@ -66,6 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Profile PIN update requires verified email (financial action)
     Route::post('/profile/pin', [ProfileController::class, 'updatePin'])->name('profile.pin.update')->middleware('throttle:5,1');
+    Route::post('/profile/withdrawal-account', [ProfileController::class, 'updateWithdrawalAccount'])->name('profile.withdrawal-account.update')->middleware('throttle:5,1');
 
     // Support Tickets Routes
     Route::get('/support', [\App\Http\Controllers\SupportController::class, 'index'])->name('support');
@@ -200,6 +201,13 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
         Route::post('/requests/{simRequest}/reject', [\App\Http\Controllers\Admin\SimPlanController::class, 'rejectRequest'])->name('requests.reject');
         Route::post('/import-excel', [\App\Http\Controllers\Admin\SimPlanController::class, 'importExcel'])->name('import');
         Route::get('/download-sample', [\App\Http\Controllers\Admin\SimPlanController::class, 'downloadSample'])->name('download-sample');
+    });
+
+    // Admin Cash Out Approvals
+    Route::prefix('admin/cash-out')->name('admin.cash-out.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\CashOutController::class, 'index'])->name('index');
+        Route::post('/{cashOutRequest}/approve', [\App\Http\Controllers\Admin\CashOutController::class, 'approve'])->name('approve');
+        Route::post('/{cashOutRequest}/reject', [\App\Http\Controllers\Admin\CashOutController::class, 'reject'])->name('reject');
     });
 
     // Admin Leaderboard Settings (activation tiers, counting period, on/off)
