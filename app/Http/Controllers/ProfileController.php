@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Bank;
+use App\Models\WithdrawalAccount;
+use App\Services\PalmPayService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +22,8 @@ class ProfileController extends Controller
     {
         return view('profile.edit', [
             'user' => $request->user(),
+            'banks' => Bank::where('is_active', true)->orderBy('bank_name')->get(),
+            'withdrawalAccount' => $request->user()->withdrawalAccount,
         ]);
     }
 
@@ -95,6 +100,55 @@ class ProfileController extends Controller
         ]);
 
         return Redirect::route('profile.edit')->with('success', 'Transaction PIN updated successfully. You can now use it to authorise purchases.');
+    }
+
+    /**
+     * Set or replace the user's single saved cash-out withdrawal account.
+     */
+    public function updateWithdrawalAccount(Request $request, PalmPayService $palmPay): RedirectResponse
+    {
+        $request->validateWithBag('updateWithdrawal', [
+            'bankCode' => ['required', 'string', 'exists:banks,bank_code'],
+            'account_no' => ['required', 'digits:10'],
+        ]);
+
+        $bank = Bank::where('bank_code', $request->bankCode)->first();
+
+        // Resolve the account name server-side rather than trusting whatever
+        // the client submits — this is the account money will actually be
+        // sent to, so it must come from PalmPay's own lookup, not the form.
+        try {
+            $response = $palmPay->queryBankAccount($request->bankCode, $request->account_no);
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            return Redirect::route('profile.edit')
+                ->withErrors(['account_no' => 'Unable to reach the bank verification service. Please try again shortly.'], 'updateWithdrawal')
+                ->withInput();
+        }
+
+        $accountName = null;
+        if (isset($response['respCode']) && $response['respCode'] === '00000000' && ($response['data']['Status'] ?? null) === 'Success') {
+            $accountName = $response['data']['accountName'] ?? null;
+        }
+
+        if (!$accountName) {
+            $message = $response['data']['errorMessage'] ?? $response['respMsg'] ?? 'Could not verify that account number.';
+
+            return Redirect::route('profile.edit')
+                ->withErrors(['account_no' => $message], 'updateWithdrawal')
+                ->withInput();
+        }
+
+        WithdrawalAccount::updateOrCreate(
+            ['user_id' => $request->user()->id],
+            [
+                'bank_code' => $request->bankCode,
+                'bank_name' => $bank->bank_name ?? 'Bank',
+                'account_no' => $request->account_no,
+                'account_name' => $accountName,
+            ]
+        );
+
+        return Redirect::route('profile.edit')->with('success', 'Withdrawal account saved. You can now cash out to this account.');
     }
 
     /**

@@ -50,8 +50,8 @@
     </div>
 
     <!-- Main Navigation and View Panel -->
-    <div x-data="{ 
-        activeTab: '{{ $errors->updatePassword->any() || $errors->updatePin->any() ? 'security' : ($errors->any() ? 'profile' : 'profile') }}'
+    <div x-data="{
+        activeTab: '{{ $errors->updatePassword->any() || $errors->updatePin->any() ? 'security' : ($errors->updateWithdrawal->any() ? 'withdrawal' : ($errors->any() ? 'profile' : 'profile')) }}'
     }" class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
         
         <!-- Sidebar Navigation Options -->
@@ -72,7 +72,14 @@
                 <span>Security & PIN</span>
             </button>
             
-            <button @click="activeTab = 'upgrade'" 
+            <button @click="activeTab = 'withdrawal'"
+                    :class="activeTab === 'withdrawal' ? 'bg-[#0056D2] text-white shadow-lg shadow-[#0056D2]/10' : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-200">
+                <i data-lucide="banknote" class="w-5 h-5"></i>
+                <span>Withdrawal Account</span>
+            </button>
+
+            <button @click="activeTab = 'upgrade'"
                     :class="activeTab === 'upgrade' ? 'bg-[#0056D2] text-white shadow-lg shadow-[#0056D2]/10' : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'" 
                     class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-200">
                 <i data-lucide="award" class="w-5 h-5"></i>
@@ -97,7 +104,7 @@
                 </div>
             @endif
 
-            @if ($errors->any() && !$errors->updatePassword->any() && !$errors->updatePin->any())
+            @if ($errors->any() && !$errors->updatePassword->any() && !$errors->updatePin->any() && !$errors->updateWithdrawal->any())
                 <div class="mb-6 p-4 bg-rose-50 border border-rose-100 text-rose-700 rounded-2xl animate-in fade-in slide-in-from-top-4 duration-200">
                     <div class="flex items-center gap-3 mb-2">
                         <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-500 flex-shrink-0"></i>
@@ -346,6 +353,120 @@
                 </div>
             </div>
 
+            <!-- TAB: WITHDRAWAL ACCOUNT -->
+            <div x-show="activeTab === 'withdrawal'"
+                 x-transition:enter="transition ease-out duration-250"
+                 x-transition:enter-start="opacity-0 translate-y-4"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 class="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6"
+                 style="display: none;">
+
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800 font-display">Withdrawal Account</h2>
+                        <p class="text-xs text-slate-400 mt-1">The single bank account your cash-out requests are paid into. Only one account can be saved at a time — saving a new one replaces it. Admin approval is required before any funds are sent.</p>
+                    </div>
+                    <div class="shrink-0">
+                        @if ($withdrawalAccount)
+                            <span class="px-3 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full uppercase tracking-wider flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                Set
+                            </span>
+                        @else
+                            <span class="px-3 py-1 text-xs font-extrabold bg-amber-50 text-amber-600 border border-amber-100 rounded-full uppercase tracking-wider flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                                Not Set
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                @if ($withdrawalAccount)
+                    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 shadow-inner">
+                        <div class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm text-[#0056D2]">
+                            <i data-lucide="landmark" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="font-bold text-sm text-slate-800 truncate">{{ $withdrawalAccount->account_name }}</p>
+                            <p class="text-xs text-slate-400 font-semibold">{{ $withdrawalAccount->bank_name }} &bull; {{ substr($withdrawalAccount->account_no, 0, 3) }}****{{ substr($withdrawalAccount->account_no, -3) }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('profile.withdrawal-account.update') }}" id="withdrawalAccountForm" class="space-y-4">
+                    @csrf
+
+                    @if ($errors->updateWithdrawal->any())
+                        <div class="p-3 bg-rose-50 border border-rose-100 text-rose-700 rounded-xl">
+                            <ul class="list-disc pl-4 space-y-0.5">
+                                @foreach ($errors->updateWithdrawal->all() as $error)
+                                    <li class="text-xs font-semibold">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    {{-- Hidden native select — the actual form-submitted field --}}
+                    <select name="bankCode" id="wa_bank_code" class="hidden" required>
+                        <option value="">Choose a bank...</option>
+                        @foreach ($banks as $bank)
+                            <option value="{{ $bank->bank_code }}" data-name="{{ $bank->bank_name }}"
+                                {{ old('bankCode', $withdrawalAccount->bank_code ?? '') === $bank->bank_code ? 'selected' : '' }}>
+                                {{ $bank->bank_name }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <div class="space-y-1.5" id="wa_bankPickerWrapper">
+                        <x-input-label value="Bank" />
+                        <div class="relative">
+                            <div class="w-full flex items-center border border-slate-200 rounded-xl bg-white shadow-sm cursor-pointer select-none" id="wa_bankPickerTrigger" role="button" tabindex="0">
+                                <div class="flex-grow pl-3.5 pr-4 py-3.5 flex items-center justify-between text-xs font-semibold text-slate-700">
+                                    <span id="wa_bankPickerLabel" class="{{ ($withdrawalAccount->bank_name ?? null) ? 'text-slate-800 font-bold' : 'text-slate-400' }}">{{ $withdrawalAccount->bank_name ?? 'Choose a bank...' }}</span>
+                                    <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" id="wa_bankChevron"></i>
+                                </div>
+                            </div>
+                            <div id="wa_bankPickerDropdown" class="hidden absolute left-0 right-0 z-50 mt-1.5 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
+                                <div class="p-2 border-b border-slate-100 bg-slate-50">
+                                    <x-text-input type="text" id="wa_bankSearchInput" placeholder="Search bank name..." autocomplete="off" />
+                                </div>
+                                <ul class="list-none mb-0 max-h-56 overflow-y-auto divide-y divide-slate-50" id="wa_bankPickerList">
+                                    @foreach ($banks as $bank)
+                                        <li class="wa-bank-item flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors cursor-pointer" data-code="{{ $bank->bank_code }}" data-name="{{ $bank->bank_name }}">
+                                            <span class="text-xs font-semibold text-slate-700">{{ $bank->bank_name }}</span>
+                                        </li>
+                                    @endforeach
+                                    <li class="px-4 py-6 text-center text-xs text-slate-400 hidden" id="wa_bankNoResults">No banks found</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <x-input-label for="wa_account_no" value="Account Number" />
+                        <x-text-input type="text" id="wa_account_no" name="account_no"
+                               placeholder="Enter 10-digit account number" maxlength="10" inputmode="numeric" required
+                               :value="old('account_no', $withdrawalAccount->account_no ?? '')"
+                               :class="$errors->updateWithdrawal->has('account_no') ? 'border-rose-400' : ''" />
+                        <div class="mt-1.5 min-h-[22px]">
+                            <div id="wa_accountNameDisplay" class="text-xs font-bold"></div>
+                            <div id="wa_accountErrorDisplay" class="text-xs font-bold text-rose-600"></div>
+                        </div>
+                    </div>
+
+                    <p class="text-[11px] text-slate-400 flex items-center gap-1.5">
+                        <i data-lucide="info" class="w-3.5 h-3.5 text-slate-300 shrink-0"></i>
+                        The account name shown is resolved directly with the bank and cannot be edited manually.
+                    </p>
+
+                    <div class="flex justify-end pt-2">
+                        <x-primary-button type="submit">
+                            Save Withdrawal Account
+                        </x-primary-button>
+                    </div>
+                </form>
+            </div>
+
             <!-- TAB 3: ACCOUNT UPGRADE -->
             <div x-show="activeTab === 'upgrade'" 
                  x-transition:enter="transition ease-out duration-250"
@@ -566,4 +687,119 @@
 
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bankCodeSelect = document.getElementById('wa_bank_code');
+        if (!bankCodeSelect) return; // withdrawal tab markup not present
+
+        const accountNoInput   = document.getElementById('wa_account_no');
+        const accountNameDisp  = document.getElementById('wa_accountNameDisplay');
+        const accountErrorDisp = document.getElementById('wa_accountErrorDisplay');
+
+        /* ── Custom Bank Picker ───────────────────────── */
+        const trigger    = document.getElementById('wa_bankPickerTrigger');
+        const dropdown   = document.getElementById('wa_bankPickerDropdown');
+        const searchInput = document.getElementById('wa_bankSearchInput');
+        const label       = document.getElementById('wa_bankPickerLabel');
+        const chevron     = document.getElementById('wa_bankChevron');
+        const items       = document.querySelectorAll('.wa-bank-item');
+        const noResults   = document.getElementById('wa_bankNoResults');
+
+        function openPicker() {
+            dropdown.classList.remove('hidden');
+            chevron.style.transform = 'rotate(180deg)';
+            searchInput.value = '';
+            items.forEach(el => el.classList.remove('hidden'));
+            noResults?.classList.add('hidden');
+            setTimeout(() => searchInput.focus(), 60);
+        }
+        function closePicker() {
+            dropdown.classList.add('hidden');
+            chevron.style.transform = '';
+        }
+        function applySelection(code, name) {
+            bankCodeSelect.value = code;
+            bankCodeSelect.dispatchEvent(new Event('change'));
+            label.textContent = name;
+            label.classList.remove('text-slate-400');
+            label.classList.add('text-slate-800', 'font-bold');
+            closePicker();
+        }
+
+        trigger.addEventListener('click', e => {
+            e.stopPropagation();
+            dropdown.classList.contains('hidden') ? openPicker() : closePicker();
+        });
+
+        searchInput.addEventListener('input', function () {
+            const q = this.value.toLowerCase().trim();
+            let visible = 0;
+            items.forEach(item => {
+                const match = item.getAttribute('data-name').toLowerCase().includes(q);
+                item.classList.toggle('hidden', !match);
+                if (match) visible++;
+            });
+            noResults?.classList.toggle('hidden', visible > 0);
+        });
+
+        items.forEach(item => {
+            item.addEventListener('click', () => applySelection(
+                item.getAttribute('data-code'),
+                item.getAttribute('data-name')
+            ));
+        });
+
+        document.addEventListener('click', e => {
+            if (!document.getElementById('wa_bankPickerWrapper')?.contains(e.target)) {
+                closePicker();
+            }
+        });
+
+        /* ── Live account-name preview (server re-verifies on submit regardless) ── */
+        let verificationTimeout;
+        function performVerification() {
+            const bankCode = bankCodeSelect.value;
+            const acctNo = accountNoInput.value;
+            if (!(bankCode && acctNo.length === 10)) return;
+
+            accountNameDisp.innerHTML = '<span class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1 rounded-full"><span class="w-2.5 h-2.5 border border-slate-400 border-t-transparent rounded-full animate-spin"></span> Verifying...</span>';
+            accountErrorDisp.innerHTML = '';
+
+            fetch("{{ route('withdraw.verifyAccount') }}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: JSON.stringify({ bankCode: bankCode, account_no: acctNo })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    accountNameDisp.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="check-circle" class="w-3.5 h-3.5 inline-block"></i> ${data.account_name}</span>`;
+                    accountErrorDisp.innerHTML = '';
+                } else {
+                    accountNameDisp.innerHTML = '';
+                    accountErrorDisp.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-bold text-rose-600 bg-rose-50 border border-rose-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="alert-circle" class="w-3.5 h-3.5 inline-block"></i> ${data.message}</span>`;
+                }
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            })
+            .catch(() => {
+                accountNameDisp.innerHTML = '';
+                accountErrorDisp.innerHTML = '<span class="inline-flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-100 px-3 py-1 rounded-full shadow-sm"><i data-lucide="wifi-off" class="w-3.5 h-3.5 inline-block"></i> Connection failed</span>';
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            });
+        }
+
+        accountNoInput.addEventListener('input', () => {
+            clearTimeout(verificationTimeout);
+            if (accountNoInput.value.length === 10) {
+                verificationTimeout = setTimeout(performVerification, 500);
+            } else {
+                accountNameDisp.innerHTML = '';
+                accountErrorDisp.innerHTML = '';
+            }
+        });
+
+        bankCodeSelect.addEventListener('change', performVerification);
+    });
+    </script>
 </x-app-layout>
