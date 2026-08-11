@@ -20,11 +20,14 @@ class PalmPayService
 
     public function __construct()
     {
-        // Get credentials directly from env
-        $baseUrl = env('BASE_URL_PALMPAY') ?: 'https://open-gw-prod.palmpay-inc.com/';
+        // Read via config(), not env() directly — env() outside a config
+        // file silently returns null once config is cached (routine in
+        // staging/production), which made this class blind to real
+        // credentials while config()-based callers kept working fine.
+        $baseUrl = config('services.palmpay.base_url');
         $this->baseUrl = rtrim($baseUrl, '/') . '/';
-        $this->bearerToken = env('BEARER_TOKEN');
-        $this->merchantId = env('MERCHANTID');
+        $this->bearerToken = config('services.palmpay.bearer_token');
+        $this->merchantId = config('services.palmpay.merchant_id');
     }
 
     /**
@@ -32,7 +35,7 @@ class PalmPayService
      */
     public function queryBankList($businessType = 0)
     {
-        $version = env('VERSION', 'V2.0');
+        $version = config('services.palmpay.version', 'V2.0');
         $data = [
             'requestTime' => (int) (microtime(true) * 1000),
             'version' => $version,
@@ -48,7 +51,7 @@ class PalmPayService
      */
     public function queryBankAccount($bankCode, $bankAccNo)
     {
-        $version = env('VERSION', 'V2.0');
+        $version = config('services.palmpay.version', 'V2.0');
         $data = [
             'requestTime' => (int) (microtime(true) * 1000),
             'version' => $version,

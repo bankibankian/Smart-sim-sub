@@ -52,4 +52,14 @@ return [
         'verify_jamb_url' => env('VTPASS_VERIFY_JAMB_URL', 'https://sandbox.vtpass.com/api/verify-jamb'),
         'biller_code'     => env('VTPASS_BILLER_CODE'),
     ],
+
+    'arewa' => [
+        'base_url'  => env('AREWA_BASE_URL'),
+        'api_token' => env('AREWA_API_TOKEN'),
+    ],
+
+    'smedata' => [
+        'base_url' => env('BASE_URL', 'https://fadeelposdatasub.com.ng/api/data/purchase'),
+        'api_key'  => env('API_KEYS'),
+    ],
 ];

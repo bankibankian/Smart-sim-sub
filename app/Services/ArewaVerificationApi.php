@@ -57,7 +57,9 @@ class ArewaVerificationApi
             throw new \RuntimeException('Verification vendor is temporarily unavailable. Please try again shortly.');
         }
 
-        $baseUrl = env('AREWA_BASE_URL');
+        // config(), not env() directly — env() outside a config file
+        // silently returns null once config is cached.
+        $baseUrl = config('services.arewa.base_url');
         $url = rtrim((string) $baseUrl, '/') . $path;
 
         Log::info('Arewa Verification API Request', [
@@ -70,7 +72,7 @@ class ArewaVerificationApi
                 ->timeout(self::TIMEOUT)
                 ->retry(times: 2, sleepMilliseconds: 300, when: fn ($e) => $e instanceof ConnectionException, throw: false)
                 ->withoutVerifying()
-                ->withToken(env('AREWA_API_TOKEN'))
+                ->withToken(config('services.arewa.api_token'))
                 ->acceptJson()
                 ->post($url, $payload);
         } catch (ConnectionException $e) {
