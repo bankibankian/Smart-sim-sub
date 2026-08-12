@@ -318,7 +318,14 @@ class SimsController extends Controller
             ->groupBy('category')
             ->pluck('total', 'category');
 
-        return view('smartsimcard.inventory', compact('user', 'categories', 'providers', 'mySims', 'stockCounts'));
+        // Who this user can bulk-assign held SIMs down to — empty for agents,
+        // who sit at the bottom of the chain and only self-activate.
+        $nextRole = \App\Support\RoleHierarchy::nextRole($user->role);
+        $downlineUsers = $nextRole
+            ? $user->referrals()->where('role', $nextRole)->where('status', 'active')->orderBy('first_name')->get()
+            : collect();
+
+        return view('smartsimcard.inventory', compact('user', 'categories', 'providers', 'mySims', 'stockCounts', 'downlineUsers'));
     }
 
     /**
@@ -378,48 +385,36 @@ class SimsController extends Controller
     }
 
     /**
-     * User submits request to purchase/get a SIM number.
+     * User submits a request for N SIM numbers of a category/network — they
+     * no longer pick specific numbers; the admin chooses exactly which SIMs
+     * to hand out when reviewing the request.
      */
     public function requestSim(Request $request)
     {
         $request->validate([
             'category' => 'required|string',
             'provider' => 'required|string',
-            'sim_id'   => 'required|exists:sims,id',
+            'quantity' => 'required|integer|min:1|max:20',
         ]);
 
         $user = Auth::user();
-        $sim = Sim::find($request->sim_id);
-
-        if ($sim->status !== SimStatus::UNASSIGNED) {
-            return back()->with('error', 'The selected SIM number is no longer available.');
-        }
-
-        // Check if there is already a pending request for this SIM to prevent double-charging
-        $existingRequest = SimRequest::where('sim_id', $sim->id)
-            ->where('status', 'pending')
-            ->first();
-
-        if ($existingRequest) {
-            return back()->with('error', 'This SIM card already has a pending request.');
-        }
 
         try {
-            DB::transaction(function () use ($user, $sim) {
-                // Create the SIM request with 0.00 amount (free request)
+            DB::transaction(function () use ($user, $request) {
                 SimRequest::create([
                     'user_id'      => $user->id,
-                    'sim_id'       => $sim->id,
-                    'number'       => $sim->number,
-                    'category'     => $sim->category,
-                    'provider'     => $sim->provider,
+                    'sim_id'       => null,
+                    'number'       => null,
+                    'category'     => $request->category,
+                    'provider'     => $request->provider,
+                    'quantity'     => $request->quantity,
                     'request_type' => 'purchase',
                     'status'       => 'pending',
                     'amount'       => 0.00,
                 ]);
             });
 
-            return back()->with('success', 'Your request for SIM number ' . $sim->number . ' has been submitted successfully.');
+            return back()->with('success', "Your request for {$request->quantity} x {$request->category} has been submitted successfully.");
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -577,6 +572,48 @@ class SimsController extends Controller
         }
 
         return back()->with('success', "SIM number {$sim->number} successfully assigned to {$targetUser->first_name} {$targetUser->last_name}.");
+    }
+
+    /**
+     * Bulk variant of the hierarchy path above — lets a Regional Manager /
+     * Coordinator / Partner multi-select held SIMs on the Inventory table
+     * and delegate them all to one downline user in a single action.
+     */
+    public function bulkAssignSim(Request $request)
+    {
+        $request->validate([
+            'sim_ids'   => 'required|array|max:50',
+            'sim_ids.*' => 'exists:sims,id',
+            'user_id'   => 'required|exists:users,id',
+        ]);
+
+        $from = Auth::user();
+        $targetUser = User::find($request->user_id);
+        $sims = Sim::whereIn('id', $request->sim_ids)->get();
+        $service = app(SimAssignmentService::class);
+
+        $assignedCount = 0;
+        $skipped = 0;
+
+        DB::transaction(function () use ($sims, $from, $targetUser, $service, &$assignedCount, &$skipped) {
+            foreach ($sims as $sim) {
+                try {
+                    $service->assignDown($sim, $from, $targetUser);
+                    $assignedCount++;
+                } catch (\RuntimeException $e) {
+                    $skipped++;
+                }
+            }
+        });
+
+        $message = "Successfully assigned {$assignedCount} SIM number(s) to {$targetUser->first_name} {$targetUser->last_name}.";
+        if ($skipped > 0) {
+            $message .= " {$skipped} SIM(s) were skipped (no longer eligible).";
+
+            return back()->with('warning', $message);
+        }
+
+        return back()->with('success', $message);
     }
 
     /**

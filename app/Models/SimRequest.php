@@ -16,6 +16,7 @@ class SimRequest extends Model
         'number',
         'category',
         'provider',
+        'quantity',
         'request_type',
         'status',
         'amount',

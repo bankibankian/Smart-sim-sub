@@ -213,7 +213,13 @@
                                             <span class="font-bold text-slate-700">{{ $req->user->first_name }} {{ $req->user->last_name }}</span>
                                             <span class="block text-xs text-slate-400">{{ $req->user->role }}</span>
                                         </td>
-                                        <td class="py-3 font-semibold text-slate-800">{{ $req->number }}</td>
+                                        <td class="py-3 font-semibold text-slate-800">
+                                            @if ($req->request_type === 'purchase')
+                                                Qty: {{ $req->quantity }}
+                                            @else
+                                                {{ $req->number }}
+                                            @endif
+                                        </td>
                                         <td class="py-3">
                                             <span class="px-2 py-0.5 rounded-full text-xs font-bold {{ $req->request_type === 'activation' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-[#0056D2]' }}">
                                                 {{ $req->request_type }}
@@ -227,10 +233,53 @@
                                             <span class="font-bold text-slate-700">₦{{ number_format($req->amount, 2) }}</span>
                                         </td>
                                         <td class="py-3 text-right space-x-1 whitespace-nowrap">
-                                            <form action="{{ route('admin.sim-plan.requests.approve', $req->id) }}" method="POST" class="inline-block">
-                                                @csrf
-                                                <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg transition-colors">Approve</button>
-                                            </form>
+                                            @if ($req->request_type === 'activation')
+                                                <form action="{{ route('admin.sim-plan.requests.approve', $req->id) }}" method="POST" class="inline-block">
+                                                    @csrf
+                                                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg transition-colors">Approve</button>
+                                                </form>
+                                            @else
+                                                <button type="button" @click="fetch('{{ route('admin.sim-plan.available-sims') }}?category={{ urlencode($req->category) }}&provider={{ urlencode($req->provider) }}')
+                                                    .then(r => r.json())
+                                                    .then(sims => {
+                                                        if (sims.length < {{ $req->quantity }}) {
+                                                            Swal.fire('Not Enough Stock', 'Only ' + sims.length + ' SIM(s) available for {{ $req->category }} / {{ strtoupper($req->provider) }}, but {{ $req->quantity }} requested.', 'warning');
+                                                            return;
+                                                        }
+                                                        let optionsHtml = sims.map(s => `
+                                                            <label class='flex items-center gap-2 text-xs font-medium py-1'>
+                                                                <input type='checkbox' class='approve-sim-cb' value='${s.id}'> ${s.number}
+                                                            </label>
+                                                        `).join('');
+                                                        Swal.fire({
+                                                            title: 'Select {{ $req->quantity }} SIM(s) to Approve',
+                                                            html: `<div class='text-left max-h-64 overflow-y-auto space-y-1'>${optionsHtml}</div>`,
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#0056D2',
+                                                            confirmButtonText: 'Approve Selected',
+                                                            preConfirm: () => {
+                                                                const checked = Array.from(document.querySelectorAll('.approve-sim-cb:checked')).map(el => el.value);
+                                                                if (checked.length !== {{ $req->quantity }}) {
+                                                                    Swal.showValidationMessage('Please select exactly {{ $req->quantity }} SIM(s).');
+                                                                }
+                                                                return checked;
+                                                            }
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                let f = document.createElement('form');
+                                                                f.action = '{{ route('admin.sim-plan.requests.approve', $req->id) }}';
+                                                                f.method = 'POST';
+                                                                let inputs = '<input type=\'hidden\' name=\'_token\' value=\'{{ csrf_token() }}\'>';
+                                                                result.value.forEach(id => { inputs += '<input type=\'hidden\' name=\'sim_ids[]\' value=\'' + id + '\'>'; });
+                                                                f.innerHTML = inputs;
+                                                                document.body.appendChild(f);
+                                                                f.submit();
+                                                            }
+                                                        })
+                                                    })" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg transition-colors">
+                                                    Approve
+                                                </button>
+                                            @endif
                                             <button type="button" @click="Swal.fire({
                                                 title: 'Reject Request',
                                                 input: 'text',
@@ -286,7 +335,13 @@
                                             <span class="font-bold text-slate-700">{{ $req->user->first_name }} {{ $req->user->last_name }}</span>
                                             <span class="block text-xs text-slate-400">{{ $req->user->role }}</span>
                                         </td>
-                                        <td class="py-3 font-semibold text-slate-800">{{ $req->number }}</td>
+                                        <td class="py-3 font-semibold text-slate-800">
+                                            @if ($req->request_type === 'purchase')
+                                                Qty: {{ $req->quantity }}
+                                            @else
+                                                {{ $req->number }}
+                                            @endif
+                                        </td>
                                         <td class="py-3 font-semibold capitalize">{{ $req->request_type }}</td>
                                         <td class="py-3 font-bold text-slate-700">₦{{ number_format($req->amount, 2) }}</td>
                                         <td class="py-3">

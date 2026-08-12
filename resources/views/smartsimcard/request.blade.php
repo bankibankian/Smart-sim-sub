@@ -13,7 +13,7 @@
             <x-sim-illustration :illustration="$device['illustration']" class="w-16 h-16 shrink-0" />
             <div>
                 <h1 class="text-xl font-extrabold font-display text-slate-900">Request {{ $device['label'] }}</h1>
-                <p class="text-sm text-slate-500 mt-0.5">Select a network to choose from our uploaded number inventory.</p>
+                <p class="text-sm text-slate-500 mt-0.5">Tell us how many you need — the admin will assign the specific number(s).</p>
             </div>
         </div>
 
@@ -55,10 +55,9 @@
                 </div>
 
                 <div class="space-y-1.5">
-                    <x-input-label for="req_number" value="Available Numbers" />
-                    <x-select-input id="req_number" name="sim_id" required disabled class="rounded-xl font-medium">
-                        <option value="">Select Number (Select Network First)</option>
-                    </x-select-input>
+                    <x-input-label for="req_quantity" value="Quantity" />
+                    <x-text-input type="number" id="req_quantity" name="quantity" min="1" max="20" value="1" required class="rounded-xl font-medium" />
+                    <p class="text-xs text-slate-400">The admin will review your request and assign specific SIM number(s) to you.</p>
                 </div>
 
                 <x-primary-button type="submit" class="w-full">
@@ -68,50 +67,4 @@
             </form>
         </div>
     </div>
-
-    @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-    $(document).ready(function () {
-        const category = @json($category);
-        const providerSelect = $('#req_provider');
-        const numberSelect = $('#req_number');
-
-        function fetchNumbers() {
-            const provider = providerSelect.val();
-
-            if (!provider) {
-                numberSelect.empty().append('<option value="">Select Number (Select Network First)</option>').prop('disabled', true);
-                return;
-            }
-
-            numberSelect.empty().append('<option value="">Loading numbers...</option>').prop('disabled', true);
-
-            $.ajax({
-                type: 'GET',
-                url: '{{ route('sims.available') }}',
-                data: { category: category, provider: provider },
-                dataType: 'json',
-                success: function (response) {
-                    numberSelect.empty();
-                    if (response.length === 0) {
-                        numberSelect.append('<option value="">No available numbers found</option>').prop('disabled', true);
-                    } else {
-                        numberSelect.append('<option value="">Select Number</option>');
-                        response.forEach(function (sim) {
-                            numberSelect.append('<option value="' + sim.id + '">' + sim.number + '</option>');
-                        });
-                        numberSelect.prop('disabled', false);
-                    }
-                },
-                error: function () {
-                    numberSelect.empty().append('<option value="">Error loading numbers. Try again.</option>').prop('disabled', true);
-                }
-            });
-        }
-
-        providerSelect.on('change', fetchNumbers);
-    });
-    </script>
-    @endpush
 </x-app-layout>
