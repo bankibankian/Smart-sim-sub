@@ -108,6 +108,8 @@
                             <option value="personal" {{ request('role') === 'personal' ? 'selected' : '' }}>Personal</option>
                             <option value="agent" {{ request('role') === 'agent' ? 'selected' : '' }}>Agent</option>
                             <option value="partner" {{ request('role') === 'partner' ? 'selected' : '' }}>Partner</option>
+                            <option value="coordinator" {{ request('role') === 'coordinator' ? 'selected' : '' }}>Coordinator</option>
+                            <option value="regional_manager" {{ request('role') === 'regional_manager' ? 'selected' : '' }}>Regional Manager</option>
                             <option value="business" {{ request('role') === 'business' ? 'selected' : '' }}>Business</option>
                             <option value="staff" {{ request('role') === 'staff' ? 'selected' : '' }}>Staff</option>
                             <option value="checker" {{ request('role') === 'checker' ? 'selected' : '' }}>Checker</option>

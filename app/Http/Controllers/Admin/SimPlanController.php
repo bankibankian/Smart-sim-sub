@@ -157,6 +157,26 @@ class SimPlanController extends Controller
     }
 
     /**
+     * AJAX: unassigned SIMs for a category/provider, used by the purchase-request
+     * approval picker so the admin can choose exactly which numbers to hand out.
+     */
+    public function availableSims(Request $request)
+    {
+        $request->validate([
+            'category' => 'required|string',
+            'provider' => 'required|string',
+        ]);
+
+        $sims = Sim::where('category', $request->category)
+            ->where('provider', $request->provider)
+            ->where('status', SimStatus::UNASSIGNED)
+            ->orderBy('number')
+            ->get(['id', 'number']);
+
+        return response()->json($sims);
+    }
+
+    /**
      * Admin unassigns a SIM back to the available pool, at any stage of the cascade.
      */
     public function unassign(Request $request, Sim $sim)
@@ -181,7 +201,9 @@ class SimPlanController extends Controller
     }
 
     /**
-     * Admin approves a purchase/activation request.
+     * Admin approves a purchase/activation request. For a purchase request
+     * the admin explicitly picks which SIM(s) to hand out — the requester
+     * only stated category/provider/quantity, not specific numbers.
      */
     public function approveRequest(Request $request, SimRequest $simRequest)
     {
@@ -191,35 +213,52 @@ class SimPlanController extends Controller
 
         $actor = $request->user();
 
+        if ($simRequest->request_type === 'purchase') {
+            $request->validate([
+                'sim_ids'   => 'required|array',
+                'sim_ids.*' => 'exists:sims,id',
+            ]);
+
+            if (count($request->sim_ids) !== $simRequest->quantity) {
+                return back()->with('error', "Please select exactly {$simRequest->quantity} SIM number(s).");
+            }
+        }
+
         try {
-            DB::transaction(function () use ($simRequest, $actor) {
+            DB::transaction(function () use ($simRequest, $actor, $request) {
                 // Lock the request for update
                 $lockedRequest = SimRequest::where('id', $simRequest->id)->lockForUpdate()->first();
                 if (!$lockedRequest || $lockedRequest->status !== 'pending') {
                     throw new \Exception('This request has already been processed or is not found.');
                 }
 
-                $sim = $lockedRequest->sim;
-                if ($sim) {
-                    $sim = Sim::where('id', $sim->id)->lockForUpdate()->first();
-                }
-
                 if ($lockedRequest->request_type === 'purchase') {
-                    if (!$sim || $sim->status !== SimStatus::UNASSIGNED) {
-                        throw new \Exception('The requested SIM number is no longer available.');
-                    }
-
                     $requester = User::where('id', $lockedRequest->user_id)->lockForUpdate()->first();
                     if (!$requester) {
                         throw new \Exception('Requester user not found.');
                     }
 
-                    $sim->update([
-                        'user_id'    => $requester->id,
-                        'partner_id' => $requester->role === 'partner' ? $requester->id : null,
-                        'status'     => SimStatus::ASSIGNED_TO_PARTNER,
-                    ]);
+                    $sims = Sim::whereIn('id', $request->sim_ids)->lockForUpdate()->get();
+                    if ($sims->count() !== $lockedRequest->quantity) {
+                        throw new \Exception('One or more selected SIMs are no longer available.');
+                    }
+
+                    foreach ($sims as $sim) {
+                        if ($sim->status !== SimStatus::UNASSIGNED) {
+                            throw new \Exception("SIM {$sim->number} is no longer available.");
+                        }
+                    }
+
+                    $service = app(SimAssignmentService::class);
+                    foreach ($sims as $sim) {
+                        $service->adminAssign($sim, $requester, $actor);
+                    }
                 } elseif ($lockedRequest->request_type === 'activation') {
+                    $sim = $lockedRequest->sim;
+                    if ($sim) {
+                        $sim = Sim::where('id', $sim->id)->lockForUpdate()->first();
+                    }
+
                     if ($sim && $sim->status !== SimStatus::ACTIVATED) {
                         // Marks the SIM ACTIVATED and fires SimActivated, which the
                         // Commission Engine (AwardCommissions listener) pays out from.

@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('sim_requests', function (Blueprint $table) {
+            $table->unsignedInteger('quantity')->default(1)->after('provider');
+        });
+
+        // Purchase-type requests no longer carry a pre-picked number — the
+        // admin chooses specific SIMs at approval time. No doctrine/dbal in
+        // this project, so modify the column directly rather than via
+        // Blueprint::change().
+        DB::statement('ALTER TABLE sim_requests MODIFY number VARCHAR(255) NULL');
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('sim_requests', function (Blueprint $table) {
+            $table->dropColumn('quantity');
+        });
+
+        DB::statement('ALTER TABLE sim_requests MODIFY number VARCHAR(255) NOT NULL');
+    }
+};
