@@ -156,6 +156,19 @@ class CashOutController extends Controller
                 return back()->with('success', "Cash out approved and paid to {$cashOutRequest->account_name}.");
             }
 
+            $errorMsg = $payoutResponse['respMsg'] ?? 'PalmPay rejected the transaction.';
+
+            if ($this->isSystemError($errorMsg)) {
+                // A signature/auth/config failure, not a genuine vendor
+                // decline — every approval will fail identically until this
+                // is fixed, so don't refund-and-close (which would force the
+                // user to resubmit) or mislabel it as "recipient rejected".
+                // Leave pending for a retry once the underlying issue is fixed.
+                Log::critical('Cash Out approval blocked by a PalmPay system/signature error: ' . $errorMsg);
+
+                return back()->with('error', "PalmPay could not process this approval due to a system/authentication error, not a recipient rejection: {$errorMsg}. The request remains pending — retry after this is fixed.");
+            }
+
             // Explicit API rejection — refund the user
             DB::transaction(function () use ($cashOutRequest, $transaction, $report, $payoutResponse) {
                 $cashOutRequest->update([
@@ -181,7 +194,6 @@ class CashOutController extends Controller
                 }
             });
 
-            $errorMsg = $payoutResponse['respMsg'] ?? 'PalmPay rejected the transaction.';
             Log::error('Cash Out approval rejected by PalmPay: ' . $errorMsg);
 
             return back()->with('error', 'PalmPay rejected the transfer: ' . $errorMsg . ' (Funds refunded).');
@@ -194,6 +206,25 @@ class CashOutController extends Controller
 
             return back()->with('success', 'Approval sent — awaiting final confirmation from the bank. This request remains pending until resolved.');
         }
+    }
+
+    /**
+     * Whether a PalmPay error message indicates a system/config failure
+     * (bad signature, expired token, bad certificate) rather than a
+     * genuine business decline of the recipient/transaction.
+     */
+    private function isSystemError(string $respMsg): bool
+    {
+        $needles = ['sign', 'signature', 'authoriz', 'token', 'certificate'];
+        $haystack = strtolower($respMsg);
+
+        foreach ($needles as $needle) {
+            if (str_contains($haystack, $needle)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

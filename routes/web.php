@@ -84,12 +84,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sims/router/request', [\App\Http\Controllers\smartsim\SimsController::class, 'routerRequestForm'])->name('sims.router.request');
     Route::get('/sims/inventory', [\App\Http\Controllers\smartsim\SimsController::class, 'inventory'])->name('sims.inventory');
     Route::get('/sims/mine', [\App\Http\Controllers\smartsim\SimsController::class, 'mine'])->name('sims.mine');
-    Route::get('/sims/check', [\App\Http\Controllers\smartsim\SimsController::class, 'checkNumber'])->name('sims.check');
     Route::get('/sims/available-numbers', [\App\Http\Controllers\smartsim\SimsController::class, 'getAvailableNumbers'])->name('sims.available');
     Route::post('/sims/request', [\App\Http\Controllers\smartsim\SimsController::class, 'requestSim'])->name('sims.request');
     Route::post('/sims/activate', [\App\Http\Controllers\smartsim\SimsController::class, 'activateSim'])->name('sims.activate');
     Route::post('/sims/activate-for-user', [\App\Http\Controllers\smartsim\SimsController::class, 'activateForDownlineUser'])->name('sims.activate-for-user');
     Route::post('/partner/sims/assign', [\App\Http\Controllers\smartsim\SimsController::class, 'partnerAssignSim'])->name('partner.sims.assign');
+    Route::post('/sims/bulk-assign', [\App\Http\Controllers\smartsim\SimsController::class, 'bulkAssignSim'])->name('sims.bulk-assign');
 
     // Identity Verification Routes
     Route::prefix('verification')->group(function () {
@@ -201,6 +201,7 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
         Route::post('/requests/{simRequest}/reject', [\App\Http\Controllers\Admin\SimPlanController::class, 'rejectRequest'])->name('requests.reject');
         Route::post('/import-excel', [\App\Http\Controllers\Admin\SimPlanController::class, 'importExcel'])->name('import');
         Route::get('/download-sample', [\App\Http\Controllers\Admin\SimPlanController::class, 'downloadSample'])->name('download-sample');
+        Route::get('/available-sims', [\App\Http\Controllers\Admin\SimPlanController::class, 'availableSims'])->name('available-sims');
     });
 
     // Admin Cash Out Approvals

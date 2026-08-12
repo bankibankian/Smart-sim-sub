@@ -672,49 +672,4 @@ class SimsController extends Controller
         }
     }
 
-    /**
-     * Public/User SIM lookup check.
-     */
-    public function checkNumber(Request $request)
-    {
-        $request->validate([
-            'number' => 'required|string',
-        ]);
-
-        $sim = Sim::with('user')->where('number', $request->number)->first();
-
-        if (!$sim) {
-            return back()->with('check_result', [
-                'success' => false,
-                'message' => 'SIM number not found in the database.',
-            ]);
-        }
-
-        if ($sim->user_id && $sim->user) {
-            $isOwnerOrAdmin = ($sim->user_id === Auth::id()) || (Auth::user() && Auth::user()->role === 'super_admin');
-
-            return back()->with('check_result', [
-                'success'      => true,
-                'found'        => true,
-                'assigned'     => true,
-                'number'       => $sim->number,
-                'category'     => $sim->category,
-                'provider'     => $sim->provider,
-                'status'       => $sim->status,
-                'user_name'    => $isOwnerOrAdmin ? ($sim->user->first_name . ' ' . $sim->user->last_name) : 'Masked (Unauthorized)',
-                'user_email'   => $isOwnerOrAdmin ? $sim->user->email : 'Masked (Unauthorized)',
-                'user_phone'   => $isOwnerOrAdmin ? $sim->user->phone : 'Masked (Unauthorized)',
-            ]);
-        }
-
-        return back()->with('check_result', [
-            'success'  => true,
-            'found'    => true,
-            'assigned' => false,
-            'number'   => $sim->number,
-            'category' => $sim->category,
-            'provider' => $sim->provider,
-            'status'   => $sim->status,
-        ]);
-    }
 }

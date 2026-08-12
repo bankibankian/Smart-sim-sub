@@ -1,7 +1,7 @@
 <x-app-layout>
     <title>SmartSIM - SIM Inventory</title>
 
-    <div x-data="{ openLookupModal: false, openResultModal: {{ session('check_result') ? 'true' : 'false' }} }" class="max-w-6xl mx-auto space-y-6">
+    <div class="max-w-6xl mx-auto space-y-6">
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
@@ -13,10 +13,6 @@
                 </h1>
                 <p class="text-sm text-slate-500 mt-1">SIM numbers currently and previously assigned to you.</p>
             </div>
-            <x-primary-button type="button" @click="openLookupModal = true" class="!text-xs !bg-slate-800 hover:!bg-slate-700">
-                <i data-lucide="search" class="w-4 h-4"></i>
-                SIM Owner Lookup
-            </x-primary-button>
         </div>
 
         {{-- Flash Messages --}}

@@ -36,8 +36,17 @@ class signatureHelper
             return $value !== '' && $value !== null;
         });
 
-        // Sort the array by its keys in ascending order
-        ksort($filtered_data);
+        // PalmPay's server trims leading/trailing whitespace from values
+        // before recomputing its own check signature — values that carry
+        // incidental whitespace (e.g. bank account names round-tripped
+        // from a queryBankAccount() response) must be trimmed here too,
+        // or the two sides hash different strings and the signature fails.
+        $filtered_data = array_map(function ($value) {
+            return is_string($value) ? trim($value) : $value;
+        }, $filtered_data);
+
+        // Sort the array by its keys in ascending ASCII/byte order
+        ksort($filtered_data, SORT_STRING);
 
         // Remove the sign key if it exists
         unset($filtered_data['sign']);
