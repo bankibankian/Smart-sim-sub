@@ -80,6 +80,7 @@ class TransactionController extends Controller
             'date' => session('date') ?? now(),
             'receiverName' => null,
             'serviceName' => 'Service Purchase',
+            'status' => 'completed',
         ];
  
         // Attempt to fetch robust data from DB if ref exists
@@ -94,6 +95,7 @@ class TransactionController extends Controller
                 $data['fee'] = $tx->fee ?? 0;
                 $data['date'] = $tx->created_at;
                 $data['ref'] = $tx->transaction_ref;
+                $data['status'] = $tx->status;
                 
                 $meta = is_array($tx->metadata) ? $tx->metadata : json_decode($tx->metadata ?? '[]', true);
                 
@@ -102,7 +104,13 @@ class TransactionController extends Controller
                     $data['network'] = $meta['bankName'] ?? 'Bank Transfer';
                     $data['mobile'] = $meta['account_no'] ?? 'N/A';
                     $data['receiverName'] = $meta['account_name'] ?? null;
-                    
+
+                    // $tx->amount is the gross total charged (base + fee) for
+                    // withdrawals, not the base amount — show the base amount
+                    // here so Amount + Fee visibly sums to Total Debited
+                    // instead of double-counting the fee on screen.
+                    $data['amount'] = $meta['price_details']['amount'] ?? ($tx->amount - $data['fee']);
+
                     // Query for associated withdrawal tax transaction
                     $taxTx = Transaction::where('user_id', $tx->user_id)
                         ->where('type', 'debit')
