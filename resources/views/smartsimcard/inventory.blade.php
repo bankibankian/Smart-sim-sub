@@ -72,144 +72,276 @@
             </form>
         </div>
 
-        <!-- Your SIMs Table -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4"
-             @if ($downlineUsers->count() > 0)
-             x-data="{
-                selectedSims: [],
-                maxSelect: 50,
-                toggleAll(checked) {
-                    if (checked) {
-                        let ids = Array.from(document.querySelectorAll('.sim-checkbox:not(:disabled)')).map(el => parseInt(el.value));
-                        this.selectedSims = ids.slice(0, this.maxSelect);
-                    } else {
-                        this.selectedSims = [];
-                    }
-                },
-                toggleSim(id, checked) {
-                    if (checked) {
-                        if (this.selectedSims.length >= this.maxSelect) {
-                            Swal.fire('Limit Exceeded', 'You can only select up to 50 numbers at a time.', 'warning');
-                            document.getElementById('sim_cb_' + id).checked = false;
-                            return;
-                        }
-                        if (!this.selectedSims.includes(id)) {
-                            this.selectedSims.push(id);
-                        }
-                    } else {
-                        this.selectedSims = this.selectedSims.filter(x => x !== id);
-                    }
-                }
-             }"
-             @endif>
-            <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Your SIMs</h3>
-
-            @if ($downlineUsers->count() > 0)
-                <div x-show="selectedSims.length > 0"
-                     style="display: none;"
-                     class="flex items-center justify-between bg-indigo-50/80 border border-indigo-100 rounded-2xl p-3.5 animate-in slide-in-from-top duration-200">
-                    <span class="text-xs font-semibold text-slate-700">
-                        Selected: <span class="font-extrabold text-indigo-700" x-text="selectedSims.length"></span> / 50 SIMs
-                    </span>
-                    <button type="button" @click="Swal.fire({
-                        title: 'Bulk Assign SIMs',
-                        html: `
-                            <div class='text-left space-y-2'>
-                                <label class='text-xs font-bold text-slate-500 uppercase block'>Assign To</label>
-                                <select id='bulk_user_id' class='w-full py-2.5 border rounded-xl font-medium text-slate-700'>
-                                    <option value=''>Select Account</option>
-                                    @foreach ($downlineUsers as $du)
-                                        <option value='{{ $du->id }}'>{{ $du->first_name }} {{ $du->last_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        `,
-                        showCancelButton: true,
-                        confirmButtonColor: '#0056D2',
-                        confirmButtonText: 'Assign Selected',
-                        preConfirm: () => {
-                            const val = document.getElementById('bulk_user_id').value;
-                            if (!val) {
-                                Swal.showValidationMessage('Please select a user');
-                            }
-                            return val;
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            let f = document.createElement('form');
-                            f.action = '{{ route('sims.bulk-assign') }}';
-                            f.method = 'POST';
-                            let inputs = '<input type=\'hidden\' name=\'_token\' value=\'{{ csrf_token() }}\'><input type=\'hidden\' name=\'user_id\' value=\'' + result.value + '\'>';
-                            selectedSims.forEach(id => {
-                                inputs += '<input type=\'hidden\' name=\'sim_ids[]\' value=\'' + id + '\'>';
-                            });
-                            f.innerHTML = inputs;
-                            document.body.appendChild(f);
-                            f.submit();
-                        }
-                    })" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 px-4 rounded-xl flex items-center gap-1.5 transition-colors shadow-sm">
-                        <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
-                        Assign Checked
+        <!-- Your SIMs -->
+        <div x-data="{ currentTab: 'activated' }" class="space-y-4">
+            <!-- Navigation Tabs -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-2 flex gap-1">
+                <button type="button" @click="currentTab = 'activated'" :class="currentTab === 'activated' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
+                    <i data-lucide="zap" class="w-4 h-4"></i> Activated
+                </button>
+                <button type="button" @click="currentTab = 'mine'" :class="currentTab === 'mine' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
+                    <i data-lucide="inbox" class="w-4 h-4"></i> Assigned to Me
+                </button>
+                @if ($downlineUsers->count() > 0)
+                    <button type="button" @click="currentTab = 'others'" :class="currentTab === 'others' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
+                        <i data-lucide="git-branch" class="w-4 h-4"></i> Assigned to Others
                     </button>
-                </div>
-            @endif
+                @endif
+            </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
-                    <thead>
-                        <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase">
-                            @if ($downlineUsers->count() > 0)
-                                <th class="py-2.5 pl-1 w-8">
-                                    <input type="checkbox" @change="toggleAll($event.target.checked)" class="rounded text-[#0056D2] focus:ring-[#0056D2]">
-                                </th>
-                            @endif
-                            <th class="py-2.5">Number</th>
-                            <th class="py-2.5">Category</th>
-                            <th class="py-2.5">Network</th>
-                            <th class="py-2.5">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($mySims as $sim)
-                            @php
-                                $eligible = match ($user->role) {
-                                    'regional_manager' => $sim->status === 'ASSIGNED_TO_RM' && $sim->regional_manager_id === $user->id,
-                                    'coordinator' => $sim->status === 'ASSIGNED_TO_COORDINATOR' && $sim->coordinator_id === $user->id,
-                                    'partner' => $sim->status === 'ASSIGNED_TO_PARTNER' && $sim->partner_id === $user->id,
-                                    default => false,
-                                };
-                            @endphp
-                            <tr class="border-b border-slate-50 hover:bg-slate-50/50">
+            <!-- Tab: Activated -->
+            <div x-show="currentTab === 'activated'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
+                <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Activated SIMs</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase">
+                                <th class="py-2.5">Number</th>
+                                <th class="py-2.5">Category</th>
+                                <th class="py-2.5">Network</th>
+                                <th class="py-2.5">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($activatedSims as $sim)
+                                <tr class="border-b border-slate-50 hover:bg-slate-50/50">
+                                    <td class="py-3 font-bold text-slate-800">{{ $sim->number }}</td>
+                                    <td class="py-3 font-semibold text-slate-700">{{ $sim->category }}</td>
+                                    <td class="py-3 text-slate-500 uppercase">{{ $sim->provider }}</td>
+                                    <td class="py-3">
+                                        <span class="px-2 py-0.5 rounded-full text-[11px] font-bold border {{ \App\Support\SimStatus::badgeClasses($sim->status) }}">
+                                            {{ \App\Support\SimStatus::label($sim->status) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="py-8 text-center text-slate-400 font-semibold">No activated SIMs yet.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                {{ $activatedSims->links('vendor.pagination.custom') }}
+            </div>
+
+            <!-- Tab: Assigned to Me -->
+            <div x-show="currentTab === 'mine'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4"
+                 @if ($downlineUsers->count() > 0)
+                 x-data="{
+                    selectedSims: [],
+                    maxSelect: 50,
+                    toggleAll(checked) {
+                        if (checked) {
+                            let ids = Array.from(document.querySelectorAll('.sim-checkbox:not(:disabled)')).map(el => parseInt(el.value));
+                            this.selectedSims = ids.slice(0, this.maxSelect);
+                        } else {
+                            this.selectedSims = [];
+                        }
+                    },
+                    toggleSim(id, checked) {
+                        if (checked) {
+                            if (this.selectedSims.length >= this.maxSelect) {
+                                Swal.fire('Limit Exceeded', 'You can only select up to 50 numbers at a time.', 'warning');
+                                document.getElementById('sim_cb_' + id).checked = false;
+                                return;
+                            }
+                            if (!this.selectedSims.includes(id)) {
+                                this.selectedSims.push(id);
+                            }
+                        } else {
+                            this.selectedSims = this.selectedSims.filter(x => x !== id);
+                        }
+                    }
+                 }"
+                 @endif>
+                <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">SIMs Assigned to Me</h3>
+
+                @if ($downlineUsers->count() > 0)
+                    <div x-show="selectedSims.length > 0"
+                         style="display: none;"
+                         class="flex items-center justify-between bg-indigo-50/80 border border-indigo-100 rounded-2xl p-3.5 animate-in slide-in-from-top duration-200">
+                        <span class="text-xs font-semibold text-slate-700">
+                            Selected: <span class="font-extrabold text-indigo-700" x-text="selectedSims.length"></span> / 50 SIMs
+                        </span>
+                        <button type="button" @click="Swal.fire({
+                            title: 'Bulk Assign SIMs',
+                            html: `
+                                <div class='text-left space-y-2'>
+                                    <label class='text-xs font-bold text-slate-500 uppercase block'>Assign To</label>
+                                    <select id='bulk_user_id' class='w-full py-2.5 border rounded-xl font-medium text-slate-700'>
+                                        <option value=''>Select Account</option>
+                                        @foreach ($downlineUsers as $du)
+                                            <option value='{{ $du->id }}'>{{ $du->first_name }} {{ $du->last_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonColor: '#0056D2',
+                            confirmButtonText: 'Assign Selected',
+                            preConfirm: () => {
+                                const val = document.getElementById('bulk_user_id').value;
+                                if (!val) {
+                                    Swal.showValidationMessage('Please select a user');
+                                }
+                                return val;
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                let f = document.createElement('form');
+                                f.action = '{{ route('sims.bulk-assign') }}';
+                                f.method = 'POST';
+                                let inputs = '<input type=\'hidden\' name=\'_token\' value=\'{{ csrf_token() }}\'><input type=\'hidden\' name=\'user_id\' value=\'' + result.value + '\'>';
+                                selectedSims.forEach(id => {
+                                    inputs += '<input type=\'hidden\' name=\'sim_ids[]\' value=\'' + id + '\'>';
+                                });
+                                f.innerHTML = inputs;
+                                document.body.appendChild(f);
+                                f.submit();
+                            }
+                        })" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 px-4 rounded-xl flex items-center gap-1.5 transition-colors shadow-sm">
+                            <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+                            Assign Checked
+                        </button>
+                    </div>
+                @endif
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase">
                                 @if ($downlineUsers->count() > 0)
-                                    <td class="py-3 pl-1">
-                                        @if ($eligible)
+                                    <th class="py-2.5 pl-1 w-8">
+                                        <input type="checkbox" @change="toggleAll($event.target.checked)" class="rounded text-[#0056D2] focus:ring-[#0056D2]">
+                                    </th>
+                                @endif
+                                <th class="py-2.5">Number</th>
+                                <th class="py-2.5">Category</th>
+                                <th class="py-2.5">Network</th>
+                                <th class="py-2.5">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($assignedToMeSims as $sim)
+                                <tr class="border-b border-slate-50 hover:bg-slate-50/50">
+                                    @if ($downlineUsers->count() > 0)
+                                        <td class="py-3 pl-1">
                                             <input type="checkbox" id="sim_cb_{{ $sim->id }}" value="{{ $sim->id }}"
                                                    :checked="selectedSims.includes({{ $sim->id }})"
                                                    @change="toggleSim({{ $sim->id }}, $event.target.checked)"
                                                    class="sim-checkbox rounded text-[#0056D2] focus:ring-[#0056D2]">
-                                        @else
-                                            <input type="checkbox" disabled class="rounded bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed">
-                                        @endif
+                                        </td>
+                                    @endif
+                                    <td class="py-3 font-bold text-slate-800">{{ $sim->number }}</td>
+                                    <td class="py-3 font-semibold text-slate-700">{{ $sim->category }}</td>
+                                    <td class="py-3 text-slate-500 uppercase">{{ $sim->provider }}</td>
+                                    <td class="py-3">
+                                        <span class="px-2 py-0.5 rounded-full text-[11px] font-bold border {{ \App\Support\SimStatus::badgeClasses($sim->status) }}">
+                                            {{ \App\Support\SimStatus::label($sim->status) }}
+                                        </span>
                                     </td>
-                                @endif
-                                <td class="py-3 font-bold text-slate-800">{{ $sim->number }}</td>
-                                <td class="py-3 font-semibold text-slate-700">{{ $sim->category }}</td>
-                                <td class="py-3 text-slate-500 uppercase">{{ $sim->provider }}</td>
-                                <td class="py-3">
-                                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold border {{ \App\Support\SimStatus::badgeClasses($sim->status) }}">
-                                        {{ \App\Support\SimStatus::label($sim->status) }}
-                                    </span>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="{{ $downlineUsers->count() > 0 ? 5 : 4 }}" class="py-8 text-center text-slate-400 font-semibold">You don't have any SIMs yet.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="{{ $downlineUsers->count() > 0 ? 5 : 4 }}" class="py-8 text-center text-slate-400 font-semibold">You don't have any SIMs assigned to you right now.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                {{ $assignedToMeSims->links('vendor.pagination.custom') }}
             </div>
-            {{ $mySims->links('vendor.pagination.custom') }}
+
+            @if ($downlineUsers->count() > 0)
+                <!-- Tab: Assigned to Others -->
+                <div x-show="currentTab === 'others'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
+                    <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">SIMs Assigned to Others in Your Downline</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase">
+                                    <th class="py-2.5">Number</th>
+                                    <th class="py-2.5">Category</th>
+                                    <th class="py-2.5">Network</th>
+                                    <th class="py-2.5">Status</th>
+                                    <th class="py-2.5">Held By</th>
+                                    <th class="py-2.5 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($assignedToOthersSims as $sim)
+                                    <tr class="border-b border-slate-50 hover:bg-slate-50/50">
+                                        <td class="py-3 font-bold text-slate-800">{{ $sim->number }}</td>
+                                        <td class="py-3 font-semibold text-slate-700">{{ $sim->category }}</td>
+                                        <td class="py-3 text-slate-500 uppercase">{{ $sim->provider }}</td>
+                                        <td class="py-3">
+                                            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold border {{ \App\Support\SimStatus::badgeClasses($sim->status) }}">
+                                                {{ \App\Support\SimStatus::label($sim->status) }}
+                                            </span>
+                                        </td>
+                                        <td class="py-3">
+                                            @if ($sim->current_holder)
+                                                <span class="font-semibold text-slate-700">{{ $sim->current_holder->first_name }} {{ $sim->current_holder->last_name }}</span>
+                                                <span class="block text-xs text-slate-400 capitalize">{{ str_replace('_', ' ', $sim->current_holder->role) }}</span>
+                                            @else
+                                                <span class="text-slate-400 italic">Unknown</span>
+                                            @endif
+                                        </td>
+                                        <td class="py-3 text-right whitespace-nowrap">
+                                            @if ($sim->swap_eligible)
+                                                <button type="button" @click="Swal.fire({
+                                                    title: 'Swap SIM Holder',
+                                                    html: `
+                                                        <div class='text-left space-y-2'>
+                                                            <p class='text-xs text-slate-500'>Currently with <strong>{{ $sim->current_holder->first_name ?? '' }} {{ $sim->current_holder->last_name ?? '' }}</strong>. This swap requires admin approval before it takes effect.</p>
+                                                            <label class='text-xs font-bold text-slate-500 uppercase block'>Swap To</label>
+                                                            <select id='swap_to_id_{{ $sim->id }}' class='w-full py-2.5 border rounded-xl font-medium text-slate-700'>
+                                                                <option value=''>Select Account</option>
+                                                                @foreach ($downlineUsers as $du)
+                                                                    @continue($sim->current_holder && $du->id === $sim->current_holder->id)
+                                                                    <option value='{{ $du->id }}'>{{ $du->first_name }} {{ $du->last_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    `,
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#0056D2',
+                                                    confirmButtonText: 'Request Swap',
+                                                    preConfirm: () => {
+                                                        const val = document.getElementById('swap_to_id_{{ $sim->id }}').value;
+                                                        if (!val) {
+                                                            Swal.showValidationMessage('Please select an account to swap to');
+                                                        }
+                                                        return val;
+                                                    }
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        let f = document.createElement('form');
+                                                        f.action = '{{ route('sims.request-swap') }}';
+                                                        f.method = 'POST';
+                                                        f.innerHTML = '<input type=\'hidden\' name=\'_token\' value=\'{{ csrf_token() }}\'><input type=\'hidden\' name=\'sim_id\' value=\'{{ $sim->id }}\'><input type=\'hidden\' name=\'to_holder_id\' value=\'' + result.value + '\'>';
+                                                        document.body.appendChild(f);
+                                                        f.submit();
+                                                    }
+                                                })" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition-all duration-150 shadow-sm">
+                                                    <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                                                    Swap
+                                                </button>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="py-8 text-center text-slate-400 font-semibold">No SIMs assigned further down your downline right now.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    {{ $assignedToOthersSims->links('vendor.pagination.custom') }}
+                </div>
+            @endif
         </div>
 
     </div>

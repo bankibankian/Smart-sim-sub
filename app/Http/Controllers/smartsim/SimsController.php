@@ -5,8 +5,10 @@ namespace App\Http\Controllers\smartsim;
 use App\Http\Controllers\Controller;
 use App\Models\Sim;
 use App\Models\SimRequest;
+use App\Models\SimSwapRequest;
 use App\Models\User;
 use App\Services\SimAssignmentService;
+use App\Support\RoleHierarchy;
 use App\Support\SimAccess;
 use App\Support\SimStatus;
 use Illuminate\Http\Request;
@@ -287,7 +289,9 @@ class SimsController extends Controller
     }
 
     /**
-     * Browsable stock of currently available (unassigned) SIM numbers, by category and network.
+     * The user's SIM portfolio, split into three tabs: Activated, sitting
+     * with the user right now (Assigned to Me), and further down their
+     * downline (Assigned to Others — some of which may be swap-eligible).
      */
     public function inventory(Request $request)
     {
@@ -300,17 +304,55 @@ class SimsController extends Controller
         $categories = $this->resolveCategories($user);
         $providers = ['mtn', 'airtel', 'glo', '9mobile'];
 
-        $query = $this->scopeToUserPortfolio(Sim::query(), $user);
+        $baseQuery = function () use ($request, $user) {
+            $query = $this->scopeToUserPortfolio(Sim::query(), $user);
+            if ($request->filled('category')) {
+                $query->where('category', $request->string('category'));
+            }
+            if ($request->filled('provider')) {
+                $query->where('provider', $request->string('provider'));
+            }
+            return $query;
+        };
 
-        if ($request->filled('category')) {
-            $query->where('category', $request->string('category'));
-        }
-        if ($request->filled('provider')) {
-            $query->where('provider', $request->string('provider'));
-        }
+        $activatedSims = $baseQuery()
+            ->whereIn('status', [SimStatus::ACTIVATED, SimStatus::DEACTIVATED, SimStatus::SUSPENDED])
+            ->orderBy('category')->orderBy('provider')
+            ->paginate(15, ['*'], 'activated_page')->withQueryString();
 
-        $mySims = $query->orderBy('category')->orderBy('provider')
-            ->paginate(15)->withQueryString();
+        $assignedToMeQuery = $baseQuery();
+        $this->applyOwnTierScope($assignedToMeQuery, $user);
+        $assignedToMeSims = $assignedToMeQuery
+            ->orderBy('category')->orderBy('provider')
+            ->paginate(15, ['*'], 'mine_page')->withQueryString();
+
+        $assignedToOthersQuery = $baseQuery();
+        $this->applyOthersScope($assignedToOthersQuery, $user);
+        $assignedToOthersSims = $assignedToOthersQuery
+            ->with(['user', 'partner', 'coordinator'])
+            ->orderBy('category')->orderBy('provider')
+            ->paginate(15, ['*'], 'others_page')->withQueryString();
+
+        // Flag which "Assigned to Others" rows the user can swap, and resolve
+        // who currently holds each one for the "Held By" column — derived
+        // purely from the SIM's own state, so it's correct regardless of
+        // which tier is viewing (a Coordinator's "Others" tab can show rows
+        // still held by a Partner *and* rows that Partner has already
+        // handed to their own downline user).
+        $assignedToOthersSims->getCollection()->transform(function (Sim $sim) use ($user) {
+            $sim->swap_eligible = (bool) $this->resolveSwapHolder($sim, $user);
+            $sim->current_holder = match (true) {
+                $sim->status === SimStatus::ASSIGNED_TO_COORDINATOR => $sim->coordinator,
+                // At ASSIGNED_TO_PARTNER, user_id === partner_id means it's
+                // still self-held by the partner; anything else means it's
+                // been handed to that downline personal user.
+                $sim->status === SimStatus::ASSIGNED_TO_PARTNER && $sim->user_id !== $sim->partner_id => $sim->user,
+                $sim->status === SimStatus::ASSIGNED_TO_PARTNER => $sim->partner,
+                default => null,
+            };
+
+            return $sim;
+        });
 
         // Quick counts per category, for the summary cards — scoped to this user's own SIMs.
         $stockCounts = $this->scopeToUserPortfolio(Sim::query(), $user)
@@ -318,14 +360,129 @@ class SimsController extends Controller
             ->groupBy('category')
             ->pluck('total', 'category');
 
-        // Who this user can bulk-assign held SIMs down to — empty for agents,
-        // who sit at the bottom of the chain and only self-activate.
-        $nextRole = \App\Support\RoleHierarchy::nextRole($user->role);
+        // Who this user can bulk-assign/swap held SIMs down to — empty for
+        // agents, who sit at the bottom of the chain and only self-activate.
+        $nextRole = RoleHierarchy::nextRole($user->role);
         $downlineUsers = $nextRole
             ? $user->referrals()->where('role', $nextRole)->where('status', 'active')->orderBy('first_name')->get()
             : collect();
 
-        return view('smartsimcard.inventory', compact('user', 'categories', 'providers', 'mySims', 'stockCounts', 'downlineUsers'));
+        return view('smartsimcard.inventory', compact(
+            'user', 'categories', 'providers', 'stockCounts', 'downlineUsers',
+            'activatedSims', 'assignedToMeSims', 'assignedToOthersSims'
+        ));
+    }
+
+    /**
+     * Constrain $query to SIMs currently held AT $user's own tier (not yet
+     * cascaded further, not activated).
+     */
+    private function applyOwnTierScope($query, User $user): void
+    {
+        match ($user->role) {
+            'regional_manager' => $query->where('regional_manager_id', $user->id)->where('status', SimStatus::ASSIGNED_TO_RM),
+            'coordinator' => $query->where('coordinator_id', $user->id)->where('status', SimStatus::ASSIGNED_TO_COORDINATOR),
+            // A partner's own held SIMs share status+partner_id with SIMs
+            // they've already handed to a downline user — both adminAssign()
+            // and assignDown() set user_id to the partner's OWN id when it's
+            // still with them (never left null), overwriting it with the
+            // downline user's id only once handed further down. So
+            // user_id = partner_id is what "still with the partner" means.
+            'partner' => $query->where('partner_id', $user->id)->where('status', SimStatus::ASSIGNED_TO_PARTNER)->whereColumn('user_id', 'partner_id'),
+            default => $query->where('user_id', $user->id)->where('status', SimStatus::ASSIGNED_TO_PARTNER), // agent
+        };
+    }
+
+    /**
+     * Constrain $query to SIMs cascaded further down $user's downline than
+     * their own tier, not yet activated.
+     */
+    private function applyOthersScope($query, User $user): void
+    {
+        match ($user->role) {
+            'regional_manager' => $query->where('regional_manager_id', $user->id)
+                ->whereIn('status', [SimStatus::ASSIGNED_TO_COORDINATOR, SimStatus::ASSIGNED_TO_PARTNER]),
+            'coordinator' => $query->where('coordinator_id', $user->id)->where('status', SimStatus::ASSIGNED_TO_PARTNER),
+            'partner' => $query->where('partner_id', $user->id)->where('status', SimStatus::ASSIGNED_TO_PARTNER)
+                ->whereColumn('user_id', '!=', 'partner_id'),
+            default => $query->whereRaw('1 = 0'), // agent has no downline
+        };
+    }
+
+    /**
+     * Whether $sim is swap-eligible for $user at their direct next tier,
+     * and if so, who currently holds it and at what tier. Returns null if
+     * not eligible. Single source of truth, used both to flag rows on the
+     * Inventory page and to re-validate requestSwap() submissions.
+     */
+    private function resolveSwapHolder(Sim $sim, User $user): ?array
+    {
+        return match (true) {
+            $user->role === 'regional_manager'
+                && $sim->regional_manager_id === $user->id
+                && $sim->status === SimStatus::ASSIGNED_TO_COORDINATOR
+                => ['holder_id' => $sim->coordinator_id, 'holder_role' => 'coordinator'],
+
+            $user->role === 'coordinator'
+                && $sim->coordinator_id === $user->id
+                && $sim->status === SimStatus::ASSIGNED_TO_PARTNER
+                && $sim->user_id === $sim->partner_id
+                => ['holder_id' => $sim->partner_id, 'holder_role' => 'partner'],
+
+            $user->role === 'partner'
+                && $sim->partner_id === $user->id
+                && $sim->status === SimStatus::ASSIGNED_TO_PARTNER
+                && $sim->user_id !== $sim->partner_id
+                => ['holder_id' => $sim->user_id, 'holder_role' => 'personal'],
+
+            default => null,
+        };
+    }
+
+    /**
+     * User requests that a SIM currently held by one of their direct
+     * downline be moved to a different downline peer at that same tier.
+     * The actual move only happens once an admin approves it.
+     */
+    public function requestSwap(Request $request)
+    {
+        $request->validate([
+            'sim_id' => 'required|exists:sims,id',
+            'to_holder_id' => 'required|exists:users,id',
+        ]);
+
+        $requester = Auth::user();
+        $sim = Sim::find($request->sim_id);
+
+        $context = $this->resolveSwapHolder($sim, $requester);
+        if (!$context) {
+            return back()->with('error', 'This SIM is not eligible for a swap.');
+        }
+
+        $toHolder = User::find($request->to_holder_id);
+
+        if ((int) $toHolder->id === (int) $context['holder_id']) {
+            return back()->with('error', 'Please pick a different downline account to swap to.');
+        }
+
+        if ($toHolder->role !== $context['holder_role'] || $toHolder->referred_by !== $requester->id || $toHolder->status !== 'active') {
+            return back()->with('error', 'You can only swap to another active account in your own downline at that tier.');
+        }
+
+        if (SimSwapRequest::where('sim_id', $sim->id)->where('status', 'pending')->exists()) {
+            return back()->with('error', 'A swap request for this SIM is already pending admin approval.');
+        }
+
+        SimSwapRequest::create([
+            'sim_id' => $sim->id,
+            'requested_by' => $requester->id,
+            'from_holder_id' => $context['holder_id'],
+            'to_holder_id' => $toHolder->id,
+            'holder_role' => $context['holder_role'],
+            'status' => 'pending',
+        ]);
+
+        return back()->with('success', "Swap request for {$sim->number} submitted for admin approval.");
     }
 
     /**

@@ -90,6 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sims/activate-for-user', [\App\Http\Controllers\smartsim\SimsController::class, 'activateForDownlineUser'])->name('sims.activate-for-user');
     Route::post('/partner/sims/assign', [\App\Http\Controllers\smartsim\SimsController::class, 'partnerAssignSim'])->name('partner.sims.assign');
     Route::post('/sims/bulk-assign', [\App\Http\Controllers\smartsim\SimsController::class, 'bulkAssignSim'])->name('sims.bulk-assign');
+    Route::post('/sims/request-swap', [\App\Http\Controllers\smartsim\SimsController::class, 'requestSwap'])->name('sims.request-swap');
 
     // Identity Verification Routes
     Route::prefix('verification')->group(function () {
@@ -186,6 +187,12 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\SmePlanController::class, 'index'])->name('index');
         Route::post('/', [\App\Http\Controllers\Admin\SmePlanController::class, 'store'])->name('store');
         Route::put('/activation-bonus', [\App\Http\Controllers\Admin\SmePlanController::class, 'updateActivationBonus'])->name('activation-bonus.update');
+        // Declared before the '/{plan}' catch-all below — a route with a
+        // literal segment declared AFTER a '/{param}' route gets shadowed
+        // (matched as the param instead), as happened once already on this
+        // same page with 'activation-bonus'.
+        Route::put('/provider-settings', [\App\Http\Controllers\Admin\SmePlanController::class, 'updateProviderSettings'])->name('provider-settings.update');
+        Route::put('/provider-settings/activate', [\App\Http\Controllers\Admin\SmePlanController::class, 'activateProvider'])->name('provider-settings.activate');
         Route::put('/{plan}', [\App\Http\Controllers\Admin\SmePlanController::class, 'update'])->name('update');
         Route::delete('/{plan}', [\App\Http\Controllers\Admin\SmePlanController::class, 'destroy'])->name('destroy');
     });
@@ -202,6 +209,11 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
         Route::post('/import-excel', [\App\Http\Controllers\Admin\SimPlanController::class, 'importExcel'])->name('import');
         Route::get('/download-sample', [\App\Http\Controllers\Admin\SimPlanController::class, 'downloadSample'])->name('download-sample');
         Route::get('/available-sims', [\App\Http\Controllers\Admin\SimPlanController::class, 'availableSims'])->name('available-sims');
+
+        Route::prefix('swaps')->name('swaps.')->group(function () {
+            Route::post('/{simSwapRequest}/approve', [\App\Http\Controllers\Admin\SimSwapController::class, 'approve'])->name('approve');
+            Route::post('/{simSwapRequest}/reject', [\App\Http\Controllers\Admin\SimSwapController::class, 'reject'])->name('reject');
+        });
     });
 
     // Admin Cash Out Approvals
