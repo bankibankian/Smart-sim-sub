@@ -62,4 +62,9 @@ return [
         'base_url' => env('BASE_URL', 'https://fadeelposdatasub.com.ng/api/data/purchase'),
         'api_key'  => env('API_KEYS'),
     ],
+
+    'smeplug' => [
+        'base_url' => env('SMEPLUG_BASE_URL', 'https://smeplug.ng/api/v1'),
+        'api_key'  => env('SMEPLUG_API_KEY'),
+    ],
 ];
