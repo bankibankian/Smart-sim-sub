@@ -6,7 +6,7 @@ use App\Helpers\RequestIdHelper;
 use App\Models\ActivationBonusSettings;
 use App\Models\Report;
 use App\Models\Sim;
-use App\Services\SmeDataPurchaseApi;
+use App\Services\SmeDataProviderFactory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,8 +18,9 @@ use Illuminate\Support\Facades\Log;
 /**
  * Silent post-activation bonus: tops up the just-activated SIM's own number
  * with a free data bundle, using the same vendor call as a normal "Buy
- * Data" purchase (SmeDataPurchaseApi) — no wallet is debited for it. Runs
- * in the background (queued) so it never delays the activation response.
+ * Data" purchase (routed via SmeDataProviderFactory, by the bonus plan's
+ * own vendor) — no wallet is debited for it. Runs in the background
+ * (queued) so it never delays the activation response.
  */
 class GrantActivationBonusData implements ShouldQueue
 {
@@ -52,7 +53,11 @@ class GrantActivationBonusData implements ShouldQueue
         // that lets Laravel retry the whole job per $tries/$backoff instead
         // of silently giving up on the first transient network blip. The
         // final give-up (after all retries) is recorded once in failed().
-        $result = SmeDataPurchaseApi::purchase($this->sim->number, $plan->network, $plan->data_id, $requestId);
+        // Resolve by the bonus plan's OWN vendor, not whichever vendor is
+        // currently "active" for the storefront — switching the storefront's
+        // active vendor must never silently break this job by sending a
+        // plan id from one vendor's namespace to the other vendor's API.
+        $result = SmeDataProviderFactory::forProvider($plan->provider)->purchase($this->sim->number, $plan->network, $plan->data_id, $requestId);
 
         $this->logReport($this->sim, $plan, $requestId, $result['success'], $result['success']
             ? "Activation bonus: {$plan->size} {$plan->plan_type} silently topped up on {$this->sim->number}"

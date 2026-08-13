@@ -86,10 +86,7 @@ class AdminWalletController extends Controller
             return response()->json(['success' => false, 'message' => 'User not found.']);
         }
 
-        $wallet = Wallet::firstOrCreate(
-            ['user_id' => $user->id],
-            ['balance' => 0.00, 'status' => 'active']
-        );
+        $wallet = Wallet::firstOrCreateForUser($user->id);
 
         return response()->json([
             'success' => true,
@@ -251,10 +248,7 @@ class AdminWalletController extends Controller
             // Chunk users to prevent memory exhaustion and execution timeout issues
             User::chunk(100, function ($users) use ($amount, $type, $description, $adminName, &$userCount) {
                 foreach ($users as $user) {
-                    $wallet = Wallet::firstOrCreate(
-                        ['user_id' => $user->id],
-                        ['balance' => 0.00, 'status' => 'active']
-                    );
+                    $wallet = Wallet::firstOrCreateForUser($user->id);
 
                     // Refetch with lock
                     $wallet = Wallet::where('id', $wallet->id)->lockForUpdate()->first();

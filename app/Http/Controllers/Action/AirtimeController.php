@@ -44,10 +44,7 @@ class AirtimeController extends Controller implements HasMiddleware
         $user = Auth::user();
 
         // Wallet is already ensured via middleware or should be checked here
-        $wallet = Wallet::firstOrCreate(
-            ['user_id' => $user->id],
-            ['balance' => 0.00, 'status' => 'active']
-        );
+        $wallet = Wallet::firstOrCreateForUser($user->id);
 
         // Fetch recent airtime purchases
         $recentRecipients = \App\Models\Report::where('user_id', $user->id)

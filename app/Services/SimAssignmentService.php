@@ -54,7 +54,14 @@ class SimAssignmentService
         $holds = match ($from->role) {
             'regional_manager' => $sim->regional_manager_id === $from->id && $sim->status === SimStatus::ASSIGNED_TO_RM,
             'coordinator' => $sim->coordinator_id === $from->id && $sim->status === SimStatus::ASSIGNED_TO_COORDINATOR,
-            'partner' => $sim->partner_id === $from->id && $sim->status === SimStatus::ASSIGNED_TO_PARTNER,
+            // A partner's own held SIMs and SIMs they've already handed to a
+            // downline user share the same status/partner_id — both
+            // adminAssign() and this method's own 'partner' target branch
+            // set user_id to the partner's OWN id when it's still with them
+            // (never left null), and only overwrite it with the downline
+            // user's id once handed further down. So user_id === partner_id
+            // is what "still with the partner" actually means here.
+            'partner' => $sim->partner_id === $from->id && $sim->status === SimStatus::ASSIGNED_TO_PARTNER && $sim->user_id === $sim->partner_id,
             default => false,
         };
 
@@ -73,6 +80,27 @@ class SimAssignmentService
             $fromStatus = $sim->status;
             $sim->update($fields);
             $this->logHistory($sim, $fromStatus, $sim->status, $from, "Delegated to {$to->name} ({$to->role})");
+        });
+    }
+
+    /**
+     * Admin-approved swap: move a SIM currently held at the Coordinator or
+     * Partner tier to a different holder at that same tier. Status and any
+     * higher-tier FK columns are left untouched — this is a lateral move,
+     * not a cascade.
+     */
+    public function swapHolder(Sim $sim, User $newHolder, User $actor): void
+    {
+        $column = match (true) {
+            $sim->status === SimStatus::ASSIGNED_TO_COORDINATOR => 'coordinator_id',
+            $sim->status === SimStatus::ASSIGNED_TO_PARTNER && $sim->user_id !== $sim->partner_id => 'user_id',
+            default => throw new \RuntimeException('This SIM is not in a swappable state.'),
+        };
+
+        DB::transaction(function () use ($sim, $newHolder, $actor, $column) {
+            $from = $sim->status;
+            $sim->update([$column => $newHolder->id]);
+            $this->logHistory($sim, $from, $sim->status, $actor, "Swapped to {$newHolder->name} ({$newHolder->role}) via admin-approved swap request.");
         });
     }
 

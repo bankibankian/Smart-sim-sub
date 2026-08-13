@@ -2,7 +2,7 @@
     <div x-data="{ 
         addModalOpen: false, 
         editModalOpen: false, 
-        editPlan: { id: '', data_id: '', network: '', plan_type: '', business_price: '', personal_price: '', agent_price: '', partner_price: '', size: '', validity: '', status: 'enabled' }
+        editPlan: { id: '', data_id: '', provider: 'legacy', network: '', plan_type: '', business_price: '', personal_price: '', agent_price: '', partner_price: '', size: '', validity: '', status: 'enabled' }
     }" class="space-y-8 max-w-7xl mx-auto">
         
         <!-- Header -->
@@ -136,6 +136,80 @@
             </div>
         </div>
 
+        <!-- SME Data Vendor -->
+        <div class="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
+            <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
+                <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center text-[#0056D2]">
+                    <i data-lucide="plug" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-800 font-display">SME Data Vendor</h3>
+                    <p class="text-xs text-slate-400">Only the active vendor's plans are purchasable by users. Switch anytime — plans for the inactive vendor stay editable so you can prep it first.</p>
+                </div>
+            </div>
+
+            @php $vendorLabels = ['legacy' => 'Legacy (Fadeelposdatasub)', 'smeplug' => 'SME Plug']; @endphp
+
+            {{-- One settings form + one activate form per vendor. --}}
+            @foreach (\App\Models\SmeDataProviderSetting::PROVIDERS as $providerKey)
+                <form id="provider-settings-form-{{ $providerKey }}" method="POST" action="{{ route('admin.sme-plans.provider-settings.update') }}" class="hidden">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="provider" value="{{ $providerKey }}">
+                </form>
+                <form id="provider-activate-form-{{ $providerKey }}" method="POST" action="{{ route('admin.sme-plans.provider-settings.activate') }}" class="hidden">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="provider" value="{{ $providerKey }}">
+                </form>
+            @endforeach
+
+            <div class="space-y-4">
+                @foreach (\App\Models\SmeDataProviderSetting::PROVIDERS as $providerKey)
+                    @php $vendorSettings = $dataProviders[$providerKey]; @endphp
+                    <div class="rounded-xl border border-slate-100 p-4 {{ $vendorSettings->is_active ? 'bg-emerald-50/40 border-emerald-100' : '' }}">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
+                            <div class="flex items-center gap-2.5 flex-1">
+                                <span class="text-sm font-bold text-slate-700">{{ $vendorLabels[$providerKey] }}</span>
+                                @if ($vendorSettings->is_active)
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full uppercase tracking-wider">
+                                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                        Active
+                                    </span>
+                                @endif
+                            </div>
+                            @unless ($vendorSettings->is_active)
+                                <x-secondary-button type="submit" form="provider-activate-form-{{ $providerKey }}" class="!text-xs">
+                                    <i data-lucide="power" class="w-3.5 h-3.5"></i>
+                                    Set Active
+                                </x-secondary-button>
+                            @endunless
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+                            <div class="sm:col-span-1">
+                                <x-input-label value="Base URL" />
+                                <x-text-input type="url" name="base_url" form="provider-settings-form-{{ $providerKey }}"
+                                       value="{{ old('base_url', $vendorSettings->base_url) }}" required
+                                       class="rounded-xl !text-xs" />
+                            </div>
+                            <div class="sm:col-span-1">
+                                <x-input-label value="API Key" />
+                                <x-text-input type="password" name="api_key" form="provider-settings-form-{{ $providerKey }}"
+                                       placeholder="{{ $vendorSettings->api_key ? '•••••••• (leave blank to keep current)' : 'Not set' }}"
+                                       class="rounded-xl !text-xs" />
+                            </div>
+                            <div class="sm:col-span-1">
+                                <x-primary-button type="submit" form="provider-settings-form-{{ $providerKey }}" class="w-full !text-xs">
+                                    <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                                    Save
+                                </x-primary-button>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
         <!-- Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <!-- Total Plans -->
@@ -205,6 +279,21 @@
                         </div>
                     </div>
 
+                    <!-- Vendor Filter -->
+                    <div class="w-full lg:w-48">
+                        <div class="relative">
+                            <x-select-input name="provider" onchange="this.form.submit()"
+                                    class="pl-3 pr-8 rounded-2xl !text-xs font-bold text-slate-600 shadow-sm appearance-none cursor-pointer">
+                                <option value="">All Vendors</option>
+                                <option value="legacy" {{ request('provider') === 'legacy' ? 'selected' : '' }}>Legacy</option>
+                                <option value="smeplug" {{ request('provider') === 'smeplug' ? 'selected' : '' }}>SME Plug</option>
+                            </x-select-input>
+                            <div class="absolute right-3.5 top-4 pointer-events-none text-slate-400">
+                                <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Network Filter -->
                     <div class="w-full lg:w-48">
                         <div class="relative">
@@ -238,7 +327,7 @@
                     </div>
 
                     <!-- Reset Button -->
-                    @if(request('search') || request('network') || request('status'))
+                    @if(request('search') || request('provider') || request('network') || request('status'))
                         <div class="flex items-center flex-shrink-0">
                             <a href="{{ route('admin.sme-plans.index') }}" class="w-full lg:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/50 rounded-2xl transition-all duration-150 hover:shadow-sm">
                                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
@@ -256,6 +345,7 @@
                         <tr class="border-b border-slate-100 text-xs font-extrabold text-slate-400 uppercase tracking-wider bg-slate-50/30">
                             <th class="py-4 px-6 text-center w-16">S/N</th>
                             <th class="py-4 px-6">Plan Info</th>
+                            <th class="py-4 px-6">Vendor</th>
                             <th class="py-4 px-6">Data ID</th>
                             <th class="py-4 px-6">Business Price</th>
                             <th class="py-4 px-6">Personal Price</th>
@@ -297,6 +387,12 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td class="py-4 px-6">
+                                    <span class="inline-flex items-center px-2.5 py-1 text-xs font-extrabold rounded-full uppercase tracking-wider
+                                        {{ $plan->provider === 'smeplug' ? 'bg-purple-50 text-purple-700 border border-purple-100' : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
+                                        {{ $plan->provider === 'smeplug' ? 'SME Plug' : 'Legacy' }}
+                                    </span>
+                                </td>
                                 <td class="py-4 px-6 text-slate-600 font-mono text-xs font-semibold">
                                     {{ $plan->data_id }}
                                 </td>
@@ -335,10 +431,11 @@
                                     <div class="flex items-center justify-end gap-2">
                                         <!-- Edit Button -->
                                         <button @click="
-                                            editPlan = { 
-                                                id: '{{ $plan->id }}', 
-                                                data_id: '{{ $plan->data_id }}', 
-                                                network: '{{ $plan->network }}', 
+                                            editPlan = {
+                                                id: '{{ $plan->id }}',
+                                                data_id: '{{ $plan->data_id }}',
+                                                provider: '{{ $plan->provider }}',
+                                                network: '{{ $plan->network }}',
                                                 plan_type: '{{ $plan->plan_type }}', 
                                                 business_price: '{{ $plan->business_price }}', 
                                                 personal_price: '{{ $plan->personal_price }}', 
@@ -371,7 +468,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center py-12 text-slate-400 text-sm font-medium">
+                                <td colspan="11" class="text-center py-12 text-slate-400 text-sm font-medium">
                                     <div class="flex flex-col items-center justify-center gap-3">
                                         <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
                                             <i data-lucide="wifi-off" class="w-6 h-6"></i>
@@ -425,6 +522,15 @@
                                 <x-input-label value="Data ID (API Plan Code)" />
                                 <x-text-input type="text" name="data_id" required placeholder="e.g., MTN_SME_1GB"
                                        class="rounded-2xl bg-slate-50/50" />
+                            </div>
+
+                            <!-- Vendor -->
+                            <div>
+                                <x-input-label value="Vendor" />
+                                <x-select-input name="provider" required class="rounded-2xl bg-slate-50/50">
+                                    <option value="legacy">Legacy (Fadeelposdatasub)</option>
+                                    <option value="smeplug">SME Plug</option>
+                                </x-select-input>
                             </div>
 
                             <!-- Network & Type -->
@@ -546,6 +652,15 @@
                                 <x-input-label value="Data ID (API Plan Code)" />
                                 <x-text-input type="text" name="data_id" x-bind:value="editPlan.data_id" required
                                        class="rounded-2xl bg-slate-50/50" />
+                            </div>
+
+                            <!-- Vendor -->
+                            <div>
+                                <x-input-label value="Vendor" />
+                                <x-select-input name="provider" x-model="editPlan.provider" required class="rounded-2xl bg-slate-50/50">
+                                    <option value="legacy">Legacy (Fadeelposdatasub)</option>
+                                    <option value="smeplug">SME Plug</option>
+                                </x-select-input>
                             </div>
 
                             <!-- Network & Type -->

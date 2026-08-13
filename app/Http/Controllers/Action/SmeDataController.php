@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Models\SmeData;
+use App\Models\SmeDataProviderSetting;
+use App\Services\SmeDataProviderFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -17,17 +19,6 @@ use Illuminate\Support\Facades\Hash;
 
 class SmeDataController extends Controller
 {
-    // API Configuration - Fadeelposdatasub
-    private function getApiBaseUrl()
-    {
-        return env('BASE_URL', 'https://fadeelposdatasub.com.ng/api/data/purchase');
-    }
-
-    private function getApiToken()
-    {
-        return env('API_KEYS');
-    }
-
     /**
      * Show SME Data Purchase Page
      */
@@ -38,18 +29,18 @@ class SmeDataController extends Controller
             return redirect()->route('login')->with('error', 'Please log in to access this page.');
         }
 
-        $wallet = Wallet::firstOrCreate(
-            ['user_id' => $user->id],
-            ['balance' => 0.00, 'status' => 'active']
-        );
+        $wallet = Wallet::firstOrCreateForUser($user->id);
 
-        $networks = SmeData::select('network')->where('status', 'enabled')->distinct()->get();
+        $activeProvider = SmeDataProviderSetting::activeProvider();
 
-        // Query plans from the new table, grouped by network
-        $mtnPlans = SmeData::where('network', 'MTN')->where('status', 'enabled')->get();
-        $gloPlans = SmeData::where('network', 'GLO')->where('status', 'enabled')->get();
-        $airtelPlans = SmeData::where('network', 'AIRTEL')->where('status', 'enabled')->get();
-        $mobile9Plans = SmeData::where('network', '9MOBILE')->where('status', 'enabled')->get();
+        $networks = SmeData::select('network')->where('provider', $activeProvider)->where('status', 'enabled')->distinct()->get();
+
+        // Query plans from the new table, grouped by network — only the
+        // currently-active vendor's plans are purchasable by users.
+        $mtnPlans = SmeData::where('provider', $activeProvider)->where('network', 'MTN')->where('status', 'enabled')->get();
+        $gloPlans = SmeData::where('provider', $activeProvider)->where('network', 'GLO')->where('status', 'enabled')->get();
+        $airtelPlans = SmeData::where('provider', $activeProvider)->where('network', 'AIRTEL')->where('status', 'enabled')->get();
+        $mobile9Plans = SmeData::where('provider', $activeProvider)->where('network', '9MOBILE')->where('status', 'enabled')->get();
 
         return view('utilities.buy-sme-data', compact(
             'user', 
@@ -68,7 +59,8 @@ class SmeDataController extends Controller
     public function fetchDataType(Request $request)
     {
         $network = $request->id;
-        $types = SmeData::where('network', $network)
+        $types = SmeData::where('provider', SmeDataProviderSetting::activeProvider())
+            ->where('network', $network)
             ->where('status', 'enabled')
             ->select('plan_type')
             ->distinct()
@@ -83,7 +75,8 @@ class SmeDataController extends Controller
     {
         $network = $request->id;
         $type = $request->type;
-        $plans = SmeData::where('network', $network)
+        $plans = SmeData::where('provider', SmeDataProviderSetting::activeProvider())
+            ->where('network', $network)
             ->where('plan_type', $type)
             ->where('status', 'enabled')
             ->get();
@@ -96,7 +89,7 @@ class SmeDataController extends Controller
     public function fetchSmeBundlePrice(Request $request)
     {
         $planId = $request->id;
-        $plan = SmeData::where('data_id', $planId)->first();
+        $plan = SmeData::where('provider', SmeDataProviderSetting::activeProvider())->where('data_id', $planId)->first();
         
         if (!$plan) {
             return response()->json("0.00");
@@ -127,6 +120,10 @@ class SmeDataController extends Controller
         $plan = SmeData::where('data_id', $planId)->first();
         if (!$plan) {
             return back()->with('error', 'Invalid data plan selected.');
+        }
+
+        if ($plan->provider !== SmeDataProviderSetting::activeProvider()) {
+            return back()->with('error', 'This plan is no longer available. Please refresh and try again.');
         }
 
         $payableAmount = $plan->calculatePriceForRole($user->role ?? 'personal');
@@ -233,6 +230,7 @@ class SmeDataController extends Controller
                     'network'      => $plan->network,
                     'plan_type'    => $plan->plan_type,
                     'data_id'      => $planId,
+                    'provider'     => $plan->provider,
                 ]),
                 'performed_by' => $user->first_name . ' ' . $user->last_name,
                 'approved_by'  => $user->id,
@@ -259,9 +257,9 @@ class SmeDataController extends Controller
             return redirect()->back()->with('error', 'Database error: ' . $e->getMessage());
         }
 
-        // API Call to Fadeelposdatasub
+        // API Call to the active SME data vendor
         try {
-            $result = \App\Services\SmeDataPurchaseApi::purchase($mobile, $plan->network, $planId, $requestId);
+            $result = SmeDataProviderFactory::make()->purchase($mobile, $plan->network, $planId, $requestId);
             $data = $result['data'];
             $isSuccess = $result['success'];
 
@@ -282,6 +280,7 @@ class SmeDataController extends Controller
                         'network'      => $plan->network,
                         'plan_type'    => $plan->plan_type,
                         'data_id'      => $planId,
+                        'provider'     => $plan->provider,
                         'api_response' => $data,
                         'api_data'     => $apiData
                     ]),

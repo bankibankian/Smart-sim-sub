@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ActivationBonusSettings;
 use App\Models\SmeData;
+use App\Models\SmeDataProviderSetting;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -24,6 +25,11 @@ class SmePlanController extends Controller
                 $q->where('data_id', 'like', "%{$search}%")
                   ->orWhere('size', 'like', "%{$search}%");
             });
+        }
+
+        // Filter by Vendor
+        if ($request->filled('provider')) {
+            $query->where('provider', $request->provider);
         }
 
         // Filter by Network
@@ -51,10 +57,17 @@ class SmePlanController extends Controller
         $disabledPlansCount = SmeData::where('status', 'disabled')->count();
 
         $bonusSettingsByProvider = ActivationBonusSettings::allProviders();
+        // Not restricted to the active vendor — an admin should be able to
+        // configure a bonus plan from either vendor independent of which is
+        // currently "active" for the storefront (GrantActivationBonusData
+        // resolves by the bonus plan's own provider, not the active flag).
         $bonusEligiblePlansByNetwork = SmeData::where('status', 'enabled')
             ->orderBy('size')
             ->get()
             ->groupBy('network');
+
+        $dataProviders = SmeDataProviderSetting::allProviders();
+        $activeDataProvider = SmeDataProviderSetting::activeProvider();
 
         return view('admin.sme-plans.index', compact(
             'plans',
@@ -62,8 +75,50 @@ class SmePlanController extends Controller
             'activePlansCount',
             'disabledPlansCount',
             'bonusSettingsByProvider',
-            'bonusEligiblePlansByNetwork'
+            'bonusEligiblePlansByNetwork',
+            'dataProviders',
+            'activeDataProvider'
         ));
+    }
+
+    /**
+     * Update a vendor's base URL/API key.
+     */
+    public function updateProviderSettings(Request $request)
+    {
+        $validated = $request->validate([
+            'provider' => ['required', 'string', 'in:' . implode(',', SmeDataProviderSetting::PROVIDERS)],
+            'base_url' => ['required', 'url'],
+            'api_key' => ['nullable', 'string'],
+        ]);
+
+        $settings = SmeDataProviderSetting::forProvider($validated['provider']);
+        $update = ['base_url' => $validated['base_url']];
+
+        // Blank means "leave the stored key as-is" — never blank out a
+        // working credential just because the admin left the field empty.
+        if (filled($validated['api_key'] ?? null)) {
+            $update['api_key'] = $validated['api_key'];
+        }
+
+        $settings->update($update);
+
+        return back()->with('success', 'Vendor settings updated.');
+    }
+
+    /**
+     * Make a vendor the active one for the storefront — only its plans
+     * become purchasable by users.
+     */
+    public function activateProvider(Request $request)
+    {
+        $validated = $request->validate([
+            'provider' => ['required', 'string', 'in:' . implode(',', SmeDataProviderSetting::PROVIDERS)],
+        ]);
+
+        SmeDataProviderSetting::activate($validated['provider']);
+
+        return back()->with('success', 'Active SME data vendor updated.');
     }
 
     /**
@@ -96,6 +151,7 @@ class SmePlanController extends Controller
     {
         $validated = $request->validate([
             'data_id' => 'required|string|unique:sme_data,data_id',
+            'provider' => 'required|string|in:' . implode(',', SmeDataProviderSetting::PROVIDERS),
             'network' => 'required|string|in:MTN,GLO,AIRTEL,9MOBILE',
             'plan_type' => 'required|string',
             'personal_price' => 'required|numeric|min:0',
@@ -119,6 +175,7 @@ class SmePlanController extends Controller
     {
         $validated = $request->validate([
             'data_id' => 'required|string|unique:sme_data,data_id,' . $plan->id,
+            'provider' => 'required|string|in:' . implode(',', SmeDataProviderSetting::PROVIDERS),
             'network' => 'required|string|in:MTN,GLO,AIRTEL,9MOBILE',
             'plan_type' => 'required|string',
             'personal_price' => 'required|numeric|min:0',

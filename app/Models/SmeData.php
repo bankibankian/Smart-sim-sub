@@ -13,6 +13,7 @@ class SmeData extends Model
 
     protected $fillable = [
         'data_id',
+        'provider',
         'network',
         'plan_type',
         'personal_price',

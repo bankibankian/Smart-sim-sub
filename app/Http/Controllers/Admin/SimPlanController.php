@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Sim;
 use App\Models\SimRequest;
+use App\Models\SimSwapRequest;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Transaction;
@@ -51,6 +52,10 @@ class SimPlanController extends Controller
         $pendingRequests = SimRequest::with('user', 'sim')->where('status', 'pending')->latest()->get();
         $resolvedRequests = SimRequest::with('user', 'sim')->where('status', '!=', 'pending')->latest()->paginate(10, ['*'], 'requests_page')->appends(request()->query());
 
+        // Fetch swap requests
+        $pendingSwaps = SimSwapRequest::with('sim', 'requester', 'fromHolder', 'toHolder')->where('status', 'pending')->latest()->get();
+        $resolvedSwaps = SimSwapRequest::with('sim', 'requester', 'fromHolder', 'toHolder', 'approver')->where('status', '!=', 'pending')->latest()->paginate(10, ['*'], 'swaps_page')->appends(request()->query());
+
         // Fetch assignable users (excluding super_admin role)
         $assignableUsers = User::where('role', '!=', 'super_admin')
             ->where('status', 'active')
@@ -72,7 +77,7 @@ class SimPlanController extends Controller
         $totalActivated = Sim::where('status', SimStatus::ACTIVATED)->count();
 
         return view('admin.sim-plan.index', compact(
-            'sims', 'pendingRequests', 'resolvedRequests', 'assignableUsers', 'categories', 'providers',
+            'sims', 'pendingRequests', 'resolvedRequests', 'pendingSwaps', 'resolvedSwaps', 'assignableUsers', 'categories', 'providers',
             'totalUploaded', 'totalAssigned', 'totalAvailable', 'totalActivated'
         ));
     }
