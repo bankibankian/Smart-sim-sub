@@ -32,6 +32,26 @@ class Wallet extends Model
     }
 
     /**
+     * Get or create the wallet for a user, generating wallet_number the
+     * same way registration does. `wallet_number` has no DB default, so a
+     * plain `Wallet::firstOrCreate(['user_id' => ...], ['balance' => ...])`
+     * 500s the moment it needs to actually create a row — this happened
+     * identically in four separate controllers before being centralized
+     * here.
+     */
+    public static function firstOrCreateForUser(int $userId): self
+    {
+        return static::firstOrCreate(
+            ['user_id' => $userId],
+            [
+                'balance' => 0.00,
+                'status' => 'active',
+                'wallet_number' => 'WLT' . str_pad((string) $userId, 7, '0', STR_PAD_LEFT),
+            ]
+        );
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
