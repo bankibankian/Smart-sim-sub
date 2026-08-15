@@ -104,7 +104,7 @@
                         <i data-lucide="gift" class="w-5 h-5"></i>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <p class="text-xs text-slate-400 mb-0.5">Referral &amp; Bonuses</p>
+                        <p class="text-xs text-slate-400 mb-0.5">{{ \App\Support\SimAccess::canBrowseCatalog(auth()->user()) ? 'Commission' : 'Referral & Bonuses' }}</p>
                         <p class="text-lg font-bold font-display text-slate-800 tracking-tight mb-0 truncate">
                             ₦{{ number_format($walletData['bonus'] ?? 0.00, 2) }}
                         </p>
