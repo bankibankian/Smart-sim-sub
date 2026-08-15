@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'monthly_limit',
     'status',
     'is_locked',
+    'pnd_at',
+    'pnd_reason',
+    'pnd_by',
     'last_activity',
 ])]
 class Wallet extends Model
@@ -67,6 +70,7 @@ class Wallet extends Model
             'daily_limit'    => 'decimal:2',
             'monthly_limit'  => 'decimal:2',
             'is_locked'      => 'boolean',
+            'pnd_at'         => 'datetime',
             'last_activity'  => 'datetime',
         ];
     }
@@ -81,16 +85,26 @@ class Wallet extends Model
         return $this->status === 'active' && !$this->is_locked;
     }
 
-    /** Lock the wallet (blocks debits). */
-    public function lock(): void
+    /** Place a Post No Debit restriction — blocks cashout only, not spending. */
+    public function placePnd(string $reason = '', ?int $by = null): void
     {
-        $this->forceFill(['is_locked' => true])->save();
+        $this->forceFill([
+            'is_locked'  => true,
+            'pnd_at'     => now(),
+            'pnd_reason' => $reason,
+            'pnd_by'     => $by,
+        ])->save();
     }
 
-    /** Unlock the wallet. */
-    public function unlock(): void
+    /** Lift a Post No Debit restriction. */
+    public function liftPnd(): void
     {
-        $this->forceFill(['is_locked' => false])->save();
+        $this->forceFill([
+            'is_locked'  => false,
+            'pnd_at'     => null,
+            'pnd_reason' => null,
+            'pnd_by'     => null,
+        ])->save();
     }
 
     // -------------------------------------------------------------------------

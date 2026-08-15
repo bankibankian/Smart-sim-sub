@@ -49,6 +49,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/network/claim/check', [\App\Http\Controllers\NetworkController::class, 'checkClaim'])->name('network.claim.check');
     Route::post('/network/claim', [\App\Http\Controllers\NetworkController::class, 'claim'])->name('network.claim');
 
+    // Downline restriction actions — shared by catalog-role self-service (own
+    // immediate downline only) and super_admin (anyone); see
+    // DownlineRestrictionController::authorize().
+    Route::post('/network/downline/{user}/pnd', [\App\Http\Controllers\DownlineRestrictionController::class, 'placePnd'])->name('network.downline.pnd');
+    Route::post('/network/downline/{user}/pnd/lift', [\App\Http\Controllers\DownlineRestrictionController::class, 'liftPnd'])->name('network.downline.pnd.lift');
+    Route::post('/network/downline/{user}/suspend', [\App\Http\Controllers\DownlineRestrictionController::class, 'suspend'])->name('network.downline.suspend');
+    Route::post('/network/downline/{user}/reinstate', [\App\Http\Controllers\DownlineRestrictionController::class, 'reinstate'])->name('network.downline.reinstate');
+
     // Leaderboard & Commission Dashboard Routes
     Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
     Route::get('/commissions/dashboard', [\App\Http\Controllers\CommissionDashboardController::class, 'index'])->name('commissions.dashboard');
