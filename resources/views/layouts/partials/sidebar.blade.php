@@ -69,8 +69,10 @@
             </div>
         </div>
 
-        @include('layouts.partials.sidebar-link', ['href' => route('airtime'), 'icon' => 'phone', 'label' => __('Buy Airtime'), 'active' => request()->routeIs('airtime')])
-        @include('layouts.partials.sidebar-link', ['href' => route('buy-sme-data'), 'icon' => 'wifi', 'label' => __('Buy Data'), 'active' => request()->routeIs('buy-sme-data*')])
+        @if (\App\Support\UtilityAccess::canUse(auth()->user()))
+            @include('layouts.partials.sidebar-link', ['href' => route('airtime'), 'icon' => 'phone', 'label' => __('Buy Airtime'), 'active' => request()->routeIs('airtime')])
+            @include('layouts.partials.sidebar-link', ['href' => route('buy-sme-data'), 'icon' => 'wifi', 'label' => __('Buy Data'), 'active' => request()->routeIs('buy-sme-data*')])
+        @endif
 
         @php
             $simsActive = request()->routeIs('sims.*');
@@ -110,37 +112,39 @@
             </div>
         </div>
 
-        @php
-            $verificationActive = request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index');
-        @endphp
-        <div x-data="{ open: {{ $verificationActive ? 'true' : 'false' }} }">
-            <button type="button"
-                    @click="if (sidebarCollapsed) { sidebarCollapsed = false; open = true } else { open = !open }"
-                    :aria-expanded="open" aria-controls="sidebar-verification-menu"
-                    :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : 'justify-between'"
-                    class="w-full flex items-center gap-3 py-2.5 px-3 rounded-md text-sm font-medium font-display transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary {{ $verificationActive ? 'text-slate-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                <span class="flex items-center gap-3">
-                    <i data-lucide="shield-check" class="w-5 h-5 shrink-0 {{ $verificationActive ? 'text-slate-900' : 'text-slate-400' }}"></i>
-                    <span x-show="!sidebarCollapsed" x-cloak>Verification</span>
-                </span>
-                <i x-show="!sidebarCollapsed" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" aria-hidden="true"></i>
-            </button>
+        @if (\App\Support\UtilityAccess::canUse(auth()->user()))
+            @php
+                $verificationActive = request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index');
+            @endphp
+            <div x-data="{ open: {{ $verificationActive ? 'true' : 'false' }} }">
+                <button type="button"
+                        @click="if (sidebarCollapsed) { sidebarCollapsed = false; open = true } else { open = !open }"
+                        :aria-expanded="open" aria-controls="sidebar-verification-menu"
+                        :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : 'justify-between'"
+                        class="w-full flex items-center gap-3 py-2.5 px-3 rounded-md text-sm font-medium font-display transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary {{ $verificationActive ? 'text-slate-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                    <span class="flex items-center gap-3">
+                        <i data-lucide="shield-check" class="w-5 h-5 shrink-0 {{ $verificationActive ? 'text-slate-900' : 'text-slate-400' }}"></i>
+                        <span x-show="!sidebarCollapsed" x-cloak>Verification</span>
+                    </span>
+                    <i x-show="!sidebarCollapsed" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" aria-hidden="true"></i>
+                </button>
 
-            <div id="sidebar-verification-menu" x-show="open && !sidebarCollapsed"
-                 x-transition:enter="transition ease-out duration-150"
-                 x-transition:enter-start="opacity-0 -translate-y-1"
-                 x-transition:enter-end="opacity-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-100"
-                 x-transition:leave-start="opacity-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 -translate-y-1"
-                 class="mt-1 ml-[22px] space-y-0.5 border-l border-slate-200 pl-2.5" style="display: none;">
+                <div id="sidebar-verification-menu" x-show="open && !sidebarCollapsed"
+                     x-transition:enter="transition ease-out duration-150"
+                     x-transition:enter-start="opacity-0 -translate-y-1"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-100"
+                     x-transition:leave-start="opacity-100 translate-y-0"
+                     x-transition:leave-end="opacity-0 -translate-y-1"
+                     class="mt-1 ml-[22px] space-y-0.5 border-l border-slate-200 pl-2.5" style="display: none;">
 
-                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('bvn.verification.index'), 'icon' => 'fingerprint', 'label' => 'BVN Verification', 'active' => request()->routeIs('bvn.verification.index')])
-                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('nin.verification.index'), 'icon' => 'file-check-2', 'label' => 'NIN Verification', 'active' => request()->routeIs('nin.verification.index')])
-                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('nin.demo.index'), 'icon' => 'users', 'label' => 'NIN Demo', 'active' => request()->routeIs('nin.demo.index')])
-                @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('nin.phone.index'), 'icon' => 'phone', 'label' => 'NIN Phone', 'active' => request()->routeIs('nin.phone.index')])
+                    @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('bvn.verification.index'), 'icon' => 'fingerprint', 'label' => 'BVN Verification', 'active' => request()->routeIs('bvn.verification.index')])
+                    @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('nin.verification.index'), 'icon' => 'file-check-2', 'label' => 'NIN Verification', 'active' => request()->routeIs('nin.verification.index')])
+                    @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('nin.demo.index'), 'icon' => 'users', 'label' => 'NIN Demo', 'active' => request()->routeIs('nin.demo.index')])
+                    @include('layouts.partials.sidebar-link', ['sub' => true, 'href' => route('nin.phone.index'), 'icon' => 'phone', 'label' => 'NIN Phone', 'active' => request()->routeIs('nin.phone.index')])
+                </div>
             </div>
-        </div>
+        @endif
 
         @include('layouts.partials.sidebar-link', ['href' => route('transactions'), 'icon' => 'history', 'label' => __('Transaction'), 'active' => request()->routeIs('transactions')])
         @include('layouts.partials.sidebar-link', ['href' => route('network'), 'icon' => 'users', 'label' => __('My Network'), 'active' => request()->routeIs('network')])

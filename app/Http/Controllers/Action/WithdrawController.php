@@ -162,6 +162,16 @@ class WithdrawController extends Controller
             $tax = $taxField->priceForUser($user);
         }
 
+        // Fail fast on insufficient balance, before the PIN check burns a
+        // rate-limited attempt or the eligibility check does real work on a
+        // request that can't succeed anyway. This is a plain read — the
+        // authoritative, race-condition-safe check still happens below
+        // inside the locked DB transaction right before the debit.
+        $wallet = $user->wallet;
+        if (!$wallet || $wallet->balance < ($totalCharge + $tax)) {
+            return back()->with('error', 'Insufficient wallet balance. Total required (including tax): ' . number_format($totalCharge + $tax, 2));
+        }
+
         // 1. One Active Withdrawal at a Time (Check for Processing/Pending)
         $hasPending = \App\Models\Report::where('user_id', $user->id)
             ->where('type', 'withdrawal')

@@ -163,31 +163,33 @@
 
             <div class="row row-cols-3 row-cols-md-6 g-2 g-md-4 justify-content-center">
 
-                <!-- Service 1: Buy Airtime -->
-                <div class="col">
-                    <a href="{{ route('airtime') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
-                            <i data-lucide="phone" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">Buy Airtime</h4>
-                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">Top-up instantly</p>
-                        </div>
-                    </a>
-                </div>
+                @if (\App\Support\UtilityAccess::canUse(auth()->user()))
+                    <!-- Service 1: Buy Airtime -->
+                    <div class="col">
+                        <a href="{{ route('airtime') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
+                            <div class="p-2 rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
+                                <i data-lucide="phone" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">Buy Airtime</h4>
+                                <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">Top-up instantly</p>
+                            </div>
+                        </a>
+                    </div>
 
-                <!-- Service 2: Buy Data -->
-                <div class="col">
-                    <a href="{{ route('buy-sme-data') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
-                            <i data-lucide="wifi" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">Buy Data</h4>
-                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">SME & retail data</p>
-                        </div>
-                    </a>
-                </div>
+                    <!-- Service 2: Buy Data -->
+                    <div class="col">
+                        <a href="{{ route('buy-sme-data') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
+                            <div class="p-2 rounded-lg bg-primary/10 text-primary flex items-center justify-center w-10 h-10">
+                                <i data-lucide="wifi" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">Buy Data</h4>
+                                <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">SME & retail data</p>
+                            </div>
+                        </a>
+                    </div>
+                @endif
 
                 <!-- Service 3: SIM Services -->
                 <div class="col">
@@ -228,57 +230,59 @@
                     </a>
                 </div>
 
-                <!-- Service 6: NIN -->
-                <div class="col">
-                    <a href="{{ route('nin.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
-                            <i data-lucide="id-card" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">NIN Verification</h4>
-                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">Verify your identity</p>
-                        </div>
-                    </a>
-                </div>
+                @if (\App\Support\UtilityAccess::canUse(auth()->user()))
+                    <!-- Service 6: NIN -->
+                    <div class="col">
+                        <a href="{{ route('nin.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
+                            <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
+                                <i data-lucide="id-card" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">NIN Verification</h4>
+                                <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">Verify your identity</p>
+                            </div>
+                        </a>
+                    </div>
 
-                <!-- Service 7: BVN -->
-                <div class="col">
-                    <a href="{{ route('bvn.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
-                            <i data-lucide="id-card" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">BVN Verification</h4>
-                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">BVN verification service</p>
-                        </div>
-                    </a>
-                </div>
+                    <!-- Service 7: BVN -->
+                    <div class="col">
+                        <a href="{{ route('bvn.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
+                            <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
+                                <i data-lucide="id-card" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">BVN Verification</h4>
+                                <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">BVN verification service</p>
+                            </div>
+                        </a>
+                    </div>
 
-                <!-- Service 8: NIN by Phone -->
-                <div class="col">
-                    <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
-                            <i data-lucide="id-card" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">NIN by Phone</h4>
-                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">NIN retrieval by phone</p>
-                        </div>
-                    </a>
-                </div>
+                    <!-- Service 8: NIN by Phone -->
+                    <div class="col">
+                        <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
+                            <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
+                                <i data-lucide="id-card" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">NIN by Phone</h4>
+                                <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">NIN retrieval by phone</p>
+                            </div>
+                        </a>
+                    </div>
 
-                <!-- Service 9: NIN by Demo -->
-                <div class="col">
-                    <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
-                        <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
-                            <i data-lucide="id-card" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">NIN by Demo</h4>
-                            <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">NIN retrieval by demo</p>
-                        </div>
-                    </a>
-                </div>
+                    <!-- Service 9: NIN by Demo -->
+                    <div class="col">
+                        <a href="{{ route('nin.phone.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
+                            <div class="p-2 rounded-lg bg-vibrant/10 text-vibrant flex items-center justify-center w-10 h-10">
+                                <i data-lucide="id-card" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-800 mb-0 font-display text-sm">NIN by Demo</h4>
+                                <p class="text-slate-400 hidden md:block mb-0 mt-1 text-xs">NIN retrieval by demo</p>
+                            </div>
+                        </a>
+                    </div>
+                @endif
 
                 <!-- Service 10: Bills Payment (Coming Soon) -->
                 <div class="col">

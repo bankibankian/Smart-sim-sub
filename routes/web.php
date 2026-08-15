@@ -53,16 +53,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
     Route::get('/commissions/dashboard', [\App\Http\Controllers\CommissionDashboardController::class, 'index'])->name('commissions.dashboard');
 
-    // Airtime Routes
-    Route::get('/airtime', [\App\Http\Controllers\Action\AirtimeController::class, 'airtime'])->name('airtime');
-    Route::post('/airtime', [\App\Http\Controllers\Action\AirtimeController::class, 'buyAirtime'])->name('buyairtime');
+    // Airtime, SME Data & Verification Routes — restricted to Personal/Business
+    // account roles (App\Support\UtilityAccess); resellers and back-office
+    // roles manage the catalog/hierarchy instead of buying these for
+    // themselves through this storefront flow.
+    Route::middleware('utility_access')->group(function () {
+        // Airtime Routes
+        Route::get('/airtime', [\App\Http\Controllers\Action\AirtimeController::class, 'airtime'])->name('airtime');
+        Route::post('/airtime', [\App\Http\Controllers\Action\AirtimeController::class, 'buyAirtime'])->name('buyairtime');
 
-    // SME Data Routes
-    Route::get('/buy-sme-data', [\App\Http\Controllers\Action\SmeDataController::class, 'index'])->name('buy-sme-data');
-    Route::post('/buy-sme-data', [\App\Http\Controllers\Action\SmeDataController::class, 'buySMEdata'])->name('buy-sme-data.submit');
-    Route::get('/sme/fetch-type', [\App\Http\Controllers\Action\SmeDataController::class, 'fetchDataType'])->name('sme.fetch.type');
-    Route::get('/sme/fetch-plan', [\App\Http\Controllers\Action\SmeDataController::class, 'fetchDataPlan'])->name('sme.fetch.plan');
-    Route::get('/sme/fetch-price', [\App\Http\Controllers\Action\SmeDataController::class, 'fetchSmeBundlePrice'])->name('sme.fetch.price');
+        // SME Data Routes
+        Route::get('/buy-sme-data', [\App\Http\Controllers\Action\SmeDataController::class, 'index'])->name('buy-sme-data');
+        Route::post('/buy-sme-data', [\App\Http\Controllers\Action\SmeDataController::class, 'buySMEdata'])->name('buy-sme-data.submit');
+        Route::get('/sme/fetch-type', [\App\Http\Controllers\Action\SmeDataController::class, 'fetchDataType'])->name('sme.fetch.type');
+        Route::get('/sme/fetch-plan', [\App\Http\Controllers\Action\SmeDataController::class, 'fetchDataPlan'])->name('sme.fetch.plan');
+        Route::get('/sme/fetch-price', [\App\Http\Controllers\Action\SmeDataController::class, 'fetchSmeBundlePrice'])->name('sme.fetch.price');
+    });
 
     // Profile PIN update requires verified email (financial action)
     Route::post('/profile/pin', [ProfileController::class, 'updatePin'])->name('profile.pin.update')->middleware('throttle:5,1');
@@ -92,8 +98,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sims/bulk-assign', [\App\Http\Controllers\smartsim\SimsController::class, 'bulkAssignSim'])->name('sims.bulk-assign');
     Route::post('/sims/request-swap', [\App\Http\Controllers\smartsim\SimsController::class, 'requestSwap'])->name('sims.request-swap');
 
-    // Identity Verification Routes
-    Route::prefix('verification')->group(function () {
+    // Identity Verification Routes — same restriction as Airtime/SME Data above.
+    Route::prefix('verification')->middleware('utility_access')->group(function () {
         // BVN Verification
         Route::get('/bvn', [\App\Http\Controllers\Verification\BvnverificationController::class, 'index'])->name('bvn.verification.index');
         Route::post('/bvn', [\App\Http\Controllers\Verification\BvnverificationController::class, 'store'])->name('bvn.verification.store');
