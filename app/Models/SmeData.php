@@ -20,6 +20,7 @@ class SmeData extends Model
         'agent_price',
         'partner_price',
         'business_price',
+        'vendor_amount',
         'size',
         'validity',
         'status',
@@ -30,6 +31,7 @@ class SmeData extends Model
         'agent_price' => 'decimal:2',
         'partner_price' => 'decimal:2',
         'business_price' => 'decimal:2',
+        'vendor_amount' => 'decimal:2',
     ];
 
     /**

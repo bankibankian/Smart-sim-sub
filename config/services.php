@@ -67,4 +67,12 @@ return [
         'base_url' => env('SMEPLUG_BASE_URL', 'https://smeplug.ng/api/v1'),
         'api_key'  => env('SMEPLUG_API_KEY'),
     ],
+
+    'ninepsb' => [
+        'auth_base_url' => env('NINEPSB_AUTH_BASE_URL', 'https://middleware.9psb.com.ng/identity/api/v1'),
+        'base_url'      => env('NINEPSB_BASE_URL', 'https://middleware.9psb.com.ng/vas/api/v1'),
+        'api_key'       => env('NINEPSB_API_KEY'),
+        'secret_key'    => env('NINEPSB_SECRET_KEY'),
+        'debit_account' => env('NINEPSB_DEBIT_ACCOUNT'),
+    ],
 ];

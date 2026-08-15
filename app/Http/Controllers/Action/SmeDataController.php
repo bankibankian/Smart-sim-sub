@@ -259,7 +259,7 @@ class SmeDataController extends Controller
 
         // API Call to the active SME data vendor
         try {
-            $result = SmeDataProviderFactory::make()->purchase($mobile, $plan->network, $planId, $requestId);
+            $result = SmeDataProviderFactory::make()->purchase($mobile, $plan->network, $planId, $requestId, $plan->vendor_amount);
             $data = $result['data'];
             $isSuccess = $result['success'];
 

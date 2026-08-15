@@ -23,10 +23,12 @@
                     <i data-lucide="banknote" class="w-3.5 h-3.5 text-slate-400"></i>
                     Cash Out
                 </a>
-                <a href="{{ route('airtime') }}" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold transition">
-                    <i data-lucide="phone" class="w-3.5 h-3.5 text-slate-400"></i>
-                    Buy Airtime
-                </a>
+                @if (\App\Support\UtilityAccess::canUse(auth()->user()))
+                    <a href="{{ route('airtime') }}" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold transition">
+                        <i data-lucide="phone" class="w-3.5 h-3.5 text-slate-400"></i>
+                        Buy Airtime
+                    </a>
+                @endif
             </div>
         </div>
 
