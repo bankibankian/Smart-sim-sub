@@ -143,6 +143,12 @@ class WalletController extends Controller
                 $user = User::find($userId);
                 $performedBy = $user ? $user->first_name . ' ' . $user->last_name : 'System';
 
+                // Catalog (reseller) roles earn this balance as commission,
+                // not a referral/reward bonus — reflect that in the history.
+                $description = $user && \App\Support\SimAccess::canBrowseCatalog($user)
+                    ? 'Commission claimed and credited to wallet balance'
+                    : 'Bonus claimed and credited to wallet balance';
+
                 // Save transaction
                 Transaction::create([
                     'user_id'         => $userId,
@@ -150,7 +156,7 @@ class WalletController extends Controller
                     'amount'          => $bonus,
                     'fee'             => 0.00,
                     'net_amount'      => $bonus,
-                    'description'     => 'Bonus claimed and credited to wallet balance',
+                    'description'     => $description,
                     'status'          => 'completed',
                     'transaction_ref' => 'BONUS-' . strtoupper(uniqid()),
                     'performed_by'    => $performedBy,

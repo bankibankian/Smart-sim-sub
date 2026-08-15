@@ -267,7 +267,7 @@ class SearchController extends Controller
                 ['title' => 'Bank Withdrawal', 'description' => 'Payout money from wallet balance to your bank account.', 'url' => route('withdraw'), 'icon' => 'banknote'],
                 ['title' => 'My Transactions Statements', 'description' => 'Trace your history payments and download receipt statement.', 'url' => route('transactions'), 'icon' => 'receipt'],
                 ['title' => 'Support Helpdesk Tickets', 'description' => 'Get help or open support ticket for technical/billing queries.', 'url' => route('support'), 'icon' => 'message-square'],
-                ['title' => 'My Wallet & Funding', 'description' => 'View deposit history, claim referral bonuses, and fund balance.', 'url' => route('wallet'), 'icon' => 'wallet'],
+                ['title' => 'My Wallet & Funding', 'description' => \App\Support\SimAccess::canBrowseCatalog($user) ? 'View deposit history, claim commission, and fund balance.' : 'View deposit history, claim referral bonuses, and fund balance.', 'url' => route('wallet'), 'icon' => 'wallet'],
                 ['title' => 'Profile Settings & Security', 'description' => 'Edit profile info, update transaction PIN, change password.', 'url' => route('profile.edit'), 'icon' => 'user-cog'],
                 ['title' => 'KYC Profile Verification', 'description' => 'Complete profile details, submit BVN/NIN info.', 'url' => route('profile.edit') . '#kyc', 'icon' => 'shield-alert'],
                 ['title' => 'Request Account Upgrade', 'description' => 'Request upgrade to Agent, Business, or Partner tiers for cheaper rates.', 'url' => route('profile.edit') . '#upgrade', 'icon' => 'trending-up'],
