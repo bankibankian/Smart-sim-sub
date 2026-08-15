@@ -52,6 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Leaderboard & Commission Dashboard Routes
     Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
     Route::get('/commissions/dashboard', [\App\Http\Controllers\CommissionDashboardController::class, 'index'])->name('commissions.dashboard');
+    Route::get('/sales-performance', [\App\Http\Controllers\SalesPerformanceController::class, 'index'])->name('sales-performance.index');
 
     // Airtime, SME Data & Verification Routes — restricted to Personal/Business
     // account roles (App\Support\UtilityAccess); resellers and back-office

@@ -151,6 +151,9 @@
         @if (auth()->user() && (\App\Support\SimAccess::canBrowseCatalog(auth()->user()) || auth()->user()->hasRole('super_admin')))
             @include('layouts.partials.sidebar-link', ['href' => route('commissions.dashboard'), 'icon' => 'badge-percent', 'label' => __('Commissions'), 'active' => request()->routeIs('commissions.dashboard')])
         @endif
+        @if (auth()->user() && \App\Support\SimAccess::canBrowseCatalog(auth()->user()))
+            @include('layouts.partials.sidebar-link', ['href' => route('sales-performance.index'), 'icon' => 'trending-up', 'label' => __('Sales Performance'), 'active' => request()->routeIs('sales-performance.*')])
+        @endif
         @if (auth()->user() && in_array(auth()->user()->role, ['partner', 'super_admin']))
             @include('layouts.partials.sidebar-link', ['href' => route('leaderboard'), 'icon' => 'trophy', 'label' => __('Leaderboard'), 'active' => request()->routeIs('leaderboard')])
         @endif
