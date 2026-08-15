@@ -45,6 +45,7 @@ use Illuminate\Notifications\Notifiable;
     'last_login_ip',
     'suspended_at',
     'suspension_reason',
+    'suspended_by',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
@@ -158,13 +159,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return in_array($this->status, ['suspended', 'banned']);
     }
 
-    /** Suspend the user with an optional reason. */
-    public function suspend(string $reason = ''): void
+    /** Suspend the user with an optional reason, attributing who did it. */
+    public function suspend(string $reason = '', ?int $suspendedBy = null): void
     {
         $this->forceFill([
             'status'           => 'suspended',
             'suspended_at'     => now(),
             'suspension_reason'=> $reason,
+            'suspended_by'     => $suspendedBy,
         ])->save();
     }
 
@@ -175,6 +177,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'status'           => 'active',
             'suspended_at'     => null,
             'suspension_reason'=> null,
+            'suspended_by'     => null,
         ])->save();
     }
 

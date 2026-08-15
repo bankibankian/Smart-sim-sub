@@ -168,6 +168,9 @@ class WithdrawController extends Controller
         // authoritative, race-condition-safe check still happens below
         // inside the locked DB transaction right before the debit.
         $wallet = $user->wallet;
+        if ($wallet && $wallet->is_locked) {
+            return back()->with('error', 'Your account is under a Post No Debit (PND) restriction. Contact support or your upline.');
+        }
         if (!$wallet || $wallet->balance < ($totalCharge + $tax)) {
             return back()->with('error', 'Insufficient wallet balance. Total required (including tax): ' . number_format($totalCharge + $tax, 2));
         }
