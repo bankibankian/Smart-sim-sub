@@ -95,8 +95,30 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <a href="{{ route('admin.manage.users.edit', $user) }}" 
+                    <div class="flex items-center gap-2 flex-wrap">
+                        @if ($user->wallet && $user->wallet->is_locked)
+                            <button type="button" onclick="liftRestriction('pnd/lift', {{ $user->id }})"
+                                    class="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-all duration-200">
+                                Lift PND
+                            </button>
+                        @else
+                            <button type="button" onclick="placeRestriction('pnd', {{ $user->id }})"
+                                    class="px-3 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-100 text-xs font-semibold rounded-xl transition-all duration-200">
+                                Place PND
+                            </button>
+                        @endif
+                        @if ($user->isSuspended())
+                            <button type="button" onclick="liftRestriction('reinstate', {{ $user->id }})"
+                                    class="px-3 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-100 text-xs font-semibold rounded-xl transition-all duration-200">
+                                Reinstate
+                            </button>
+                        @else
+                            <button type="button" onclick="placeRestriction('suspend', {{ $user->id }})"
+                                    class="px-3 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-100 text-xs font-semibold rounded-xl transition-all duration-200">
+                                Suspend
+                            </button>
+                        @endif
+                        <a href="{{ route('admin.manage.users.edit', $user) }}"
                            class="px-4 py-2.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#374368] hover:to-[#465785] text-white text-xs font-semibold rounded-xl shadow-md shadow-[#0056D2]/10 transition-all duration-200 flex items-center gap-2">
                             <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                             Edit Account
@@ -613,4 +635,61 @@
 
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function submitDownlineAction(path, userId, extra) {
+            const f = document.createElement('form');
+            f.action = '/network/downline/' + userId + '/' + path;
+            f.method = 'POST';
+            let inputs = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
+            if (extra) {
+                inputs += '<input type="hidden" name="reason" value="' + extra.replace(/"/g, '&quot;') + '">';
+            }
+            f.innerHTML = inputs;
+            document.body.appendChild(f);
+            f.submit();
+        }
+
+        function placeRestriction(path, userId) {
+            const isSuspend = path === 'suspend';
+            Swal.fire({
+                title: isSuspend ? 'Suspend Account' : 'Place Post No Debit',
+                text: isSuspend
+                    ? 'This blocks the user from logging in until reinstated.'
+                    : 'This blocks the user from cashing out until lifted — other spending stays available.',
+                input: 'text',
+                inputLabel: 'Reason',
+                inputPlaceholder: 'Enter a reason...',
+                showCancelButton: true,
+                confirmButtonColor: isSuspend ? '#e11d48' : '#d97706',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: isSuspend ? 'Suspend' : 'Place PND',
+                preConfirm: (value) => {
+                    if (!value || !value.trim()) {
+                        Swal.showValidationMessage('A reason is required');
+                    }
+                    return value;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    submitDownlineAction(path, userId, result.value);
+                }
+            });
+        }
+
+        function liftRestriction(path, userId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                showCancelButton: true,
+                confirmButtonColor: '#0056D2',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, confirm'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    submitDownlineAction(path, userId, null);
+                }
+            });
+        }
+    </script>
 </x-app-layout>

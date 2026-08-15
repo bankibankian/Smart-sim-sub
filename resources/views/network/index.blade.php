@@ -1,7 +1,8 @@
 <x-app-layout>
     <title>SmartSIM - My Network</title>
 
-    <div x-data="{ openClaimModal: false, openClaimResultModal: {{ session('claim_result') ? 'true' : 'false' }} }" class="max-w-5xl mx-auto space-y-6">
+    @php $canRestrict = \App\Support\SimAccess::canBrowseCatalog(auth()->user()); @endphp
+    <div x-data="{ openClaimModal: false, openClaimResultModal: {{ session('claim_result') ? 'true' : 'false' }}, currentTab: 'invited', openMemberModal: false, selectedMember: null }" class="max-w-5xl mx-auto space-y-6">
         <!-- Page Header -->
         <div class="flex items-start justify-between gap-4 flex-wrap">
             <div>
@@ -94,63 +95,220 @@
             </div>
         @endif
 
-        <!-- Downline Table -->
+        <!-- Invited / Team Tabs -->
         <x-card padding="p-6">
-            <h3 class="text-sm font-semibold text-slate-800 font-display pb-3 border-b border-slate-100 mb-4">
-                Your Downline
-            </h3>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
-                    <thead>
-                        <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase">
-                            <th class="py-2.5">Member</th>
-                            <th class="py-2.5">Role</th>
-                            <th class="py-2.5">Status</th>
-                            <th class="py-2.5">Joined</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($referrals as $ref)
-                            <tr class="border-b border-slate-50 hover:bg-slate-50/50">
-                                <td class="py-3">
-                                    <span class="font-bold text-slate-800 block">{{ $ref->first_name ? $ref->first_name . ' ' . $ref->last_name : $ref->email }}</span>
-                                    <span class="text-xs text-slate-400">{{ $ref->email }}</span>
-                                </td>
-                                <td class="py-3">
-                                    <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase bg-primary/10 text-primary">
-                                        {{ str_replace('_', ' ', $ref->role) }}
-                                    </span>
-                                </td>
-                                <td class="py-3">
-                                    <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase
-                                        {{ $ref->status === 'active' ? 'bg-emerald-50 text-emerald-600' : ($ref->status === 'invited' ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-600') }}">
-                                        {{ $ref->status }}
-                                    </span>
-                                </td>
-                                <td class="py-3 text-slate-400 font-medium">{{ $ref->created_at->format('M d, Y') }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="py-12 text-center text-slate-400">
-                                    <div class="bg-slate-50 rounded-2xl w-14 h-14 flex items-center justify-center mb-3 mx-auto border border-slate-100">
-                                        <i data-lucide="user-plus" class="w-6 h-6 text-slate-400"></i>
-                                    </div>
-                                    <h6 class="font-bold text-slate-800 text-sm">No downline members yet</h6>
-                                    <p class="text-xs text-slate-400 mt-1 max-w-[280px] mx-auto">
-                                        @if ($nextRole)
-                                            Invite a {{ str_replace('_', ' ', $nextRole) }} above, or share your sign-up link below.
-                                        @else
-                                            Share your sign-up link below — anyone who joins through it will appear here.
-                                        @endif
-                                    </p>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+            <div class="flex items-center gap-2 pb-3 border-b border-slate-100 mb-4">
+                <button type="button" @click="currentTab = 'invited'"
+                        :class="currentTab === 'invited' ? 'bg-[#0056D2] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+                        class="px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                    Invited ({{ $invited->total() }})
+                </button>
+                <button type="button" @click="currentTab = 'team'"
+                        :class="currentTab === 'team' ? 'bg-[#0056D2] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+                        class="px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                    Team ({{ $team->total() }})
+                </button>
             </div>
-            {{ $referrals->links('vendor.pagination.custom') }}
+
+            <!-- Invited Panel -->
+            <div x-show="currentTab === 'invited'">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase">
+                                <th class="py-2.5">Member</th>
+                                <th class="py-2.5">Role</th>
+                                <th class="py-2.5">Invited</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($invited as $ref)
+                                <tr class="border-b border-slate-50 hover:bg-slate-50/50">
+                                    <td class="py-3">
+                                        <span class="font-bold text-slate-800 block">{{ $ref->first_name ? $ref->first_name . ' ' . $ref->last_name : $ref->email }}</span>
+                                        <span class="text-xs text-slate-400">{{ $ref->email }}</span>
+                                    </td>
+                                    <td class="py-3">
+                                        <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase bg-primary/10 text-primary">
+                                            {{ str_replace('_', ' ', $ref->role) }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 text-slate-400 font-medium">{{ $ref->created_at->format('M d, Y') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="py-12 text-center text-slate-400">
+                                        <div class="bg-slate-50 rounded-2xl w-14 h-14 flex items-center justify-center mb-3 mx-auto border border-slate-100">
+                                            <i data-lucide="mail" class="w-6 h-6 text-slate-400"></i>
+                                        </div>
+                                        <h6 class="font-bold text-slate-800 text-sm">No pending invites</h6>
+                                        <p class="text-xs text-slate-400 mt-1 max-w-[280px] mx-auto">
+                                            @if ($nextRole)
+                                                Invite a {{ str_replace('_', ' ', $nextRole) }} above — they'll show up here until they accept.
+                                            @else
+                                                Accounts you invite will show up here until they accept.
+                                            @endif
+                                        </p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                {{ $invited->links('vendor.pagination.custom') }}
+            </div>
+
+            <!-- Team Panel -->
+            <div x-show="currentTab === 'team'" x-cloak>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase">
+                                <th class="py-2.5">Member</th>
+                                <th class="py-2.5">Role</th>
+                                <th class="py-2.5">Status</th>
+                                <th class="py-2.5">Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($team as $ref)
+                                @php
+                                    $isLocked = $ref->wallet->is_locked ?? false;
+                                    $isSuspended = $ref->isSuspended();
+                                @endphp
+                                <tr class="border-b border-slate-50 hover:bg-slate-50/50 {{ $canRestrict ? 'cursor-pointer' : '' }}"
+                                    @if ($canRestrict)
+                                        @click="selectedMember = {
+                                            id: {{ $ref->id }},
+                                            name: '{{ addslashes(($ref->first_name ? $ref->first_name . ' ' . $ref->last_name : $ref->email)) }}',
+                                            role: '{{ addslashes(str_replace('_', ' ', $ref->role)) }}',
+                                            status: '{{ $ref->status }}',
+                                            phone: '{{ addslashes($ref->phone ?? '—') }}',
+                                            email: '{{ addslashes($ref->email) }}',
+                                            joined: '{{ $ref->created_at->format('M d, Y') }}',
+                                            isLocked: {{ $isLocked ? 'true' : 'false' }},
+                                            isSuspended: {{ $isSuspended ? 'true' : 'false' }}
+                                        }; openMemberModal = true"
+                                    @endif
+                                    >
+                                    <td class="py-3">
+                                        <span class="font-bold text-slate-800 block">{{ $ref->first_name ? $ref->first_name . ' ' . $ref->last_name : $ref->email }}</span>
+                                        <span class="text-xs text-slate-400">{{ $ref->email }}</span>
+                                    </td>
+                                    <td class="py-3">
+                                        <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase bg-primary/10 text-primary">
+                                            {{ str_replace('_', ' ', $ref->role) }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3">
+                                        <div class="flex flex-wrap items-center gap-1">
+                                            <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase
+                                                {{ $ref->status === 'active' ? 'bg-emerald-50 text-emerald-600' : ($ref->status === 'suspended' ? 'bg-rose-50 text-rose-600' : 'bg-slate-100 text-slate-600') }}">
+                                                {{ $ref->status }}
+                                            </span>
+                                            @if ($isLocked)
+                                                <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase bg-amber-50 text-amber-600">PND</span>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="py-3 text-slate-400 font-medium">{{ $ref->created_at->format('M d, Y') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="py-12 text-center text-slate-400">
+                                        <div class="bg-slate-50 rounded-2xl w-14 h-14 flex items-center justify-center mb-3 mx-auto border border-slate-100">
+                                            <i data-lucide="users" class="w-6 h-6 text-slate-400"></i>
+                                        </div>
+                                        <h6 class="font-bold text-slate-800 text-sm">No team members yet</h6>
+                                        <p class="text-xs text-slate-400 mt-1 max-w-[280px] mx-auto">
+                                            Once an invited member accepts, they'll appear here.
+                                        </p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                {{ $team->links('vendor.pagination.custom') }}
+            </div>
         </x-card>
+
+        @if ($canRestrict)
+            <!-- Team Member Detail Modal -->
+            <div x-show="openMemberModal" x-cloak
+                 class="fixed inset-0 z-50 overflow-y-auto"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 style="display: none;">
+                <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openMemberModal = false"></div>
+                <div class="flex min-h-screen items-center justify-center p-4">
+                    <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-200 shadow-2xl p-6 overflow-hidden transform transition-all space-y-4" x-show="selectedMember">
+                        <button type="button" @click="openMemberModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                        <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
+                            <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800 font-display" x-text="selectedMember ? selectedMember.name : ''"></h3>
+                                <p class="text-xs text-slate-400 capitalize" x-text="selectedMember ? selectedMember.role : ''"></p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 rounded-lg p-4 border border-slate-100 space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500 font-semibold text-xs">Status:</span>
+                                <span class="font-bold text-slate-800 capitalize" x-text="selectedMember ? selectedMember.status : ''"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500 font-semibold text-xs">Phone:</span>
+                                <span class="font-bold text-slate-800" x-text="selectedMember ? selectedMember.phone : ''"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500 font-semibold text-xs">Email:</span>
+                                <span class="font-bold text-slate-800 text-xs break-all" x-text="selectedMember ? selectedMember.email : ''"></span>
+                            </div>
+                            <div class="flex justify-between pt-2 border-t border-slate-200">
+                                <span class="text-slate-500 font-semibold text-xs">Joined:</span>
+                                <span class="font-bold text-slate-800" x-text="selectedMember ? selectedMember.joined : ''"></span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button"
+                                    x-show="selectedMember && !selectedMember.isLocked"
+                                    @click="placeRestriction('pnd', selectedMember.id)"
+                                    class="px-3 py-2 rounded-lg bg-amber-50 text-amber-700 border border-amber-100 text-xs font-bold hover:bg-amber-100 transition-colors">
+                                Place PND
+                            </button>
+                            <button type="button"
+                                    x-show="selectedMember && selectedMember.isLocked"
+                                    @click="liftRestriction('pnd/lift', selectedMember.id)"
+                                    class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold hover:bg-slate-200 transition-colors">
+                                Lift PND
+                            </button>
+                            <button type="button"
+                                    x-show="selectedMember && !selectedMember.isSuspended"
+                                    @click="placeRestriction('suspend', selectedMember.id)"
+                                    class="px-3 py-2 rounded-lg bg-rose-50 text-rose-700 border border-rose-100 text-xs font-bold hover:bg-rose-100 transition-colors">
+                                Suspend
+                            </button>
+                            <button type="button"
+                                    x-show="selectedMember && selectedMember.isSuspended"
+                                    @click="liftRestriction('reinstate', selectedMember.id)"
+                                    class="px-3 py-2 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs font-bold hover:bg-emerald-100 transition-colors">
+                                Reinstate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         @if ($nextRole)
             <!-- Claim Downline Member Modal -->
@@ -274,4 +432,63 @@
             @endif
         @endif
     </div>
+
+    @if ($canRestrict)
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            function submitDownlineAction(path, userId, extra) {
+                const f = document.createElement('form');
+                f.action = '/network/downline/' + userId + '/' + path;
+                f.method = 'POST';
+                let inputs = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
+                if (extra) {
+                    inputs += '<input type="hidden" name="reason" value="' + extra.replace(/"/g, '&quot;') + '">';
+                }
+                f.innerHTML = inputs;
+                document.body.appendChild(f);
+                f.submit();
+            }
+
+            function placeRestriction(path, userId) {
+                const isSuspend = path === 'suspend';
+                Swal.fire({
+                    title: isSuspend ? 'Suspend Account' : 'Place Post No Debit',
+                    text: isSuspend
+                        ? 'This blocks the member from logging in until reinstated.'
+                        : 'This blocks the member from cashing out until lifted — other spending stays available.',
+                    input: 'text',
+                    inputLabel: 'Reason',
+                    inputPlaceholder: 'Enter a reason...',
+                    showCancelButton: true,
+                    confirmButtonColor: isSuspend ? '#e11d48' : '#d97706',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: isSuspend ? 'Suspend' : 'Place PND',
+                    preConfirm: (value) => {
+                        if (!value || !value.trim()) {
+                            Swal.showValidationMessage('A reason is required');
+                        }
+                        return value;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        submitDownlineAction(path, userId, result.value);
+                    }
+                });
+            }
+
+            function liftRestriction(path, userId) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0056D2',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Yes, confirm'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        submitDownlineAction(path, userId, null);
+                    }
+                });
+            }
+        </script>
+    @endif
 </x-app-layout>

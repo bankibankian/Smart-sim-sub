@@ -33,9 +33,20 @@ class NetworkController extends Controller
             ->groupBy('role')
             ->pluck('total', 'role');
 
-        $referrals = $user->referrals()
+        // Invited = account created but not yet activated (no usable
+        // password yet, see OnboardingController::sendInvite()). Team =
+        // everyone else, including already-suspended members so the upline
+        // can see and reinstate them from the same place.
+        $invited = $user->referrals()
+            ->where('status', 'invited')
             ->latest()
-            ->paginate(10);
+            ->paginate(10, ['*'], 'invited_page');
+
+        $team = $user->referrals()
+            ->where('status', '!=', 'invited')
+            ->with('wallet')
+            ->latest()
+            ->paginate(10, ['*'], 'team_page');
 
         return view('network.index', compact(
             'user',
@@ -44,7 +55,8 @@ class NetworkController extends Controller
             'activeReferrals',
             'pendingInvites',
             'roleBreakdown',
-            'referrals'
+            'invited',
+            'team'
         ));
     }
 
