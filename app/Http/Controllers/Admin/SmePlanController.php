@@ -57,17 +57,18 @@ class SmePlanController extends Controller
         $disabledPlansCount = SmeData::where('status', 'disabled')->count();
 
         $bonusSettingsByProvider = ActivationBonusSettings::allProviders();
-        // Not restricted to the active vendor — an admin should be able to
-        // configure a bonus plan from either vendor independent of which is
-        // currently "active" for the storefront (GrantActivationBonusData
-        // resolves by the bonus plan's own provider, not the active flag).
+        $activeDataProvider = SmeDataProviderSetting::activeProvider();
+        // Scoped to the active vendor so an admin can't wire a bonus to a
+        // plan ID that belongs to a different vendor's namespace — a plan
+        // only stays selectable here while its vendor is the one actually
+        // serving the storefront.
         $bonusEligiblePlansByNetwork = SmeData::where('status', 'enabled')
+            ->where('provider', $activeDataProvider)
             ->orderBy('size')
             ->get()
             ->groupBy('network');
 
         $dataProviders = SmeDataProviderSetting::allProviders();
-        $activeDataProvider = SmeDataProviderSetting::activeProvider();
 
         return view('admin.sme-plans.index', compact(
             'plans',
@@ -90,15 +91,27 @@ class SmePlanController extends Controller
             'provider' => ['required', 'string', 'in:' . implode(',', SmeDataProviderSetting::PROVIDERS)],
             'base_url' => ['required', 'url'],
             'api_key' => ['nullable', 'string'],
+            'auth_base_url' => ['nullable', 'url'],
+            'secret_key' => ['nullable', 'string'],
+            'debit_account' => ['nullable', 'string'],
         ]);
 
         $settings = SmeDataProviderSetting::forProvider($validated['provider']);
         $update = ['base_url' => $validated['base_url']];
 
-        // Blank means "leave the stored key as-is" — never blank out a
+        // Blank means "leave the stored value as-is" — never blank out a
         // working credential just because the admin left the field empty.
         if (filled($validated['api_key'] ?? null)) {
             $update['api_key'] = $validated['api_key'];
+        }
+        if (filled($validated['auth_base_url'] ?? null)) {
+            $update['auth_base_url'] = $validated['auth_base_url'];
+        }
+        if (filled($validated['secret_key'] ?? null)) {
+            $update['secret_key'] = $validated['secret_key'];
+        }
+        if (filled($validated['debit_account'] ?? null)) {
+            $update['debit_account'] = $validated['debit_account'];
         }
 
         $settings->update($update);
@@ -132,7 +145,9 @@ class SmePlanController extends Controller
             'is_active' => ['nullable', 'boolean'],
             'sme_data_id' => [
                 'nullable',
-                Rule::exists('sme_data', 'id')->where('network', strtoupper($request->input('provider'))),
+                Rule::exists('sme_data', 'id')
+                    ->where('network', strtoupper($request->input('provider')))
+                    ->where('provider', SmeDataProviderSetting::activeProvider()),
             ],
         ]);
 
@@ -158,6 +173,7 @@ class SmePlanController extends Controller
             'agent_price' => 'required|numeric|min:0',
             'partner_price' => 'required|numeric|min:0',
             'business_price' => 'required|numeric|min:0',
+            'vendor_amount' => 'required_if:provider,9psb|nullable|numeric|min:0',
             'size' => 'required|string|max:255',
             'validity' => 'required|string|max:100',
             'status' => 'required|string|in:enabled,disabled',
@@ -182,6 +198,7 @@ class SmePlanController extends Controller
             'agent_price' => 'required|numeric|min:0',
             'partner_price' => 'required|numeric|min:0',
             'business_price' => 'required|numeric|min:0',
+            'vendor_amount' => 'required_if:provider,9psb|nullable|numeric|min:0',
             'size' => 'required|string|max:255',
             'validity' => 'required|string|max:100',
             'status' => 'required|string|in:enabled,disabled',

@@ -45,7 +45,7 @@ class SmePlugApi implements SmeDataProviderInterface
     /**
      * @return array{success: bool, data: array, api_data: array, transaction_ref: string, message: ?string}
      */
-    public function purchase(string $mobile, string $network, string $planId, string $requestId): array
+    public function purchase(string $mobile, string $network, string $planId, string $requestId, ?string $vendorAmount = null): array
     {
         $networkId = self::NETWORK_ID_MAP[strtoupper($network)] ?? 1;
         $payload = [

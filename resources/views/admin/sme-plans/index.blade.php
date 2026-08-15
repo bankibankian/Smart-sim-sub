@@ -1,8 +1,9 @@
 <x-app-layout>
     <div x-data="{ 
-        addModalOpen: false, 
-        editModalOpen: false, 
-        editPlan: { id: '', data_id: '', provider: 'legacy', network: '', plan_type: '', business_price: '', personal_price: '', agent_price: '', partner_price: '', size: '', validity: '', status: 'enabled' }
+        addModalOpen: false,
+        editModalOpen: false,
+        addProvider: 'legacy',
+        editPlan: { id: '', data_id: '', provider: 'legacy', network: '', plan_type: '', business_price: '', personal_price: '', agent_price: '', partner_price: '', vendor_amount: '', size: '', validity: '', status: 'enabled' }
     }" class="space-y-8 max-w-7xl mx-auto">
         
         <!-- Header -->
@@ -55,6 +56,8 @@
             </div>
         @endif
 
+        @php $vendorLabels = ['legacy' => 'Legacy (Fadeelposdatasub)', 'smeplug' => 'SME Plug', '9psb' => '9PSB Data']; @endphp
+
         <!-- Activation Bonus Settings -->
         <div class="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
             <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
@@ -63,7 +66,7 @@
                 </div>
                 <div>
                     <h3 class="text-sm font-semibold text-slate-800 font-display">SIM Activation Data Bonus</h3>
-                    <p class="text-xs text-slate-400">When on for a network, every SIM on that network silently receives a free data top-up on its own number when activated — no wallet is charged. Each provider has its own plan and switch, since a MTN SIM can only be topped up with a MTN plan.</p>
+                    <p class="text-xs text-slate-400">When on for a network, every SIM on that network silently receives a free data top-up on its own number when activated — no wallet is charged. Each provider has its own plan and switch, since a MTN SIM can only be topped up with a MTN plan. Plan choices below are limited to the currently active SME Data Vendor ({{ $vendorLabels[$activeDataProvider] ?? $activeDataProvider }}).</p>
                 </div>
             </div>
             @php $bonusLogoMap = ['mtn' => 'mtn.jpg', 'airtel' => 'Airtel.png', 'glo' => 'glo.jpg', '9mobile' => '9Mobile.jpg']; @endphp
@@ -148,8 +151,6 @@
                 </div>
             </div>
 
-            @php $vendorLabels = ['legacy' => 'Legacy (Fadeelposdatasub)', 'smeplug' => 'SME Plug']; @endphp
-
             {{-- One settings form + one activate form per vendor. --}}
             @foreach (\App\Models\SmeDataProviderSetting::PROVIDERS as $providerKey)
                 <form id="provider-settings-form-{{ $providerKey }}" method="POST" action="{{ route('admin.sme-plans.provider-settings.update') }}" class="hidden">
@@ -187,7 +188,7 @@
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
                             <div class="sm:col-span-1">
-                                <x-input-label value="Base URL" />
+                                <x-input-label :value="$providerKey === '9psb' ? 'VAS Base URL' : 'Base URL'" />
                                 <x-text-input type="url" name="base_url" form="provider-settings-form-{{ $providerKey }}"
                                        value="{{ old('base_url', $vendorSettings->base_url) }}" required
                                        class="rounded-xl !text-xs" />
@@ -204,6 +205,26 @@
                                     Save
                                 </x-primary-button>
                             </div>
+                            @if ($providerKey === '9psb')
+                                <div class="sm:col-span-1">
+                                    <x-input-label value="Auth Base URL" />
+                                    <x-text-input type="url" name="auth_base_url" form="provider-settings-form-{{ $providerKey }}"
+                                           value="{{ old('auth_base_url', $vendorSettings->auth_base_url) }}" required
+                                           class="rounded-xl !text-xs" />
+                                </div>
+                                <div class="sm:col-span-1">
+                                    <x-input-label value="Secret Key" />
+                                    <x-text-input type="password" name="secret_key" form="provider-settings-form-{{ $providerKey }}"
+                                           placeholder="{{ $vendorSettings->secret_key ? '•••••••• (leave blank to keep current)' : 'Not set' }}"
+                                           class="rounded-xl !text-xs" />
+                                </div>
+                                <div class="sm:col-span-1">
+                                    <x-input-label value="Debit Account" />
+                                    <x-text-input type="text" name="debit_account" form="provider-settings-form-{{ $providerKey }}"
+                                           value="{{ old('debit_account', $vendorSettings->debit_account) }}"
+                                           class="rounded-xl !text-xs" />
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -287,6 +308,7 @@
                                 <option value="">All Vendors</option>
                                 <option value="legacy" {{ request('provider') === 'legacy' ? 'selected' : '' }}>Legacy</option>
                                 <option value="smeplug" {{ request('provider') === 'smeplug' ? 'selected' : '' }}>SME Plug</option>
+                                <option value="9psb" {{ request('provider') === '9psb' ? 'selected' : '' }}>9PSB Data</option>
                             </x-select-input>
                             <div class="absolute right-3.5 top-4 pointer-events-none text-slate-400">
                                 <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
@@ -389,8 +411,16 @@
                                 </td>
                                 <td class="py-4 px-6">
                                     <span class="inline-flex items-center px-2.5 py-1 text-xs font-extrabold rounded-full uppercase tracking-wider
-                                        {{ $plan->provider === 'smeplug' ? 'bg-purple-50 text-purple-700 border border-purple-100' : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
-                                        {{ $plan->provider === 'smeplug' ? 'SME Plug' : 'Legacy' }}
+                                        {{ match ($plan->provider) {
+                                            'smeplug' => 'bg-purple-50 text-purple-700 border border-purple-100',
+                                            '9psb' => 'bg-sky-50 text-sky-700 border border-sky-100',
+                                            default => 'bg-slate-100 text-slate-600 border border-slate-200',
+                                        } }}">
+                                        {{ match ($plan->provider) {
+                                            'smeplug' => 'SME Plug',
+                                            '9psb' => '9PSB Data',
+                                            default => 'Legacy',
+                                        } }}
                                     </span>
                                 </td>
                                 <td class="py-4 px-6 text-slate-600 font-mono text-xs font-semibold">
@@ -440,8 +470,9 @@
                                                 business_price: '{{ $plan->business_price }}', 
                                                 personal_price: '{{ $plan->personal_price }}', 
                                                 agent_price: '{{ $plan->agent_price }}', 
-                                                partner_price: '{{ $plan->partner_price }}', 
-                                                size: '{{ addslashes($plan->size) }}', 
+                                                partner_price: '{{ $plan->partner_price }}',
+                                                vendor_amount: '{{ $plan->vendor_amount }}',
+                                                size: '{{ addslashes($plan->size) }}',
                                                 validity: '{{ $plan->validity }}', 
                                                 status: '{{ $plan->status }}' 
                                             }; 
@@ -527,9 +558,10 @@
                             <!-- Vendor -->
                             <div>
                                 <x-input-label value="Vendor" />
-                                <x-select-input name="provider" required class="rounded-2xl bg-slate-50/50">
+                                <x-select-input name="provider" x-model="addProvider" required class="rounded-2xl bg-slate-50/50">
                                     <option value="legacy">Legacy (Fadeelposdatasub)</option>
                                     <option value="smeplug">SME Plug</option>
+                                    <option value="9psb">9PSB Data</option>
                                 </x-select-input>
                             </div>
 
@@ -587,6 +619,13 @@
                                     <x-text-input type="number" step="0.01" name="partner_price" required placeholder="7300.00"
                                            class="rounded-2xl bg-slate-50/50" />
                                 </div>
+                            </div>
+
+                            <!-- Vendor Amount (9PSB only) -->
+                            <div x-show="addProvider === '9psb'" x-cloak>
+                                <x-input-label value="Vendor Amount (₦) — 9PSB's own price for this productId" />
+                                <x-text-input type="number" step="0.01" name="vendor_amount" placeholder="e.g., 200.00"
+                                       class="rounded-2xl bg-slate-50/50" />
                             </div>
 
                             <!-- Status Toggle -->
@@ -660,6 +699,7 @@
                                 <x-select-input name="provider" x-model="editPlan.provider" required class="rounded-2xl bg-slate-50/50">
                                     <option value="legacy">Legacy (Fadeelposdatasub)</option>
                                     <option value="smeplug">SME Plug</option>
+                                    <option value="9psb">9PSB Data</option>
                                 </x-select-input>
                             </div>
 
@@ -717,6 +757,13 @@
                                     <x-text-input type="number" step="0.01" name="partner_price" x-bind:value="editPlan.partner_price" required
                                            class="rounded-2xl bg-slate-50/50" />
                                 </div>
+                            </div>
+
+                            <!-- Vendor Amount (9PSB only) -->
+                            <div x-show="editPlan.provider === '9psb'" x-cloak>
+                                <x-input-label value="Vendor Amount (₦) — 9PSB's own price for this productId" />
+                                <x-text-input type="number" step="0.01" name="vendor_amount" x-bind:value="editPlan.vendor_amount"
+                                       class="rounded-2xl bg-slate-50/50" />
                             </div>
 
                             <!-- Status Toggle -->

@@ -57,7 +57,7 @@ class GrantActivationBonusData implements ShouldQueue
         // currently "active" for the storefront — switching the storefront's
         // active vendor must never silently break this job by sending a
         // plan id from one vendor's namespace to the other vendor's API.
-        $result = SmeDataProviderFactory::forProvider($plan->provider)->purchase($this->sim->number, $plan->network, $plan->data_id, $requestId);
+        $result = SmeDataProviderFactory::forProvider($plan->provider)->purchase($this->sim->number, $plan->network, $plan->data_id, $requestId, $plan->vendor_amount);
 
         $this->logReport($this->sim, $plan, $requestId, $result['success'], $result['success']
             ? "Activation bonus: {$plan->size} {$plan->plan_type} silently topped up on {$this->sim->number}"

@@ -8,18 +8,22 @@ use Illuminate\Support\Collection;
 
 class SmeDataProviderSetting extends Model
 {
-    public const PROVIDERS = ['legacy', 'smeplug'];
+    public const PROVIDERS = ['legacy', 'smeplug', '9psb'];
 
     protected $fillable = [
         'provider',
         'base_url',
         'api_key',
+        'secret_key',
+        'auth_base_url',
+        'debit_account',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'api_key' => 'encrypted',
+        'secret_key' => 'encrypted',
     ];
 
     /**
@@ -32,11 +36,26 @@ class SmeDataProviderSetting extends Model
     {
         return static::firstOrCreate(
             ['provider' => $provider],
-            [
-                'is_active' => $provider === 'legacy',
-                'base_url' => $provider === 'legacy' ? config('services.smedata.base_url') : config('services.smeplug.base_url'),
-                'api_key' => $provider === 'legacy' ? config('services.smedata.api_key') : config('services.smeplug.api_key'),
-            ]
+            match ($provider) {
+                'legacy' => [
+                    'is_active' => true,
+                    'base_url' => config('services.smedata.base_url'),
+                    'api_key' => config('services.smedata.api_key'),
+                ],
+                '9psb' => [
+                    'is_active' => false,
+                    'base_url' => config('services.ninepsb.base_url'),
+                    'auth_base_url' => config('services.ninepsb.auth_base_url'),
+                    'api_key' => config('services.ninepsb.api_key'),
+                    'secret_key' => config('services.ninepsb.secret_key'),
+                    'debit_account' => config('services.ninepsb.debit_account'),
+                ],
+                default => [
+                    'is_active' => false,
+                    'base_url' => config('services.smeplug.base_url'),
+                    'api_key' => config('services.smeplug.api_key'),
+                ],
+            }
         );
     }
 

@@ -26,6 +26,7 @@ class SmeDataProviderFactory
 
         return match ($provider) {
             'smeplug' => new SmePlugApi($settings),
+            '9psb'    => new NinePsbDataApi($settings),
             default   => new SmeDataPurchaseApi($settings),
         };
     }
