@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * The 9PSB VAS data-topup vendor call — a third vendor behind
- * SmeDataProviderInterface. Unlike the other two vendors, 9PSB uses a
- * two-step OAuth-style exchange: an access token is fetched from a
- * separate auth endpoint and cached until near expiry, then sent as a
- * bearer token on the actual topup call.
+ * SmeDataProviderInterface. Unlike the other two vendors, 9PSB logs in with
+ * a plain username/password (not an API key/secret pair) to a separate auth
+ * endpoint; the resulting access token is cached until near expiry, then
+ * sent as a bearer token on the actual topup call.
  */
 class NinePsbDataApi implements SmeDataProviderInterface
 {
@@ -36,12 +36,12 @@ class NinePsbDataApi implements SmeDataProviderInterface
         return $this->settings?->base_url ?: config('services.ninepsb.base_url');
     }
 
-    public function apiKey(): ?string
+    public function username(): ?string
     {
         return $this->settings?->api_key ?: config('services.ninepsb.api_key');
     }
 
-    public function secretKey(): ?string
+    public function password(): ?string
     {
         return $this->settings?->secret_key ?: config('services.ninepsb.secret_key');
     }
@@ -146,8 +146,8 @@ class NinePsbDataApi implements SmeDataProviderInterface
                 ->retry(times: 2, sleepMilliseconds: 300, when: fn ($e) => $e instanceof ConnectionException, throw: false)
                 ->withHeaders(['Accept' => 'application/json'])
                 ->post($url, [
-                    'username' => $this->apiKey(),
-                    'password' => $this->secretKey(),
+                    'username' => $this->username(),
+                    'password' => $this->password(),
                 ]);
         } catch (ConnectionException $e) {
             return null;

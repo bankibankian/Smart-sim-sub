@@ -194,8 +194,8 @@
                                        class="rounded-xl !text-xs" />
                             </div>
                             <div class="sm:col-span-1">
-                                <x-input-label value="API Key" />
-                                <x-text-input type="password" name="api_key" form="provider-settings-form-{{ $providerKey }}"
+                                <x-input-label :value="$providerKey === '9psb' ? 'Username' : 'API Key'" />
+                                <x-text-input :type="$providerKey === '9psb' ? 'text' : 'password'" name="api_key" form="provider-settings-form-{{ $providerKey }}"
                                        placeholder="{{ $vendorSettings->api_key ? '•••••••• (leave blank to keep current)' : 'Not set' }}"
                                        class="rounded-xl !text-xs" />
                             </div>
@@ -213,7 +213,7 @@
                                            class="rounded-xl !text-xs" />
                                 </div>
                                 <div class="sm:col-span-1">
-                                    <x-input-label value="Secret Key" />
+                                    <x-input-label value="Password" />
                                     <x-text-input type="password" name="secret_key" form="provider-settings-form-{{ $providerKey }}"
                                            placeholder="{{ $vendorSettings->secret_key ? '•••••••• (leave blank to keep current)' : 'Not set' }}"
                                            class="rounded-xl !text-xs" />
