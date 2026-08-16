@@ -257,8 +257,10 @@
                                     <p class="text-xs text-slate-400">Generate your dedicated virtual account to start automated funding.</p>
                                 </div>
 
-                                <form method="POST" action="{{ route('virtual.account.create') }}" class="space-y-4">
+                                <form method="POST" action="{{ route('virtual.account.create') }}" class="space-y-4"
+                                      x-data="{ idType: '{{ old('identity_type', 'bvn') }}' }">
                                     @csrf
+                                    <input type="hidden" name="identity_type" x-bind:value="idType">
                                     <div>
                                         <x-input-label value="Full Name" />
                                         <x-text-input type="text" name="name"
@@ -274,6 +276,23 @@
                                     </div>
 
                                     <div>
+                                        <x-input-label value="Verify Identity With" />
+                                        <div class="flex gap-2">
+                                            <button type="button" @click="idType = 'bvn'"
+                                                    :class="idType === 'bvn' ? 'bg-[#0056D2] text-white' : 'bg-white text-slate-600 border border-slate-200'"
+                                                    class="flex-1 py-2 rounded-lg text-xs font-bold transition-colors">
+                                                BVN
+                                            </button>
+                                            <button type="button" @click="idType = 'nin'"
+                                                    :class="idType === 'nin' ? 'bg-[#0056D2] text-white' : 'bg-white text-slate-600 border border-slate-200'"
+                                                    class="flex-1 py-2 rounded-lg text-xs font-bold transition-colors">
+                                                NIN
+                                            </button>
+                                        </div>
+                                        <p class="text-[11px] text-slate-400 mt-1">If your BVN fails verification, try NIN instead.</p>
+                                    </div>
+
+                                    <div x-show="idType === 'bvn'">
                                         <x-input-label value="Bank Verification Number (BVN)" />
                                         <x-text-input type="text" name="bvn"
                                                :value="old('bvn', auth()->user()->bvn)"
@@ -281,7 +300,18 @@
                                                maxlength="11"
                                                pattern="\d{11}"
                                                title="BVN must be exactly 11 digits"
-                                               required />
+                                               x-bind:required="idType === 'bvn'" />
+                                    </div>
+
+                                    <div x-show="idType === 'nin'" x-cloak>
+                                        <x-input-label value="National Identification Number (NIN)" />
+                                        <x-text-input type="text" name="nin"
+                                               :value="old('nin', auth()->user()->nin)"
+                                               placeholder="Enter 11-digit NIN"
+                                               maxlength="11"
+                                               pattern="\d{11}"
+                                               title="NIN must be exactly 11 digits"
+                                               x-bind:required="idType === 'nin'" />
                                     </div>
 
                                     <div class="flex items-start gap-2.5 pt-2">

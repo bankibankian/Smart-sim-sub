@@ -73,29 +73,41 @@ class WalletController extends Controller
             ]);
         }
 
-        // Validate details
+        // Validate details — identity_type picks which of BVN/NIN is
+        // required (NIN is a fallback path for users whose BVN fails
+        // PalmPay's own verification; see VirtualAccountRepository).
         $request->validate([
-            'name'  => 'required|string|max:255',
-            'phone' => 'required|string|max:20|unique:users,phone,' . $loginUserId,
-            'bvn'   => 'required|string|digits:11|unique:users,bvn,' . $loginUserId,
+            'name'          => 'required|string|max:255',
+            'phone'         => 'required|string|max:20|unique:users,phone,' . $loginUserId,
+            'identity_type' => 'required|in:bvn,nin',
+            'bvn'           => 'required_if:identity_type,bvn|nullable|string|digits:11|unique:users,bvn,' . $loginUserId,
+            'nin'           => 'required_if:identity_type,nin|nullable|string|digits:11|unique:users,nin,' . $loginUserId,
         ]);
 
-        // Save submitted details to user profile
+        $identityType = $request->input('identity_type');
+
+        // Save submitted details to user profile — only overwrite whichever
+        // identity field was actually chosen, never blank out the other.
         $user->name = $request->input('name');
         $user->phone = $request->input('phone');
-        $user->bvn = $request->input('bvn');
+        if ($identityType === 'nin') {
+            $user->nin = $request->input('nin');
+        } else {
+            $user->bvn = $request->input('bvn');
+        }
         $user->save();
 
         // Check KYC details
-        if (empty($user->bvn) || empty($user->phone)) {
+        $identityValue = $identityType === 'nin' ? $user->nin : $user->bvn;
+        if (empty($identityValue) || empty($user->phone)) {
             return redirect()->route('wallet')->with([
-                'error' => 'Please complete your registration by providing your BVN and Phone Number to open a virtual account.'
+                'error' => 'Please complete your registration by providing your BVN or NIN and Phone Number to open a virtual account.'
             ]);
         }
 
         // Repository call
         $repObj2 = new VirtualAccountRepository;
-        $result = $repObj2->createVirtualAccount($loginUserId);
+        $result = $repObj2->createVirtualAccount($loginUserId, $identityType);
 
         // Handle failure
         if (!is_array($result) || !isset($result['success']) || !$result['success']) {

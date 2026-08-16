@@ -107,8 +107,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sims/bulk-assign', [\App\Http\Controllers\smartsim\SimsController::class, 'bulkAssignSim'])->name('sims.bulk-assign');
     Route::post('/sims/request-swap', [\App\Http\Controllers\smartsim\SimsController::class, 'requestSwap'])->name('sims.request-swap');
 
-    // Identity Verification Routes — same restriction as Airtime/SME Data above.
-    Route::prefix('verification')->middleware('utility_access')->group(function () {
+    // Identity Verification Routes — personal/business/agent plus partner
+    // (a narrower carve-out than Airtime/SME Data above).
+    Route::prefix('verification')->middleware('verification_access')->group(function () {
         // BVN Verification
         Route::get('/bvn', [\App\Http\Controllers\Verification\BvnverificationController::class, 'index'])->name('bvn.verification.index');
         Route::post('/bvn', [\App\Http\Controllers\Verification\BvnverificationController::class, 'store'])->name('bvn.verification.store');

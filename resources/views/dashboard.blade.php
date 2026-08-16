@@ -230,7 +230,7 @@
                     </a>
                 </div>
 
-                @if (\App\Support\UtilityAccess::canUse(auth()->user()))
+                @if (\App\Support\UtilityAccess::canVerify(auth()->user()))
                     <!-- Service 6: NIN -->
                     <div class="col">
                         <a href="{{ route('nin.verification.index') }}" class="service-btn p-3 p-md-4 text-center flex flex-col items-center justify-center gap-2">
