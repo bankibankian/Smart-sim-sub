@@ -20,8 +20,16 @@ class VirtualAccountRepository
 
     /**
      * Create a PalmPay virtual account for the given user.
+     *
+     * $identityType is our own app-level choice ('bvn' or 'nin' — which field
+     * the user supplied), mapped below to PalmPay's actual identityType
+     * values ('personal' / 'personal_nin'). NIN is a fallback path: PalmPay's
+     * BVN verification (identityType: personal) rejects some real, valid
+     * accounts (confirmed via production logs — respCode AC100007,
+     * "LicenseNumber verification failed") and NIN is PalmPay's own
+     * documented alternative identity check.
      */
-    public function createVirtualAccount(int $loginUserId): array
+    public function createVirtualAccount(int $loginUserId, string $identityType = 'bvn'): array
     {
         $userDetails = User::where('id', $loginUserId)->first();
 
@@ -36,10 +44,13 @@ class VirtualAccountRepository
             $noncestr       = noncestrHelper::generateNonceStr();
             $accountReference = 'F24' . strtoupper(bin2hex(random_bytes(5)));
 
+            $palmpayIdentityType = $identityType === 'nin' ? 'personal_nin' : 'personal';
+            $licenseNumber = $identityType === 'nin' ? $userDetails->nin : $userDetails->bvn;
+
             $data = [
                 'requestTime'        => $requestTime,
-                'identityType'       => 'personal',
-                'licenseNumber'      => $userDetails->bvn,
+                'identityType'       => $palmpayIdentityType,
+                'licenseNumber'      => $licenseNumber,
                 'virtualAccountName' => $customer_name,
                 'version'            => config('services.palmpay.version', 'V2.0'),
                 'customerName'       => $customer_name,
@@ -125,7 +136,23 @@ class VirtualAccountRepository
         } catch (Exception $e) {
             Log::error('Error creating virtual account for user ' . $loginUserId . ': ' . $e->getMessage());
 
-            return ['success' => false, 'message' => $e->getMessage()];
+            return ['success' => false, 'message' => $this->userFacingMessage($e->getMessage())];
         }
+    }
+
+    /**
+     * Never surface the vendor's raw error text (or that a third-party
+     * vendor is even involved) to end users — the real reason is already in
+     * the log line above for debugging. Users only get a generic hint,
+     * specific enough to act on when we know the ID number itself was the
+     * problem.
+     */
+    private function userFacingMessage(string $rawMessage): string
+    {
+        if (stripos($rawMessage, 'licensenumber') !== false || stripos($rawMessage, 'verification failed') !== false) {
+            return 'We could not verify the ID number you provided. Please double-check it and try again, or try the other verification option (BVN/NIN).';
+        }
+
+        return 'We could not generate your virtual account right now. Please try again shortly, or contact support if this continues.';
     }
 }

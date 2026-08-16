@@ -112,7 +112,7 @@
             </div>
         </div>
 
-        @if (\App\Support\UtilityAccess::canUse(auth()->user()))
+        @if (\App\Support\UtilityAccess::canVerify(auth()->user()))
             @php
                 $verificationActive = request()->routeIs('bvn.verification.index', 'nin.verification.index', 'nin.demo.index', 'nin.phone.index');
             @endphp
