@@ -18,6 +18,16 @@ the command itself, and something processing the queue it feeds. If you
 already have a queue worker running continuously (see Part 2), you only need
 to add Part 1.
 
+> **This isn't optional or specific to the monthly command.** Confirmed live
+> in this environment: with no queue worker running, jobs — including
+> `GrantActivationBonusData` firing on every single ordinary SIM activation,
+> not just this monthly bulk one — simply pile up in the `jobs` table
+> forever, completely silently (no error, nothing in `storage/logs/laravel.log`,
+> nothing anywhere) until someone notices a bonus/email never arrived, which
+> can take weeks. If you haven't explicitly set up Part 2 below on your
+> server, assume nothing is processing the queue and do it now — then add
+> Part 3 so a future outage gets caught in minutes instead of months.
+
 ---
 
 ## Part 1 — the monthly command itself
@@ -133,6 +143,27 @@ one-minute cron interval so runs never overlap. This already exists on most
 Laravel-on-cPanel deployments for the app's other queued jobs — check
 **Cron Jobs** first in case one's already configured before adding a
 duplicate.
+
+---
+
+## Part 3 — catch a stalled worker automatically
+
+`php artisan queue:health-check` (`app/Console/Commands/QueueHealthCheck.php`)
+checks for jobs sitting unprocessed for more than 15 minutes, or any rows in
+`failed_jobs`, and logs a `Log::critical(...)` line if it finds either —
+the same "loud" log level `CircuitBreaker` already uses in this app when a
+vendor integration trips. It doesn't fix anything or send an email itself
+(this app has no email-alerting infrastructure — logs are the alerting
+channel here), it just makes the problem visible fast instead of silent for
+weeks.
+
+Add it to the same crontab as Part 2, running every 15-30 minutes:
+```
+*/15 * * * * cd /var/www/smartsim && php artisan queue:health-check >> storage/logs/queue-health.log 2>&1
+```
+(or the equivalent cPanel cron entry, same PHP-path pattern as above). Then
+either watch `storage/logs/laravel.log` for `CRITICAL` lines, or point your
+existing log-monitoring/alerting tool (if any) at that log level.
 
 ---
 
