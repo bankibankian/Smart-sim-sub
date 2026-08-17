@@ -55,32 +55,32 @@
         @endif
 
         <!-- Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <x-card padding="p-5" class="flex items-center gap-4">
-                <div class="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <x-card padding="p-3.5" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
                     <i data-lucide="users" class="w-5 h-5"></i>
                 </div>
-                <div>
+                <div class="min-w-0 flex-1">
                     <p class="text-xs text-slate-400 mb-0.5">Total Downline</p>
-                    <p class="text-lg font-bold font-display text-slate-800">{{ number_format($totalReferrals) }}</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ number_format($totalReferrals) }}</p>
                 </div>
             </x-card>
-            <x-card padding="p-5" class="flex items-center gap-4">
-                <div class="w-11 h-11 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+            <x-card padding="p-3.5" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
                     <i data-lucide="user-check" class="w-5 h-5"></i>
                 </div>
-                <div>
+                <div class="min-w-0 flex-1">
                     <p class="text-xs text-slate-400 mb-0.5">Active Members</p>
-                    <p class="text-lg font-bold font-display text-slate-800">{{ number_format($activeReferrals) }}</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ number_format($activeReferrals) }}</p>
                 </div>
             </x-card>
-            <x-card padding="p-5" class="flex items-center gap-4">
-                <div class="w-11 h-11 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
+            <x-card padding="p-3.5" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
                     <i data-lucide="clock" class="w-5 h-5"></i>
                 </div>
-                <div>
+                <div class="min-w-0 flex-1">
                     <p class="text-xs text-slate-400 mb-0.5">Pending Invites</p>
-                    <p class="text-lg font-bold font-display text-slate-800">{{ number_format($pendingInvites) }}</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ number_format($pendingInvites) }}</p>
                 </div>
             </x-card>
         </div>

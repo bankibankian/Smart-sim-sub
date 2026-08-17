@@ -15,13 +15,13 @@
             </p>
         </div>
 
-        <x-card padding="p-5" class="flex items-center gap-4">
-            <div class="w-11 h-11 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+        <x-card padding="p-3.5" class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
                 <i data-lucide="wallet" class="w-5 h-5"></i>
             </div>
-            <div>
+            <div class="min-w-0 flex-1">
                 <p class="text-xs text-slate-400 mb-0.5">Total Commission Paid</p>
-                <p class="text-lg font-bold font-display text-slate-800">₦{{ number_format($totalPaid, 2) }}</p>
+                <p class="text-lg font-bold font-display text-slate-800 truncate">₦{{ number_format($totalPaid, 2) }}</p>
             </div>
         </x-card>
 
