@@ -22,6 +22,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'pnd_at',
     'pnd_reason',
     'pnd_by',
+    'lien_amount',
+    'lien_at',
+    'lien_reason',
+    'lien_by',
     'last_activity',
 ])]
 class Wallet extends Model
@@ -71,6 +75,8 @@ class Wallet extends Model
             'monthly_limit'  => 'decimal:2',
             'is_locked'      => 'boolean',
             'pnd_at'         => 'datetime',
+            'lien_amount'    => 'decimal:2',
+            'lien_at'        => 'datetime',
             'last_activity'  => 'datetime',
         ];
     }
@@ -107,26 +113,53 @@ class Wallet extends Model
         ])->save();
     }
 
+    /**
+     * Place a partial-amount hold — unlike PND, the rest of the balance
+     * stays spendable. Standing until explicitly lifted; unaffected by
+     * unrelated debits (see debit()'s lien-aware balance check below).
+     */
+    public function placeLien(float $amount, string $reason = '', ?int $by = null): void
+    {
+        $this->forceFill([
+            'lien_amount' => $amount,
+            'lien_at'     => now(),
+            'lien_reason' => $reason,
+            'lien_by'     => $by,
+        ])->save();
+    }
+
+    /** Lift a Lien. */
+    public function liftLien(): void
+    {
+        $this->forceFill([
+            'lien_amount' => 0,
+            'lien_at'     => null,
+            'lien_reason' => null,
+            'lien_by'     => null,
+        ])->save();
+    }
+
     // -------------------------------------------------------------------------
     // Balance Helpers
     // -------------------------------------------------------------------------
 
-    /** Total spendable balance (balance + bonus). */
+    /** Total spendable balance (balance + bonus - any active lien). */
     public function spendable(): float
     {
-        return (float) $this->balance + (float) $this->bonus;
+        return (float) $this->balance + (float) $this->bonus - (float) $this->lien_amount;
     }
 
     /**
      * Debit wallet and update totals atomically.
-     * Throws \RuntimeException if balance is insufficient or wallet is locked.
+     * Throws \RuntimeException if balance is insufficient, wallet is locked,
+     * or the amount would eat into a liened portion of the balance.
      */
     public function debit(float $amount): void
     {
         if ($this->is_locked) {
             throw new \RuntimeException('Wallet is locked.');
         }
-        if ($this->balance < $amount) {
+        if ($this->balance - (float) $this->lien_amount < $amount) {
             throw new \RuntimeException('Insufficient wallet balance.');
         }
 

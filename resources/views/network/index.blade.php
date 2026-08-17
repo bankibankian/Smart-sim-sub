@@ -2,7 +2,7 @@
     <title>SmartSIM - My Network</title>
 
     @php $canRestrict = \App\Support\SimAccess::canBrowseCatalog(auth()->user()); @endphp
-    <div x-data="{ openClaimModal: false, openClaimResultModal: {{ session('claim_result') ? 'true' : 'false' }}, currentTab: 'invited', openMemberModal: false, selectedMember: null }" class="max-w-5xl mx-auto space-y-6">
+    <div x-data="{ openClaimModal: false, openClaimResultModal: {{ session('claim_result') ? 'true' : 'false' }}, currentTab: 'invited', editInviteModal: false, editingInvite: null }" class="max-w-5xl mx-auto space-y-6">
         <!-- Page Header -->
         <div class="flex items-start justify-between gap-4 flex-wrap">
             <div>
@@ -119,6 +119,9 @@
                                 <th class="py-2.5">Member</th>
                                 <th class="py-2.5">Role</th>
                                 <th class="py-2.5">Invited</th>
+                                @if ($canRestrict)
+                                    <th class="py-2.5 text-right">Actions</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -134,10 +137,33 @@
                                         </span>
                                     </td>
                                     <td class="py-3 text-slate-400 font-medium">{{ $ref->created_at->format('M d, Y') }}</td>
+                                    @if ($canRestrict)
+                                        <td class="py-3 text-right" x-data="{ menuOpen: false }" @click.away="menuOpen = false">
+                                            <div class="relative inline-block">
+                                                <button type="button" @click="menuOpen = !menuOpen"
+                                                        class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
+                                                    <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                                </button>
+                                                <div x-show="menuOpen" x-cloak x-transition
+                                                     class="absolute right-0 mt-1 w-32 bg-white border border-slate-200 rounded-lg shadow-lg z-10 py-1">
+                                                    <button type="button"
+                                                            @click="editingInvite = {{ \Illuminate\Support\Js::from([
+                                                                'id' => $ref->id,
+                                                                'name' => $ref->first_name ? $ref->first_name . ' ' . $ref->last_name : $ref->email,
+                                                                'email' => $ref->email,
+                                                                'phone' => $ref->phone,
+                                                            ])->toHtml() }}; editInviteModal = true; menuOpen = false"
+                                                            class="w-full text-left px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2">
+                                                        <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Edit
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-12 text-center text-slate-400">
+                                    <td colspan="{{ $canRestrict ? 4 : 3 }}" class="py-12 text-center text-slate-400">
                                         <div class="bg-slate-50 rounded-2xl w-14 h-14 flex items-center justify-center mb-3 mx-auto border border-slate-100">
                                             <i data-lucide="mail" class="w-6 h-6 text-slate-400"></i>
                                         </div>
@@ -178,17 +204,7 @@
                                 @endphp
                                 <tr class="border-b border-slate-50 hover:bg-slate-50/50 {{ $canRestrict ? 'cursor-pointer' : '' }}"
                                     @if ($canRestrict)
-                                        @click="selectedMember = {
-                                            id: {{ $ref->id }},
-                                            name: '{{ addslashes(($ref->first_name ? $ref->first_name . ' ' . $ref->last_name : $ref->email)) }}',
-                                            role: '{{ addslashes(str_replace('_', ' ', $ref->role)) }}',
-                                            status: '{{ $ref->status }}',
-                                            phone: '{{ addslashes($ref->phone ?? '—') }}',
-                                            email: '{{ addslashes($ref->email) }}',
-                                            joined: '{{ $ref->created_at->format('M d, Y') }}',
-                                            isLocked: {{ $isLocked ? 'true' : 'false' }},
-                                            isSuspended: {{ $isSuspended ? 'true' : 'false' }}
-                                        }; openMemberModal = true"
+                                        onclick="window.location.href = '{{ route('network.downline.show', $ref) }}'"
                                     @endif
                                     >
                                     <td class="py-3">
@@ -234,8 +250,8 @@
         </x-card>
 
         @if ($canRestrict)
-            <!-- Team Member Detail Modal -->
-            <div x-show="openMemberModal" x-cloak
+            <!-- Edit Invite Modal -->
+            <div x-show="editInviteModal" x-cloak
                  class="fixed inset-0 z-50 overflow-y-auto"
                  x-transition:enter="transition ease-out duration-300"
                  x-transition:enter-start="opacity-0"
@@ -244,67 +260,52 @@
                  x-transition:leave-start="opacity-100"
                  x-transition:leave-end="opacity-0"
                  style="display: none;">
-                <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="openMemberModal = false"></div>
+                <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="editInviteModal = false"></div>
                 <div class="flex min-h-screen items-center justify-center p-4">
-                    <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-200 shadow-2xl p-6 overflow-hidden transform transition-all space-y-4" x-show="selectedMember">
-                        <button type="button" @click="openMemberModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
+                    <div class="relative w-full max-w-md bg-white rounded-xl border border-slate-200 shadow-2xl p-6 overflow-hidden transform transition-all space-y-4" x-show="editingInvite">
+                        <button type="button" @click="editInviteModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
                             <i data-lucide="x" class="w-5 h-5"></i>
                         </button>
                         <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
                             <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                                <i data-lucide="user" class="w-4 h-4"></i>
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <h3 class="text-sm font-semibold text-slate-800 font-display" x-text="selectedMember ? selectedMember.name : ''"></h3>
-                                <p class="text-xs text-slate-400 capitalize" x-text="selectedMember ? selectedMember.role : ''"></p>
+                                <h3 class="text-sm font-semibold text-slate-800 font-display" x-text="editingInvite ? editingInvite.name : ''"></h3>
+                                <p class="text-xs text-slate-400">Edit invite details</p>
                             </div>
                         </div>
 
-                        <div class="bg-slate-50 rounded-lg p-4 border border-slate-100 space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-slate-500 font-semibold text-xs">Status:</span>
-                                <span class="font-bold text-slate-800 capitalize" x-text="selectedMember ? selectedMember.status : ''"></span>
+                        <form :action="editingInvite ? '/network/invited/' + editingInvite.id : ''" method="POST" class="space-y-4">
+                            @csrf
+                            @method('PATCH')
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <x-input-label value="Email Address" />
+                                    <button type="button" @click="resendInvite(editingInvite.id)"
+                                            class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                                        <i data-lucide="send" class="w-3 h-3"></i> Resend
+                                    </button>
+                                </div>
+                                <x-text-input type="email" name="email"
+                                       x-bind:value="editingInvite ? editingInvite.email : ''"
+                                       required class="rounded-xl font-medium" />
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-500 font-semibold text-xs">Phone:</span>
-                                <span class="font-bold text-slate-800" x-text="selectedMember ? selectedMember.phone : ''"></span>
+                            <div class="space-y-1.5">
+                                <x-input-label value="Phone Number" />
+                                <x-text-input type="text"
+                                       x-bind:value="editingInvite ? (editingInvite.phone || '') : ''"
+                                       disabled class="rounded-xl font-medium bg-slate-50 text-slate-400" />
+                                <p class="text-[11px] text-slate-400">Phone editing isn't available yet.</p>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-500 font-semibold text-xs">Email:</span>
-                                <span class="font-bold text-slate-800 text-xs break-all" x-text="selectedMember ? selectedMember.email : ''"></span>
+                            <div class="flex items-center gap-2 pt-2">
+                                <x-primary-button type="submit" class="flex-1 !text-xs">Save</x-primary-button>
+                                <button type="button" @click="editInviteModal = false"
+                                        class="flex-1 px-4 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors">
+                                    Cancel
+                                </button>
                             </div>
-                            <div class="flex justify-between pt-2 border-t border-slate-200">
-                                <span class="text-slate-500 font-semibold text-xs">Joined:</span>
-                                <span class="font-bold text-slate-800" x-text="selectedMember ? selectedMember.joined : ''"></span>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2">
-                            <button type="button"
-                                    x-show="selectedMember && !selectedMember.isLocked"
-                                    @click="placeRestriction('pnd', selectedMember.id)"
-                                    class="px-3 py-2 rounded-lg bg-amber-50 text-amber-700 border border-amber-100 text-xs font-bold hover:bg-amber-100 transition-colors">
-                                Place PND
-                            </button>
-                            <button type="button"
-                                    x-show="selectedMember && selectedMember.isLocked"
-                                    @click="liftRestriction('pnd/lift', selectedMember.id)"
-                                    class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold hover:bg-slate-200 transition-colors">
-                                Lift PND
-                            </button>
-                            <button type="button"
-                                    x-show="selectedMember && !selectedMember.isSuspended"
-                                    @click="placeRestriction('suspend', selectedMember.id)"
-                                    class="px-3 py-2 rounded-lg bg-rose-50 text-rose-700 border border-rose-100 text-xs font-bold hover:bg-rose-100 transition-colors">
-                                Suspend
-                            </button>
-                            <button type="button"
-                                    x-show="selectedMember && selectedMember.isSuspended"
-                                    @click="liftRestriction('reinstate', selectedMember.id)"
-                                    class="px-3 py-2 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs font-bold hover:bg-emerald-100 transition-colors">
-                                Reinstate
-                            </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -436,56 +437,22 @@
     @if ($canRestrict)
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-            function submitDownlineAction(path, userId, extra) {
-                const f = document.createElement('form');
-                f.action = '/network/downline/' + userId + '/' + path;
-                f.method = 'POST';
-                let inputs = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-                if (extra) {
-                    inputs += '<input type="hidden" name="reason" value="' + extra.replace(/"/g, '&quot;') + '">';
-                }
-                f.innerHTML = inputs;
-                document.body.appendChild(f);
-                f.submit();
-            }
-
-            function placeRestriction(path, userId) {
-                const isSuspend = path === 'suspend';
+            function resendInvite(userId) {
                 Swal.fire({
-                    title: isSuspend ? 'Suspend Account' : 'Place Post No Debit',
-                    text: isSuspend
-                        ? 'This blocks the member from logging in until reinstated.'
-                        : 'This blocks the member from cashing out until lifted — other spending stays available.',
-                    input: 'text',
-                    inputLabel: 'Reason',
-                    inputPlaceholder: 'Enter a reason...',
-                    showCancelButton: true,
-                    confirmButtonColor: isSuspend ? '#e11d48' : '#d97706',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: isSuspend ? 'Suspend' : 'Place PND',
-                    preConfirm: (value) => {
-                        if (!value || !value.trim()) {
-                            Swal.showValidationMessage('A reason is required');
-                        }
-                        return value;
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        submitDownlineAction(path, userId, result.value);
-                    }
-                });
-            }
-
-            function liftRestriction(path, userId) {
-                Swal.fire({
-                    title: 'Are you sure?',
+                    title: 'Resend Invite?',
+                    text: 'A new invite email will be sent with a fresh 3-day link.',
                     showCancelButton: true,
                     confirmButtonColor: '#0056D2',
                     cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Yes, confirm'
+                    confirmButtonText: 'Resend'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        submitDownlineAction(path, userId, null);
+                        const f = document.createElement('form');
+                        f.action = '/network/invited/' + userId + '/resend';
+                        f.method = 'POST';
+                        f.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
+                        document.body.appendChild(f);
+                        f.submit();
                     }
                 });
             }

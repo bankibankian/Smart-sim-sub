@@ -48,14 +48,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/network', [\App\Http\Controllers\NetworkController::class, 'index'])->name('network');
     Route::get('/network/claim/check', [\App\Http\Controllers\NetworkController::class, 'checkClaim'])->name('network.claim.check');
     Route::post('/network/claim', [\App\Http\Controllers\NetworkController::class, 'claim'])->name('network.claim');
+    Route::patch('/network/invited/{user}', [\App\Http\Controllers\NetworkController::class, 'updateInvited'])->name('network.invited.update');
+    Route::post('/network/invited/{user}/resend', [\App\Http\Controllers\NetworkController::class, 'resendInvite'])->name('network.invited.resend');
 
     // Downline restriction actions — shared by catalog-role self-service (own
     // immediate downline only) and super_admin (anyone); see
-    // DownlineRestrictionController::authorize().
+    // DownlineAuthorization::authorize().
     Route::post('/network/downline/{user}/pnd', [\App\Http\Controllers\DownlineRestrictionController::class, 'placePnd'])->name('network.downline.pnd');
     Route::post('/network/downline/{user}/pnd/lift', [\App\Http\Controllers\DownlineRestrictionController::class, 'liftPnd'])->name('network.downline.pnd.lift');
     Route::post('/network/downline/{user}/suspend', [\App\Http\Controllers\DownlineRestrictionController::class, 'suspend'])->name('network.downline.suspend');
     Route::post('/network/downline/{user}/reinstate', [\App\Http\Controllers\DownlineRestrictionController::class, 'reinstate'])->name('network.downline.reinstate');
+    Route::post('/network/downline/{user}/lien', [\App\Http\Controllers\DownlineRestrictionController::class, 'placeLien'])->name('network.downline.lien');
+    Route::post('/network/downline/{user}/lien/lift', [\App\Http\Controllers\DownlineRestrictionController::class, 'liftLien'])->name('network.downline.lien.lift');
+
+    // Team-member detail page — Info/Metrics/Tier/Actions tabs for a single
+    // downline user; see DownlineDetailController.
+    Route::get('/network/downline/{user}', [\App\Http\Controllers\DownlineDetailController::class, 'show'])->name('network.downline.show');
+    Route::post('/network/downline/{user}/complete-onboarding', [\App\Http\Controllers\DownlineDetailController::class, 'completeOnboarding'])->name('network.downline.complete-onboarding');
+    Route::post('/network/downline/{user}/virtual-account', [\App\Http\Controllers\DownlineDetailController::class, 'generateVirtualAccount'])->name('network.downline.virtual-account');
 
     // Leaderboard & Commission Dashboard Routes
     Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
