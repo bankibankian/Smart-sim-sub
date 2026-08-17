@@ -11,7 +11,7 @@
                     </div>
                     Cash Out
                 </h1>
-                <p class="text-sm text-slate-500 mt-1">Request a payout to your saved withdrawal account — every request is reviewed by an admin before funds are sent.</p>
+                <p class="text-sm text-slate-500 mt-1">Request a payout to your saved withdrawal account — every request is reviewed by our team before funds are sent.</p>
             </div>
 
             <div class="flex items-center gap-3">
@@ -64,7 +64,7 @@
                         </div>
                         <div>
                             <h3 class="font-bold font-display text-slate-800">Request Cash Out</h3>
-                            <p class="text-xs text-slate-400 mt-0.5 font-medium">Sent for admin approval before payout.</p>
+                            <p class="text-xs text-slate-400 mt-0.5 font-medium">Sent for review by our team before payout.</p>
                         </div>
                     </div>
                     <span class="inline-block text-xs font-extrabold text-primary bg-primary/10 px-2.5 py-1 rounded-full uppercase tracking-wider">Manual Review</span>
@@ -145,7 +145,7 @@
                         <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-amber-800 flex gap-3 shadow-sm">
                             <i data-lucide="alert-circle" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5"></i>
                             <div class="text-[11px] leading-relaxed">
-                                <strong>Manual Review Required:</strong> Your wallet is debited immediately, but the payout only happens once an admin approves this request. Approved requests are non-reversible.
+                                <strong>Manual Review Required:</strong> Your wallet is debited immediately, but the payout only happens once our team approves this request. Approved requests are non-reversible.
                             </div>
                         </div>
 

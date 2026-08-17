@@ -49,7 +49,7 @@ class SimPlanController extends Controller
         $sims = $query->latest()->paginate(10, ['*'], 'sims_page')->appends(request()->query());
 
         // Fetch requests
-        $pendingRequests = SimRequest::with('user', 'sim')->where('status', 'pending')->latest()->get();
+        $pendingRequests = SimRequest::with('user', 'sim', 'upline')->where('status', 'pending')->latest()->get();
         $resolvedRequests = SimRequest::with('user', 'sim')->where('status', '!=', 'pending')->latest()->paginate(10, ['*'], 'requests_page')->appends(request()->query());
 
         // Fetch swap requests
@@ -273,7 +273,7 @@ class SimPlanController extends Controller
 
                 $lockedRequest->update([
                     'status' => 'approved',
-                    'admin_notes' => 'Approved by Super Admin.',
+                    'admin_notes' => 'Approved.',
                 ]);
             });
 
@@ -306,7 +306,7 @@ class SimPlanController extends Controller
 
                 $lockedRequest->update([
                     'status'      => 'rejected',
-                    'admin_notes' => $request->admin_notes ?? 'Rejected by Admin.',
+                    'admin_notes' => $request->admin_notes ?? 'Rejected.',
                 ]);
 
                 // Refund the amount securely if user was charged

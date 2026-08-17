@@ -106,6 +106,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/partner/sims/assign', [\App\Http\Controllers\smartsim\SimsController::class, 'partnerAssignSim'])->name('partner.sims.assign');
     Route::post('/sims/bulk-assign', [\App\Http\Controllers\smartsim\SimsController::class, 'bulkAssignSim'])->name('sims.bulk-assign');
     Route::post('/sims/request-swap', [\App\Http\Controllers\smartsim\SimsController::class, 'requestSwap'])->name('sims.request-swap');
+    Route::get('/sims/downline-requests', [\App\Http\Controllers\smartsim\SimsController::class, 'downlineRequests'])->name('sims.downline-requests');
+    Route::get('/sims/downline-requests/available-sims', [\App\Http\Controllers\smartsim\SimsController::class, 'downlineRequestAvailableSims'])->name('sims.downline-requests.available-sims');
+    Route::post('/sims/downline-requests/{simRequest}/fulfill', [\App\Http\Controllers\smartsim\SimsController::class, 'fulfillDownlineRequest'])->name('sims.downline-requests.fulfill');
 
     // Identity Verification Routes — personal/business/agent plus partner
     // (a narrower carve-out than Airtime/SME Data above).

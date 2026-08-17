@@ -119,7 +119,7 @@
                         @if ($user->hasRole('super_admin'))
                             Turn it on from the settings page to start tracking activations and tiers.
                         @else
-                            Check back later — an admin hasn't switched it on yet.
+                            Check back later — our team hasn't switched it on yet.
                         @endif
                     </p>
                 </div>
@@ -169,7 +169,7 @@
                     </div>
 
                     @if (!$hasTiers)
-                        <p class="text-xs text-slate-400">Admin hasn't configured any tiers yet — check back later.</p>
+                        <p class="text-xs text-slate-400">Tiers haven't been configured yet — check back later.</p>
                     @elseif ($nextTier)
                         <div class="space-y-2">
                             <div class="flex items-center justify-between text-xs">

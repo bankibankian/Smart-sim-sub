@@ -67,7 +67,7 @@ class SimSwapController extends Controller
                     'status' => 'approved',
                     'approved_by' => $actor->id,
                     'resolved_at' => now(),
-                    'admin_notes' => 'Approved by Super Admin.',
+                    'admin_notes' => 'Approved.',
                 ]);
             });
 
@@ -100,7 +100,7 @@ class SimSwapController extends Controller
 
                 $locked->update([
                     'status' => 'rejected',
-                    'admin_notes' => $request->admin_notes ?: 'Rejected by Admin.',
+                    'admin_notes' => $request->admin_notes ?: 'Rejected.',
                     'approved_by' => Auth::id(),
                     'resolved_at' => now(),
                 ]);

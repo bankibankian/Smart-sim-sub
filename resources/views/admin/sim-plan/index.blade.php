@@ -234,6 +234,11 @@
                                         </td>
                                         <td class="py-3">
                                             <span class="font-bold text-slate-700">₦{{ number_format($req->amount, 2) }}</span>
+                                            @if ($req->upline)
+                                                <span class="block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 w-fit">
+                                                    Routed to: {{ $req->upline->first_name }} {{ $req->upline->last_name }}
+                                                </span>
+                                            @endif
                                         </td>
                                         <td class="py-3 text-right space-x-1 whitespace-nowrap">
                                             @if ($req->request_type === 'activation')
@@ -373,6 +378,7 @@
                      x-data="{
                         selectedSims: [],
                         maxSelect: 50,
+                        assignableUsersMap: {{ \Illuminate\Support\Js::from($assignableUsers->mapWithKeys(fn ($au) => [trim($au->first_name . ' ' . $au->last_name) . ' · ' . ($au->phone ?? '') . ' (' . $au->role . ') #' . $au->id => $au->id]))->toHtml() }},
                         toggleAll(checked) {
                             if (checked) {
                                 let ids = Array.from(document.querySelectorAll('.sim-checkbox:not(:disabled)')).map(el => parseInt(el.value));
@@ -452,22 +458,22 @@
                             title: 'Bulk Assign SIMs',
                             html: `
                                 <div class='text-left space-y-2'>
-                                    <label class='text-xs font-bold text-slate-500 uppercase block'>Select Assignee</label>
-                                    <select id='bulk_user_id' class='w-full py-2.5 border rounded-xl font-medium text-slate-700'>
-                                        <option value=''>Select Account</option>
+                                    <label class='text-xs font-bold text-slate-500 uppercase block'>Search by Name or Phone</label>
+                                    <input type='text' id='bulk_user_id' list='bulk_user_id_list' autocomplete='off' placeholder='Start typing a name or phone…' class='w-full py-2.5 px-3 border rounded-xl font-medium text-slate-700'>
+                                    <datalist id='bulk_user_id_list'>
                                         @foreach ($assignableUsers as $au)
-                                            <option value='{{ $au->id }}'>{{ $au->first_name }} {{ $au->last_name }} ({{ $au->role }})</option>
+                                            <option value='{{ trim($au->first_name . " " . $au->last_name) }} · {{ $au->phone }} ({{ $au->role }}) #{{ $au->id }}'></option>
                                         @endforeach
-                                    </select>
+                                    </datalist>
                                 </div>
                             `,
                             showCancelButton: true,
                             confirmButtonColor: '#0056D2',
                             confirmButtonText: 'Assign Selected',
                             preConfirm: () => {
-                                const val = document.getElementById('bulk_user_id').value;
+                                const val = assignableUsersMap[document.getElementById('bulk_user_id').value.trim()];
                                 if (!val) {
-                                    Swal.showValidationMessage('Please select a user');
+                                    Swal.showValidationMessage('Please select a valid user from the list');
                                 }
                                 return val;
                             }
@@ -556,22 +562,22 @@
                                                     title: 'Assign SIM Card',
                                                     html: `
                                                         <div class='text-left space-y-2'>
-                                                            <label class='text-xs font-bold text-slate-500 uppercase'>Select Assignee</label>
-                                                            <select id='swal_user_id' class='w-full py-2.5 border rounded-xl font-medium text-slate-700'>
-                                                                <option value=''>Select Account</option>
+                                                            <label class='text-xs font-bold text-slate-500 uppercase'>Search by Name or Phone</label>
+                                                            <input type='text' id='swal_user_id' list='swal_user_id_list' autocomplete='off' placeholder='Start typing a name or phone…' class='w-full py-2.5 px-3 border rounded-xl font-medium text-slate-700'>
+                                                            <datalist id='swal_user_id_list'>
                                                                 @foreach ($assignableUsers as $au)
-                                                                    <option value='{{ $au->id }}'>{{ $au->first_name }} {{ $au->last_name }} ({{ $au->role }})</option>
+                                                                    <option value='{{ trim($au->first_name . " " . $au->last_name) }} · {{ $au->phone }} ({{ $au->role }}) #{{ $au->id }}'></option>
                                                                 @endforeach
-                                                            </select>
+                                                            </datalist>
                                                         </div>
                                                     `,
                                                     showCancelButton: true,
                                                     confirmButtonColor: '#0056D2',
                                                     confirmButtonText: 'Assign Now',
                                                     preConfirm: () => {
-                                                        const val = document.getElementById('swal_user_id').value;
+                                                        const val = assignableUsersMap[document.getElementById('swal_user_id').value.trim()];
                                                         if (!val) {
-                                                            Swal.showValidationMessage('Please select a user');
+                                                            Swal.showValidationMessage('Please select a valid user from the list');
                                                         }
                                                         return val;
                                                     }
