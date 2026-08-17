@@ -128,7 +128,7 @@
             <div class="content">
                 <h1 class="title">Support Ticket #{{ $ticket->id }} Closed</h1>
                 <p class="text">Hello {{ $ticket->user->first_name }},</p>
-                <p class="text">We are writing to inform you that your support ticket has been marked as <strong>Resolved and Closed</strong> by our administration team. We hope we were able to successfully resolve your issue!</p>
+                <p class="text">We are writing to inform you that your support ticket has been marked as <strong>Resolved and Closed</strong> by our support team. We hope we were able to successfully resolve your issue!</p>
                 
                 <div class="ticket-details">
                     <h3 class="details-title">Ticket Information</h3>

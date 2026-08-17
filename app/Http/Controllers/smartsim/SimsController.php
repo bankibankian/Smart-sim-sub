@@ -264,12 +264,29 @@ class SimsController extends Controller
         $meta = self::DEVICE_PAGES[$slug];
         $providers = ['mtn', 'airtel', 'glo', '9mobile'];
 
+        $uplinePartner = null;
+        $unitPrice = 0.00;
+
+        if (in_array($user->role, SimAccess::MINE_ROLES, true)) {
+            $uplinePartner = $this->resolveUplinePartner($user);
+
+            if (!$uplinePartner) {
+                $simService = \App\Models\Service::where('name', 'simcard')->first();
+                $serviceField = $simService
+                    ? \App\Models\ServiceField::where('service_id', $simService->id)->where('field_name', $meta['category'])->first()
+                    : null;
+                $unitPrice = $serviceField ? $serviceField->priceForUser($user) : 0.00;
+            }
+        }
+
         return view('smartsimcard.request', [
             'user' => $user,
             'device' => $meta,
             'slug' => $slug,
             'category' => $meta['category'],
             'providers' => $providers,
+            'uplinePartner' => $uplinePartner,
+            'unitPrice' => $unitPrice,
         ]);
     }
 
@@ -482,7 +499,7 @@ class SimsController extends Controller
             'status' => 'pending',
         ]);
 
-        return back()->with('success', "Swap request for {$sim->number} submitted for admin approval.");
+        return back()->with('success', "Swap request for {$sim->number} submitted for review by our team.");
     }
 
     /**
@@ -542,9 +559,32 @@ class SimsController extends Controller
     }
 
     /**
+     * A personal/business requester's immediate upline is only usable for
+     * self-service SIM fulfillment when it's an active partner — the only
+     * role RoleHierarchy's chain lets hand a SIM straight to 'personal'.
+     * Anything else (no referrer, a suspended partner, or a referrer from
+     * outside the distribution chain — e.g. another personal user via the
+     * leaderboard referral system) is treated as "unclaimed".
+     */
+    private function resolveUplinePartner(User $user): ?User
+    {
+        $referrer = $user->referrer;
+
+        return ($referrer && $referrer->role === 'partner' && $referrer->status === 'active') ? $referrer : null;
+    }
+
+    /**
      * User submits a request for N SIM numbers of a category/network — they
-     * no longer pick specific numbers; the admin chooses exactly which SIMs
-     * to hand out when reviewing the request.
+     * no longer pick specific numbers; whoever fulfills the request chooses
+     * exactly which SIMs to hand out.
+     *
+     * Personal/Business requesters split two ways: if they have an active
+     * partner upline, the request is routed to that partner to fulfill from
+     * their own held stock first (free — the admin queue still sees it as a
+     * fallback). Otherwise ("unclaimed" — no upline, or an upline that isn't
+     * an active partner), the requester pays for the quantity up front,
+     * mirroring activateSim()'s charge-then-request pattern below, before
+     * the request lands in the admin queue.
      */
     public function requestSim(Request $request)
     {
@@ -556,10 +596,101 @@ class SimsController extends Controller
 
         $user = Auth::user();
 
+        if (!in_array($user->role, SimAccess::MINE_ROLES, true)) {
+            try {
+                DB::transaction(function () use ($user, $request) {
+                    SimRequest::create([
+                        'user_id'      => $user->id,
+                        'sim_id'       => null,
+                        'number'       => null,
+                        'category'     => $request->category,
+                        'provider'     => $request->provider,
+                        'quantity'     => $request->quantity,
+                        'request_type' => 'purchase',
+                        'status'       => 'pending',
+                        'amount'       => 0.00,
+                    ]);
+                });
+
+                return back()->with('success', "Your request for {$request->quantity} x {$request->category} has been submitted successfully.");
+            } catch (\Exception $e) {
+                return back()->with('error', $e->getMessage());
+            }
+        }
+
+        $uplinePartner = $this->resolveUplinePartner($user);
+
         try {
-            DB::transaction(function () use ($user, $request) {
+            if ($uplinePartner) {
+                DB::transaction(function () use ($user, $request, $uplinePartner) {
+                    SimRequest::create([
+                        'user_id'      => $user->id,
+                        'upline_id'    => $uplinePartner->id,
+                        'sim_id'       => null,
+                        'number'       => null,
+                        'category'     => $request->category,
+                        'provider'     => $request->provider,
+                        'quantity'     => $request->quantity,
+                        'request_type' => 'purchase',
+                        'status'       => 'pending',
+                        'amount'       => 0.00,
+                    ]);
+                });
+
+                return back()->with('success', "Your request for {$request->quantity} x {$request->category} has been sent to your upline, {$uplinePartner->first_name} {$uplinePartner->last_name}, to fulfill from their stock — our team will step in if they can't.");
+            }
+
+            // Unclaimed: no active-partner upline to fulfill from, so payment
+            // is collected up front, same pattern as activateSim() below.
+            $simService = \App\Models\Service::where('name', 'simcard')->first();
+            $serviceField = $simService
+                ? \App\Models\ServiceField::where('service_id', $simService->id)->where('field_name', $request->category)->first()
+                : null;
+            $unitPrice = $serviceField ? $serviceField->priceForUser($user) : 0.00;
+            $totalAmount = $unitPrice * $request->quantity;
+
+            DB::transaction(function () use ($user, $request, $totalAmount, $simService) {
+                $wallet = \App\Models\Wallet::where('user_id', $user->id)->lockForUpdate()->first();
+                if (!$wallet || $wallet->balance < $totalAmount) {
+                    throw new \Exception('Insufficient wallet balance! You need ₦' . number_format($totalAmount, 2));
+                }
+
+                $oldBalance = $wallet->balance;
+                $wallet->decrement('balance', $totalAmount);
+                $newBalance = $wallet->balance;
+
+                $ref = 'SIMREQ-' . time() . '-' . rand(1000, 9999);
+
+                \App\Models\Transaction::create([
+                    'transaction_ref' => $ref,
+                    'user_id'         => $user->id,
+                    'amount'          => $totalAmount,
+                    'fee'             => 0.00,
+                    'net_amount'      => $totalAmount,
+                    'description'     => "SIM Card Request: {$request->quantity} x {$request->category} (Network: " . strtoupper($request->provider) . ")",
+                    'type'            => 'debit',
+                    'status'          => 'completed',
+                    'performed_by'    => $user->first_name . ' ' . $user->last_name,
+                    'approved_by'     => $user->id,
+                ]);
+
+                \App\Models\Report::create([
+                    'user_id'      => $user->id,
+                    'phone_number' => null,
+                    'network'      => $request->provider,
+                    'ref'          => $ref,
+                    'amount'       => $totalAmount,
+                    'status'       => 'completed',
+                    'type'         => 'sim_purchase_request',
+                    'description'  => "SIM Card Request: {$request->quantity} x {$request->category}",
+                    'old_balance'  => $oldBalance,
+                    'new_balance'  => $newBalance,
+                    'service_id'   => $simService ? $simService->id : null,
+                ]);
+
                 SimRequest::create([
                     'user_id'      => $user->id,
+                    'upline_id'    => null,
                     'sim_id'       => null,
                     'number'       => null,
                     'category'     => $request->category,
@@ -567,11 +698,11 @@ class SimsController extends Controller
                     'quantity'     => $request->quantity,
                     'request_type' => 'purchase',
                     'status'       => 'pending',
-                    'amount'       => 0.00,
+                    'amount'       => $totalAmount,
                 ]);
             });
 
-            return back()->with('success', "Your request for {$request->quantity} x {$request->category} has been submitted successfully.");
+            return back()->with('success', "Your request for {$request->quantity} x {$request->category} has been submitted and ₦" . number_format($totalAmount, 2) . " has been charged from your wallet. Our team will assign your SIM number(s) shortly.");
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -861,6 +992,143 @@ class SimsController extends Controller
             });
 
             return back()->with('success', "Activated {$sim->number} for {$targetUser->first_name} {$targetUser->last_name}.");
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Restrict the three downline-requests actions below to Partners — the
+     * only role a personal/business requester's SimRequest.upline_id can
+     * point to (see resolveUplinePartner()).
+     */
+    private function authorizePartner(): User
+    {
+        $user = Auth::user();
+        if (!$user || $user->role !== 'partner') {
+            abort(403, 'This page is only available to Partners.');
+        }
+
+        return $user;
+    }
+
+    /**
+     * Requests from a Partner's own downline (personal/business users who
+     * named this partner as their upline at submission time), still pending.
+     * Shown alongside how many matching SIMs the partner currently holds so
+     * they immediately know whether they can fulfill it themselves.
+     */
+    public function downlineRequests()
+    {
+        $partner = $this->authorizePartner();
+
+        $requests = SimRequest::with('user')
+            ->where('upline_id', $partner->id)
+            ->where('status', 'pending')
+            ->latest()
+            ->get()
+            ->map(function (SimRequest $req) use ($partner) {
+                $req->held_count = Sim::where('partner_id', $partner->id)
+                    ->where('user_id', $partner->id)
+                    ->where('status', SimStatus::ASSIGNED_TO_PARTNER)
+                    ->where('category', $req->category)
+                    ->where('provider', $req->provider)
+                    ->count();
+
+                return $req;
+            });
+
+        return view('smartsimcard.downline-requests', ['requests' => $requests]);
+    }
+
+    /**
+     * AJAX source for the "pick which SIM(s) to hand over" picker on the
+     * Downline Requests page — mirrors Admin\SimPlanController::availableSims(),
+     * scoped to the partner's own held stock instead of the central pool.
+     */
+    public function downlineRequestAvailableSims(Request $request)
+    {
+        $partner = $this->authorizePartner();
+
+        $request->validate([
+            'category' => 'required|string',
+            'provider' => 'required|string',
+        ]);
+
+        $sims = Sim::where('partner_id', $partner->id)
+            ->where('user_id', $partner->id)
+            ->where('status', SimStatus::ASSIGNED_TO_PARTNER)
+            ->where('category', $request->category)
+            ->where('provider', $request->provider)
+            ->orderBy('number')
+            ->get(['id', 'number']);
+
+        return response()->json($sims);
+    }
+
+    /**
+     * Partner fulfills a downline request directly from their own held
+     * stock via the same assignDown() delegation they'd otherwise do
+     * manually from Inventory/the device page.
+     */
+    public function fulfillDownlineRequest(Request $request, SimRequest $simRequest)
+    {
+        $partner = $this->authorizePartner();
+
+        if ((int) $simRequest->upline_id !== $partner->id) {
+            abort(403, 'This request was not routed to you.');
+        }
+
+        if ($simRequest->status !== 'pending') {
+            return back()->with('error', 'This request has already been processed.');
+        }
+
+        $request->validate([
+            'sim_ids'   => 'required|array',
+            'sim_ids.*' => 'exists:sims,id',
+        ]);
+
+        if (count($request->sim_ids) !== $simRequest->quantity) {
+            return back()->with('error', "Please select exactly {$simRequest->quantity} SIM number(s).");
+        }
+
+        try {
+            DB::transaction(function () use ($simRequest, $partner, $request) {
+                $lockedRequest = SimRequest::where('id', $simRequest->id)->lockForUpdate()->first();
+                if (!$lockedRequest || $lockedRequest->status !== 'pending') {
+                    throw new \Exception('This request has already been processed.');
+                }
+
+                $requester = User::where('id', $lockedRequest->user_id)->lockForUpdate()->first();
+                if (!$requester) {
+                    throw new \Exception('Requester user not found.');
+                }
+
+                $sims = Sim::whereIn('id', $request->sim_ids)->lockForUpdate()->get();
+                if ($sims->count() !== $lockedRequest->quantity) {
+                    throw new \Exception('One or more selected SIMs are no longer available.');
+                }
+
+                $service = app(SimAssignmentService::class);
+                foreach ($sims as $sim) {
+                    if ($sim->partner_id !== $partner->id || $sim->user_id !== $partner->id
+                        || $sim->status !== SimStatus::ASSIGNED_TO_PARTNER
+                        || $sim->category !== $lockedRequest->category || $sim->provider !== $lockedRequest->provider) {
+                        throw new \Exception("SIM {$sim->number} is no longer yours to assign.");
+                    }
+                }
+
+                foreach ($sims as $sim) {
+                    $service->assignDown($sim, $partner, $requester);
+                }
+
+                $lockedRequest->update([
+                    'status' => 'approved',
+                    'admin_notes' => "Fulfilled by upline partner {$partner->first_name} {$partner->last_name}.",
+                ]);
+            });
+
+            return back()->with('success', 'Request fulfilled successfully.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }

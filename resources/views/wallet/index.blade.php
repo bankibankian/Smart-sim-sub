@@ -76,7 +76,7 @@
                                     <i data-lucide="gift" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-semibold text-slate-800 font-display">Rewards &amp; Bonus</h3>
+                                    <h3 class="font-semibold text-slate-800 font-display">{{ \App\Support\SimAccess::canBrowseCatalog(auth()->user()) ? 'Commission Balance' : 'Rewards & Bonus' }}</h3>
                                     <span class="text-xs text-slate-400">Claimable balance</span>
                                 </div>
                             </div>

@@ -364,7 +364,7 @@
                 <div class="flex items-start justify-between gap-4">
                     <div>
                         <h2 class="text-lg font-bold text-slate-800 font-display">Withdrawal Account</h2>
-                        <p class="text-xs text-slate-400 mt-1">The single bank account your cash-out requests are paid into. Only one account can be saved at a time — saving a new one replaces it. Admin approval is required before any funds are sent.</p>
+                        <p class="text-xs text-slate-400 mt-1">The single bank account your cash-out requests are paid into. Only one account can be saved at a time — saving a new one replaces it. Our team's approval is required before any funds are sent.</p>
                     </div>
                     <div class="shrink-0">
                         @if ($withdrawalAccount)
@@ -487,7 +487,7 @@
                         <div>
                             <span class="block text-sm font-bold">Upgrade Request Pending</span>
                             <span class="block text-xs mt-0.5 font-medium leading-relaxed">
-                                Your application to upgrade to <strong class="uppercase">{{ $user->pending_role }}</strong> was submitted on {{ $user->upgrade_requested_at->format('M d, Y h:i A') }} and is currently under review by our administrators.
+                                Your application to upgrade to <strong class="uppercase">{{ $user->pending_role }}</strong> was submitted on {{ $user->upgrade_requested_at->format('M d, Y h:i A') }} and is currently under review by our team.
                             </span>
                         </div>
                     </div>

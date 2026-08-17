@@ -27,7 +27,7 @@
 
             <p class="text-sm text-slate-500 mt-1.5 max-w-sm mx-auto">
                 @if ($isWithdrawal && $isPending)
-                    Your cash-out request has been submitted and is awaiting admin approval. You'll be notified once it's processed.
+                    Your cash-out request has been submitted and is awaiting review from our team. You'll be notified once it's processed.
                 @elseif ($isPending)
                     Your request has been submitted and is being processed.
                 @elseif ($isFailed)

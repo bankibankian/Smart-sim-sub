@@ -249,7 +249,7 @@ class CashOutController extends Controller
 
                 $locked->update([
                     'status' => 'rejected',
-                    'admin_notes' => $request->admin_notes ?: 'Rejected by Admin.',
+                    'admin_notes' => $request->admin_notes ?: 'Rejected.',
                     'approved_by' => Auth::id(),
                     'resolved_at' => now(),
                 ]);

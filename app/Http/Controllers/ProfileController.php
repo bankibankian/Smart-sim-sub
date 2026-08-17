@@ -187,7 +187,7 @@ class ProfileController extends Controller
             'cac_number' => $request->cac_number,
         ])->save();
 
-        return Redirect::route('profile.edit')->with('success', 'Your account upgrade request to ' . ucfirst($request->role) . ' has been submitted successfully and is currently pending admin review.');
+        return Redirect::route('profile.edit')->with('success', 'Your account upgrade request to ' . ucfirst($request->role) . ' has been submitted successfully and is currently pending review from our team.');
     }
 
     /**

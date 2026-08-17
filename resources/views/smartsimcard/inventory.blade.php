@@ -73,7 +73,7 @@
         </div>
 
         <!-- Your SIMs -->
-        <div x-data="{ currentTab: 'activated' }" class="space-y-4">
+        <div x-data="{ currentTab: 'activated', downlineUsersMap: {{ \Illuminate\Support\Js::from($downlineUsers->mapWithKeys(fn ($du) => [trim($du->first_name . ' ' . $du->last_name) . ' · ' . ($du->phone ?? '') . ' #' . $du->id => $du->id]))->toHtml() }} }" class="space-y-4">
             <!-- Navigation Tabs -->
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-2 flex gap-1">
                 <button type="button" @click="currentTab = 'activated'" :class="currentTab === 'activated' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
@@ -168,22 +168,22 @@
                             title: 'Bulk Assign SIMs',
                             html: `
                                 <div class='text-left space-y-2'>
-                                    <label class='text-xs font-bold text-slate-500 uppercase block'>Assign To</label>
-                                    <select id='bulk_user_id' class='w-full py-2.5 border rounded-xl font-medium text-slate-700'>
-                                        <option value=''>Select Account</option>
+                                    <label class='text-xs font-bold text-slate-500 uppercase block'>Search by Name or Phone</label>
+                                    <input type='text' id='bulk_user_id' list='bulk_user_id_list' autocomplete='off' placeholder='Start typing a name or phone…' class='w-full py-2.5 px-3 border rounded-xl font-medium text-slate-700'>
+                                    <datalist id='bulk_user_id_list'>
                                         @foreach ($downlineUsers as $du)
-                                            <option value='{{ $du->id }}'>{{ $du->first_name }} {{ $du->last_name }}</option>
+                                            <option value='{{ trim($du->first_name . " " . $du->last_name) }} · {{ $du->phone }} #{{ $du->id }}'></option>
                                         @endforeach
-                                    </select>
+                                    </datalist>
                                 </div>
                             `,
                             showCancelButton: true,
                             confirmButtonColor: '#0056D2',
                             confirmButtonText: 'Assign Selected',
                             preConfirm: () => {
-                                const val = document.getElementById('bulk_user_id').value;
+                                const val = downlineUsersMap[document.getElementById('bulk_user_id').value.trim()];
                                 if (!val) {
-                                    Swal.showValidationMessage('Please select a user');
+                                    Swal.showValidationMessage('Please select a valid user from the list');
                                 }
                                 return val;
                             }
@@ -294,24 +294,25 @@
                                                     title: 'Swap SIM Holder',
                                                     html: `
                                                         <div class='text-left space-y-2'>
-                                                            <p class='text-xs text-slate-500'>Currently with <strong>{{ $sim->current_holder->first_name ?? '' }} {{ $sim->current_holder->last_name ?? '' }}</strong>. This swap requires admin approval before it takes effect.</p>
-                                                            <label class='text-xs font-bold text-slate-500 uppercase block'>Swap To</label>
-                                                            <select id='swap_to_id_{{ $sim->id }}' class='w-full py-2.5 border rounded-xl font-medium text-slate-700'>
-                                                                <option value=''>Select Account</option>
+                                                            <p class='text-xs text-slate-500'>Currently with <strong>{{ $sim->current_holder->first_name ?? '' }} {{ $sim->current_holder->last_name ?? '' }}</strong>. This swap requires review from our team before it takes effect.</p>
+                                                            <label class='text-xs font-bold text-slate-500 uppercase block'>Search by Name or Phone</label>
+                                                            <input type='text' id='swap_to_id_{{ $sim->id }}' list='swap_to_id_list_{{ $sim->id }}' autocomplete='off' placeholder='Start typing a name or phone…' class='w-full py-2.5 px-3 border rounded-xl font-medium text-slate-700'>
+                                                            <datalist id='swap_to_id_list_{{ $sim->id }}'>
                                                                 @foreach ($downlineUsers as $du)
                                                                     @continue($sim->current_holder && $du->id === $sim->current_holder->id)
-                                                                    <option value='{{ $du->id }}'>{{ $du->first_name }} {{ $du->last_name }}</option>
+                                                                    <option value='{{ trim($du->first_name . " " . $du->last_name) }} · {{ $du->phone }} #{{ $du->id }}'></option>
                                                                 @endforeach
-                                                            </select>
+                                                            </datalist>
                                                         </div>
                                                     `,
                                                     showCancelButton: true,
                                                     confirmButtonColor: '#0056D2',
                                                     confirmButtonText: 'Request Swap',
                                                     preConfirm: () => {
-                                                        const val = document.getElementById('swap_to_id_{{ $sim->id }}').value;
+                                                        const swapMap_{{ $sim->id }} = {{ \Illuminate\Support\Js::from($downlineUsers->filter(fn ($du) => !($sim->current_holder && $du->id === $sim->current_holder->id))->mapWithKeys(fn ($du) => [trim($du->first_name . ' ' . $du->last_name) . ' · ' . ($du->phone ?? '') . ' #' . $du->id => $du->id]))->toHtml() }};
+                                                        const val = swapMap_{{ $sim->id }}[document.getElementById('swap_to_id_{{ $sim->id }}').value.trim()];
                                                         if (!val) {
-                                                            Swal.showValidationMessage('Please select an account to swap to');
+                                                            Swal.showValidationMessage('Please select a valid account from the list');
                                                         }
                                                         return val;
                                                     }

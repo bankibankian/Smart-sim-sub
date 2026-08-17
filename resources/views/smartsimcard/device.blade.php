@@ -45,7 +45,11 @@
                     numbers: @json($heldSims->pluck("id", "number")),
                     numberInput: "",
                     simId: "",
-                    lookup() { this.simId = this.numbers[this.numberInput.trim()] ?? ""; }
+                    lookup() { this.simId = this.numbers[this.numberInput.trim()] ?? ""; },
+                    users: @json($downlineUsers->mapWithKeys(fn ($du) => [trim("{$du->first_name} {$du->last_name}") . " · " . ($du->phone ?? '') . " #{$du->id}" => $du->id])),
+                    userInput: "",
+                    userId: "",
+                    lookupUser() { this.userId = this.users[this.userInput.trim()] ?? ""; }
                 }' class="space-y-6">
         @endif
 
@@ -109,16 +113,21 @@
                                     </div>
 
                                     <div class="space-y-1.5">
-                                        <x-input-label for="assign_user_{{ $slug }}" value="Select from Network" />
-                                        <x-select-input id="assign_user_{{ $slug }}" name="user_id" required class="rounded-xl font-medium">
-                                            <option value="">Select {{ ucfirst($nextRoleLabel) }}</option>
+                                        <x-input-label for="assign_user_{{ $slug }}" value="Search by Name or Phone" />
+                                        <input type="text" id="assign_user_{{ $slug }}" list="assign_users_{{ $slug }}"
+                                               x-model="userInput" @input="lookupUser()" autocomplete="off"
+                                               class="block w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                               placeholder="Start typing a {{ $nextRoleLabel }}'s name or phone…">
+                                        <datalist id="assign_users_{{ $slug }}">
                                             @foreach ($downlineUsers as $du)
-                                                <option value="{{ $du->id }}">{{ $du->first_name }} {{ $du->last_name }}</option>
+                                                <option value="{{ trim($du->first_name . ' ' . $du->last_name) }} · {{ $du->phone }} #{{ $du->id }}"></option>
                                             @endforeach
-                                        </x-select-input>
+                                        </datalist>
+                                        <input type="hidden" name="user_id" x-bind:value="userId">
+                                        <p x-show="userInput.length > 0 && !userId" x-cloak class="text-xs font-medium text-rose-500">That's not one of your {{ $nextRoleLabel }}s.</p>
                                     </div>
 
-                                    <x-primary-button type="submit" class="w-full !text-xs" x-bind:disabled="!simId">
+                                    <x-primary-button type="submit" class="w-full !text-xs" x-bind:disabled="!simId || !userId">
                                         <i data-lucide="send" class="w-3.5 h-3.5"></i>
                                         Assign to Downline
                                     </x-primary-button>
@@ -162,13 +171,18 @@
                                     </div>
 
                                     <div class="space-y-1.5">
-                                        <x-input-label for="activate_user_{{ $slug }}" value="Select from Network" />
-                                        <x-select-input id="activate_user_{{ $slug }}" name="user_id" required class="rounded-xl font-medium">
-                                            <option value="">Select User</option>
+                                        <x-input-label for="activate_user_{{ $slug }}" value="Search by Name or Phone" />
+                                        <input type="text" id="activate_user_{{ $slug }}" list="activate_users_{{ $slug }}"
+                                               x-model="userInput" @input="lookupUser()" autocomplete="off"
+                                               class="block w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                               placeholder="Start typing a user's name or phone…">
+                                        <datalist id="activate_users_{{ $slug }}">
                                             @foreach ($downlineUsers as $du)
-                                                <option value="{{ $du->id }}">{{ $du->first_name }} {{ $du->last_name }}</option>
+                                                <option value="{{ trim($du->first_name . ' ' . $du->last_name) }} · {{ $du->phone }} #{{ $du->id }}"></option>
                                             @endforeach
-                                        </x-select-input>
+                                        </datalist>
+                                        <input type="hidden" name="user_id" x-bind:value="userId">
+                                        <p x-show="userInput.length > 0 && !userId" x-cloak class="text-xs font-medium text-rose-500">That's not one of your downline users.</p>
                                     </div>
 
                                     <div class="bg-primary/5 border border-primary/10 rounded-lg p-4 space-y-1 shadow-inner">
@@ -179,7 +193,7 @@
                                         <p class="text-xs text-slate-400">This amount is debited from the selected user's wallet — not yours.</p>
                                     </div>
 
-                                    <x-primary-button type="submit" class="w-full !text-xs !bg-emerald-600 hover:!bg-emerald-700" x-bind:disabled="!simId">
+                                    <x-primary-button type="submit" class="w-full !text-xs !bg-emerald-600 hover:!bg-emerald-700" x-bind:disabled="!simId || !userId">
                                         <i data-lucide="power" class="w-3.5 h-3.5"></i>
                                         Activate SIM
                                     </x-primary-button>

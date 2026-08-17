@@ -12,6 +12,7 @@ class SimRequest extends Model
 
     protected $fillable = [
         'user_id',
+        'upline_id',
         'sim_id',
         'number',
         'category',
@@ -49,5 +50,14 @@ class SimRequest extends Model
     public function sim(): BelongsTo
     {
         return $this->belongsTo(Sim::class, 'sim_id');
+    }
+
+    /**
+     * The immediate-upline partner this request was routed to for
+     * self-fulfillment, if the requester had one at submission time.
+     */
+    public function upline(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'upline_id');
     }
 }

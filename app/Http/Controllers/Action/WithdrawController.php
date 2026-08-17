@@ -353,7 +353,7 @@ class WithdrawController extends Controller
             }
 
             return redirect()->route('thankyou', ['ref' => $transaction->transaction_ref])
-                ->with('success', 'Your cash-out request has been submitted and is awaiting admin approval.');
+                ->with('success', 'Your cash-out request has been submitted and is awaiting review from our team.');
         } finally {
             // Unlock immediately after transaction processing completes
             if (isset($lock)) {

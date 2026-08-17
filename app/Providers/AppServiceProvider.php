@@ -90,5 +90,28 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('headerNotifications', collect([]));
             }
         });
+
+        // Sidebar nav badges: open support tickets for admins, pending
+        // downline SIM requests for partners. Cheap counts, computed once
+        // per request regardless of how many pages include the sidebar.
+        view()->composer('layouts.partials.sidebar', function ($view) {
+            $openTicketsBadge = 0;
+            $pendingDownlineRequestsBadge = 0;
+
+            if (auth()->check()) {
+                $user = auth()->user();
+
+                if ($user->role === 'super_admin') {
+                    $openTicketsBadge = \App\Models\Ticket::where('status', 'open')->count();
+                } elseif ($user->role === 'partner') {
+                    $pendingDownlineRequestsBadge = \App\Models\SimRequest::where('upline_id', $user->id)
+                        ->where('status', 'pending')
+                        ->count();
+                }
+            }
+
+            $view->with('openTicketsBadge', $openTicketsBadge);
+            $view->with('pendingDownlineRequestsBadge', $pendingDownlineRequestsBadge);
+        });
     }
 }
