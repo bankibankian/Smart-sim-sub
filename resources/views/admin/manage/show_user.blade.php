@@ -93,6 +93,12 @@
                                 ₦{{ $user->wallet ? number_format($user->wallet->spendable(), 2) : '0.00' }}
                             </span>
                         </div>
+                        @if ($user->wallet && $user->wallet->lien_amount > 0)
+                            <div class="border-l border-slate-200 pl-4">
+                                <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Lien Held</span>
+                                <span class="text-xs font-bold text-violet-600">₦{{ number_format($user->wallet->lien_amount, 2) }}</span>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="flex items-center gap-2 flex-wrap">
@@ -118,6 +124,17 @@
                                 Suspend
                             </button>
                         @endif
+                        @if ($user->wallet && $user->wallet->lien_amount > 0)
+                            <button type="button" onclick="liftRestriction('lien/lift', {{ $user->id }})"
+                                    class="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-all duration-200">
+                                Lift Lien
+                            </button>
+                        @else
+                            <button type="button" onclick="placeLien({{ $user->id }})"
+                                    class="px-3 py-2.5 bg-violet-50 hover:bg-violet-100 text-violet-700 border border-violet-100 text-xs font-semibold rounded-xl transition-all duration-200">
+                                Place Lien
+                            </button>
+                        @endif
                         <a href="{{ route('admin.manage.users.edit', $user) }}"
                            class="px-4 py-2.5 bg-gradient-to-r from-[#0056D2] to-[#0049b8] hover:from-[#374368] hover:to-[#465785] text-white text-xs font-semibold rounded-xl shadow-md shadow-[#0056D2]/10 transition-all duration-200 flex items-center gap-2">
                             <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
@@ -129,21 +146,27 @@
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 flex gap-1 max-w-md">
-            <button @click="activeTab = 'overview'" 
-                    :class="activeTab === 'overview' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'" 
+        <div class="bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 flex gap-1 max-w-2xl">
+            <button @click="activeTab = 'overview'"
+                    :class="activeTab === 'overview' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'"
                     class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
                 <i data-lucide="user" class="w-4 h-4"></i>
                 Overview & KYC
             </button>
-            <button @click="activeTab = 'financials'" 
-                    :class="activeTab === 'financials' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'" 
+            <button @click="activeTab = 'financials'"
+                    :class="activeTab === 'financials' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'"
                     class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
                 <i data-lucide="wallet" class="w-4 h-4"></i>
                 Wallet & Bank
             </button>
-            <button @click="activeTab = 'transactions'" 
-                    :class="activeTab === 'transactions' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'" 
+            <button @click="activeTab = 'metrics'"
+                    :class="activeTab === 'metrics' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'"
+                    class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
+                <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                Metrics
+            </button>
+            <button @click="activeTab = 'transactions'"
+                    :class="activeTab === 'transactions' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'"
                     class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
                 <i data-lucide="list" class="w-4 h-4"></i>
                 Ledger Logs
@@ -613,6 +636,86 @@
                 </div>
             </div>
 
+            <!-- Metrics Tab -->
+            <div x-show="activeTab === 'metrics'" class="space-y-6" x-cloak>
+                @if ($nextRole)
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+                        <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Downline Onboarding</h2>
+                        <div class="flex flex-wrap items-center gap-4">
+                            <a href="{{ route('admin.manage.users.team', $user) }}"
+                               class="p-4 bg-slate-50 border border-slate-100 rounded-2xl min-w-[140px] hover:bg-slate-100 transition-colors block">
+                                <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Total Onboarded</span>
+                                <span class="text-xl font-extrabold font-display text-[#0056D2]">{{ $totalDownline }}</span>
+                            </a>
+                            @forelse ($roleBreakdown as $role => $count)
+                                <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl min-w-[120px]">
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">{{ str_replace('_', ' ', $role) }}</span>
+                                    <span class="text-xl font-extrabold font-display text-slate-800">{{ $count }}</span>
+                                </div>
+                            @empty
+                                <p class="text-xs text-slate-400">Hasn't onboarded anyone yet.</p>
+                            @endforelse
+                        </div>
+                    </div>
+                @endif
+
+                <div class="grid grid-cols-1 {{ $isCatalogRole ? 'md:grid-cols-2' : '' }} gap-6">
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+                        <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Personal SIM Inventory</h2>
+                        <p class="text-xs text-slate-400">SIMs held directly by {{ $user->first_name }}, not yet handed further down.</p>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                                <span class="block text-lg font-extrabold font-display text-slate-800">{{ $personalTotal }}</span>
+                                <span class="block text-[11px] text-slate-400 font-semibold uppercase">Held</span>
+                            </div>
+                            <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                                <span class="block text-lg font-extrabold font-display text-emerald-600">{{ $personalActivated }}</span>
+                                <span class="block text-[11px] text-slate-400 font-semibold uppercase">Activated</span>
+                            </div>
+                            <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                                <span class="block text-lg font-extrabold font-display text-[#0056D2]">{{ $personalConversion }}%</span>
+                                <span class="block text-[11px] text-slate-400 font-semibold uppercase">Conversion</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if ($isCatalogRole)
+                        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+                            <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Team SIM Inventory</h2>
+                            <p class="text-xs text-slate-400">Every SIM anywhere in {{ $user->first_name }}'s downline cascade.</p>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                                    <span class="block text-lg font-extrabold font-display text-slate-800">{{ $teamTotal }}</span>
+                                    <span class="block text-[11px] text-slate-400 font-semibold uppercase">Held</span>
+                                </div>
+                                <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                                    <span class="block text-lg font-extrabold font-display text-emerald-600">{{ $teamActivated }}</span>
+                                    <span class="block text-[11px] text-slate-400 font-semibold uppercase">Activated</span>
+                                </div>
+                                <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                                    <span class="block text-lg font-extrabold font-display text-[#0056D2]">{{ $teamConversion }}%</span>
+                                    <span class="block text-[11px] text-slate-400 font-semibold uppercase">Conversion</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+                    <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Activation Counts</h2>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl min-w-[140px]">
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">All-Time Activations</span>
+                            <span class="text-xl font-extrabold font-display text-slate-800">{{ $totalActivations }}</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl min-w-[140px]">
+                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">This Period</span>
+                            <span class="text-xl font-extrabold font-display text-slate-800">{{ $periodActivations }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Transaction Logs Tab -->
             <div x-show="activeTab === 'transactions'" class="space-y-6" x-cloak>
                 <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
@@ -638,13 +741,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function submitDownlineAction(path, userId, extra) {
+        function submitDownlineAction(path, userId, fields) {
             const f = document.createElement('form');
             f.action = '/network/downline/' + userId + '/' + path;
             f.method = 'POST';
             let inputs = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-            if (extra) {
-                inputs += '<input type="hidden" name="reason" value="' + extra.replace(/"/g, '&quot;') + '">';
+            if (fields) {
+                for (const key in fields) {
+                    inputs += '<input type="hidden" name="' + key + '" value="' + String(fields[key]).replace(/"/g, '&quot;') + '">';
+                }
             }
             f.innerHTML = inputs;
             document.body.appendChild(f);
@@ -673,7 +778,7 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    submitDownlineAction(path, userId, result.value);
+                    submitDownlineAction(path, userId, { reason: result.value });
                 }
             });
         }
@@ -688,6 +793,41 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     submitDownlineAction(path, userId, null);
+                }
+            });
+        }
+
+        function placeLien(userId) {
+            Swal.fire({
+                title: 'Place Lien',
+                html: `
+                    <div class="text-left space-y-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase block">Amount (₦)</label>
+                        <input id="lien_amount" type="number" min="0.01" step="0.01" class="swal2-input" placeholder="0.00" style="margin:0 0 8px;">
+                        <label class="text-xs font-bold text-slate-500 uppercase block">Reason</label>
+                        <input id="lien_reason" type="text" class="swal2-input" placeholder="Enter a reason..." style="margin:0;">
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonColor: '#7c3aed',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Place Lien',
+                preConfirm: () => {
+                    const amount = document.getElementById('lien_amount').value;
+                    const reason = document.getElementById('lien_reason').value;
+                    if (!amount || parseFloat(amount) <= 0) {
+                        Swal.showValidationMessage('Enter a valid amount');
+                        return false;
+                    }
+                    if (!reason || !reason.trim()) {
+                        Swal.showValidationMessage('A reason is required');
+                        return false;
+                    }
+                    return { amount, reason };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    submitDownlineAction('lien', userId, result.value);
                 }
             });
         }

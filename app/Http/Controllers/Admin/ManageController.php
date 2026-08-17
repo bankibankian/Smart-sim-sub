@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\DownlineMetrics;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -87,12 +88,27 @@ class ManageController extends Controller
     }
 
     /**
-     * Show the detailed information for a user (KYC, Wallet, Virtual Accounts).
+     * Show the detailed information for a user (KYC, Wallet, Virtual
+     * Accounts, and downline/SIM metrics). Admin can view any user, not
+     * just their own downline — DownlineMetrics::forUser() is the same
+     * computation an upline sees for their own team, reused here.
      */
     public function showUser(User $user): View
     {
         $user->load(['wallet', 'virtualAccounts']);
-        return view('admin.manage.show_user', compact('user'));
+        $metrics = DownlineMetrics::forUser($user);
+        return view('admin.manage.show_user', array_merge($metrics, compact('user')));
+    }
+
+    /**
+     * Paginated list of a user's immediate downline (invited + active),
+     * reached by drilling into the "Total Onboarded" number on their
+     * Metrics tab. Each row links back into showUser() for that member.
+     */
+    public function userTeam(User $user): View
+    {
+        $team = $user->referrals()->with('wallet')->latest()->paginate(15)->withQueryString();
+        return view('admin.manage.team', compact('user', 'team'));
     }
 
     /**

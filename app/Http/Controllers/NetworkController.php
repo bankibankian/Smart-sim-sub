@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OnboardingInviteMail;
 use App\Models\User;
+use App\Support\DownlineAuthorization;
 use App\Support\RoleHierarchy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 
 class NetworkController extends Controller
 {
@@ -173,5 +177,49 @@ class NetworkController extends Controller
         $roleLabel = $nextRole === 'personal' ? 'User' : str_replace('_', ' ', $nextRole);
 
         return back()->with('success', "Claimed {$claimed->first_name} {$claimed->last_name} into your network as your {$roleLabel}.");
+    }
+
+    /**
+     * Upline corrects a typo'd invite email before the invitee has accepted.
+     * Phone is intentionally not editable here — the invite is keyed to the
+     * account row created by OnboardingController::sendInvite(), and phone
+     * edits are out of scope for now.
+     */
+    public function updateInvited(Request $request, User $user)
+    {
+        DownlineAuthorization::authorize($user);
+
+        if ($user->status !== 'invited') {
+            return back()->with('error', 'This invite has already been accepted.');
+        }
+
+        $validated = $request->validate([
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $user->id],
+        ]);
+
+        $user->update(['email' => $validated['email']]);
+
+        return back()->with('success', "Invite email updated to {$user->email}.");
+    }
+
+    /**
+     * Re-sends the same onboarding-invite email with a freshly-generated
+     * 3-day signed accept link (the original link may have expired or never
+     * arrived) — no separate invite-tracking record exists, so this simply
+     * repeats what OnboardingController::sendInvite() already does.
+     */
+    public function resendInvite(User $user)
+    {
+        $actor = DownlineAuthorization::authorize($user);
+
+        if ($user->status !== 'invited') {
+            return back()->with('error', 'This invite has already been accepted.');
+        }
+
+        $acceptUrl = URL::temporarySignedRoute('onboarding.accept', now()->addDays(3), ['user' => $user->id]);
+
+        Mail::to($user->email)->send(new OnboardingInviteMail($user, $actor, $acceptUrl));
+
+        return back()->with('success', "Invite resent to {$user->email}.");
     }
 }
