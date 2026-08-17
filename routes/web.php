@@ -167,6 +167,7 @@ Route::middleware(['auth', 'verified', 'super_admin'])->prefix('admin/manage')->
     Route::get('/users/{user}/edit', [\App\Http\Controllers\Admin\ManageController::class, 'editUser'])->name('users.edit');
     Route::put('/users/{user}', [\App\Http\Controllers\Admin\ManageController::class, 'updateUser'])->name('users.update');
     Route::get('/users/{user}', [\App\Http\Controllers\Admin\ManageController::class, 'showUser'])->name('users.show');
+    Route::get('/users/{user}/team', [\App\Http\Controllers\Admin\ManageController::class, 'userTeam'])->name('users.team');
     Route::delete('/users/{user}', [\App\Http\Controllers\Admin\ManageController::class, 'destroyUser'])->name('users.destroy');
 
     Route::get('/upgrades', [\App\Http\Controllers\Admin\ManageController::class, 'upgrades'])->name('upgrades');
