@@ -80,7 +80,7 @@
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 flex gap-1 max-w-lg">
+        <div class="bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 flex gap-1 max-w-md">
             <button @click="activeTab = 'info'"
                     :class="activeTab === 'info' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'"
                     class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
@@ -95,11 +95,6 @@
                     :class="activeTab === 'tier' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'"
                     class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
                 <i data-lucide="trophy" class="w-4 h-4"></i> Tier
-            </button>
-            <button @click="activeTab = 'actions'"
-                    :class="activeTab === 'actions' ? 'bg-white text-[#0056D2] shadow-sm font-bold border-slate-200' : 'border-transparent text-slate-500 hover:text-slate-700'"
-                    class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border">
-                <i data-lucide="shield-alert" class="w-4 h-4"></i> Actions
             </button>
         </div>
 
@@ -383,163 +378,5 @@
             </x-card>
         </div>
 
-        <!-- Tab: Actions -->
-        <div x-show="activeTab === 'actions'" class="space-y-6" x-cloak>
-            <x-card padding="p-6 sm:p-8" class="space-y-6">
-                <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Downline Restrictions</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <!-- PND -->
-                    <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-2">
-                        <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Post No Debit</span>
-                        <p class="text-[11px] text-slate-400">Blocks all wallet debits until lifted.</p>
-                        @if ($wallet->is_locked)
-                            <button type="button" onclick="liftRestriction('pnd/lift', {{ $user->id }})"
-                                    class="w-full px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-all duration-200">
-                                Lift PND
-                            </button>
-                        @else
-                            <button type="button" onclick="placeRestriction('pnd', {{ $user->id }})"
-                                    class="w-full px-3 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-100 text-xs font-semibold rounded-xl transition-all duration-200">
-                                Place PND
-                            </button>
-                        @endif
-                    </div>
-
-                    <!-- Suspend -->
-                    <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-2">
-                        <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Suspend Account</span>
-                        <p class="text-[11px] text-slate-400">Blocks the user from logging in until reinstated.</p>
-                        @if ($user->isSuspended())
-                            <button type="button" onclick="liftRestriction('reinstate', {{ $user->id }})"
-                                    class="w-full px-3 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-100 text-xs font-semibold rounded-xl transition-all duration-200">
-                                Reinstate
-                            </button>
-                        @else
-                            <button type="button" onclick="placeRestriction('suspend', {{ $user->id }})"
-                                    class="w-full px-3 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-100 text-xs font-semibold rounded-xl transition-all duration-200">
-                                Suspend
-                            </button>
-                        @endif
-                    </div>
-
-                    <!-- Lien -->
-                    <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-2">
-                        <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Lien</span>
-                        <p class="text-[11px] text-slate-400">
-                            @if ($wallet->lien_amount > 0)
-                                ₦{{ number_format($wallet->lien_amount, 2) }} held — rest of balance stays usable.
-                            @else
-                                Holds a specific amount; rest of balance stays usable.
-                            @endif
-                        </p>
-                        @if ($wallet->lien_amount > 0)
-                            <button type="button" onclick="liftRestriction('lien/lift', {{ $user->id }})"
-                                    class="w-full px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-all duration-200">
-                                Lift Lien
-                            </button>
-                        @else
-                            <button type="button" onclick="placeLien({{ $user->id }})"
-                                    class="w-full px-3 py-2.5 bg-violet-50 hover:bg-violet-100 text-violet-700 border border-violet-100 text-xs font-semibold rounded-xl transition-all duration-200">
-                                Place Lien
-                            </button>
-                        @endif
-                    </div>
-                </div>
-            </x-card>
-        </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function submitDownlineAction(path, userId, fields) {
-            const f = document.createElement('form');
-            f.action = '/network/downline/' + userId + '/' + path;
-            f.method = 'POST';
-            let inputs = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-            if (fields) {
-                for (const key in fields) {
-                    inputs += '<input type="hidden" name="' + key + '" value="' + String(fields[key]).replace(/"/g, '&quot;') + '">';
-                }
-            }
-            f.innerHTML = inputs;
-            document.body.appendChild(f);
-            f.submit();
-        }
-
-        function placeRestriction(path, userId) {
-            const isSuspend = path === 'suspend';
-            Swal.fire({
-                title: isSuspend ? 'Suspend Account' : 'Place Post No Debit',
-                text: isSuspend
-                    ? 'This blocks the user from logging in until reinstated.'
-                    : 'This blocks the user from any wallet debit until lifted.',
-                input: 'text',
-                inputLabel: 'Reason',
-                inputPlaceholder: 'Enter a reason...',
-                showCancelButton: true,
-                confirmButtonColor: isSuspend ? '#e11d48' : '#d97706',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: isSuspend ? 'Suspend' : 'Place PND',
-                preConfirm: (value) => {
-                    if (!value || !value.trim()) {
-                        Swal.showValidationMessage('A reason is required');
-                    }
-                    return value;
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    submitDownlineAction(path, userId, { reason: result.value });
-                }
-            });
-        }
-
-        function liftRestriction(path, userId) {
-            Swal.fire({
-                title: 'Are you sure?',
-                showCancelButton: true,
-                confirmButtonColor: '#0056D2',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, confirm'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    submitDownlineAction(path, userId, null);
-                }
-            });
-        }
-
-        function placeLien(userId) {
-            Swal.fire({
-                title: 'Place Lien',
-                html: `
-                    <div class="text-left space-y-2">
-                        <label class="text-xs font-bold text-slate-500 uppercase block">Amount (₦)</label>
-                        <input id="lien_amount" type="number" min="0.01" step="0.01" class="swal2-input" placeholder="0.00" style="margin:0 0 8px;">
-                        <label class="text-xs font-bold text-slate-500 uppercase block">Reason</label>
-                        <input id="lien_reason" type="text" class="swal2-input" placeholder="Enter a reason..." style="margin:0;">
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonColor: '#7c3aed',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Place Lien',
-                preConfirm: () => {
-                    const amount = document.getElementById('lien_amount').value;
-                    const reason = document.getElementById('lien_reason').value;
-                    if (!amount || parseFloat(amount) <= 0) {
-                        Swal.showValidationMessage('Enter a valid amount');
-                        return false;
-                    }
-                    if (!reason || !reason.trim()) {
-                        Swal.showValidationMessage('A reason is required');
-                        return false;
-                    }
-                    return { amount, reason };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    submitDownlineAction('lien', userId, result.value);
-                }
-            });
-        }
-    </script>
 </x-app-layout>

@@ -4,21 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Wallet;
-use App\Support\DownlineAuthorization;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
- * Lets a catalog-role upline place/lift a Post No Debit restriction, a
- * partial-amount Lien, or suspend/reinstate their own immediate downline —
- * and lets super_admin do the same to anyone, regardless of who placed a
- * restriction originally. See DownlineAuthorization::authorize().
+ * Lets a super_admin place/lift a Post No Debit restriction, a
+ * partial-amount Lien, or suspend/reinstate any user. Restricting an
+ * account is admin-only — uplines (partners, coordinators, etc.) no longer
+ * have this capability, on the team-member detail page or otherwise.
  */
 class DownlineRestrictionController extends Controller
 {
+    /** Aborts 403 on failure. Returns the acting admin on success. */
+    private function authorizeAdmin(): User
+    {
+        $actor = Auth::user();
+        if (!$actor || !$actor->hasRole('super_admin')) {
+            abort(403, 'Only administrators can restrict user accounts.');
+        }
+
+        return $actor;
+    }
+
     public function placePnd(Request $request, User $user): RedirectResponse
     {
-        $actor = DownlineAuthorization::authorize($user);
+        $actor = $this->authorizeAdmin();
 
         $validated = $request->validate(['reason' => ['required', 'string', 'max:255']]);
 
@@ -30,7 +41,7 @@ class DownlineRestrictionController extends Controller
 
     public function liftPnd(Request $request, User $user): RedirectResponse
     {
-        DownlineAuthorization::authorize($user);
+        $this->authorizeAdmin();
 
         $wallet = Wallet::firstOrCreateForUser($user->id);
         $wallet->liftPnd();
@@ -40,7 +51,7 @@ class DownlineRestrictionController extends Controller
 
     public function suspend(Request $request, User $user): RedirectResponse
     {
-        $actor = DownlineAuthorization::authorize($user);
+        $actor = $this->authorizeAdmin();
 
         $validated = $request->validate(['reason' => ['required', 'string', 'max:255']]);
 
@@ -51,7 +62,7 @@ class DownlineRestrictionController extends Controller
 
     public function reinstate(Request $request, User $user): RedirectResponse
     {
-        DownlineAuthorization::authorize($user);
+        $this->authorizeAdmin();
 
         $user->reinstate();
 
@@ -60,7 +71,7 @@ class DownlineRestrictionController extends Controller
 
     public function placeLien(Request $request, User $user): RedirectResponse
     {
-        $actor = DownlineAuthorization::authorize($user);
+        $actor = $this->authorizeAdmin();
 
         $validated = $request->validate([
             'amount' => ['required', 'numeric', 'min:0.01'],
@@ -75,7 +86,7 @@ class DownlineRestrictionController extends Controller
 
     public function liftLien(Request $request, User $user): RedirectResponse
     {
-        DownlineAuthorization::authorize($user);
+        $this->authorizeAdmin();
 
         $wallet = Wallet::firstOrCreateForUser($user->id);
         $wallet->liftLien();
