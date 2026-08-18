@@ -234,6 +234,44 @@
         </a>
     </div>
 
+    @if ($sidebarUpline ?? null)
+    <div class="border-t border-slate-200 p-3" x-data="{ open: false }">
+        <button type="button"
+                @click="if (sidebarCollapsed) { sidebarCollapsed = false; open = true } else { open = !open }"
+                :aria-expanded="open" aria-controls="sidebar-upline-panel"
+                :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : 'justify-between'"
+                class="w-full flex items-center gap-3 py-2.5 px-3 rounded-md text-sm font-medium font-display text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <span class="flex items-center gap-3">
+                <i data-lucide="user-check" class="w-5 h-5 shrink-0 text-slate-400"></i>
+                <span x-show="!sidebarCollapsed" x-cloak>{{ __('Upline Manager') }}</span>
+            </span>
+            <i x-show="!sidebarCollapsed" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" aria-hidden="true"></i>
+        </button>
+
+        <div id="sidebar-upline-panel" x-show="open && !sidebarCollapsed"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-1"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-1"
+             class="mt-2 w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs space-y-2" style="display: none;">
+            <div class="flex items-start justify-between gap-3">
+                <span class="text-slate-500">Name</span>
+                <span class="font-semibold text-slate-800 text-right">{{ $sidebarUpline->name }}</span>
+            </div>
+            <div class="flex items-start justify-between gap-3">
+                <span class="text-slate-500 shrink-0">Position</span>
+                <span class="font-semibold text-slate-800 capitalize text-right">{{ str_replace('_', ' ', $sidebarUpline->role) }}</span>
+            </div>
+            <div class="flex items-start justify-between gap-3">
+                <span class="text-slate-500 shrink-0">Phone</span>
+                <span class="font-semibold text-slate-800 text-right break-all">{{ $sidebarUpline->phone }}</span>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Logout -->
     <div class="border-t border-slate-200 p-3">
         <form method="POST" action="{{ route('logout') }}" class="m-0">

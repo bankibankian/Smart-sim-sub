@@ -97,6 +97,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('layouts.partials.sidebar', function ($view) {
             $openTicketsBadge = 0;
             $pendingDownlineRequestsBadge = 0;
+            $sidebarUpline = null;
 
             if (auth()->check()) {
                 $user = auth()->user();
@@ -108,10 +109,13 @@ class AppServiceProvider extends ServiceProvider
                         ->where('status', 'pending')
                         ->count();
                 }
+
+                $sidebarUpline = $user->referrer;
             }
 
             $view->with('openTicketsBadge', $openTicketsBadge);
             $view->with('pendingDownlineRequestsBadge', $pendingDownlineRequestsBadge);
+            $view->with('sidebarUpline', $sidebarUpline);
         });
     }
 }

@@ -56,7 +56,7 @@
             </div>
         @endif
 
-        @php $vendorLabels = ['legacy' => 'Legacy (Fadeelposdatasub)', 'smeplug' => 'SME Plug', '9psb' => '9PSB Data']; @endphp
+        @php $vendorLabels = ['legacy' => 'Legacy (Fadeelposdatasub)', 'smeplug' => 'SME Plug', '9psb' => '9PSB Data', 'amsub' => 'AMSUB']; @endphp
 
         <!-- Activation Bonus Settings -->
         <div class="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
@@ -232,57 +232,39 @@
         </div>
 
         <!-- Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <!-- Total Plans -->
-            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Plans</p>
-                        <h3 class="text-3xl font-extrabold text-slate-900 mt-2.5 tracking-tight font-display">{{ $totalPlansCount }}</h3>
-                        <p class="text-[11px] text-slate-400 mt-2 font-medium flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                            Registered in system
-                        </p>
-                    </div>
-                    <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/10 flex items-center justify-center text-primary transition-transform duration-300 group-hover:rotate-6">
-                        <i data-lucide="database" class="w-5 h-5"></i>
-                    </div>
+            <x-card padding="p-3.5" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <i data-lucide="database" class="w-5 h-5"></i>
                 </div>
-            </div>
+                <div class="min-w-0 flex-1">
+                    <p class="text-xs text-slate-400 mb-0.5">Total Plans</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ $totalPlansCount }}</p>
+                </div>
+            </x-card>
 
             <!-- Active Plans -->
-            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Plans</p>
-                        <h3 class="text-3xl font-extrabold text-slate-900 mt-2.5 tracking-tight font-display">{{ $activePlansCount }}</h3>
-                        <p class="text-[11px] text-slate-400 mt-2 font-medium flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Purchasable by users
-                        </p>
-                    </div>
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100/50 flex items-center justify-center text-emerald-600 transition-transform duration-300 group-hover:rotate-6">
-                        <i data-lucide="check-circle-2" class="w-5 h-5"></i>
-                    </div>
+            <x-card padding="p-3.5" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+                    <i data-lucide="check-circle-2" class="w-5 h-5"></i>
                 </div>
-            </div>
+                <div class="min-w-0 flex-1">
+                    <p class="text-xs text-slate-400 mb-0.5">Active Plans</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ $activePlansCount }}</p>
+                </div>
+            </x-card>
 
             <!-- Disabled Plans -->
-            <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Disabled Plans</p>
-                        <h3 class="text-3xl font-extrabold text-slate-900 mt-2.5 tracking-tight font-display">{{ $disabledPlansCount }}</h3>
-                        <p class="text-[11px] text-slate-400 mt-2 font-medium flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-                            Hidden from users
-                        </p>
-                    </div>
-                    <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100/50 flex items-center justify-center text-rose-600 transition-transform duration-300 group-hover:rotate-6">
-                        <i data-lucide="x-circle" class="w-5 h-5"></i>
-                    </div>
+            <x-card padding="p-3.5" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center text-rose-600 shrink-0">
+                    <i data-lucide="x-circle" class="w-5 h-5"></i>
                 </div>
-            </div>
+                <div class="min-w-0 flex-1">
+                    <p class="text-xs text-slate-400 mb-0.5">Disabled Plans</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ $disabledPlansCount }}</p>
+                </div>
+            </x-card>
         </div>
 
         <!-- Filter & Table Card -->
@@ -309,6 +291,7 @@
                                 <option value="legacy" {{ request('provider') === 'legacy' ? 'selected' : '' }}>Legacy</option>
                                 <option value="smeplug" {{ request('provider') === 'smeplug' ? 'selected' : '' }}>SME Plug</option>
                                 <option value="9psb" {{ request('provider') === '9psb' ? 'selected' : '' }}>9PSB Data</option>
+                                <option value="amsub" {{ request('provider') === 'amsub' ? 'selected' : '' }}>AMSUB</option>
                             </x-select-input>
                             <div class="absolute right-3.5 top-4 pointer-events-none text-slate-400">
                                 <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
@@ -562,6 +545,7 @@
                                     <option value="legacy">Legacy (Fadeelposdatasub)</option>
                                     <option value="smeplug">SME Plug</option>
                                     <option value="9psb">9PSB Data</option>
+                                    <option value="amsub">AMSUB</option>
                                 </x-select-input>
                             </div>
 
@@ -700,6 +684,7 @@
                                     <option value="legacy">Legacy (Fadeelposdatasub)</option>
                                     <option value="smeplug">SME Plug</option>
                                     <option value="9psb">9PSB Data</option>
+                                    <option value="amsub">AMSUB</option>
                                 </x-select-input>
                             </div>
 

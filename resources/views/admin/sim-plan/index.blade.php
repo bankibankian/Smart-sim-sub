@@ -16,48 +16,48 @@
         </div>
 
         <!-- Header Statistics Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <!-- Card 1: Total Uploaded -->
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2] shrink-0">
-                    <i data-lucide="database" class="w-6 h-6"></i>
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-indigo-50 border border-indigo-100/50 flex items-center justify-center text-[#0056D2] shrink-0">
+                    <i data-lucide="database" class="w-5 h-5"></i>
                 </div>
-                <div>
-                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Total Uploaded</span>
-                    <span class="text-xl font-extrabold text-slate-800 font-display mt-0.5">{{ $totalUploaded }}</span>
+                <div class="min-w-0 flex-1">
+                    <p class="text-xs text-slate-400 mb-0.5">Total Uploaded</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ $totalUploaded }}</p>
                 </div>
             </div>
 
             <!-- Card 2: Total Available -->
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100/50 flex items-center justify-center text-blue-600 shrink-0">
-                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100/50 flex items-center justify-center text-blue-600 shrink-0">
+                    <i data-lucide="check-circle" class="w-5 h-5"></i>
                 </div>
-                <div>
-                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Not Assigned</span>
-                    <span class="text-xl font-extrabold text-slate-800 font-display mt-0.5">{{ $totalAvailable }}</span>
+                <div class="min-w-0 flex-1">
+                    <p class="text-xs text-slate-400 mb-0.5">Not Assigned</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ $totalAvailable }}</p>
                 </div>
             </div>
 
             <!-- Card 3: Total Assigned -->
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100/50 flex items-center justify-center text-purple-600 shrink-0">
-                    <i data-lucide="user-check" class="w-6 h-6"></i>
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-purple-50 border border-purple-100/50 flex items-center justify-center text-purple-600 shrink-0">
+                    <i data-lucide="user-check" class="w-5 h-5"></i>
                 </div>
-                <div>
-                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Total Assigned</span>
-                    <span class="text-xl font-extrabold text-slate-800 font-display mt-0.5">{{ $totalAssigned }}</span>
+                <div class="min-w-0 flex-1">
+                    <p class="text-xs text-slate-400 mb-0.5">Total Assigned</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ $totalAssigned }}</p>
                 </div>
             </div>
 
             <!-- Card 4: Total Activated -->
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100/50 flex items-center justify-center text-emerald-600 shrink-0">
-                    <i data-lucide="zap" class="w-6 h-6"></i>
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-100/50 flex items-center justify-center text-emerald-600 shrink-0">
+                    <i data-lucide="zap" class="w-5 h-5"></i>
                 </div>
-                <div>
-                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Total Activated</span>
-                    <span class="text-xl font-extrabold text-slate-800 font-display mt-0.5">{{ $totalActivated }}</span>
+                <div class="min-w-0 flex-1">
+                    <p class="text-xs text-slate-400 mb-0.5">Total Activated</p>
+                    <p class="text-lg font-bold font-display text-slate-800 truncate">{{ $totalActivated }}</p>
                 </div>
             </div>
         </div>
@@ -174,24 +174,65 @@
                         </x-primary-button>
                     </form>
                 </div>
+
+                <!-- Activation Controls -->
+                <div id="activation-controls" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 scroll-mt-6">
+                    <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
+                        <div class="w-9 h-9 rounded-xl bg-rose-50 border border-rose-100/50 flex items-center justify-center text-rose-600">
+                            <i data-lucide="power-off" class="w-4 h-4"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-semibold text-slate-800 font-display">Activation Controls</h3>
+                            <p class="text-xs text-slate-400">Block new activations per SIM category.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        @forelse ($categoryFields as $field)
+                            <div class="flex items-center justify-between px-3 py-2.5 rounded-xl {{ $field->activation_disabled ? 'bg-rose-50' : 'bg-slate-50' }}">
+                                <span class="text-xs font-semibold text-slate-700">{{ $field->field_name }}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-extrabold uppercase tracking-wider w-14 text-right {{ $field->activation_disabled ? 'text-rose-600' : 'text-emerald-600' }}">
+                                        {{ $field->activation_disabled ? 'Blocked' : 'Active' }}
+                                    </span>
+                                    <form method="POST" action="{{ route('admin.sim-plan.categories.toggle-activation', $field) }}">
+                                        @csrf
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" {{ $field->activation_disabled ? 'checked' : '' }} onchange="this.form.submit()">
+                                            <div class="w-9 h-5 bg-slate-300 peer-checked:bg-rose-500 rounded-full transition-colors"></div>
+                                            <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                                        </label>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-xs text-slate-400">No SIM categories configured yet.</p>
+                        @endforelse
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-3">Toggling ON blocks new activations for that category — existing activated SIMs are unaffected.</p>
+                </div>
             </div>
 
             <!-- Right Side: Requests & Inventory Tabs -->
             <div class="lg:col-span-8 space-y-6" x-data="{ currentTab: 'requests' }">
-                <!-- Navigation Tabs -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-2 flex gap-1">
-                    <button type="button" @click="currentTab = 'requests'" :class="currentTab === 'requests' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
-                        <i data-lucide="inbox" class="w-4 h-4"></i> Pending Requests ({{ count($pendingRequests) }})
-                    </button>
-                    <button type="button" @click="currentTab = 'resolved'" :class="currentTab === 'resolved' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
-                        <i data-lucide="check-square" class="w-4 h-4"></i> Resolved Requests
-                    </button>
-                    <button type="button" @click="currentTab = 'inventory'" :class="currentTab === 'inventory' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
-                        <i data-lucide="database" class="w-4 h-4"></i> SIM Inventory
-                    </button>
-                    <button type="button" @click="currentTab = 'swaps'" :class="currentTab === 'swaps' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5">
-                        <i data-lucide="repeat" class="w-4 h-4"></i> Pending Swaps ({{ count($pendingSwaps) }})
-                    </button>
+                <!-- Navigation Tabs (horizontally scrollable so they stay relaxed on small screens) -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-2 overflow-x-auto">
+                    <div class="flex gap-1 w-max min-w-full">
+                        <button type="button" @click="currentTab = 'requests'" :class="currentTab === 'requests' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="shrink-0 py-2 px-3.5 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <i data-lucide="inbox" class="w-4 h-4"></i> Pending Requests ({{ count($pendingRequests) }})
+                        </button>
+                        <button type="button" @click="currentTab = 'resolved'" :class="currentTab === 'resolved' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="shrink-0 py-2 px-3.5 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <i data-lucide="check-square" class="w-4 h-4"></i> Resolved Requests
+                        </button>
+                        <button type="button" @click="currentTab = 'inventory'" :class="currentTab === 'inventory' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="shrink-0 py-2 px-3.5 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <i data-lucide="database" class="w-4 h-4"></i> SIM Inventory
+                        </button>
+                        <button type="button" @click="currentTab = 'swaps'" :class="currentTab === 'swaps' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="shrink-0 py-2 px-3.5 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <i data-lucide="repeat" class="w-4 h-4"></i> Pending Swaps ({{ count($pendingSwaps) }})
+                        </button>
+                        <button type="button" @click="currentTab = 'failed'" :class="currentTab === 'failed' ? 'bg-[#0056D2] text-white' : 'text-slate-500 hover:bg-slate-50'" class="shrink-0 py-2 px-3.5 text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <i data-lucide="alert-octagon" class="w-4 h-4"></i> Failed Activations ({{ count($failedActivations) }})
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Tab: Pending Requests -->
@@ -721,6 +762,45 @@
                         </div>
                         {{ $resolvedSwaps->withQueryString()->links('vendor.pagination.custom') }}
                     @endif
+                </div>
+
+                <!-- Tab: Failed Activations -->
+                <div x-show="currentTab === 'failed'" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
+                    <h3 class="font-bold text-slate-800 font-display pb-3 border-b border-slate-100">Failed Activation Bonus Top-Ups</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase">
+                                    <th class="py-2.5">Phone Number</th>
+                                    <th class="py-2.5">Network</th>
+                                    <th class="py-2.5">Reason</th>
+                                    <th class="py-2.5">Failed At</th>
+                                    <th class="py-2.5 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($failedActivations as $failed)
+                                    <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                                        <td class="py-3 font-semibold text-slate-800">{{ $failed->phone_number }}</td>
+                                        <td class="py-3 text-slate-600 uppercase">{{ $failed->network }}</td>
+                                        <td class="py-3 text-slate-600 max-w-xs">{{ $failed->description }}</td>
+                                        <td class="py-3 text-slate-400 font-medium">{{ $failed->created_at->format('M d, Y H:i') }}</td>
+                                        <td class="py-3 text-right whitespace-nowrap">
+                                            <form action="{{ route('admin.sim-plan.failed-activations.retry', $failed) }}" method="POST" class="inline-block">
+                                                @csrf
+                                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-2.5 py-1 rounded-lg transition-colors">Retry</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="py-8 text-center text-slate-400 font-semibold">No failed activation bonus top-ups found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    {{ $failedActivations->withQueryString()->links('vendor.pagination.custom') }}
                 </div>
             </div>
         </div>

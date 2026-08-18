@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\GrantActivationBonusData;
+use App\Models\Report;
+use App\Models\ServiceField;
 use App\Models\Sim;
 use App\Models\SimRequest;
 use App\Models\SimSwapRequest;
@@ -11,6 +14,7 @@ use App\Models\Wallet;
 use App\Models\Transaction;
 use App\Services\SimAssignmentService;
 use App\Support\SimStatus;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -63,8 +67,17 @@ class SimPlanController extends Controller
             ->get();
 
         $simService = \App\Models\Service::where('name', 'simcard')->first();
-        $categories = $simService ? $simService->fields()->active()->pluck('field_name')->toArray() : ['POS SIM', 'CAMERA SIM', 'CCTV', 'ROUTER SIM', 'GPS SIM'];
+        $categoryFields = $simService ? $simService->fields()->active()->get() : collect();
+        $categories = $simService ? $categoryFields->pluck('field_name')->toArray() : ['POS SIM', 'CAMERA SIM', 'CCTV', 'ROUTER SIM', 'GPS SIM'];
         $providers = ['mtn', 'airtel', 'glo', '9mobile'];
+
+        // Failed activation-bonus-data top-ups, written by GrantActivationBonusData
+        // to the shared reports table — same source every other purchase-attempt log uses.
+        $failedActivations = Report::where('type', 'activation_bonus_data')
+            ->where('status', 'failed')
+            ->latest()
+            ->paginate(10, ['*'], 'failed_page')
+            ->appends(request()->query());
 
         // Header statistics
         $totalUploaded = Sim::count();
@@ -77,9 +90,48 @@ class SimPlanController extends Controller
         $totalActivated = Sim::where('status', SimStatus::ACTIVATED)->count();
 
         return view('admin.sim-plan.index', compact(
-            'sims', 'pendingRequests', 'resolvedRequests', 'pendingSwaps', 'resolvedSwaps', 'assignableUsers', 'categories', 'providers',
-            'totalUploaded', 'totalAssigned', 'totalAvailable', 'totalActivated'
+            'sims', 'pendingRequests', 'resolvedRequests', 'pendingSwaps', 'resolvedSwaps', 'assignableUsers', 'categories', 'categoryFields', 'providers',
+            'totalUploaded', 'totalAssigned', 'totalAvailable', 'totalActivated', 'failedActivations'
         ));
+    }
+
+    /**
+     * Flip the per-category activation kill-switch. Blocks new activations
+     * for every SIM in this category via SimAssignmentService::activate()'s
+     * server-side gate — existing activated SIMs are unaffected. Redirects
+     * back to the Activation Controls section specifically (not just the
+     * top of the page) so the admin lands right back on the switch they
+     * just flipped and sees the new state immediately, instead of losing
+     * their scroll position on reload.
+     */
+    public function toggleActivation(ServiceField $field): RedirectResponse
+    {
+        $field->update(['activation_disabled' => !$field->activation_disabled]);
+        $state = $field->activation_disabled ? 'disabled' : 're-enabled';
+
+        return redirect(url()->previous() . '#activation-controls')
+            ->with('success', "Activation {$state} for {$field->field_name}.");
+    }
+
+    /**
+     * Re-dispatch the activation bonus data top-up for a failed attempt,
+     * looked up by phone number (the SIM's own number) since GrantActivationBonusData
+     * takes a Sim, not a Report.
+     */
+    public function retryActivationBonus(Report $report): RedirectResponse
+    {
+        if ($report->type !== 'activation_bonus_data' || $report->status !== 'failed') {
+            return back()->with('error', 'This entry is not a retryable failed activation bonus.');
+        }
+
+        $sim = Sim::where('number', $report->phone_number)->first();
+        if (!$sim) {
+            return back()->with('error', "No SIM found for {$report->phone_number}.");
+        }
+
+        GrantActivationBonusData::dispatch($sim);
+
+        return back()->with('success', "Retry queued for {$report->phone_number}.");
     }
 
     /**

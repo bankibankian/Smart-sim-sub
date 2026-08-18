@@ -188,6 +188,7 @@ class SimsController extends Controller
         };
 
         $personalPrice = null;
+        $activationDisabled = false;
 
         if ($mode === 'distribute') {
             $nextRole = \App\Support\RoleHierarchy::nextRole($user->role);
@@ -201,6 +202,7 @@ class SimsController extends Controller
             $personalPrice = $field
                 ? (float) (\App\Models\ServicePrice::where('service_fields_id', $field->id)->where('user_type', 'personal')->whereNull('user_id')->value('price') ?? $field->base_price)
                 : null;
+            $activationDisabled = (bool) ($field->activation_disabled ?? false);
         }
 
         return view('smartsimcard.device', [
@@ -214,6 +216,7 @@ class SimsController extends Controller
             'mode' => $mode,
             'heldSims' => $heldSims,
             'downlineUsers' => $downlineUsers,
+            'activationDisabled' => $activationDisabled,
         ]);
     }
 

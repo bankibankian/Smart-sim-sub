@@ -16,19 +16,19 @@
         </div>
 
         <!-- KPI Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <x-card padding="p-5">
-                <p class="text-xs text-slate-400 mb-1">{{ $isPersonal ? 'My SIM Conversion' : 'Downline SIM Conversion' }}</p>
-                <p class="text-xl font-bold font-display text-slate-800">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <x-card padding="p-4">
+                <p class="text-xs text-slate-400 mb-0.5">{{ $isPersonal ? 'My SIM Conversion' : 'Downline SIM Conversion' }}</p>
+                <p class="text-lg font-bold font-display text-slate-800 truncate">
                     {{ $activatedSims }} / {{ $totalSims }}
                     <span class="text-sm font-semibold text-primary">· {{ $conversionRate }}%</span>
                 </p>
                 <p class="text-xs text-slate-400 mt-1">{{ $activatedSims }} activated of {{ $totalSims }} {{ $isPersonal ? 'held' : 'distributed' }}</p>
             </x-card>
 
-            <x-card padding="p-5">
-                <p class="text-xs text-slate-400 mb-1">Commission This Week</p>
-                <p class="text-xl font-bold font-display text-slate-800">₦{{ number_format($commissionThisWeek, 2) }}</p>
+            <x-card padding="p-4">
+                <p class="text-xs text-slate-400 mb-0.5">Commission This Week</p>
+                <p class="text-lg font-bold font-display text-slate-800 truncate">₦{{ number_format($commissionThisWeek, 2) }}</p>
                 <p class="text-xs mt-1 font-semibold {{ $commissionTrendPct > 0 ? 'text-emerald-600' : ($commissionTrendPct < 0 ? 'text-rose-600' : 'text-slate-400') }}">
                     @if ($commissionTrendPct > 0)
                         <i data-lucide="arrow-up-right" class="w-3 h-3 inline"></i> {{ $commissionTrendPct }}% vs last week
@@ -40,9 +40,9 @@
                 </p>
             </x-card>
 
-            <x-card padding="p-5">
-                <p class="text-xs text-slate-400 mb-1">Dormant {{ $isPersonal ? 'SIMs' : 'Downline SIMs' }}</p>
-                <p class="text-xl font-bold font-display {{ $dormantCount > 0 ? 'text-rose-600' : 'text-slate-800' }}">{{ $dormantCount }}</p>
+            <x-card padding="p-4">
+                <p class="text-xs text-slate-400 mb-0.5">Dormant {{ $isPersonal ? 'SIMs' : 'Downline SIMs' }}</p>
+                <p class="text-lg font-bold font-display {{ $dormantCount > 0 ? 'text-rose-600' : 'text-slate-800' }} truncate">{{ $dormantCount }}</p>
                 <p class="text-xs text-slate-400 mt-1">Held {{ \App\Http\Controllers\SalesPerformanceController::DORMANT_DAYS ?? 7 }}+ days unactivated</p>
             </x-card>
         </div>

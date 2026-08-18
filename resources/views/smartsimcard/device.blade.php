@@ -193,7 +193,7 @@
                                         <p class="text-xs text-slate-400">This amount is debited from the selected user's wallet — not yours.</p>
                                     </div>
 
-                                    <x-primary-button type="submit" class="w-full !text-xs !bg-emerald-600 hover:!bg-emerald-700" x-bind:disabled="!simId || !userId">
+                                    <x-primary-button type="submit" class="w-full !text-xs !bg-emerald-600 hover:!bg-emerald-700" x-bind:disabled="!simId || !userId || {{ $activationDisabled ? 'true' : 'false' }}">
                                         <i data-lucide="power" class="w-3.5 h-3.5"></i>
                                         Activate SIM
                                     </x-primary-button>
