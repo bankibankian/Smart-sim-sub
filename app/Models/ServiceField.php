@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'description',
     'base_price',
     'is_active',
+    'activation_disabled',
 ])]
 class ServiceField extends Model
 {
@@ -98,8 +99,9 @@ class ServiceField extends Model
     protected function casts(): array
     {
         return [
-            'base_price' => 'decimal:2',
-            'is_active'  => 'boolean',
+            'base_price'           => 'decimal:2',
+            'is_active'            => 'boolean',
+            'activation_disabled'  => 'boolean',
         ];
     }
 }

@@ -244,6 +244,9 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
             Route::post('/{simSwapRequest}/approve', [\App\Http\Controllers\Admin\SimSwapController::class, 'approve'])->name('approve');
             Route::post('/{simSwapRequest}/reject', [\App\Http\Controllers\Admin\SimSwapController::class, 'reject'])->name('reject');
         });
+
+        Route::post('/categories/{field}/toggle-activation', [\App\Http\Controllers\Admin\SimPlanController::class, 'toggleActivation'])->name('categories.toggle-activation');
+        Route::post('/failed-activations/{report}/retry', [\App\Http\Controllers\Admin\SimPlanController::class, 'retryActivationBonus'])->name('failed-activations.retry');
     });
 
     // Admin Cash Out Approvals

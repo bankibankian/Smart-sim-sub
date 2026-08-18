@@ -115,6 +115,10 @@ class SimAssignmentService
             throw new \RuntimeException('This SIM is already activated.');
         }
 
+        if ($this->isActivationDisabled($sim->category)) {
+            throw new \RuntimeException('Activation is currently disabled for this SIM category.');
+        }
+
         DB::transaction(function () use ($sim, $actor) {
             $from = $sim->status;
             $sim->update(['status' => SimStatus::ACTIVATED]);
@@ -122,6 +126,18 @@ class SimAssignmentService
         });
 
         event(new SimActivated($sim->fresh(), $actor));
+    }
+
+    /**
+     * Admin-controlled kill-switch, keyed off the category's ServiceField
+     * row (the same one-per-category pricing template the SIM Plans page
+     * already manages) — not a per-physical-SIM flag.
+     */
+    private function isActivationDisabled(string $category): bool
+    {
+        return \App\Models\ServiceField::whereHas('service', fn ($q) => $q->where('name', 'simcard'))
+            ->where('field_name', $category)
+            ->value('activation_disabled') ?? false;
     }
 
     public function deactivate(Sim $sim, User $actor): void

@@ -75,4 +75,9 @@ return [
         'secret_key'    => env('NINEPSB_SECRET_KEY'),
         'debit_account' => env('NINEPSB_DEBIT_ACCOUNT'),
     ],
+
+    'amsub' => [
+        'base_url' => env('AMSUB_BASE_URL', 'https://amsubapi.com/api'),
+        'api_key'  => env('AMSUB_API_KEY'),
+    ],
 ];

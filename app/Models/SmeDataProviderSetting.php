@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 class SmeDataProviderSetting extends Model
 {
-    public const PROVIDERS = ['legacy', 'smeplug', '9psb'];
+    public const PROVIDERS = ['legacy', 'smeplug', '9psb', 'amsub'];
 
     protected $fillable = [
         'provider',
@@ -49,6 +49,11 @@ class SmeDataProviderSetting extends Model
                     'api_key' => config('services.ninepsb.api_key'),
                     'secret_key' => config('services.ninepsb.secret_key'),
                     'debit_account' => config('services.ninepsb.debit_account'),
+                ],
+                'amsub' => [
+                    'is_active' => false,
+                    'base_url' => config('services.amsub.base_url'),
+                    'api_key' => config('services.amsub.api_key'),
                 ],
                 default => [
                     'is_active' => false,
