@@ -236,6 +236,7 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
         Route::post('/activate/{sim}', [\App\Http\Controllers\Admin\SimPlanController::class, 'activate'])->name('activate');
         Route::post('/requests/{simRequest}/approve', [\App\Http\Controllers\Admin\SimPlanController::class, 'approveRequest'])->name('requests.approve');
         Route::post('/requests/{simRequest}/reject', [\App\Http\Controllers\Admin\SimPlanController::class, 'rejectRequest'])->name('requests.reject');
+        Route::post('/requests/{simRequest}/resolve-numbers', [\App\Http\Controllers\Admin\SimPlanController::class, 'resolveRequestNumbers'])->name('requests.resolve-numbers');
         Route::post('/import-excel', [\App\Http\Controllers\Admin\SimPlanController::class, 'importExcel'])->name('import');
         Route::get('/download-sample', [\App\Http\Controllers\Admin\SimPlanController::class, 'downloadSample'])->name('download-sample');
         Route::get('/available-sims', [\App\Http\Controllers\Admin\SimPlanController::class, 'availableSims'])->name('available-sims');

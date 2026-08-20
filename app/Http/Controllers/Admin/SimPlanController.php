@@ -336,6 +336,70 @@ class SimPlanController extends Controller
     }
 
     /**
+     * AJAX: resolve admin-pasted SIM numbers (comma/newline separated) into
+     * validated sim_ids for a purchase request, mirroring the checkbox
+     * picker's output so approveRequest() can consume either. Read-only —
+     * approveRequest() still re-validates everything inside its own
+     * transaction before assigning.
+     */
+    public function resolveRequestNumbers(Request $request, SimRequest $simRequest)
+    {
+        if ($simRequest->status !== 'pending' || $simRequest->request_type !== 'purchase') {
+            return response()->json(['resolved' => [], 'errors' => ['This request is not open for SIM selection.']]);
+        }
+
+        $request->validate(['numbers' => 'required|string']);
+
+        $rawNumbers = preg_split('/[\r\n,]+/', $request->numbers);
+        $resolved = [];
+        $errors = [];
+        $seen = [];
+
+        foreach ($rawNumbers as $rawNumber) {
+            $number = trim($rawNumber);
+            if ($number === '') {
+                continue;
+            }
+
+            if (isset($seen[$number])) {
+                continue;
+            }
+            $seen[$number] = true;
+
+            if (strlen($number) !== 11 || !ctype_digit($number)) {
+                $errors[] = "{$number} — Invalid format (must be 11 digits)";
+                continue;
+            }
+
+            $sim = Sim::where('number', $number)->first();
+
+            if (!$sim) {
+                $errors[] = "{$number} — Not found";
+                continue;
+            }
+
+            if ($sim->category !== $simRequest->category || $sim->provider !== $simRequest->provider) {
+                $errors[] = "{$number} — Wrong category/provider for this request";
+                continue;
+            }
+
+            if ($sim->status === SimStatus::ACTIVATED) {
+                $errors[] = "{$number} — Already activated";
+                continue;
+            }
+
+            if ($sim->status !== SimStatus::UNASSIGNED) {
+                $errors[] = "{$number} — Already assigned";
+                continue;
+            }
+
+            $resolved[] = ['id' => $sim->id, 'number' => $sim->number];
+        }
+
+        return response()->json(['resolved' => $resolved, 'errors' => $errors]);
+    }
+
+    /**
      * Admin rejects a purchase/activation request.
      */
     public function rejectRequest(Request $request, SimRequest $simRequest)
