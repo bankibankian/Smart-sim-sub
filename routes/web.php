@@ -119,6 +119,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sims/downline-requests', [\App\Http\Controllers\smartsim\SimsController::class, 'downlineRequests'])->name('sims.downline-requests');
     Route::get('/sims/downline-requests/available-sims', [\App\Http\Controllers\smartsim\SimsController::class, 'downlineRequestAvailableSims'])->name('sims.downline-requests.available-sims');
     Route::post('/sims/downline-requests/{simRequest}/fulfill', [\App\Http\Controllers\smartsim\SimsController::class, 'fulfillDownlineRequest'])->name('sims.downline-requests.fulfill');
+    Route::post('/sims/downline-requests/{simRequest}/resolve-numbers', [\App\Http\Controllers\smartsim\SimsController::class, 'resolveDownlineRequestNumbers'])->name('sims.downline-requests.resolve-numbers');
 
     // Identity Verification Routes — personal/business/agent plus partner
     // (a narrower carve-out than Airtime/SME Data above).
