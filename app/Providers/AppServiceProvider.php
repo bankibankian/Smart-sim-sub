@@ -104,7 +104,7 @@ class AppServiceProvider extends ServiceProvider
 
                 if ($user->role === 'super_admin') {
                     $openTicketsBadge = \App\Models\Ticket::where('status', 'open')->count();
-                } elseif ($user->role === 'partner') {
+                } elseif (in_array($user->role, ['partner', 'coordinator', 'regional_manager'], true)) {
                     $pendingDownlineRequestsBadge = \App\Models\SimRequest::where('upline_id', $user->id)
                         ->where('status', 'pending')
                         ->count();

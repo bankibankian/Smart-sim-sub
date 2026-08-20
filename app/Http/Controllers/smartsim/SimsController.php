@@ -271,7 +271,7 @@ class SimsController extends Controller
         $unitPrice = 0.00;
 
         if (in_array($user->role, SimAccess::MINE_ROLES, true)) {
-            $uplinePartner = $this->resolveUplinePartner($user);
+            $uplinePartner = $this->resolveUpline($user);
 
             if (!$uplinePartner) {
                 $simService = \App\Models\Service::where('name', 'simcard')->first();
@@ -290,6 +290,7 @@ class SimsController extends Controller
             'providers' => $providers,
             'uplinePartner' => $uplinePartner,
             'unitPrice' => $unitPrice,
+            'maxQuantity' => \App\Support\SimRequestLimits::maxFor($user),
         ]);
     }
 
@@ -562,18 +563,30 @@ class SimsController extends Controller
     }
 
     /**
-     * A personal/business requester's immediate upline is only usable for
-     * self-service SIM fulfillment when it's an active partner — the only
-     * role RoleHierarchy's chain lets hand a SIM straight to 'personal'.
-     * Anything else (no referrer, a suspended partner, or a referrer from
-     * outside the distribution chain — e.g. another personal user via the
-     * leaderboard referral system) is treated as "unclaimed".
+     * A requester's immediate upline is only usable for self-service SIM
+     * fulfillment when it's an active user in the correct parent role for
+     * the chain step below them (personal/business -> partner -> coordinator
+     * -> regional_manager). Anything else (no referrer, a suspended upline,
+     * a referrer from outside the distribution chain — e.g. another personal
+     * user via the leaderboard referral system, or a role with no parent
+     * tier at all — agent, regional_manager) is treated as "unclaimed".
      */
-    private function resolveUplinePartner(User $user): ?User
+    private function resolveUpline(User $user): ?User
     {
+        $parentRole = match ($user->role) {
+            'personal', 'business' => 'partner',
+            'partner' => 'coordinator',
+            'coordinator' => 'regional_manager',
+            default => null,
+        };
+
+        if (!$parentRole) {
+            return null;
+        }
+
         $referrer = $user->referrer;
 
-        return ($referrer && $referrer->role === 'partner' && $referrer->status === 'active') ? $referrer : null;
+        return ($referrer && $referrer->role === $parentRole && $referrer->status === 'active') ? $referrer : null;
     }
 
     /**
@@ -591,19 +604,22 @@ class SimsController extends Controller
      */
     public function requestSim(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
             'category' => 'required|string',
             'provider' => 'required|string',
-            'quantity' => 'required|integer|min:1|max:20',
+            'quantity' => ['required', 'integer', 'min:1', 'max:' . \App\Support\SimRequestLimits::maxFor($user)],
         ]);
 
-        $user = Auth::user();
-
         if (!in_array($user->role, SimAccess::MINE_ROLES, true)) {
+            $upline = $this->resolveUpline($user);
+
             try {
-                DB::transaction(function () use ($user, $request) {
+                DB::transaction(function () use ($user, $request, $upline) {
                     SimRequest::create([
                         'user_id'      => $user->id,
+                        'upline_id'    => $upline?->id,
                         'sim_id'       => null,
                         'number'       => null,
                         'category'     => $request->category,
@@ -615,13 +631,17 @@ class SimsController extends Controller
                     ]);
                 });
 
-                return back()->with('success', "Your request for {$request->quantity} x {$request->category} has been submitted successfully.");
+                $message = $upline
+                    ? "Your request for {$request->quantity} x {$request->category} has been sent to your upline, {$upline->first_name} {$upline->last_name}, to fulfill from their stock — our team will step in if they can't."
+                    : "Your request for {$request->quantity} x {$request->category} has been submitted successfully.";
+
+                return back()->with('success', $message);
             } catch (\Exception $e) {
                 return back()->with('error', $e->getMessage());
             }
         }
 
-        $uplinePartner = $this->resolveUplinePartner($user);
+        $uplinePartner = $this->resolveUpline($user);
 
         try {
             if ($uplinePartner) {
@@ -1001,42 +1021,67 @@ class SimsController extends Controller
     }
 
     /**
-     * Restrict the three downline-requests actions below to Partners — the
-     * only role a personal/business requester's SimRequest.upline_id can
-     * point to (see resolveUplinePartner()).
+     * Restrict the downline-requests actions below to the three roles that
+     * hold stock a direct downline's SimRequest.upline_id can point to (see
+     * resolveUpline()): Partner (-> personal/business), Coordinator
+     * (-> partner), Regional Manager (-> coordinator).
      */
-    private function authorizePartner(): User
+    private function authorizeUplineFulfiller(): User
     {
         $user = Auth::user();
-        if (!$user || $user->role !== 'partner') {
-            abort(403, 'This page is only available to Partners.');
+        if (!$user || !in_array($user->role, ['partner', 'coordinator', 'regional_manager'], true)) {
+            abort(403, 'This page is only available to Partners, Coordinators, and Regional Managers.');
         }
 
         return $user;
     }
 
     /**
-     * Requests from a Partner's own downline (personal/business users who
-     * named this partner as their upline at submission time), still pending.
-     * Shown alongside how many matching SIMs the partner currently holds so
-     * they immediately know whether they can fulfill it themselves.
+     * The FK/status pair each upline role's own held stock lives under,
+     * scoped to a category/provider — mirrors the same role match
+     * SimAssignmentService::assignDown() uses internally to check whether
+     * the "from" user actually holds a given SIM.
+     */
+    private function heldStockQuery(User $user, string $category, string $provider)
+    {
+        return (match ($user->role) {
+            'regional_manager' => Sim::where('regional_manager_id', $user->id)->where('status', SimStatus::ASSIGNED_TO_RM),
+            'coordinator'       => Sim::where('coordinator_id', $user->id)->where('status', SimStatus::ASSIGNED_TO_COORDINATOR),
+            default             => Sim::where('partner_id', $user->id)->where('user_id', $user->id)->where('status', SimStatus::ASSIGNED_TO_PARTNER),
+        })->where('category', $category)->where('provider', $provider);
+    }
+
+    /**
+     * Whether $user currently holds $sim at their own tier (Regional
+     * Manager/Coordinator/Partner), the same condition heldStockQuery()
+     * checks in bulk, evaluated here against an already-loaded Sim.
+     */
+    private function holdsSim(User $user, Sim $sim): bool
+    {
+        return match ($user->role) {
+            'regional_manager' => $sim->regional_manager_id === $user->id && $sim->status === SimStatus::ASSIGNED_TO_RM,
+            'coordinator'       => $sim->coordinator_id === $user->id && $sim->status === SimStatus::ASSIGNED_TO_COORDINATOR,
+            default             => $sim->partner_id === $user->id && $sim->user_id === $user->id && $sim->status === SimStatus::ASSIGNED_TO_PARTNER,
+        };
+    }
+
+    /**
+     * Requests from this upline's own direct downline (users who named them
+     * as upline at submission time), still pending. Shown alongside how
+     * many matching SIMs the upline currently holds so they immediately
+     * know whether they can fulfill it themselves.
      */
     public function downlineRequests()
     {
-        $partner = $this->authorizePartner();
+        $user = $this->authorizeUplineFulfiller();
 
         $requests = SimRequest::with('user')
-            ->where('upline_id', $partner->id)
+            ->where('upline_id', $user->id)
             ->where('status', 'pending')
             ->latest()
             ->get()
-            ->map(function (SimRequest $req) use ($partner) {
-                $req->held_count = Sim::where('partner_id', $partner->id)
-                    ->where('user_id', $partner->id)
-                    ->where('status', SimStatus::ASSIGNED_TO_PARTNER)
-                    ->where('category', $req->category)
-                    ->where('provider', $req->provider)
-                    ->count();
+            ->map(function (SimRequest $req) use ($user) {
+                $req->held_count = $this->heldStockQuery($user, $req->category, $req->provider)->count();
 
                 return $req;
             });
@@ -1047,22 +1092,18 @@ class SimsController extends Controller
     /**
      * AJAX source for the "pick which SIM(s) to hand over" picker on the
      * Downline Requests page — mirrors Admin\SimPlanController::availableSims(),
-     * scoped to the partner's own held stock instead of the central pool.
+     * scoped to the upline's own held stock instead of the central pool.
      */
     public function downlineRequestAvailableSims(Request $request)
     {
-        $partner = $this->authorizePartner();
+        $user = $this->authorizeUplineFulfiller();
 
         $request->validate([
             'category' => 'required|string',
             'provider' => 'required|string',
         ]);
 
-        $sims = Sim::where('partner_id', $partner->id)
-            ->where('user_id', $partner->id)
-            ->where('status', SimStatus::ASSIGNED_TO_PARTNER)
-            ->where('category', $request->category)
-            ->where('provider', $request->provider)
+        $sims = $this->heldStockQuery($user, $request->category, $request->provider)
             ->orderBy('number')
             ->get(['id', 'number']);
 
@@ -1070,15 +1111,75 @@ class SimsController extends Controller
     }
 
     /**
-     * Partner fulfills a downline request directly from their own held
+     * AJAX: resolve pasted SIM numbers (comma/newline separated) into
+     * validated sim_ids for a downline request, mirroring
+     * Admin\SimPlanController::resolveRequestNumbers() but scoped to the
+     * upline's own held stock rather than the global unassigned pool.
+     */
+    public function resolveDownlineRequestNumbers(Request $request, SimRequest $simRequest)
+    {
+        $user = $this->authorizeUplineFulfiller();
+
+        if ((int) $simRequest->upline_id !== $user->id || $simRequest->status !== 'pending') {
+            return response()->json(['resolved' => [], 'errors' => ['This request is not open for SIM selection.']]);
+        }
+
+        $request->validate(['numbers' => 'required|string']);
+
+        $rawNumbers = preg_split('/[\r\n,]+/', $request->numbers);
+        $resolved = [];
+        $errors = [];
+        $seen = [];
+
+        foreach ($rawNumbers as $rawNumber) {
+            $number = trim($rawNumber);
+            if ($number === '') {
+                continue;
+            }
+
+            if (isset($seen[$number])) {
+                continue;
+            }
+            $seen[$number] = true;
+
+            if (strlen($number) !== 11 || !ctype_digit($number)) {
+                $errors[] = "{$number} — Invalid format (must be 11 digits)";
+                continue;
+            }
+
+            $sim = Sim::where('number', $number)->first();
+
+            if (!$sim) {
+                $errors[] = "{$number} — Not found";
+                continue;
+            }
+
+            if ($sim->category !== $simRequest->category || $sim->provider !== $simRequest->provider) {
+                $errors[] = "{$number} — Wrong category/provider for this request";
+                continue;
+            }
+
+            if (!$this->holdsSim($user, $sim)) {
+                $errors[] = "{$number} — Not in your held stock";
+                continue;
+            }
+
+            $resolved[] = ['id' => $sim->id, 'number' => $sim->number];
+        }
+
+        return response()->json(['resolved' => $resolved, 'errors' => $errors]);
+    }
+
+    /**
+     * Upline fulfills a downline request directly from their own held
      * stock via the same assignDown() delegation they'd otherwise do
      * manually from Inventory/the device page.
      */
     public function fulfillDownlineRequest(Request $request, SimRequest $simRequest)
     {
-        $partner = $this->authorizePartner();
+        $user = $this->authorizeUplineFulfiller();
 
-        if ((int) $simRequest->upline_id !== $partner->id) {
+        if ((int) $simRequest->upline_id !== $user->id) {
             abort(403, 'This request was not routed to you.');
         }
 
@@ -1096,7 +1197,7 @@ class SimsController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($simRequest, $partner, $request) {
+            DB::transaction(function () use ($simRequest, $user, $request) {
                 $lockedRequest = SimRequest::where('id', $simRequest->id)->lockForUpdate()->first();
                 if (!$lockedRequest || $lockedRequest->status !== 'pending') {
                     throw new \Exception('This request has already been processed.');
@@ -1114,20 +1215,19 @@ class SimsController extends Controller
 
                 $service = app(SimAssignmentService::class);
                 foreach ($sims as $sim) {
-                    if ($sim->partner_id !== $partner->id || $sim->user_id !== $partner->id
-                        || $sim->status !== SimStatus::ASSIGNED_TO_PARTNER
+                    if (!$this->holdsSim($user, $sim)
                         || $sim->category !== $lockedRequest->category || $sim->provider !== $lockedRequest->provider) {
                         throw new \Exception("SIM {$sim->number} is no longer yours to assign.");
                     }
                 }
 
                 foreach ($sims as $sim) {
-                    $service->assignDown($sim, $partner, $requester);
+                    $service->assignDown($sim, $user, $requester);
                 }
 
                 $lockedRequest->update([
                     'status' => 'approved',
-                    'admin_notes' => "Fulfilled by upline partner {$partner->first_name} {$partner->last_name}.",
+                    'admin_notes' => "Fulfilled by upline {$user->first_name} {$user->last_name} ({$user->role}).",
                 ]);
             });
 

@@ -58,44 +58,14 @@
                                 </td>
                                 <td class="py-3 text-right whitespace-nowrap">
                                     @if ($req->held_count >= $req->quantity)
-                                        <button type="button" @click="fetch('{{ route('sims.downline-requests.available-sims') }}?category={{ urlencode($req->category) }}&provider={{ urlencode($req->provider) }}')
-                                            .then(r => r.json())
-                                            .then(sims => {
-                                                if (sims.length < {{ $req->quantity }}) {
-                                                    Swal.fire('Not Enough Stock', 'Only ' + sims.length + ' SIM(s) available for {{ $req->category }} / {{ strtoupper($req->provider) }}, but {{ $req->quantity }} requested.', 'warning');
-                                                    return;
-                                                }
-                                                let optionsHtml = sims.map(s => `
-                                                    <label class='flex items-center gap-2 text-xs font-medium py-1'>
-                                                        <input type='checkbox' class='fulfill-sim-cb' value='${s.id}'> ${s.number}
-                                                    </label>
-                                                `).join('');
-                                                Swal.fire({
-                                                    title: 'Select {{ $req->quantity }} SIM(s) to Hand Over',
-                                                    html: `<div class='text-left max-h-64 overflow-y-auto space-y-1'>${optionsHtml}</div>`,
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#0056D2',
-                                                    confirmButtonText: 'Fulfill Selected',
-                                                    preConfirm: () => {
-                                                        const checked = Array.from(document.querySelectorAll('.fulfill-sim-cb:checked')).map(el => el.value);
-                                                        if (checked.length !== {{ $req->quantity }}) {
-                                                            Swal.showValidationMessage('Please select exactly {{ $req->quantity }} SIM(s).');
-                                                        }
-                                                        return checked;
-                                                    }
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        let f = document.createElement('form');
-                                                        f.action = '{{ route('sims.downline-requests.fulfill', $req->id) }}';
-                                                        f.method = 'POST';
-                                                        let inputs = '<input type=\'hidden\' name=\'_token\' value=\'{{ csrf_token() }}\'>';
-                                                        result.value.forEach(id => { inputs += '<input type=\'hidden\' name=\'sim_ids[]\' value=\'' + id + '\'>'; });
-                                                        f.innerHTML = inputs;
-                                                        document.body.appendChild(f);
-                                                        f.submit();
-                                                    }
-                                                })
-                                            })" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg transition-colors">
+                                        <button type="button" @click="openFulfillRequestModal(
+                                            '{{ $req->category }}',
+                                            '{{ $req->provider }}',
+                                            {{ $req->quantity }},
+                                            '{{ route('sims.downline-requests.available-sims') }}',
+                                            '{{ route('sims.downline-requests.fulfill', $req->id) }}',
+                                            '{{ route('sims.downline-requests.resolve-numbers', $req->id) }}'
+                                        )" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg transition-colors">
                                             Fulfill
                                         </button>
                                     @else
@@ -113,4 +83,126 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            function openFulfillRequestModal(category, provider, quantity, availableSimsUrl, fulfillUrl, resolveNumbersUrl) {
+                fetch(`${availableSimsUrl}?category=${encodeURIComponent(category)}&provider=${encodeURIComponent(provider)}`)
+                    .then(r => r.json())
+                    .then(sims => {
+                        if (sims.length < quantity) {
+                            Swal.fire('Not Enough Stock', `Only ${sims.length} SIM(s) available for ${category} / ${provider.toUpperCase()}, but ${quantity} requested.`, 'warning');
+                            return;
+                        }
+
+                        const optionsHtml = sims.map(s => `
+                            <label class="flex items-center gap-2 text-xs font-medium py-1">
+                                <input type="checkbox" class="fulfill-sim-cb" value="${s.id}"> ${s.number}
+                            </label>
+                        `).join('');
+
+                        let activeTab = 'list';
+
+                        Swal.fire({
+                            title: `Select ${quantity} SIM(s) to Hand Over`,
+                            html: `
+                                <div class="text-left">
+                                    <div class="flex gap-2 mb-3 border-b border-slate-200">
+                                        <button type="button" id="fulfill-tab-list" class="px-3 py-1.5 text-xs font-bold border-b-2 border-[#0056D2] text-[#0056D2]">Pick from List</button>
+                                        <button type="button" id="fulfill-tab-numbers" class="px-3 py-1.5 text-xs font-bold border-b-2 border-transparent text-slate-400">Enter Numbers</button>
+                                    </div>
+                                    <div id="fulfill-panel-list" class="max-h-64 overflow-y-auto space-y-1">${optionsHtml}</div>
+                                    <div id="fulfill-panel-numbers" class="hidden">
+                                        <textarea id="fulfill-numbers-input" rows="6" class="w-full text-xs border border-slate-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#0056D2]" placeholder="08030000000, 08031111111&#10;or one per line"></textarea>
+                                        <p class="text-[11px] text-slate-400 mt-1">Separate numbers by comma or new line. Each must be an existing, unassigned ${category} / ${provider.toUpperCase()} SIM currently in your held stock.</p>
+                                    </div>
+                                </div>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonColor: '#0056D2',
+                            confirmButtonText: 'Fulfill Selected',
+                            didOpen: () => {
+                                const listBtn = document.getElementById('fulfill-tab-list');
+                                const numbersBtn = document.getElementById('fulfill-tab-numbers');
+                                const listPanel = document.getElementById('fulfill-panel-list');
+                                const numbersPanel = document.getElementById('fulfill-panel-numbers');
+
+                                listBtn.addEventListener('click', () => {
+                                    activeTab = 'list';
+                                    listBtn.classList.add('border-[#0056D2]', 'text-[#0056D2]');
+                                    listBtn.classList.remove('border-transparent', 'text-slate-400');
+                                    numbersBtn.classList.add('border-transparent', 'text-slate-400');
+                                    numbersBtn.classList.remove('border-[#0056D2]', 'text-[#0056D2]');
+                                    listPanel.classList.remove('hidden');
+                                    numbersPanel.classList.add('hidden');
+                                });
+
+                                numbersBtn.addEventListener('click', () => {
+                                    activeTab = 'numbers';
+                                    numbersBtn.classList.add('border-[#0056D2]', 'text-[#0056D2]');
+                                    numbersBtn.classList.remove('border-transparent', 'text-slate-400');
+                                    listBtn.classList.add('border-transparent', 'text-slate-400');
+                                    listBtn.classList.remove('border-[#0056D2]', 'text-[#0056D2]');
+                                    numbersPanel.classList.remove('hidden');
+                                    listPanel.classList.add('hidden');
+                                });
+                            },
+                            preConfirm: () => {
+                                if (activeTab === 'list') {
+                                    const checked = Array.from(document.querySelectorAll('.fulfill-sim-cb:checked')).map(el => el.value);
+                                    if (checked.length !== quantity) {
+                                        Swal.showValidationMessage(`Please select exactly ${quantity} SIM(s).`);
+                                        return false;
+                                    }
+                                    return checked;
+                                }
+
+                                const numbers = document.getElementById('fulfill-numbers-input').value;
+                                if (!numbers.trim()) {
+                                    Swal.showValidationMessage('Please enter at least one SIM number.');
+                                    return false;
+                                }
+
+                                return fetch(resolveNumbersUrl, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                        'Accept': 'application/json',
+                                    },
+                                    body: JSON.stringify({ numbers }),
+                                })
+                                    .then(r => r.json())
+                                    .then(data => {
+                                        if (data.errors && data.errors.length) {
+                                            Swal.showValidationMessage(data.errors.join('<br>'));
+                                            return false;
+                                        }
+                                        if (data.resolved.length !== quantity) {
+                                            Swal.showValidationMessage(`Found ${data.resolved.length} valid SIM(s), but exactly ${quantity} are required.`);
+                                            return false;
+                                        }
+                                        return data.resolved.map(s => s.id);
+                                    })
+                                    .catch(() => {
+                                        Swal.showValidationMessage('Could not validate numbers. Please try again.');
+                                        return false;
+                                    });
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const f = document.createElement('form');
+                                f.action = fulfillUrl;
+                                f.method = 'POST';
+                                let inputs = `<input type="hidden" name="_token" value="{{ csrf_token() }}">`;
+                                result.value.forEach(id => { inputs += `<input type="hidden" name="sim_ids[]" value="${id}">`; });
+                                f.innerHTML = inputs;
+                                document.body.appendChild(f);
+                                f.submit();
+                            }
+                        });
+                    });
+            }
+        </script>
+    @endpush
 </x-app-layout>
