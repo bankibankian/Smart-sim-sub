@@ -170,6 +170,24 @@
             </script>
         @endif
 
+        @if (session('pos_sim_notice'))
+            <!-- POS SIM Usage Notice Overlay -->
+            <div x-data="{ posSimNoticeOpen: true }" x-show="posSimNoticeOpen"
+                 class="fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                <div @click.away="posSimNoticeOpen = false"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                     class="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-sm w-full p-5 text-center relative">
+                    <img src="{{ asset('assets/images/pos-sim-notice.jpeg') }}" alt="POS SIM is only for POS" class="w-full rounded-xl mb-5">
+                    <button type="button" @click="posSimNoticeOpen = false"
+                            class="w-full py-3 px-6 bg-primary hover:bg-[#0049b8] text-white font-semibold text-sm rounded-lg transition font-display">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        @endif
+
         @stack('scripts')
     </body>
 </html>

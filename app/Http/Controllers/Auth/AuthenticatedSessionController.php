@@ -31,6 +31,10 @@ class AuthenticatedSessionController extends Controller
         // Terminate all other existing sessions for this user (Single Device Enforcement)
         Auth::logoutOtherDevices($request->password);
 
+        if (!in_array(Auth::user()->role, ['super_admin', 'staff', 'checker'], true)) {
+            session()->flash('pos_sim_notice', true);
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
