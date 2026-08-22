@@ -275,14 +275,12 @@ class SimPlanController extends Controller
                 'sim_ids'   => 'required|array',
                 'sim_ids.*' => 'exists:sims,id',
             ]);
-
-            if (count($request->sim_ids) !== $simRequest->quantity) {
-                return back()->with('error', "Please select exactly {$simRequest->quantity} SIM number(s).");
-            }
         }
 
+        $processedCount = 0;
+
         try {
-            DB::transaction(function () use ($simRequest, $actor, $request) {
+            DB::transaction(function () use ($simRequest, $actor, $request, &$processedCount) {
                 // Lock the request for update
                 $lockedRequest = SimRequest::where('id', $simRequest->id)->lockForUpdate()->first();
                 if (!$lockedRequest || $lockedRequest->status !== 'pending') {
@@ -295,21 +293,34 @@ class SimPlanController extends Controller
                         throw new \Exception('Requester user not found.');
                     }
 
-                    $sims = Sim::whereIn('id', $request->sim_ids)->lockForUpdate()->get();
-                    if ($sims->count() !== $lockedRequest->quantity) {
-                        throw new \Exception('One or more selected SIMs are no longer available.');
-                    }
-
-                    foreach ($sims as $sim) {
-                        if ($sim->status !== SimStatus::UNASSIGNED) {
-                            throw new \Exception("SIM {$sim->number} is no longer available.");
-                        }
-                    }
+                    $originalQuantity = $lockedRequest->quantity;
+                    // Never process more than was actually requested, even if
+                    // more sim_ids were submitted than the request called for.
+                    $simIds = array_slice($request->sim_ids, 0, $originalQuantity);
+                    $sims = Sim::whereIn('id', $simIds)->lockForUpdate()->get();
 
                     $service = app(SimAssignmentService::class);
                     foreach ($sims as $sim) {
+                        if ($sim->status !== SimStatus::UNASSIGNED) {
+                            // Raced away since the number was resolved client-side —
+                            // skip it rather than aborting the whole batch.
+                            continue;
+                        }
                         $service->adminAssign($sim, $requester, $actor);
+                        $processedCount++;
                     }
+
+                    if ($processedCount === 0) {
+                        throw new \Exception('None of the selected SIMs are still available. Please try again.');
+                    }
+
+                    $lockedRequest->update([
+                        'status'      => 'approved',
+                        'quantity'    => $processedCount,
+                        'admin_notes' => $processedCount < $originalQuantity
+                            ? "Approved with {$processedCount} of {$originalQuantity} requested SIM(s)."
+                            : 'Approved.',
+                    ]);
                 } elseif ($lockedRequest->request_type === 'activation') {
                     $sim = $lockedRequest->sim;
                     if ($sim) {
@@ -321,15 +332,19 @@ class SimPlanController extends Controller
                         // Commission Engine (AwardCommissions listener) pays out from.
                         app(SimAssignmentService::class)->activate($sim, $actor);
                     }
-                }
 
-                $lockedRequest->update([
-                    'status' => 'approved',
-                    'admin_notes' => 'Approved.',
-                ]);
+                    $lockedRequest->update([
+                        'status' => 'approved',
+                        'admin_notes' => 'Approved.',
+                    ]);
+                }
             });
 
-            return back()->with('success', 'Request approved successfully.');
+            $message = $processedCount > 0
+                ? "Request approved: {$processedCount} SIM(s) assigned."
+                : 'Request approved successfully.';
+
+            return back()->with('success', $message);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -397,6 +412,213 @@ class SimPlanController extends Controller
         }
 
         return response()->json(['resolved' => $resolved, 'errors' => $errors]);
+    }
+
+    /**
+     * Dedicated page: paste a large batch of known SIM numbers, then search
+     * and pick a user to hand them all to.
+     */
+    public function bulkAssignPage()
+    {
+        return view('admin.sim-plan.bulk-assign');
+    }
+
+    /**
+     * Dedicated page: paste a large batch of known SIM numbers, then search
+     * and pick the user to reclaim them from.
+     */
+    public function bulkCollectPage()
+    {
+        return view('admin.sim-plan.bulk-collect');
+    }
+
+    /**
+     * AJAX: resolve pasted SIM numbers for the Bulk Assign page — same
+     * format/existence checks as resolveRequestNumbers(), minus the
+     * category/provider match since there's no parent request here.
+     */
+    public function resolveBulkAssignNumbers(Request $request)
+    {
+        $request->validate(['numbers' => 'required|string']);
+
+        $rawNumbers = preg_split('/[\r\n,]+/', $request->numbers);
+        $resolved = [];
+        $errors = [];
+        $seen = [];
+
+        foreach ($rawNumbers as $rawNumber) {
+            $number = trim($rawNumber);
+            if ($number === '' || isset($seen[$number])) {
+                continue;
+            }
+            $seen[$number] = true;
+
+            if (strlen($number) !== 11 || !ctype_digit($number)) {
+                $errors[] = "{$number} — Invalid format (must be 11 digits)";
+                continue;
+            }
+
+            $sim = Sim::where('number', $number)->first();
+
+            if (!$sim) {
+                $errors[] = "{$number} — Not found";
+                continue;
+            }
+
+            if ($sim->status === SimStatus::ACTIVATED) {
+                $errors[] = "{$number} — Already activated";
+                continue;
+            }
+
+            if ($sim->status !== SimStatus::UNASSIGNED) {
+                $errors[] = "{$number} — Already assigned";
+                continue;
+            }
+
+            $resolved[] = ['id' => $sim->id, 'number' => $sim->number];
+        }
+
+        return response()->json(['resolved' => $resolved, 'errors' => $errors]);
+    }
+
+    /**
+     * AJAX: resolve pasted SIM numbers for the Bulk Collect page — must
+     * exist and currently be held by someone (not already UNASSIGNED, not
+     * ACTIVATED). Whether it belongs to the specific user the admin ends up
+     * picking is checked later, at execution time in bulkCollect(), since
+     * the user hasn't been chosen yet when this runs.
+     */
+    public function resolveBulkCollectNumbers(Request $request)
+    {
+        $request->validate(['numbers' => 'required|string']);
+
+        $rawNumbers = preg_split('/[\r\n,]+/', $request->numbers);
+        $resolved = [];
+        $errors = [];
+        $seen = [];
+
+        foreach ($rawNumbers as $rawNumber) {
+            $number = trim($rawNumber);
+            if ($number === '' || isset($seen[$number])) {
+                continue;
+            }
+            $seen[$number] = true;
+
+            if (strlen($number) !== 11 || !ctype_digit($number)) {
+                $errors[] = "{$number} — Invalid format (must be 11 digits)";
+                continue;
+            }
+
+            $sim = Sim::where('number', $number)->first();
+
+            if (!$sim) {
+                $errors[] = "{$number} — Not found";
+                continue;
+            }
+
+            if ($sim->status === SimStatus::ACTIVATED) {
+                $errors[] = "{$number} — Currently activated, cannot be collected";
+                continue;
+            }
+
+            if ($sim->status === SimStatus::UNASSIGNED) {
+                $errors[] = "{$number} — Already unassigned, nothing to collect";
+                continue;
+            }
+
+            $resolved[] = ['id' => $sim->id, 'number' => $sim->number];
+        }
+
+        return response()->json(['resolved' => $resolved, 'errors' => $errors]);
+    }
+
+    /**
+     * AJAX: search users by name/email/phone for the Bulk Assign/Collect
+     * pages' user picker — same 5-column query SearchController's navbar
+     * search already uses, scoped the same way index()'s $assignableUsers
+     * list is (non-super_admin, active).
+     */
+    public function searchUsers(Request $request)
+    {
+        $request->validate(['q' => 'required|string|min:2']);
+
+        $query = $request->q;
+
+        $users = User::where('role', '!=', 'super_admin')
+            ->where('status', 'active')
+            ->where(function ($q) use ($query) {
+                $q->where('first_name', 'like', "%{$query}%")
+                    ->orWhere('middle_name', 'like', "%{$query}%")
+                    ->orWhere('last_name', 'like', "%{$query}%")
+                    ->orWhere('email', 'like', "%{$query}%")
+                    ->orWhere('phone', 'like', "%{$query}%");
+            })
+            ->orderBy('first_name')
+            ->limit(10)
+            ->get()
+            ->map(fn (User $u) => [
+                'id'    => $u->id,
+                'name'  => $u->name,
+                'email' => $u->email,
+                'phone' => $u->phone,
+                'role'  => $u->role,
+            ]);
+
+        return response()->json($users);
+    }
+
+    /**
+     * Bulk Collect execute: reclaim pasted SIMs from the selected user back
+     * to the available pool. Verifies each SIM still actually belongs to
+     * that specific user right before reclaiming it — resolveBulkCollectNumbers()
+     * only checked the SIM is held by *someone*, not by whichever user
+     * ends up getting picked, since picking happens after resolution.
+     */
+    public function bulkCollect(Request $request)
+    {
+        $request->validate([
+            'sim_ids'   => 'required|array',
+            'sim_ids.*' => 'exists:sims,id',
+            'user_id'   => 'required|exists:users,id',
+        ]);
+
+        $targetUser = User::find($request->user_id);
+        $actor = $request->user();
+        $service = app(SimAssignmentService::class);
+
+        $sims = Sim::whereIn('id', $request->sim_ids)->get();
+        $collectedCount = 0;
+        $skipped = [];
+
+        DB::transaction(function () use ($sims, $targetUser, $actor, $service, &$collectedCount, &$skipped) {
+            foreach ($sims as $sim) {
+                $belongsToUser = $sim->user_id === $targetUser->id
+                    || $sim->partner_id === $targetUser->id
+                    || $sim->coordinator_id === $targetUser->id
+                    || $sim->regional_manager_id === $targetUser->id;
+
+                if ($sim->status === SimStatus::ACTIVATED) {
+                    $skipped[] = "{$sim->number} (activated)";
+                    continue;
+                }
+
+                if (!$belongsToUser) {
+                    $skipped[] = "{$sim->number} (not held by this user)";
+                    continue;
+                }
+
+                $service->unassign($sim, $actor);
+                $collectedCount++;
+            }
+        });
+
+        $message = "Collected {$collectedCount} SIM number(s) from {$targetUser->first_name} {$targetUser->last_name} ({$targetUser->role}).";
+        if (count($skipped) > 0) {
+            $message .= ' Skipped: ' . implode(', ', $skipped) . '.';
+            return back()->with('warning', $message);
+        }
+
+        return back()->with('success', $message);
     }
 
     /**

@@ -1192,12 +1192,10 @@ class SimsController extends Controller
             'sim_ids.*' => 'exists:sims,id',
         ]);
 
-        if (count($request->sim_ids) !== $simRequest->quantity) {
-            return back()->with('error', "Please select exactly {$simRequest->quantity} SIM number(s).");
-        }
+        $processedCount = 0;
 
         try {
-            DB::transaction(function () use ($simRequest, $user, $request) {
+            DB::transaction(function () use ($simRequest, $user, $request, &$processedCount) {
                 $lockedRequest = SimRequest::where('id', $simRequest->id)->lockForUpdate()->first();
                 if (!$lockedRequest || $lockedRequest->status !== 'pending') {
                     throw new \Exception('This request has already been processed.');
@@ -1208,30 +1206,38 @@ class SimsController extends Controller
                     throw new \Exception('Requester user not found.');
                 }
 
-                $sims = Sim::whereIn('id', $request->sim_ids)->lockForUpdate()->get();
-                if ($sims->count() !== $lockedRequest->quantity) {
-                    throw new \Exception('One or more selected SIMs are no longer available.');
-                }
+                $originalQuantity = $lockedRequest->quantity;
+                // Never process more than was actually requested, even if
+                // more sim_ids were submitted than the request called for.
+                $simIds = array_slice($request->sim_ids, 0, $originalQuantity);
+                $sims = Sim::whereIn('id', $simIds)->lockForUpdate()->get();
 
                 $service = app(SimAssignmentService::class);
                 foreach ($sims as $sim) {
                     if (!$this->holdsSim($user, $sim)
                         || $sim->category !== $lockedRequest->category || $sim->provider !== $lockedRequest->provider) {
-                        throw new \Exception("SIM {$sim->number} is no longer yours to assign.");
+                        // Raced away since the number was resolved client-side —
+                        // skip it rather than aborting the whole batch.
+                        continue;
                     }
+                    $service->assignDown($sim, $user, $requester);
+                    $processedCount++;
                 }
 
-                foreach ($sims as $sim) {
-                    $service->assignDown($sim, $user, $requester);
+                if ($processedCount === 0) {
+                    throw new \Exception('None of the selected SIMs are still yours to assign. Please try again.');
                 }
 
                 $lockedRequest->update([
-                    'status' => 'approved',
-                    'admin_notes' => "Fulfilled by upline {$user->first_name} {$user->last_name} ({$user->role}).",
+                    'status'      => 'approved',
+                    'quantity'    => $processedCount,
+                    'admin_notes' => $processedCount < $originalQuantity
+                        ? "Fulfilled with {$processedCount} of {$originalQuantity} requested SIM(s) by upline {$user->first_name} {$user->last_name} ({$user->role})."
+                        : "Fulfilled by upline {$user->first_name} {$user->last_name} ({$user->role}).",
                 ]);
             });
 
-            return back()->with('success', 'Request fulfilled successfully.');
+            return back()->with('success', "Request fulfilled: {$processedCount} SIM(s) assigned.");
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }

@@ -242,6 +242,15 @@ Route::middleware(['auth', 'verified', 'super_admin'])->group(function () {
         Route::get('/download-sample', [\App\Http\Controllers\Admin\SimPlanController::class, 'downloadSample'])->name('download-sample');
         Route::get('/available-sims', [\App\Http\Controllers\Admin\SimPlanController::class, 'availableSims'])->name('available-sims');
 
+        Route::get('/bulk-assign', [\App\Http\Controllers\Admin\SimPlanController::class, 'bulkAssignPage'])->name('bulk-assign');
+        Route::post('/bulk-assign/resolve-numbers', [\App\Http\Controllers\Admin\SimPlanController::class, 'resolveBulkAssignNumbers'])->name('bulk-assign.resolve-numbers');
+
+        Route::get('/bulk-collect', [\App\Http\Controllers\Admin\SimPlanController::class, 'bulkCollectPage'])->name('bulk-collect');
+        Route::post('/bulk-collect/resolve-numbers', [\App\Http\Controllers\Admin\SimPlanController::class, 'resolveBulkCollectNumbers'])->name('bulk-collect.resolve-numbers');
+        Route::post('/bulk-collect', [\App\Http\Controllers\Admin\SimPlanController::class, 'bulkCollect'])->name('bulk-collect.execute');
+
+        Route::get('/users/search', [\App\Http\Controllers\Admin\SimPlanController::class, 'searchUsers'])->name('users.search');
+
         Route::prefix('swaps')->name('swaps.')->group(function () {
             Route::post('/{simSwapRequest}/approve', [\App\Http\Controllers\Admin\SimSwapController::class, 'approve'])->name('approve');
             Route::post('/{simSwapRequest}/reject', [\App\Http\Controllers\Admin\SimSwapController::class, 'reject'])->name('reject');

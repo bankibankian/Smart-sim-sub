@@ -90,8 +90,8 @@
                 fetch(`${availableSimsUrl}?category=${encodeURIComponent(category)}&provider=${encodeURIComponent(provider)}`)
                     .then(r => r.json())
                     .then(sims => {
-                        if (sims.length < quantity) {
-                            Swal.fire('Not Enough Stock', `Only ${sims.length} SIM(s) available for ${category} / ${provider.toUpperCase()}, but ${quantity} requested.`, 'warning');
+                        if (sims.length === 0) {
+                            Swal.fire('Not Enough Stock', `No SIM(s) available for ${category} / ${provider.toUpperCase()}.`, 'warning');
                             return;
                         }
 
@@ -104,7 +104,7 @@
                         let activeTab = 'list';
 
                         Swal.fire({
-                            title: `Select ${quantity} SIM(s) to Hand Over`,
+                            title: `Select up to ${quantity} SIM(s) to Hand Over`,
                             html: `
                                 <div class="text-left">
                                     <div class="flex gap-2 mb-3 border-b border-slate-200">
@@ -154,7 +154,7 @@
                                         Swal.showValidationMessage(`Please select exactly ${quantity} SIM(s).`);
                                         return false;
                                     }
-                                    return checked;
+                                    return { ids: checked, errors: [] };
                                 }
 
                                 const numbers = document.getElementById('fulfill-numbers-input').value;
@@ -174,15 +174,11 @@
                                 })
                                     .then(r => r.json())
                                     .then(data => {
-                                        if (data.errors && data.errors.length) {
-                                            Swal.showValidationMessage(data.errors.join('<br>'));
+                                        if (data.resolved.length === 0) {
+                                            Swal.showValidationMessage(data.errors.length ? data.errors.join('<br>') : 'No valid SIM numbers found.');
                                             return false;
                                         }
-                                        if (data.resolved.length !== quantity) {
-                                            Swal.showValidationMessage(`Found ${data.resolved.length} valid SIM(s), but exactly ${quantity} are required.`);
-                                            return false;
-                                        }
-                                        return data.resolved.map(s => s.id);
+                                        return { ids: data.resolved.map(s => s.id), errors: data.errors };
                                     })
                                     .catch(() => {
                                         Swal.showValidationMessage('Could not validate numbers. Please try again.');
@@ -190,15 +186,22 @@
                                     });
                             }
                         }).then((result) => {
-                            if (result.isConfirmed) {
+                            if (!result.isConfirmed) return;
+                            const { ids, errors } = result.value;
+                            const submit = () => {
                                 const f = document.createElement('form');
                                 f.action = fulfillUrl;
                                 f.method = 'POST';
                                 let inputs = `<input type="hidden" name="_token" value="{{ csrf_token() }}">`;
-                                result.value.forEach(id => { inputs += `<input type="hidden" name="sim_ids[]" value="${id}">`; });
+                                ids.forEach(id => { inputs += `<input type="hidden" name="sim_ids[]" value="${id}">`; });
                                 f.innerHTML = inputs;
                                 document.body.appendChild(f);
                                 f.submit();
+                            };
+                            if (errors && errors.length) {
+                                Swal.fire('Some numbers were rejected', errors.join('<br>'), 'warning').then(submit);
+                            } else {
+                                submit();
                             }
                         });
                     });
