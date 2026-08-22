@@ -89,6 +89,16 @@
                 <div class="text-sm font-semibold">{{ session('error') }}</div>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-rose-800 flex items-start gap-3 shadow-sm">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0 mt-0.5"></i>
+                <div class="text-sm font-semibold space-y-0.5">
+                    @foreach ($errors->all() as $error)
+                        <div>{{ $error }}</div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
         <!-- Step 1: Paste & Validate -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">

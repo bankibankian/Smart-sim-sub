@@ -189,7 +189,7 @@ class SimPlanController extends Controller
     public function assign(Request $request)
     {
         $request->validate([
-            'sim_ids'   => 'required|array|max:50',
+            'sim_ids'   => 'required|array|max:1000',
             'sim_ids.*' => 'exists:sims,id',
             'user_id'   => 'required|exists:users,id',
         ]);
